@@ -1,0 +1,9 @@
+use_frameworks!
+
+target 'Okta_Example' do
+  pod 'OktaAuth', :path => '../'
+
+  target 'Okta_Tests' do
+    inherit! :search_paths
+  end
+end
