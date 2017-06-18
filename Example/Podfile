@@ -1,0 +1,27 @@
+platform :ios, '9.0'
+use_frameworks!
+
+def shared_pods
+    pod 'OktaAuth', :path => '../'
+end
+
+
+target 'Okta_Example' do
+  shared_pods
+end
+
+target 'Okta_Tests' do
+  shared_pods
+end
+  
+target 'Okta_UITests' do
+  shared_pods
+end
+  
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+          config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'NO'              
+      end
+  end
+end

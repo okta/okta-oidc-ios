@@ -1,0 +1,22 @@
+# General
+*.swp
+*.swo
+*.rbo
+*.gem
+.DS_Store
+.rbenv-version
+xcuserdata
+project.xcworkspace
+Okta.xcworkspace/
+DerivedData
+
+
+# Examples
+Example/Podfile.lock
+Example/Pods
+Example/build/
+
+
+# IDEs
+*.xccheckout
+.idea/
