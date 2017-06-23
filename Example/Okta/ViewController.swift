@@ -13,75 +13,91 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var tokenView: UITextView!
     
+    override func viewDidLoad() { super.viewDidLoad() }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    @IBAction func loginButton(_ sender: Any) {
+        if tokens == nil {  self.loginCodeFlow() }
+    }
+    
+    @IBAction func refreshTokens(_ sender: Any) {
+        OktaAuth.refresh()
+        self.buildTokenTextView()
+    }
+    
+    @IBAction func clearTokens(_ sender: Any) {
+        tokens = nil
+        self.buildTokenTextView()
+    }
+    
+    @IBAction func userInfoButton(_ sender: Any) {
+        OktaAuth.userinfo() { response, error in
+            if error != nil { print("Error: \(error!)") }
+            if response != nil {
+                var userInfoText = ""
+                response?.forEach { userInfoText += ("\($0): \($1)") }
+                self.updateUI(updateText: userInfoText)
+            }
+        }
+    }
+    
+    @IBAction func introspectButton(_ sender: Any) {
+        OktaAuth
+            .introspect()
+            .validate((tokens?.accessToken!)!) { response, error in
+                if error != nil { self.updateUI(updateText: "Error: \(error!)") }
+                if let isActive = response { self.updateUI(updateText: "Is the AccessToken valid? \(isActive)") }
+        }
+    }
+    
+    @IBAction func revokeButton(_ sender: Any) {
+        OktaAuth.revoke((tokens?.accessToken!)!) { response, error in
+            if error != nil { self.updateUI(updateText: "Error: \(error!)") }
+            if let _ = response { self.updateUI(updateText: "AccessToken was revoked") }
+        }
+    }
+    
+    func loginCodeFlow() {
         OktaAuth
             .login()
-            .start(self) {
-                response, error in
+            .start(self) { response, error in
                 
                 if error != nil { print(error!) }
                 if let authResponse = response {
-                    var tokenString = ""
-                    if let accessToken = authResponse.accessToken {
-                        tokenString = tokenString + ("\nAccess Token: \(accessToken)\n")
-                    } else {
-                        tokenString = tokenString + "\nDid not receive accessToken\n"
-                    }
-                    
-                    if let idToken = authResponse.idToken {
-                        tokenString = tokenString + "\nidToken Token: \(idToken)\n"
-                    } else {
-                        tokenString = tokenString + "\nDid not receive idToken\n"
-                    }
-                    
-                    if let refreshToken = authResponse.refreshToken {
-                        tokenString = tokenString + "\nrefresh Token: \(refreshToken)\n"
-                    } else {
-                        tokenString = tokenString + "\nDid not receive refreshToken\n"
-                    }
-                    
-                    self.tokenView.text = tokenString
+                    // Store tokens locally
+                    tokens?.local?.set(authResponse.accessToken, forKey: "accessToken")
+                    tokens?.local?.set(authResponse.idToken, forKey: "idToken")
+                    tokens?.local?.set(authResponse.refreshToken, forKey: "refreshToken")
+                    tokens?.local?.synchronize()
+
+                    self.buildTokenTextView()
                 }
-                
-            }
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    func updateUI(updateText: String) {
+        DispatchQueue.main.async { self.tokenView.text = updateText }
+    }
+    
+    func buildTokenTextView() {
+        if tokens == nil {
+            tokenView.text = ""
+            return
+        }
         
-    }
-    
-    func callRevoke(token: String) {
-        OktaAuth.revoke(token) {
-            response, error in
-            
-            if error != nil { print("Error: \(error!)") }
-            if let _ = response { print("Token was revoked") }
+        var tokenString = ""
+        
+        if let accessToken = tokens?.accessToken {
+            tokenString += ("\nAccess Token: \(accessToken)\n")
         }
-    }
-    
-    func callIntrospect(token: String) {
-        OktaAuth
-            .introspect()
-            .validate(token) {
-                response, error in
-                
-                if error != nil { print("Error: \(error!)") }
-                if let isActive = response { print("Is token valid? \(isActive)") }
-            }
-    }
-    
-    func callUserInfo() {
-        OktaAuth.userinfo() {
-            response, error in
-            
-            if error != nil { print("Error: \(error!)") }
-            
-            if response != nil {
-                response?.forEach { print("\($0.0): \($0.1)") }
-            }
+        
+        if let idToken = tokens?.idToken {
+            tokenString += "\nidToken Token: \(idToken)\n"
         }
+        
+        if let refreshToken = tokens?.refreshToken {
+            tokenString += "\nrefresh Token: \(refreshToken)\n"
+        }
+        
+        self.updateUI(updateText: tokenString)
     }
 }

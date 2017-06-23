@@ -18,6 +18,7 @@ open class OktaTokenManager: NSObject {
     open var idToken: String?
     open var refreshToken: String?
     open var accessToken: String?
+    open var local: UserDefaults?
     
     init(authState: OIDAuthState?) {
         super.init()
@@ -28,6 +29,8 @@ open class OktaTokenManager: NSObject {
         self.accessToken = authState?.lastTokenResponse?.accessToken
         self.idToken = authState?.lastTokenResponse?.idToken
         self.refreshToken = authState?.lastTokenResponse?.refreshToken
+        self.local = UserDefaults.standard
+        
         OktaAuth.tokens = self
     }
 }
