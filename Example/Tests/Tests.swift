@@ -54,4 +54,26 @@ class Tests: XCTestCase {
                 XCTAssertNil(response)
         }
     }
+    
+    func testLocalStorage() {
+        // Validate that tokens can be stored and retrieved via UserDefaults
+        let tokens = OktaTokenManager(authState: nil)
+        tokens.local = UserDefaults.standard
+        
+        tokens.local?.set("fakeToken", forKey: "accessToken")
+        XCTAssertNotNil(tokens.local?.value(forKey: "accessToken"))
+    }
+    
+    func testKeyChainStorage() {
+        // Validate that tokens can be stored and retrieved via the keychain
+        let tokens = OktaTokenManager(authState: nil)
+        tokens.local = UserDefaults.standard
+        
+        tokens.set(value: "fakeToken", forKey: "accessToken")
+        XCTAssertNotNil(tokens.get(forKey: "accessToken"))
+        
+        // Clear tokens
+        tokens.clear()
+        XCTAssertNil(tokens.get(forKey: "accessToken"))
+    }
 }

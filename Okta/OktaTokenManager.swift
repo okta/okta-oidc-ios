@@ -18,9 +18,11 @@ open class OktaTokenManager: NSObject {
     open var idToken: String?
     open var refreshToken: String?
     open var accessToken: String?
+    
+    // Using UserDefaults
     open var local: UserDefaults?
     
-    init(authState: OIDAuthState?) {
+    public init(authState: OIDAuthState?) {
         super.init()
         
         // TODO: Hook this up to Keychain
@@ -30,7 +32,20 @@ open class OktaTokenManager: NSObject {
         self.idToken = authState?.lastTokenResponse?.idToken
         self.refreshToken = authState?.lastTokenResponse?.refreshToken
         self.local = UserDefaults.standard
-        
+
         OktaAuth.tokens = self
+    }
+    
+    public func set(value: String, forKey: String) {
+        OktaKeychain.set(key: forKey, object: value)
+    }
+    
+    public func get(forKey: String) -> String? {
+        return OktaKeychain.get(key: forKey)
+    }
+    
+    public func clear() {
+        OktaKeychain.removeAll()
+        OktaAuth.tokens = nil
     }
 }

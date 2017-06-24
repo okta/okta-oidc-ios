@@ -172,6 +172,45 @@ Refreshes the `accessToken` if the `refreshToken` is provided.
 ```swift
 OktaAuth.refresh()
 ```
+### Token Management
+Tokens can be stored in the Keychain or by UserDefaults. It is recommended to store tokens in the Keychain.
+
+```swift
+OktaAuth
+    .login()
+    .start(self) { response, error in
+        
+        if error != nil { print(error!) }
+        if let authResponse = response {
+            // Store tokens in keychain
+            tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
+            tokens?.set(value: authResponse.idToken!, forKey: "idToken")
+            self.buildTokenTextView()
+        }
+}
+
+// OktaAuth.tokens.get(forKey: "accessToken")
+// OktaAuth.tokens.get(forKey: "idToken")
+```
+
+To use UserDefaults:
+```swift
+OktaAuth
+    .login()
+    .start(self) { response, error in
+        
+        if error != nil { print(error!) }
+        if let authResponse = response {
+            // Store tokens in keychain
+            tokens?.local.set(value: authResponse.accessToken!, forKey: "accessToken")
+            tokens?.local.set(value: authResponse.idToken!, forKey: "idToken")
+            self.buildTokenTextView()
+        }
+}
+
+// OktaAuth.tokens.local.value(forKey: "accessToken")
+// OktaAuth.tokens.local.value(forKey: "idToken")
+```
 
 ## License
 

@@ -25,7 +25,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clearTokens(_ sender: Any) {
-        tokens = nil
+        OktaAuth.clear()
         self.buildTokenTextView()
     }
     
@@ -63,12 +63,9 @@ class ViewController: UIViewController {
                 
                 if error != nil { print(error!) }
                 if let authResponse = response {
-                    // Store tokens locally
-                    tokens?.local?.set(authResponse.accessToken, forKey: "accessToken")
-                    tokens?.local?.set(authResponse.idToken, forKey: "idToken")
-                    tokens?.local?.set(authResponse.refreshToken, forKey: "refreshToken")
-                    tokens?.local?.synchronize()
-
+                    // Store tokens in keychain
+                    tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
+                    tokens?.set(value: authResponse.idToken!, forKey: "idToken")
                     self.buildTokenTextView()
                 }
         }
