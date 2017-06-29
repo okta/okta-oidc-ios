@@ -10,27 +10,27 @@ import UIKit
 import OktaAuth
 
 class ViewController: UIViewController {
-    
+
     @IBOutlet weak var tokenView: UITextView!
-    
+
     override func viewDidLoad() { super.viewDidLoad() }
-    
+
     @IBAction func loginButton(_ sender: Any) {
         if tokens == nil {  self.loginCodeFlow() }
     }
-    
+
     @IBAction func refreshTokens(_ sender: Any) {
         OktaAuth.refresh()
         self.buildTokenTextView()
     }
-    
+
     @IBAction func clearTokens(_ sender: Any) {
         OktaAuth.clear()
         self.buildTokenTextView()
     }
-    
+
     @IBAction func userInfoButton(_ sender: Any) {
-        OktaAuth.userinfo() { response, error in
+        OktaAuth.userinfo { response, error in
             if error != nil { print("Error: \(error!)") }
             if response != nil {
                 var userInfoText = ""
@@ -39,7 +39,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     @IBAction func introspectButton(_ sender: Any) {
         OktaAuth
             .introspect()
@@ -48,19 +48,18 @@ class ViewController: UIViewController {
                 if let isActive = response { self.updateUI(updateText: "Is the AccessToken valid? \(isActive)") }
         }
     }
-    
+
     @IBAction func revokeButton(_ sender: Any) {
         OktaAuth.revoke((tokens?.accessToken!)!) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
-            if let _ = response { self.updateUI(updateText: "AccessToken was revoked") }
+            if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }
     }
-    
+
     func loginCodeFlow() {
         OktaAuth
             .login()
             .start(self) { response, error in
-                
                 if error != nil { print(error!) }
                 if let authResponse = response {
                     // Store tokens in keychain
@@ -70,31 +69,31 @@ class ViewController: UIViewController {
                 }
         }
     }
-    
+
     func updateUI(updateText: String) {
         DispatchQueue.main.async { self.tokenView.text = updateText }
     }
-    
+
     func buildTokenTextView() {
         if tokens == nil {
             tokenView.text = ""
             return
         }
-        
+
         var tokenString = ""
-        
+
         if let accessToken = tokens?.accessToken {
             tokenString += ("\nAccess Token: \(accessToken)\n")
         }
-        
+
         if let idToken = tokens?.idToken {
             tokenString += "\nidToken Token: \(idToken)\n"
         }
-        
+
         if let refreshToken = tokens?.refreshToken {
             tokenString += "\nrefresh Token: \(refreshToken)\n"
         }
-        
+
         self.updateUI(updateText: tokenString)
     }
 }

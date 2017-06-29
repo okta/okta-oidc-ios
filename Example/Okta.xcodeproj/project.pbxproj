@@ -227,6 +227,7 @@
 				607FACCE1AFB9204008FA782 /* Resources */,
 				526329C609C1874268418CBE /* [CP] Embed Pods Frameworks */,
 				FFF89B36345F569D99AA8E26 /* [CP] Copy Pods Resources */,
+				7167B86D1F0480ED0088C484 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -416,6 +417,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		7167B86D1F0480ED0088C484 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		77CEEB599872779C0A7813D4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

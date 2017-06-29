@@ -50,11 +50,16 @@ public struct Login {
                     callback(nil, .error(error: "ClientSecret not included in PList configuration file: \(plistName!) See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information." ))
                     return
                 }
+                if self.username == nil || self.password == nil {
+                    callback(nil, .error(error: "User credentials not included."))
+                    return
+                }
+
                 let credentials = [
-                    "username": self.username,
-                    "password": self.password
-                    ] as! [String: String]
-                
+                    "username": self.username!,
+                    "password": self.password!
+                    ]
+
                 OktaAuthorization().passwordFlow(config, credentials: credentials, view: view) { response, error in callback(response, error) }
             }
         }
