@@ -53,11 +53,23 @@ class Tests: XCTestCase {
         }
     }
 
-    func testKeyChainStorage() {
+    func testKeychainStorage() {
         // Validate that tokens can be stored and retrieved via the keychain
         let tokens = OktaTokenManager(authState: nil)
 
         tokens.set(value: "fakeToken", forKey: "accessToken")
+        XCTAssertNotNil(tokens.get(forKey: "accessToken"))
+
+        // Clear tokens
+        tokens.clear()
+        XCTAssertNil(tokens.get(forKey: "accessToken"))
+    }
+
+    func testBackgroundKeychainStorage() {
+        // Validate that tokens can be stored and retrieved via the keychain
+        let tokens = OktaTokenManager(authState: nil)
+
+        tokens.set(value: "fakeToken", forKey: "accessToken", needsBackgroundAccess: true)
         XCTAssertNotNil(tokens.get(forKey: "accessToken"))
 
         // Clear tokens

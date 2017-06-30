@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() { super.viewDidLoad() }
 
     @IBAction func loginButton(_ sender: Any) {
-        if tokens == nil {  self.loginCodeFlow() }
+        if tokens == nil { self.loginCodeFlow() }
     }
 
     @IBAction func refreshTokens(_ sender: Any) {
@@ -41,16 +41,24 @@ class ViewController: UIViewController {
     }
 
     @IBAction func introspectButton(_ sender: Any) {
+        // Get current accessToken
+        let accessToken = tokens?.accessToken
+        if accessToken == nil { return }
+
         OktaAuth
             .introspect()
-            .validate((tokens?.accessToken!)!) { response, error in
+            .validate(accessToken!) { response, error in
                 if error != nil { self.updateUI(updateText: "Error: \(error!)") }
                 if let isActive = response { self.updateUI(updateText: "Is the AccessToken valid? \(isActive)") }
         }
     }
 
     @IBAction func revokeButton(_ sender: Any) {
-        OktaAuth.revoke((tokens?.accessToken!)!) { response, error in
+        // Get current accessToken
+        let accessToken = tokens?.accessToken
+        if accessToken == nil { return }
+
+        OktaAuth.revoke(accessToken!) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }
