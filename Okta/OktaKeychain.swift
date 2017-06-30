@@ -14,9 +14,10 @@ public class OktaKeychain: NSObject {
         let objectData = object.data(using: .utf8)
 
         let q = [
-                  kSecClass as String: kSecClassGenericPassword as String,
-              kSecValueData as String: objectData!,
-            kSecAttrAccount as String: key
+                     kSecClass as String: kSecClassGenericPassword as String,
+                 kSecValueData as String: objectData!,
+               kSecAttrAccount as String: key,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ] as CFDictionary
         
         // Delete existing (if applicable)
@@ -31,10 +32,11 @@ public class OktaKeychain: NSObject {
     
     internal class func get(key: String) -> String? {
         let q = [
-                  kSecClass as String: kSecClassGenericPassword,
-             kSecReturnData as String: kCFBooleanTrue,
-             kSecMatchLimit as String: kSecMatchLimitOne,
-            kSecAttrAccount as String: key
+                     kSecClass as String: kSecClassGenericPassword,
+                kSecReturnData as String: kCFBooleanTrue,
+                kSecMatchLimit as String: kSecMatchLimitOne,
+               kSecAttrAccount as String: key,
+            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
         ] as CFDictionary
         
         var ref: AnyObject? = nil
