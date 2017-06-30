@@ -1,0 +1,8 @@
+language: objective-c
+osx_image: xcode8.3
+
+before_install:
+  - rvm install ruby-2.2.0
+  - gem install cocoapods
+script:
+  - bash ./scripts/build-and-test.sh

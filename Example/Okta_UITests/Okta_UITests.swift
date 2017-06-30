@@ -15,8 +15,9 @@ class OktaUITests: XCTestCase {
     override func setUp() {
         super.setUp()
 
-        username = "johndoe"
-        password = "password"
+        // Update these values along with your Plist config
+        username = "{username}"
+        password = "{password}"
 
         continueAfterFailure = false
         XCUIApplication().launch()
