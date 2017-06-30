@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OktaAuth'
-  s.version          = '0.1.0'
+  s.version          = '0.1.0-beta'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
 
 # This description is used to generate tags and improve search results.
