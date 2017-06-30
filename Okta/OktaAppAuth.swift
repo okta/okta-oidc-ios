@@ -62,6 +62,11 @@ public func refresh() {
     })
 }
 
+public func clear() {
+    // Clear auth state
+    tokens?.clear()
+}
+
 public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
     if currentAuthorizationFlow!.resumeAuthorizationFlow(with: url){
         currentAuthorizationFlow = nil

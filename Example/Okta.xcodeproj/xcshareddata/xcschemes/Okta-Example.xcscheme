@@ -56,7 +56,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "712745E91EFB0B3F00E820FC"
+               BlueprintIdentifier = "7137EDEE1EFB25670082C30F"
                BuildableName = "Okta_UITests.xctest"
                BlueprintName = "Okta_UITests"
                ReferencedContainer = "container:Okta.xcodeproj">

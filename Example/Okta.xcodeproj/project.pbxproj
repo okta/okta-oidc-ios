@@ -17,6 +17,7 @@
 		7116BC581EF9FFDC004A4E1C /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC551EF9FFDC004A4E1C /* AppAuth.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		7116BC591EF9FFDC004A4E1C /* OktaAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC561EF9FFDC004A4E1C /* OktaAuth.framework */; };
 		7116BC5A1EF9FFDC004A4E1C /* Pods_Okta_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC571EF9FFDC004A4E1C /* Pods_Okta_Tests.framework */; };
+		7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712745EC1EFB0B3F00E820FC /* Okta_UITests.swift */; };
 		7169AE1B1EF5EB8B00313EB8 /* Okta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7169AE1A1EF5EB8B00313EB8 /* Okta.plist */; };
 		7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		71F76E51BDB207F788887141 /* Pods_Okta_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */; };
@@ -226,6 +227,7 @@
 				607FACCE1AFB9204008FA782 /* Resources */,
 				526329C609C1874268418CBE /* [CP] Embed Pods Frameworks */,
 				FFF89B36345F569D99AA8E26 /* [CP] Copy Pods Resources */,
+				7167B86D1F0480ED0088C484 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -416,6 +418,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7167B86D1F0480ED0088C484 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
 		77CEEB599872779C0A7813D4 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -516,6 +531,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,7 +773,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = UE9VMQ3VS6;
 				INFOPLIST_FILE = Okta_UITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.Okta-UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -776,7 +792,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				DEVELOPMENT_TEAM = UE9VMQ3VS6;
 				INFOPLIST_FILE = Okta_UITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.Okta-UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
