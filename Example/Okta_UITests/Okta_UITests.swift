@@ -64,16 +64,19 @@ class OktaUITests: XCTestCase {
         }
 
         // Refresh tokens
+        var oldTokens = app.textViews["tokenView"].value as? String
 
-        if let oldTokens = app.textViews["tokenView"].value as? String {
-            // Double tap to call twice
-            app.buttons["Refresh Tokens"].tap()
-            app.buttons["Refresh Tokens"].tap()
+        if oldTokens != nil {
+            oldTokens = oldTokens!
+        }
 
-            sleep(2)
-            if let tokenCheck = app.textViews["tokenView"].value as? String {
-                XCTAssertEqual(oldTokens, tokenCheck)
-            }
+        // Double tap to call twice
+        app.buttons["Refresh Tokens"].tap()
+        app.buttons["Refresh Tokens"].tap()
+
+        sleep(2)
+        if let tokenCheck = app.textViews["tokenView"].value as? String {
+            XCTAssertNotEqual(oldTokens, tokenCheck)
         }
 
         // Get User info
