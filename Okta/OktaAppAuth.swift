@@ -12,6 +12,9 @@
 
 import AppAuth
 
+// Current Version of the SDK
+let VERSION = "0.2.0"
+
 // Holds the browser session
 public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 

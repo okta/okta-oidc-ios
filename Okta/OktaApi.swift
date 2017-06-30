@@ -17,6 +17,7 @@ open class OktaApi: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = headers
+        request.setValue("okta-sdk-appauth-ios/\(VERSION) iOS/]\(UIDevice.current.systemVersion)", forHTTPHeaderField: "X-Okta-Agent")
         
         if let postBodyData = postData {
             request.httpBody = postBodyData.data(using: .utf8)

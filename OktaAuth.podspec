@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OktaAuth'
-  s.version          = '0.1.0'
+  s.version          = '0.1.0-beta'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
 
 # This description is used to generate tags and improve search results.
@@ -24,9 +24,9 @@ Integrate your native app with Okta using the AppAuth library.
   s.homepage         = 'https://github.com/okta/okta-sdk-appauth-ios'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com"}
-  s.source           = { :git => 'https://github.com/okta-sdk-appauth-ios.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/okta/okta-sdk-appauth-ios.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.source_files = 'Okta/**/*'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'

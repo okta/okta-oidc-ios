@@ -12,7 +12,6 @@
 
 public struct Introspect {
     
-    
     init() {}
     
     public func validate(_ token: String, callback: @escaping (Bool?, OktaError?) -> Void) {
@@ -47,8 +46,30 @@ public struct Introspect {
             return URL(string: OktaAuth.configuration?["issuer"] as! String + "/v1/introspect")
         }
         
-        return URL(string: OktaAuth.configuration?["issuer"] as! String + "oauth2/v1/introspect")
+        return URL(string: OktaAuth.configuration?["issuer"] as! String + "/oauth2/v1/introspect")
         
         
+    }
+    
+    public func withoutValidation(_ token: String, callback: @escaping (String?, OktaError?) -> Void) {
+        // Decode token
+        
+        // Split JWT
+        let jwt = token.components(separatedBy: ".")
+        
+        // Get claims
+        var encodedClaims = jwt[1]
+        
+        if encodedClaims.characters.count % 4 != 0 {
+            // Ensure encoded length is multiple of 4
+            let paddingLength = 4 - encodedClaims.characters.count % 4
+            encodedClaims += String(repeatElement("=", count: paddingLength))
+        }
+        
+        if let claimData = Data(base64Encoded: encodedClaims, options: []),
+            let decodedClaims = String(data:claimData, encoding: .utf8) {
+            return callback(decodedClaims, nil)
+        }
+        return callback(nil, .error(error: "Could not decode token"))
     }
 }

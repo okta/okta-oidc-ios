@@ -13,7 +13,7 @@
 import AppAuth
 
 public struct OktaAuthorization {
-
+    
     func authCodeFlow(_ config: [String: Any], view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
         

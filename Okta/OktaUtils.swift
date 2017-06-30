@@ -31,11 +31,32 @@ open class Utils: NSObject {
                     options: [],
                      format: nil
                 ) as? [String: Any] {
-                    OktaAuth.configuration = result
-                    return result
+                    // Validate PList info
+                return self.validatePList(result)
             }
         }
         return nil
+    }
+    
+    open func validatePList(_ plist: [String: Any]?) -> [String: Any]? {
+        // Perform validation on the PList fields
+        // Currently only reformatting the issuer
+        
+        if plist == nil {
+            return nil
+        }
+        
+        var formatted = plist!
+        
+        if let issuer = formatted["issuer"] as? String {
+            if let hasTrailingSlash = issuer.characters.last {
+                // Return issuer without trailing slash
+                var newIssuer = issuer
+                formatted["issuer"] = hasTrailingSlash == "/" ? String(newIssuer.characters.dropLast()) : issuer
+            }
+        }
+        OktaAuth.configuration = formatted
+        return formatted
     }
     
     open func scrubScopes(_ scopes: Any?) throws -> [String]{
