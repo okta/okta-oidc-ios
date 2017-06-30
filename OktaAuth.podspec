@@ -24,9 +24,9 @@ Integrate your native app with Okta using the AppAuth library.
   s.homepage         = 'https://github.com/okta/okta-sdk-appauth-ios'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com"}
-  s.source           = { :git => 'https://github.com/okta-sdk-appauth-ios.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/okta/okta-sdk-appauth-ios.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.source_files = 'Okta/**/*'
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
