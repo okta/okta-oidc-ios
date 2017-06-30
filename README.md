@@ -1,9 +1,9 @@
 # Okta
 
-[![CI Status](http://img.shields.io/travis/jmelberg/Okta.svg?style=flat)](https://travis-ci.org/jmelberg/Okta)
-[![Version](https://img.shields.io/cocoapods/v/Okta.svg?style=flat)](http://cocoapods.org/pods/Okta)
-[![License](https://img.shields.io/cocoapods/l/Okta.svg?style=flat)](http://cocoapods.org/pods/Okta)
-[![Platform](https://img.shields.io/cocoapods/p/Okta.svg?style=flat)](http://cocoapods.org/pods/Okta)
+[![CI Status](http://img.shields.io/travis/okta/okta-sdk-appauth-ios.svg?style=flat)](https://travis-ci.org/okta/okta-sdk-appauth-ios)
+[![Version](https://img.shields.io/cocoapods/v/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
+[![License](https://img.shields.io/cocoapods/l/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
+[![Platform](https://img.shields.io/cocoapods/p/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 
 ## Example
 
@@ -17,7 +17,7 @@ Okta is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "Okta-AppAuth"
+pod "OktaAuth"
 ```
 ## Overview
 This library currently supports:
