@@ -15,7 +15,7 @@ public struct Introspect {
     init() {}
     
     public func validate(_ token: String, callback: @escaping (Bool?, OktaError?) -> Void) {
-        // Validate token
+        // Validate token by hitting the introspection endpoint
         
         if let introspectionEndpoint = getIntrospectionEndpoint() {
             // Build introspect request
@@ -33,7 +33,7 @@ public struct Introspect {
             callback(nil, .error(error: "Error finding the introspection endpoint"))
         }
     }
-    
+
     func getIntrospectionEndpoint() -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
         

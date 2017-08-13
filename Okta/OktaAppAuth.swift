@@ -65,6 +65,17 @@ public func refresh() {
     })
 }
 
+public func validateToken(_ token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+    // Revokes the given token
+    do {
+        let jwt = try OktaJWT(token: token)
+        let validator = OktaJWTValidator(jwt)
+        validator.validate { response, error in callback(response, error) }
+    } catch {
+        print(error.localizedDescription)
+    }
+}
+
 public func clear() {
     // Clear auth state
     tokens?.clear()

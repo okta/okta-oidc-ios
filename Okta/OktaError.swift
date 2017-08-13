@@ -11,6 +11,7 @@
  */
 
 public enum OktaError: Error {
-    case error(error: Any)
-    case apiError(error: Any)
+    case error(Any)
+    case apiError(Any)
+    case jwtValidationError(Any)
 }

@@ -19,7 +19,7 @@ public struct UserInfo {
         
         // Revoke the token
         if let userInfoEndpoint = getUserInfoEndpoint() {
-            // Build introspect request
+            // Build userinfo request
             
             let headers = [
                 "Accept": "application/json",
@@ -44,7 +44,7 @@ public struct UserInfo {
         
         if (OktaAuth.configuration?["issuer"] as! String).contains("oauth2") {
             // OAuth Authorization Server
-            return nil
+            return URL(string: OktaAuth.configuration?["issuer"] as! String + "/v1/userinfo")
         }
         
         return URL(string: OktaAuth.configuration?["issuer"] as! String + "/oauth2/v1/userinfo")

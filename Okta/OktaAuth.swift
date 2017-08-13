@@ -30,10 +30,10 @@ public struct OktaAuthorization {
             let request = OIDAuthorizationRequest(
                        configuration: oidConfig!,
                             clientId: config["clientId"] as! String,
-                              scopes: try? Utils().scrubScopes(config["scopes"]),
+                              scopes: try? Utils.scrubScopes(config["scopes"]),
                          redirectURL: URL(string: config["redirectUri"] as! String)!,
                         responseType: OIDResponseTypeCode,
-                additionalParameters: nil
+                additionalParameters: ["nonce": Utils.generateNonce()]
             )
             
             // Start the authorization flow
@@ -70,7 +70,7 @@ public struct OktaAuthorization {
                              redirectURL: URL(string: config["redirectUri"] as! String)!,
                                 clientID: config["clientId"] as! String,
                             clientSecret: (config["clientSecret"] as! String),
-                                   scope: try? Utils().scrubScopes(config["scopes"]).joined(separator: " "),
+                                   scope: try? Utils.scrubScopes(config["scopes"]).joined(separator: " "),
                             refreshToken: nil,
                             codeVerifier: nil,
                     additionalParameters: credentials

@@ -17,11 +17,33 @@ open class OktaApi: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = headers
-        request.setValue("okta-sdk-appauth-ios/\(VERSION) iOS/]\(UIDevice.current.systemVersion)", forHTTPHeaderField: "X-Okta-Agent")
+        request.addValue("okta-sdk-appauth-ios/\(VERSION) iOS/]\(UIDevice.current.systemVersion)", forHTTPHeaderField: "X-Okta-Agent")
         
         if let postBodyData = postData {
             request.httpBody = postBodyData.data(using: .utf8)
         }
+        
+        let task = URLSession.shared.dataTask(with: request){
+            data, response, error in
+            
+            if error != nil {
+                callback(nil, .apiError(error: "\(String(describing: error?.localizedDescription))"))
+                return
+            }
+            var responseJson = [String:Any]()
+            try? responseJson = (JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? [String: Any])!
+            callback(responseJson, nil)
+        }
+        task.resume()
+    }
+    
+    class func get(_ url: URL, headers: [String: String]?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+        // Generic GET API wrapper
+        
+        var request = URLRequest(url: url)
+        request.allHTTPHeaderFields = headers
+        request.addValue("okta-sdk-appauth-ios/\(VERSION) iOS/]\(UIDevice.current.systemVersion)", forHTTPHeaderField: "X-Okta-Agent")
+        
         
         let task = URLSession.shared.dataTask(with: request){
             data, response, error in

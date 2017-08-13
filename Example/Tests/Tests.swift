@@ -3,9 +3,9 @@ import XCTest
 import OktaAuth
 
 class Tests: XCTestCase {
-
     override func setUp() {
         super.setUp()
+        _ = Utils.getPlistConfiguration()
     }
 
     override func tearDown() {
@@ -14,12 +14,12 @@ class Tests: XCTestCase {
 
     func testPListFailure() {
         // Attempt to find a plist file that does not exist
-        XCTAssertNil(Utils().getPlistConfiguration(forResourceName: "noFile"))
+        XCTAssertNil(Utils.getPlistConfiguration(forResourceName: "noFile"))
     }
 
     func testPListFound() {
         // Attempt to find the Okta.plist file
-        XCTAssertNotNil(Utils().getPlistConfiguration())
+        XCTAssertNotNil(Utils.getPlistConfiguration())
     }
     
     func testPListFormatWithTrailingSlash() {
@@ -27,7 +27,7 @@ class Tests: XCTestCase {
         let dict = [
             "issuer": "https://example.com/oauth2/authServerId/"
         ]
-        let rv = Utils().validatePList(dict)
+        let rv = Utils.validatePList(dict)
         if let issuer = rv?["issuer"] as? String {
             XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
         } else {
@@ -42,7 +42,7 @@ class Tests: XCTestCase {
         let dict = [
             "issuer": "https://example.com/oauth2/authServerId"
         ]
-        let rv = Utils().validatePList(dict)
+        let rv = Utils.validatePList(dict)
         if let issuer = rv?["issuer"] as? String {
             XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
         } else {
@@ -54,7 +54,7 @@ class Tests: XCTestCase {
     func testValidScopesArray() {
         // Validate the scopes are in the correct format
         let scopes = ["openid"]
-        let scrubbedScopes = try? Utils().scrubScopes(scopes)
+        let scrubbedScopes = try? Utils.scrubScopes(scopes)
         XCTAssertEqual(scrubbedScopes!, scopes)
     }
 
@@ -62,14 +62,14 @@ class Tests: XCTestCase {
         // Validate the scopes are in the correct format
         let scopes = "openid profile email"
         let validScopes = ["openid", "profile", "email"]
-        let scrubbedScopes = try? Utils().scrubScopes(scopes)
+        let scrubbedScopes = try? Utils.scrubScopes(scopes)
         XCTAssertEqual(scrubbedScopes!, validScopes)
     }
 
     func testInvalidScopes() {
         // Validate that scopes of wrong type throw an error
         let scopes = [1, 2, 3]
-        XCTAssertThrowsError(try Utils().scrubScopes(scopes))
+        XCTAssertThrowsError(try Utils.scrubScopes(scopes))
     }
 
     func testPasswordFailureFlow() {
@@ -128,5 +128,57 @@ class Tests: XCTestCase {
                 XCTAssertNotNil(response)
                 XCTAssertNil(error)
         }
+    }
+    
+    func testKeysEndpoint() {
+        // Attempt to hit the keys endpoint based on PList configuration
+        
+        let keysExpectation = expectation(description: "GET /keys endpoint")
+        OktaJWTValidator.getKeys() { response in
+            XCTAssertNotNil(response)
+            keysExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 20, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTAssertNotNil(nil) }
+        })
+    }
+    
+    func testInvalidToken() {
+        // Attempt to validate an invalid token
+        
+        let token = "eyJhbGciOiJSUzI1NiIsImtpZCI6InIzeGlQeGR1X2NzSVhRT2FlR3FDb" +
+            "TNRejVCU2ZheGYwNFNBWWJXSXNVNVkifQ.eyJzdWIiOiIwMHU2YW4xejdlSVBhVmx" +
+            "0RzBoNyIsIm5hbWUiOiJKb3JkYW4gTWVsYmVyZyIsInZlciI6MSwiaXNzIjoiaHR0cH" +
+            "M6Ly9qb3JkYW5kZW1vLm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzOXd0dWZjOEw" +
+            "wNDFxajUwaDciLCJhdWQiOiJKdzFueXpic05paFN1T0VUWTNSMSIsImlhdCI6MTUw" +
+            "MjA4NDI4NSwiZXhwIjoxNTAyMDg3ODg1LCJqdGkiOiJJRC44TFhiLW1pWG1nNVZfUF" +
+            "pXQWZ3RUpFY0tIamJIRUdIQXlHTjhEWUZsRDRNIiwiYW1yIjpbInB3ZCJdLCJpZHAi" +
+            "OiIwMG82YW4wc3Fqc1c3WEtQQTBoNyIsInByZWZlcnJlZF91c2VybmFtZSI6ImpvcmR" +
+            "hbi5tZWxiZXJnQGdtYWlsLmNvbSIsImF1dGhfdGltZSI6MTUwMjA4NDI4MywiYXRfa" +
+            "GFzaCI6InhORERwTTVVVi1rVjZvYzA2cGFFclEifQ.nid3T8n5uAR3XG-d3OAFwyhdoX" +
+            "seysfK5oNFS9x1R3I7StJ4WE-TinwbzL9El0icCnApVKFTjSj81SM6cOCGzcxGWGyALKQtuA2" +
+            "FdpQHTw3vfDRvGKnztal300nbDvQN9oyZjhqBEe1uFkn4Gk1_xcWlVTbyvH-isVnyYcIfGwrALJa7OYV" +
+            "zQzf8jtIRdhgylWQAwBFIInH_B8GyK1zhQvKfUXY2CXWx5BNVGznexDwxfO9xy3" +
+            "qRYKWxkbVzHfC_hGvXnSZYgp1Go-Fxms3KiYJjM7J8wGD2GU_fS0gGdC4rC5PCHsY7V" +
+            "f4cgsxHcZ8pWsEweERdWZ1sl5RD3jGGLQ"
+        
+        let tokenExpectation = expectation(description: "Test invalid token")
+        
+        _ = OktaAuth.validateToken(token) { response, error in
+            
+            if error != nil {
+                let expectedError = OktaError.jwtValidationError(error: "The JWT expired and is no longer valid").localizedDescription
+                XCTAssertEqual(error!.localizedDescription, expectedError)
+            } else {
+                XCTAssertNotNil(nil)
+            }
+            tokenExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 20, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTAssertNotNil(nil) }
+        })
     }
 }
