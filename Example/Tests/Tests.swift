@@ -45,12 +45,24 @@ class Tests: XCTestCase {
 
     func testPasswordFailureFlow() {
         // Validate the username & password flow fails without clientSecret
+        _ = Utils().getPlistConfiguration(forResourceName: "Okta-PasswordFlow")
+
+        let pwdExpectation = expectation(description: "Will error attempting username/password auth")
+
         OktaAuth
             .login("user@example.com", password: "password")
-            .start(UIViewController()) { response, error in
-                XCTAssertNotNil(error)
-                XCTAssertNil(response)
+            .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController()) { response, error in
+
+                if error!.localizedDescription.range(of: "The operation couldn’t be completed") != nil {
+                    XCTAssertTrue(true)
+                }
+                pwdExpectation.fulfill()
         }
+
+        waitForExpectations(timeout: 20, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTAssertNotNil(nil) }
+       })
     }
 
     func testKeychainStorage() {

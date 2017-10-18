@@ -18,8 +18,7 @@ public struct OktaAuthorization {
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
         
         // Discover Endpoints
-        getMetadataConfig(URL(string: config["issuer"] as! String)) {
-            oidConfig, error in
+        getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
 
             if error != nil {
                 callback(nil, error!)
@@ -54,9 +53,8 @@ public struct OktaAuthorization {
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
         
         // Discover Endpoints
-        getMetadataConfig(URL(string: config["issuer"] as! String)) {
-            oidConfig, error in
-            
+        getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
+
             if error != nil {
                 callback(nil, error!)
                 return
@@ -75,11 +73,14 @@ public struct OktaAuthorization {
                             codeVerifier: nil,
                     additionalParameters: credentials
                 )
-            
+
             // Start the authorization flow
-            OIDAuthorizationService.perform(request) {
-                authorizationResponse, responseError in
-                
+            OIDAuthorizationService.perform(request) { authorizationResponse, responseError in
+
+                if responseError != nil {
+                    callback(nil, .apiError(error: "Authorization Error: \(responseError!.localizedDescription)"))
+                }
+
                 if authorizationResponse != nil {
                     // Return the tokens
                     let authState = OIDAuthState(
@@ -88,20 +89,16 @@ public struct OktaAuthorization {
                              registrationResponse: nil
                         )
                     callback(OktaTokenManager(authState: authState), nil)
-                } else {
-                    callback(nil, .apiError(error: "Authorization Error: \(error!.localizedDescription)"))
                 }
             }
-            
         }
     }
-    
+
     func getMetadataConfig(_ issuer: URL?, callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
         // Get the metadata from the discovery endpoint
-        
-        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer!) {
-            oidConfig, error in
-            
+
+        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer!) { oidConfig, error in
+
             var configError: OktaError?
 
             if oidConfig == nil {
@@ -109,10 +106,11 @@ public struct OktaAuthorization {
                     "Error returning discovery document:" +
                     "\(error!.localizedDescription) Please" +
                     "check your PList configuration"
-                
+
                 configError = .apiError(error: responseError)
             }
             callback(oidConfig, configError)
+            return
         }
     }
 }
