@@ -13,8 +13,8 @@
 	<key>clientSecret</key>
 	<string></string>
 	<key>clientId</key>
-	<string>GJv1mKQtUAUbTalBeQLs</string>
+	<string>Jw1nyzbsNihSuOETY3R1</string>
 	<key>issuer</key>
-	<string>https://example.oktapreview.com</string>
+	<string>https://jordandemo.oktapreview.com/oauth2/aus9wtufc8L041qj50h7</string>
 </dict>
 </plist>

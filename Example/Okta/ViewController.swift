@@ -30,13 +30,18 @@ class ViewController: UIViewController {
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
-        OktaAuth.userinfo { response, error in
-            if error != nil { print("Error: \(error!)") }
-            if response != nil {
-                var userInfoText = ""
-                response?.forEach { userInfoText += ("\($0): \($1)") }
-                self.updateUI(updateText: userInfoText)
-            }
+        // Get current accessToken
+        let accessToken = tokens?.accessToken
+        if accessToken == nil { return }
+
+        OktaAuth
+            .userinfo { response, error in
+                if error != nil { print("Error: \(error!)") }
+                if response != nil {
+                    var userInfoText = ""
+                    response?.forEach { userInfoText += ("\($0): \($1)\n\n") }
+                    self.updateUI(updateText: userInfoText)
+                }
         }
     }
 
@@ -95,11 +100,11 @@ class ViewController: UIViewController {
         }
 
         if let idToken = tokens?.idToken {
-            tokenString += "\nidToken Token: \(idToken)\n"
+            tokenString += "\n IdToken: \(idToken)\n"
         }
 
         if let refreshToken = tokens?.refreshToken {
-            tokenString += "\nrefresh Token: \(refreshToken)\n"
+            tokenString += "\nRefresh Token: \(refreshToken)\n"
         }
 
         self.updateUI(updateText: tokenString)

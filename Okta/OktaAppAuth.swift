@@ -12,6 +12,9 @@
 
 import AppAuth
 
+// Current Version of the SDK
+let VERSION = "0.2.0"
+
 // Holds the browser session
 public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 
@@ -60,6 +63,17 @@ public func refresh() {
         }
         tokens?.accessToken = accessToken
     })
+}
+
+public func validateToken(_ token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+    // Revokes the given token
+    do {
+        let jwt = try OktaJWT(token: token)
+        let validator = OktaJWTValidator(jwt)
+        validator.validate { response, error in callback(response, error) }
+    } catch {
+        print(error.localizedDescription)
+    }
 }
 
 public func clear() {
