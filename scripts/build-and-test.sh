@@ -8,7 +8,7 @@ cd Example
 
 function pod_install() {
     echo "==== Installing pods ===="
-    pod install
+    pod install --repo-update
 }
 
 if ! pod_install; then
@@ -22,7 +22,7 @@ function build_and_test_workspace() {
     xcodebuild test \
     -workspace Okta.xcworkspace/ \
     -scheme Okta-Example \
-    -destination 'platform=iOS Simulator,OS=10.3.1,name=iPhone 7' \
+    -destination 'platform=iOS Simulator,OS=11.1,name=iPhone 8' \
     -only-testing:Okta_Tests
 }
 
