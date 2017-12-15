@@ -22,7 +22,7 @@ open class OktaApi: NSObject {
         request.allHTTPHeaderFields = headers
         request.addValue(
             "okta-sdk-appauth-ios/\(VERSION) iOS/]\(UIDevice.current.systemVersion)",
-            forHTTPHeaderField: "X-Okta-Agent"
+            forHTTPHeaderField: "X-Okta-User-Agent-Extended"
         )
 
         if let postBodyData = postData {
