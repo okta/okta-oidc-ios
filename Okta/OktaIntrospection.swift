@@ -47,7 +47,7 @@ public struct Introspect {
             return URL(string: OktaAuth.configuration?["issuer"] as! String + "/v1/introspect")
         }
         
-        return URL(string: OktaAuth.configuration?["issuer"] as! String + "oauth2/v1/introspect")
+        return URL(string: OktaAuth.configuration?["issuer"] as! String + "/oauth2/v1/introspect")
         
         
     }

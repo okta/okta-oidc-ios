@@ -48,6 +48,6 @@ public struct Revoke {
             return URL(string: OktaAuth.configuration?["issuer"] as! String + "/v1/revoke")
         }
         
-        return URL(string: OktaAuth.configuration?["issuer"] as! String + "oauth2/v1/revoke")
+        return URL(string: OktaAuth.configuration?["issuer"] as! String + "/oauth2/v1/revoke")
     }
 }
