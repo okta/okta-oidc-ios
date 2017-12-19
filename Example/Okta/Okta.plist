@@ -13,8 +13,8 @@
 	<key>clientSecret</key>
 	<string></string>
 	<key>clientId</key>
-	<string>GJv1mKQtUAUbTalBeQLs</string>
+	<string>{client_id}</string>
 	<key>issuer</key>
-	<string>https://example.oktapreview.com</string>
+	<string>https://{yourOktaDomain}.com</string>
 </dict>
 </plist>

@@ -14,15 +14,15 @@ import Foundation
 
 open class Utils: NSObject {
 
-    open func getPlistConfiguration() -> [String: Any]? {
+    open class func getPlistConfiguration() -> [String: Any]? {
         // Parse Okta.plist to build the authorization request
         
         return getPlistConfiguration(forResourceName: "Okta")
     }
-    
-    open func getPlistConfiguration(forResourceName resourceName: String) -> [String: Any]? {
+
+    open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: Any]? {
         // Parse Okta.plist to build the authorization request
-        
+
         if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"),
             let data = try? Data(contentsOf: path) {
             if let result = try? PropertyListSerialization
@@ -32,21 +32,38 @@ open class Utils: NSObject {
                      format: nil
                 ) as? [String: Any] {
                     OktaAuth.configuration = result
-                    return result
+                    return self.validatePList(result)
             }
         }
         return nil
     }
-    
-    open func scrubScopes(_ scopes: Any?) throws -> [String]{
+
+    open class func validatePList(_ plist: [String: Any]?) -> [String: Any]? {
+        // Perform validation on the PList fields
+        // Currently only reformatting the issuer
+
+        if plist == nil {
+            return nil
+        }
+
+        var formatted = plist!
+
+        if let issuer = formatted["issuer"] as? String {
+            formatted["issuer"] = String(issuer.suffix(1)) == "/" ? String(issuer.dropLast()) : issuer
+        }
+        OktaAuth.configuration = formatted
+        return formatted
+    }
+
+    open class func scrubScopes(_ scopes: Any?) throws -> [String]{
         /**
          Perform scope scrubbing here.
-         
+
          Verify that scopes:
             - Are in list format
             - Contain "openid"
         */
-        
+
         var scrubbedScopes = [String]()
         if let listScopes = scopes as? [String] {
             // Scopes are formatted as list
@@ -57,7 +74,7 @@ open class Utils: NSObject {
             }
             return scrubbedScopes
         }
-        
+
         if let stringScopes = scopes as? String {
             // Scopes are forrmated as String
             scrubbedScopes = stringScopes.components(separatedBy: " ")
@@ -67,7 +84,11 @@ open class Utils: NSObject {
             }
             return scrubbedScopes
         }
-        
+
         throw OktaError.error(error: "Scopes are in unspecified format. Must be an Array or String type.")
+    }
+
+    open class func generateNonce() -> String {
+        return UUID().uuidString
     }
 }

@@ -47,6 +47,6 @@ public struct UserInfo {
             return nil
         }
         
-        return URL(string: OktaAuth.configuration?["issuer"] as! String + "oauth2/v1/userinfo")
+        return URL(string: OktaAuth.configuration?["issuer"] as! String + "/oauth2/v1/userinfo")
     }
 }

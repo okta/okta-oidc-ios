@@ -10,7 +10,8 @@ import XCTest
 import OktaAuth
 
 class OktaUITests: XCTestCase {
-    var username, password: String?
+    var username = ""
+    var password = ""
 
     override func setUp() {
         super.setUp()
@@ -41,21 +42,13 @@ class OktaUITests: XCTestCase {
 
         let webViewsQuery = app.webViews
         webViewsQuery.textFields["Username"].tap()
-        webViewsQuery.textFields["Username"].typeText("johndoe")
+        webViewsQuery.textFields["Username"].typeText(username)
         webViewsQuery.secureTextFields["Password"].tap()
-        webViewsQuery.secureTextFields["Password"].typeText("password")
-
-        app
-            .children(matching: .window)
-            .element(boundBy: 0)
-            .children(matching: .other)
-            .element
-            .children(matching: .other)
-            .element(boundBy: 0)
-            .tap()
+        webViewsQuery.secureTextFields["Password"].typeText(password)
+        webViewsQuery.buttons["Sign In"].tap()
 
         // Wait for app to redirect back (Granting 3 second delay)
-        sleep(2)
+        sleep(3)
 
         if let tokenValues = app.textViews["tokenView"].value as? String {
             XCTAssertNotNil(tokenValues)
@@ -75,15 +68,16 @@ class OktaUITests: XCTestCase {
         app.buttons["Refresh Tokens"].tap()
         app.buttons["Refresh Tokens"].tap()
 
-        sleep(2)
         if let tokenCheck = app.textViews["tokenView"].value as? String {
+            sleep(1)
             XCTAssertNotEqual(oldTokens, tokenCheck)
         }
 
         // Get User info
         app.buttons["Userinfo"].tap()
         if let userInfoValue = app.textViews["tokenView"].value as? String {
-            XCTAssertTrue(userInfoValue.contains("johndoe"))
+            sleep(2)
+            XCTAssertTrue(userInfoValue.contains(username))
         } else {
             // Fail test
             XCTAssertTrue(false)
@@ -92,6 +86,7 @@ class OktaUITests: XCTestCase {
         // Introspect Valid Token
         app.buttons["Introspect"].tap()
         if let valid = app.textViews["tokenView"].value as? String {
+            sleep(1)
             XCTAssertTrue(valid.contains("true"))
         } else {
             // Fail test
@@ -101,6 +96,7 @@ class OktaUITests: XCTestCase {
         // Revoke Token
         app.buttons["Revoke"].tap()
         if let revoked = app.textViews["tokenView"].value as? String {
+            sleep(1)
             XCTAssertTrue(revoked.contains("AccessToken was revoked"))
         } else {
             // Fail test
@@ -110,6 +106,7 @@ class OktaUITests: XCTestCase {
         // Introspect invalid Token
         app.buttons["Introspect"].tap()
         if let isNotValid = app.textViews["tokenView"].value as? String {
+            sleep(1)
             XCTAssertTrue(isNotValid.contains("false"))
         } else {
             // Fail test

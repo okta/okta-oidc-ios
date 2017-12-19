@@ -12,6 +12,9 @@
 
 import AppAuth
 
+// Current version of the SDK
+let VERSION = "0.3.0"
+
 // Holds the browser session
 public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 
@@ -20,7 +23,6 @@ public var configuration: [String: Any]?
 
 // Token manager
 public var tokens: OktaTokenManager?
-
 
 public func login(_ username: String, password: String) -> Login {
     // Attempt to authenticate via Resource Owner Password Grant
@@ -68,7 +70,7 @@ public func clear() {
 }
 
 public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-    if currentAuthorizationFlow!.resumeAuthorizationFlow(with: url){
+    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeAuthorizationFlow(with: url){
         currentAuthorizationFlow = nil
         return true
     }
