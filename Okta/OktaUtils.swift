@@ -16,7 +16,7 @@ open class Utils: NSObject {
 
     open class func getPlistConfiguration() -> [String: Any]? {
         // Parse Okta.plist to build the authorization request
-        
+
         return getPlistConfiguration(forResourceName: "Okta")
     }
 

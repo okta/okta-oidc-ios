@@ -13,33 +13,33 @@
 import Foundation
 
 public class OktaKeychain: NSObject {
-    
+
     static var backgroundAccess = false
-    
+
     internal class func setBackgroundAccess(access:Bool) {
         self.backgroundAccess = access
     }
 
     internal class func set(key: String, object: String, access: Bool) {
         let objectData = object.data(using: .utf8)
-        
+
         let q = [
                      kSecClass as String: kSecClassGenericPassword as String,
                  kSecValueData as String: objectData!,
                kSecAttrAccount as String: key,
             kSecAttrAccessible as String: getAccessibility()
         ] as CFDictionary
-        
+
         // Delete existing (if applicable)
         SecItemDelete(q)
-        
+
         // Store to keychain
         let sanityCheck = SecItemAdd(q, nil)
         if sanityCheck != noErr {
             print("Error Storing to Keychain: \(sanityCheck.description)")
         }
     }
-    
+
     internal class func get(key: String) -> String? {
         let q = [
                      kSecClass as String: kSecClassGenericPassword,
@@ -48,13 +48,13 @@ public class OktaKeychain: NSObject {
                kSecAttrAccount as String: key,
             kSecAttrAccessible as String: getAccessibility()
         ] as CFDictionary
-        
+
         var ref: AnyObject? = nil
-        
+
         let sanityCheck = SecItemCopyMatching(q, &ref)
 
         if sanityCheck != noErr { return nil }
-        
+
         if let parsedData = ref as? Data {
             return String(data: parsedData, encoding: .utf8)
         } else {
@@ -62,7 +62,7 @@ public class OktaKeychain: NSObject {
         }
         return nil
     }
-    
+
     internal class func removeAll() {
         let secClasses = [kSecClassGenericPassword]
         for secClass in secClasses {
@@ -73,7 +73,7 @@ public class OktaKeychain: NSObject {
             }
         }
     }
-    
+
     internal class func getAccessibility() -> CFString {
         if self.backgroundAccess {
             // If the device needs background keychain access, grant permission

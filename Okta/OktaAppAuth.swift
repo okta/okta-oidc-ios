@@ -53,9 +53,7 @@ public func refresh() {
     // Get new tokens
     tokens?.authState?.setNeedsTokenRefresh()
     
-    tokens?.authState?.performAction(freshTokens: {
-        accessToken, idToken, error in
-        
+    tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
         if error != nil {
             print("Error fetching fresh tokens: \(error!.localizedDescription)")
             return

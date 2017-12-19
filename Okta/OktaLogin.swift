@@ -14,7 +14,7 @@ public struct Login {
     
     var username, password: String?
     var passwordFlow = false
-    
+
     init(forUsername username: String, forPassword password: String){
         // Login via Username/Password
         self.username = username
@@ -22,18 +22,18 @@ public struct Login {
         
         self.passwordFlow = true
     }
-    
+
     init(){
         // Login via Authoriation Code Flow
         self.username = nil
         self.password = nil
-        
+
         self.passwordFlow = false
     }
-    
+
     public func start(withPListConfig plistName: String?, view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        
+
         if plistName == nil { callback(nil, .error(error: "PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.")) }
         
         if !self.passwordFlow {
@@ -71,7 +71,7 @@ public struct Login {
             }
         }
     }
-    
+
     public func start(_ view: UIViewController, callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
         self.start(withPListConfig: "Okta", view: view) { result, error in callback(result, error) }
     }
