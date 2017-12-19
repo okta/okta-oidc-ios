@@ -21,7 +21,6 @@ class Tests: XCTestCase {
         // Attempt to find the Okta.plist file
         XCTAssertNotNil(Utils.getPlistConfiguration())
     }
-
     func testPListFormatWithTrailingSlash() {
         // Validate the PList issuer
         let dict = [
