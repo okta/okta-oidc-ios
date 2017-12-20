@@ -18,7 +18,7 @@ internal struct UserInfo {
             callback(nil, .NoUserInfoEndpoint)
             return
         }
-
+        
         guard let token = token else {
             callback(nil, .NoBearerToken)
             return

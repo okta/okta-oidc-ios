@@ -13,10 +13,17 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
 
-    override func viewDidLoad() { super.viewDidLoad() }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if OktaAuth.isAuthenticated() {
+            // If there is a valid accessToken
+            // build the token view.
+            self.buildTokenTextView()
+        }
+    }
 
     @IBAction func loginButton(_ sender: Any) {
-        if tokens == nil { self.loginCodeFlow() }
+        self.loginCodeFlow()
     }
 
     @IBAction func clearTokens(_ sender: Any) {
@@ -56,11 +63,7 @@ class ViewController: UIViewController {
 
     func loginCodeFlow() {
         OktaAuth.login().start(self)
-        .then { authResponse in
-            tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
-            tokens?.set(value: authResponse.idToken!, forKey: "idToken")
-            self.buildTokenTextView()
-        }
+        .then { _ in self.buildTokenTextView() }
         .catch { error in print(error) }
     }
 
@@ -69,23 +72,22 @@ class ViewController: UIViewController {
     }
 
     func buildTokenTextView() {
-        if tokens == nil {
+        guard let currentTokens = tokens else {
             tokenView.text = ""
             return
         }
 
         var tokenString = ""
-
-        if let accessToken = tokens?.accessToken {
+        if let accessToken = currentTokens.accessToken {
             tokenString += ("\nAccess Token: \(accessToken)\n")
         }
 
-        if let idToken = tokens?.idToken {
-            tokenString += "\nidToken Token: \(idToken)\n"
+        if let idToken = currentTokens.idToken {
+            tokenString += "\nID Token: \(idToken)\n"
         }
 
-        if let refreshToken = tokens?.refreshToken {
-            tokenString += "\nrefresh Token: \(refreshToken)\n"
+        if let refreshToken = currentTokens.refreshToken {
+            tokenString += "\nRefresh Token: \(refreshToken)\n"
         }
 
         self.updateUI(updateText: tokenString)

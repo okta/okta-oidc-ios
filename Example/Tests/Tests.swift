@@ -1,6 +1,7 @@
 import UIKit
 import XCTest
 @testable import OktaAuth
+@testable import AppAuth
 
 class Tests: XCTestCase {
 
@@ -105,30 +106,6 @@ class Tests: XCTestCase {
        })
     }
 
-    func testKeychainStorage() {
-        // Validate that tokens can be stored and retrieved via the keychain
-        let tokens = OktaTokenManager(authState: nil)
-
-        tokens.set(value: "fakeToken", forKey: "accessToken")
-        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
-
-        // Clear tokens
-        tokens.clear()
-        XCTAssertNil(tokens.get(forKey: "accessToken"))
-    }
-
-    func testBackgroundKeychainStorage() {
-        // Validate that tokens can be stored and retrieved via the keychain
-        let tokens = OktaTokenManager(authState: nil)
-
-        tokens.set(value: "fakeToken", forKey: "accessToken", needsBackgroundAccess: true)
-        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
-
-        // Clear tokens
-        tokens.clear()
-        XCTAssertNil(tokens.get(forKey: "accessToken"))
-    }
-
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
         OktaAuth.configuration = [
@@ -152,7 +129,6 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-
         let _ = UserInfo(token: nil) { response, error in
             XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
         }
@@ -178,9 +154,26 @@ class Tests: XCTestCase {
             "iZXhwIjoxNTE5OTcyNTA4LCJjaWQiOiJ7Y2xpZW50SWR9IiwidWlkIjoie3VpZH0iLCJzY3AiOlsib3Blb" +
             "mlkIiwib2ZmbGluZV9hY2Nlc3MiLCJwcm9maWxlIl0sInN1YiI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ." +
             "fakeSignature"
+
         Introspect().decode(idToken)
         .then { response in
             XCTAssertNotNil(response)
         }
+    }
+
+    func testIsAuthenticated() {
+        // Validate that if there is an existing accessToken, we return an "authenticated" state
+        let mockAuthState = OIDAuthState(authorizationResponse: nil, tokenResponse: nil, registrationResponse: nil)
+        let tokenManager = OktaTokenManager(
+            authState: mockAuthState,
+            config: [
+                "issuer": "https://example.com",
+                "clientId": "abc123"
+            ]
+        )
+        OktaAuthorization().storeAuthState(tokenManager)
+
+        let isAuth = OktaAuth.isAuthenticated()
+        XCTAssertFalse(isAuth)
     }
 }

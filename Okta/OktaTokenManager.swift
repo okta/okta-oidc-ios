@@ -13,56 +13,68 @@
 import AppAuth
 import Vinculum
 
-open class OktaTokenManager: NSObject {
+open class OktaTokenManager: NSObject, NSCoding {
 
-    open var authState: OIDAuthState?
-    open var idToken: String?
-    open var refreshToken: String?
-    open var accessToken: String?
+    private var _idToken: String? = nil
 
-    public init(authState: OIDAuthState?) {
+    open var authState: OIDAuthState
+    open var config: [String: String]
+    open var accessibility: CFString
+
+    open var idToken: String? {
+        get { return self._idToken }
+    }
+
+    open var refreshToken: String? {
+        get {
+            guard let token = self.authState.refreshToken else { return nil }
+            return token
+        }
+    }
+
+    open var accessToken: String? {
+        get {
+            guard let token = self.authState.lastTokenResponse?.accessToken else { return nil }
+            return token
+        }
+    }
+
+    public init(authState: OIDAuthState, config: [String: String], accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
+        self.authState = authState
+        self.config = config
+        self.accessibility = accessibility
+
         super.init()
 
-        if authState == nil { return }
-        self.authState = authState!
-        self.accessToken = authState?.lastTokenResponse?.accessToken
-        self.idToken = authState?.lastTokenResponse?.idToken
-        self.refreshToken = authState?.lastTokenResponse?.refreshToken
-
-        OktaAuth.tokens = self
-    }
-
-    public func set(value: String, forKey: String) {
-        // Default to not allowing background access for keychain
-        self.set(value: value, forKey: forKey, needsBackgroundAccess: false)
-    }
-
-    public func set(value: String, forKey: String, needsBackgroundAccess: Bool) {
-        var accessibility = kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        if needsBackgroundAccess {
-            // If the device needs background keychain access, grant permission
-            accessibility = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        }
-
-        do {
-            try Vinculum.set(key: forKey, value: value, accessibility: accessibility)
-        } catch let error {
-            // Log the error until this method is updated to throw
-            print(error.localizedDescription)
-        }
-    }
-
-    public func get(forKey: String) -> String? {
-        // Attempt to return the string value of the stored key
-        do {
-            if let keychainItem =  try Vinculum.get(forKey) {
-                return keychainItem.getString()
+        // Since the idToken isn't stored in the last tokenResponse after refresh,
+        // refer to the cached keychain version.
+        if let prevIdToken = authState.lastTokenResponse?.idToken {
+            self._idToken = prevIdToken
+            try? Vinculum.set(key: "idToken", value: prevIdToken)
+        } else {
+            guard let prevIdToken = try? Vinculum.get("idToken")?.getString() else {
+                self._idToken = nil
+                return
             }
-        } catch let error {
-            // Log the error until this method is updated to throw
-            print(error.localizedDescription)
+            self._idToken = prevIdToken
         }
-        return nil
+
+        // Store the current configuration
+        OktaAuth.configuration = config
+    }
+
+    required public convenience init?(coder decoder: NSCoder) {
+        self.init(
+                authState: decoder.decodeObject(forKey: "authState") as! OIDAuthState,
+                   config: decoder.decodeObject(forKey: "config") as! [String: String],
+            accessibility: (decoder.decodeObject(forKey: "accessibility") as! CFString)
+        )
+    }
+
+    public func encode(with coder: NSCoder) {
+        coder.encode(self.authState, forKey: "authState")
+        coder.encode(self.config, forKey: "config")
+        coder.encode(self.accessibility, forKey: "accessibility")
     }
 
     public func clear() {

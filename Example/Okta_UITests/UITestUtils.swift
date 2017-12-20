@@ -39,6 +39,12 @@ public struct UITestUtils {
         return nil
     }
 
+    func getTextViewValueWithDelay(label: String, delay: UInt32) -> String? {
+        // Returns the value of a textView after a given delay
+        sleep(delay)
+        return getTextViewValue(label: label)
+    }
+
     func waitForElement(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
         // Generic wait for element to apepar function w/ timeout
         let pred = NSPredicate(format: "exists == true")

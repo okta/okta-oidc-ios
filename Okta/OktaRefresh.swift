@@ -20,8 +20,8 @@ internal struct Refresh {
                 return reject(OktaError.NoRefreshToken)
             }
 
-            tokens?.authState?.setNeedsTokenRefresh()
-            tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
+            tokens?.authState.setNeedsTokenRefresh()
+            tokens?.authState.performAction(freshTokens: { accessToken, idToken, error in
                 if error != nil {
                     return reject(OktaError.ErrorFetchingFreshTokens(error!.localizedDescription))
                 }
