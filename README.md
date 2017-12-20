@@ -5,24 +5,23 @@
 [![License](https://img.shields.io/cocoapods/l/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 [![Platform](https://img.shields.io/cocoapods/p/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 
-## Example
+## Overview
+This library is a **wrapper** around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS) SDK for communicating with OAuth 2.0 + OpenID Connect providers, and follows current best practice outlined in [RFC 8252 - OAuth 2.0 for Native Apps](https://tools.ietf.org/html/rfc8252).
 
+This library currently supports:
+  - [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
+  - [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749#section-1.3.3)
+
+## Example
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## Requirements
-
 ## Installation
-
 Okta is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
 pod "OktaAuth"
 ```
-## Overview
-This library currently supports:
-  - [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
-  - [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749#section-1.3.3)
 
 ## Getting Started
 You can create an Okta developer account at [https://developer.okta.com/](https://developer.okta.com/). 
@@ -34,7 +33,7 @@ You can create an Okta developer account at [https://developer.okta.com/](https:
 | Setting                       | Value                                                                             |
 | -------------------- | --------------------------------------------------- |
 | Application Name     | Native OpenId Connect App *(must be unique)* |
-| Redirect URIs            | com.okta.yoursubdomain:/callback|
+| Redirect URIs            | com.okta.{yoursubdomain}:/callback|
 | Allowed grant types | Authorization Code, Refresh Token *(recommended)* |
 
 4. Click **Finish** to redirect back to the *General Settings* of your application.
@@ -53,7 +52,7 @@ Create an `Okta.plist` file in your application's bundle with the following fiel
 <plist version="1.0">
 <dict>
 	<key>issuer</key>
-	<string>{oktaOrg}</string>
+	<string>https://{yourOktaDomain}.com/oauth2/default</string>
 	<key>clientId</key>
 	<string>{clientIdValue}</string>
 	<key>redirectUri</key>
@@ -86,6 +85,7 @@ If using the [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749
 
 ## Authorization
 First, update your `AppDelegate` to include the following function to allow the redirect to occur:
+
 ```swift
 // AppDelegate.swift
 import OktaAuth
@@ -97,14 +97,13 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpe
 
 
 Then, you can start the authorization flow by simply calling `login`:
+
 ```swift
 OktaAuth
     .login()
-    .start(view: self) {
-        response, error in
-               
+    .start(view: self) { response, error in
         if error != nil { print(error!) }
-                
+
         // Success
         if let authResponse = response {
             // authResponse.accessToken
@@ -117,11 +116,9 @@ To login using `username` and `password`:
 ```swift
 OktaAuth
     .login(username: "user@example.com", password: "password")
-    .start(view: self) {
-        response, error in
-               
+    .start(view: self) { response, error in
         if error != nil { print(error!) }
-                
+
         // Success
         if let authResponse = response {
             // authResponse.accessToken
@@ -129,49 +126,53 @@ OktaAuth
         }
     }
 ```
+
 ### Get UserInfo
 Calls the OIDC userInfo endpoint to return user information.
+
 ```swift
-OktaAuth.userinfo() {
-    response, error in
-            
-    if error != nil { print("Error: \(error!)") }
-            
-    if let userinfo = response {
-        userinfo.forEach { print("\($0): \($1)") }
+OktaAuth
+    .userinfo() { response, error in
+        if error != nil { print("Error: \(error!)") }
+
+        if let userinfo = response {
+            userinfo.forEach { print("\($0): \($1)") }
+        }
     }
-}
 ```
 
-### Introspect the Tokens
+### Introspect the Token
 Calls the introspection endpoint to inspect the validity of the specified token.
+
 ```swift
 OktaAuth
     .introspect()
-    .validate(token: token) {
-        response, error in
-            if error != nil { print("Error: \(error!)") }
-            
-            if let isActive = response { print("Is token valid? \(isActive)") }
+    .validate(token: token) { response, error in
+        if error != nil { print("Error: \(error!)") }
+
+        if let isActive = response { print("Is token valid? \(isActive)") }
     }
 ```
 
 ### Revoke a Token
 Calls the revocation endpoint to revoke the specified token.
+
 ```swift
-OktaAuth.revoke(token: token) {
-    response, error in
-            
-    if error != nil { print("Error: \(error!)") }
-    if let _ = response { print("Token was revoked") }
-}
+OktaAuth
+    .revoke(token: token) { response, error in
+        if error != nil { print("Error: \(error!)") }
+
+        if let _ = response { print("Token was revoked") }
+    }
 ```
 
 ### Refresh a Token
 Refreshes the `accessToken` if the `refreshToken` is provided.
+
 ```swift
 OktaAuth.refresh()
 ```
+
 ### Token Management
 Tokens are securely stored in the Keychain. They can be easily be set and retrieved with the helper methods `set` and `get`.
 
@@ -179,20 +180,16 @@ Tokens are securely stored in the Keychain. They can be easily be set and retrie
 OktaAuth
     .login()
     .start(self) { response, error in
-        
         if error != nil { print(error!) }
+
         if let authResponse = response {
             // Store tokens in keychain
-            tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
-            tokens?.set(value: authResponse.idToken!, forKey: "idToken")
-            self.buildTokenTextView()
+            OktaAuth.tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
+            OktaAuth.tokens?.set(value: authResponse.idToken!, forKey: "idToken")
         }
 }
 
-// OktaAuth.tokens.get(forKey: "accessToken")
-// OktaAuth.tokens.get(forKey: "idToken")
+// Retrieve the tokens
+OktaAuth.tokens?.get(forKey: "accessToken")
+OktaAuth.tokens?.get(forKey: "idToken")
 ```
-
-## License
-
-Okta is available under the MIT license. See the LICENSE file for more info.
