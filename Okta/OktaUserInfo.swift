@@ -28,7 +28,6 @@ public struct UserInfo {
             ]
 
             OktaApi.post(userInfoEndpoint, headers: headers, postData: nil) { response, error in callback(response, error) }
-
         } else {
             callback(nil, .NoUserInfoEndpoint)
         }

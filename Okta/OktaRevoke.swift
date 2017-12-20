@@ -29,7 +29,6 @@ public struct Revoke {
             let data = "token=\(self.token!)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
             OktaApi.post(revokeEndpoint, headers: headers, postData: data) { response, error in callback(response, error) }
-
         } else {
             callback(nil, .NoRevocationEndpoint)
         }

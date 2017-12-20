@@ -39,6 +39,22 @@ class Tests: XCTestCase {
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
+    func testNoPListOnLogin() {
+        let plistException = expectation(description: "Will error attempting find plist")
+
+        OktaAuth
+            .login("user@example.com", password: "password")
+            .start(withPListConfig: nil, view: UIViewController()) { response, error in
+                XCTAssertEqual(error!.localizedDescription, "PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.")
+                plistException.fulfill()
+        }
+
+        waitForExpectations(timeout: 20, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail() }
+        })
+    }
+
     func testValidScopesArray() {
         // Validate the scopes are in the correct format
         let scopes = ["openid"]
