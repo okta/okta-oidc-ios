@@ -85,7 +85,7 @@ open class Utils: NSObject {
             return scrubbedScopes
         }
 
-        throw OktaError.error(error: "Scopes are in unspecified format. Must be an Array or String type.")
+        throw OktaError.InvalidScopeFormat
     }
 
     open class func generateNonce() -> String {

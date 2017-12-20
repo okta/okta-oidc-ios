@@ -20,7 +20,7 @@ public struct UserInfo {
         // Revoke the token
         if let userInfoEndpoint = getUserInfoEndpoint() {
             // Build introspect request
-            
+
             let headers = [
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded",
@@ -29,7 +29,7 @@ public struct UserInfo {
 
             OktaApi.post(userInfoEndpoint, headers: headers, postData: nil) { response, error in callback(response, error) }
         } else {
-            callback(nil, .error(error: "Error finding the userinfo endpoint"))
+            callback(nil, .NoUserInfoEndpoint)
         }
 
     }

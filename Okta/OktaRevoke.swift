@@ -30,7 +30,7 @@ public struct Revoke {
 
             OktaApi.post(revokeEndpoint, headers: headers, postData: data) { response, error in callback(response, error) }
         } else {
-            callback(nil, .error(error: "Error finding the revocation endpoint"))
+            callback(nil, .NoRevocationEndpoint)
         }
 
     }

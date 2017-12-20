@@ -31,7 +31,7 @@ open class OktaApi: NSObject {
 
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             if error != nil {
-                callback(nil, .apiError(error: "\(String(describing: error?.localizedDescription))"))
+                callback(nil, .APIError("\(String(describing: error?.localizedDescription))"))
                 return
             }
             var responseJson = [String:Any]()

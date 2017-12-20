@@ -21,7 +21,7 @@ class Tests: XCTestCase {
         // Attempt to find the Okta.plist file
         XCTAssertNotNil(Utils.getPlistConfiguration())
     }
-    
+
     func testPListFormatWithTrailingSlash() {
         // Validate the PList issuer
         let dict = [
@@ -33,9 +33,9 @@ class Tests: XCTestCase {
         } else {
             XCTFail()
         }
-        
+
     }
-    
+
     func testPListFormatWithoutTrailingSlash() {
         // Validate the PList issuer
         let dict = [
@@ -47,6 +47,22 @@ class Tests: XCTestCase {
         } else {
             XCTFail()
         }
+    }
+
+    func testNoPListOnLogin() {
+        let plistException = expectation(description: "Will error attempting find plist")
+
+        OktaAuth
+            .login("user@example.com", password: "password")
+            .start(withPListConfig: nil, view: UIViewController()) { response, error in
+                XCTAssertEqual(error!.localizedDescription, "PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.")
+                plistException.fulfill()
+        }
+
+        waitForExpectations(timeout: 20, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail() }
+        })
     }
 
     func testValidScopesArray() {
@@ -67,7 +83,10 @@ class Tests: XCTestCase {
     func testInvalidScopes() {
         // Validate that scopes of wrong type throw an error
         let scopes = [1, 2, 3]
-        XCTAssertThrowsError(try Utils.scrubScopes(scopes))
+        XCTAssertThrowsError(try Utils.scrubScopes(scopes)) { error in
+            let desc = error as! OktaError
+            XCTAssertEqual(desc.localizedDescription, "Scopes are in unspecified format. Must be an Array or String type.")
+        }
     }
 
     func testPasswordFailureFlow() {
@@ -79,10 +98,7 @@ class Tests: XCTestCase {
         OktaAuth
             .login("user@example.com", password: "password")
             .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController()) { response, error in
-
-                if error!.localizedDescription.range(of: "The operation couldn’t be completed") != nil {
-                    XCTAssertTrue(true)
-                }
+                XCTAssertEqual(error!.localizedDescription, "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)")
                 pwdExpectation.fulfill()
         }
 

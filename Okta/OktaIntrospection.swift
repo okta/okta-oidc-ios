@@ -30,7 +30,7 @@ public struct Introspect {
             OktaApi.post(introspectionEndpoint, headers: headers, postData: data) { response, error in callback(response?["active"] as? Bool, error) }
 
         } else {
-            callback(nil, .error(error: "Error finding the introspection endpoint"))
+            callback(nil, .NoIntrospectionEndpoint)
         }
     }
 

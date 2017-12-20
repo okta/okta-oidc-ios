@@ -34,31 +34,28 @@ public struct Login {
     public func start(withPListConfig plistName: String?, view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
 
-        if plistName == nil { callback(nil, .error(error: "PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.")) }
-        
+        if plistName == nil {
+            callback(nil, .NoPListGiven)
+            return
+        }
+
         if !self.passwordFlow {
             // Get client configuration from Okta.plist
             if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
                 OktaAuthorization().authCodeFlow(config, view: view) { response, error in callback(response, error) }
             }
         }
+
         if self.passwordFlow {
             // Get client configuratin from Okta.plist
             if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
                 // Verify the ClientSecret was included
                 if (config["clientSecret"] as! String) == "" {
-                    callback(
-                        nil,
-                        .error(
-                            error:  "ClientSecret not included in PList configuration file: "
-                            + "\(plistName!) See https://github.com/okta/okta-sdk-appauth-ios/#configuration"
-                            + "for more information."
-                        )
-                    )
+                    callback(nil, .NoClientSecret(plistName!))
                     return
                 }
                 if self.username == nil || self.password == nil {
-                    callback(nil, .error(error: "User credentials not included."))
+                    callback(nil, .NoUserCredentials)
                     return
                 }
 
