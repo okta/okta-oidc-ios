@@ -21,6 +21,7 @@
 		7169AE1B1EF5EB8B00313EB8 /* Okta.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7169AE1A1EF5EB8B00313EB8 /* Okta.plist */; };
 		7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		7173E8391F97F10D008BC82A /* Okta-PasswordFlow.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7173E8381F97F10D008BC82A /* Okta-PasswordFlow.plist */; };
+		71A92AF5202A7C4D0072EC32 /* UITestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71A92AF3202A7C160072EC32 /* UITestUtils.swift */; };
 		71F76E51BDB207F788887141 /* Pods_Okta_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */; };
 		E5E32C428E4371BB3E148847 /* Pods_Okta_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29991E729AD593DD12330109 /* Pods_Okta_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -65,6 +66,7 @@
 		7137EDF91EFB281A0082C30F /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppAuth.framework; path = "../../Library/Developer/Xcode/DerivedData/Okta-auwqmzndabniaoghxgdrvwhlmgvr/Build/Products/Debug-iphonesimulator/AppAuth/AppAuth.framework"; sourceTree = "<group>"; };
 		7169AE1A1EF5EB8B00313EB8 /* Okta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Okta.plist; sourceTree = "<group>"; };
 		7173E8381F97F10D008BC82A /* Okta-PasswordFlow.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Okta-PasswordFlow.plist"; sourceTree = "<group>"; };
+		71A92AF3202A7C160072EC32 /* UITestUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestUtils.swift; sourceTree = "<group>"; };
 		A40CCA2C6BE208FDEDEA0B7A /* Pods-Okta_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4D59B5275951E9231367D12 /* Pods-Okta_UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,6 +201,7 @@
 			isa = PBXGroup;
 			children = (
 				712745EC1EFB0B3F00E820FC /* Okta_UITests.swift */,
+				71A92AF3202A7C160072EC32 /* UITestUtils.swift */,
 				712745EE1EFB0B3F00E820FC /* Info.plist */,
 			);
 			path = Okta_UITests;
@@ -560,6 +563,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */,
+				71A92AF5202A7C4D0072EC32 /* UITestUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
