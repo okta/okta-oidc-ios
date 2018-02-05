@@ -12,6 +12,9 @@
 
 import AppAuth
 
+// Current version of the SDK
+let VERSION = "0.3.0"
+
 // Holds the browser session
 public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 
@@ -20,7 +23,6 @@ public var configuration: [String: Any]?
 
 // Token manager
 public var tokens: OktaTokenManager?
-
 
 public func login(_ username: String, password: String) -> Login {
     // Attempt to authenticate via Resource Owner Password Grant
@@ -50,10 +52,8 @@ public func userinfo(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) 
 public func refresh() {
     // Get new tokens
     tokens?.authState?.setNeedsTokenRefresh()
-    
-    tokens?.authState?.performAction(freshTokens: {
-        accessToken, idToken, error in
-        
+
+    tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
         if error != nil {
             print("Error fetching fresh tokens: \(error!.localizedDescription)")
             return
@@ -68,7 +68,7 @@ public func clear() {
 }
 
 public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-    if currentAuthorizationFlow!.resumeAuthorizationFlow(with: url){
+    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeAuthorizationFlow(with: url){
         currentAuthorizationFlow = nil
         return true
     }
