@@ -3,6 +3,7 @@ use_frameworks!
 
 def shared_pods
     pod 'OktaAuth', :path => '../'
+    pod 'Vinculum'
 end
 
 

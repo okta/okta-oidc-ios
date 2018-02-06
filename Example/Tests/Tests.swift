@@ -88,7 +88,7 @@ class Tests: XCTestCase {
         let tokens = OktaTokenManager(authState: nil)
 
         tokens.set(value: "fakeToken", forKey: "accessToken")
-        XCTAssertNotNil(tokens.get(forKey: "accessToken"))
+        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
 
         // Clear tokens
         tokens.clear()
@@ -100,7 +100,7 @@ class Tests: XCTestCase {
         let tokens = OktaTokenManager(authState: nil)
 
         tokens.set(value: "fakeToken", forKey: "accessToken", needsBackgroundAccess: true)
-        XCTAssertNotNil(tokens.get(forKey: "accessToken"))
+        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
 
         // Clear tokens
         tokens.clear()
