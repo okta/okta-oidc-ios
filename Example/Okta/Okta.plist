@@ -15,6 +15,6 @@
 	<key>clientId</key>
 	<string>{clientId}</string>
 	<key>issuer</key>
-	<string>https://j{yourOktaDomain}.com/oauth2/default</string>
+	<string>https://{yourOktaDomain}.com/oauth2/default</string>
 </dict>
 </plist>
