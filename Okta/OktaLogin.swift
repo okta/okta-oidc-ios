@@ -38,13 +38,13 @@ public struct Login {
         
         if !self.passwordFlow {
             // Get client configuration from Okta.plist
-            if let config = Utils().getPlistConfiguration(forResourceName: plistName!) {
+            if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
                 OktaAuthorization().authCodeFlow(config, view: view) { response, error in callback(response, error) }
             }
         }
         if self.passwordFlow {
             // Get client configuratin from Okta.plist
-            if let config = Utils().getPlistConfiguration(forResourceName: plistName!) {
+            if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
                 // Verify the ClientSecret was included
                 if (config["clientSecret"] as! String) == "" {
                     callback(

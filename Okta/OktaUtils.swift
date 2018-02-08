@@ -14,15 +14,14 @@ import Foundation
 
 open class Utils: NSObject {
 
-    open func getPlistConfiguration() -> [String: Any]? {
+    open class func getPlistConfiguration() -> [String: Any]? {
         // Parse Okta.plist to build the authorization request
-        
         return getPlistConfiguration(forResourceName: "Okta")
     }
-    
-    open func getPlistConfiguration(forResourceName resourceName: String) -> [String: Any]? {
+
+    open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: Any]? {
         // Parse Okta.plist to build the authorization request
-        
+
         if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"),
             let data = try? Data(contentsOf: path) {
             if let result = try? PropertyListSerialization
@@ -37,40 +36,35 @@ open class Utils: NSObject {
         }
         return nil
     }
-    
-    open func scrubScopes(_ scopes: Any?) throws -> [String]{
+
+    internal class func scrubScopes(_ scopes: Any?) -> [String]{
         /**
          Perform scope scrubbing here.
-         
+
          Verify that scopes:
             - Are in list format
             - Contain "openid"
         */
-        
+
         var scrubbedScopes = [String]()
-        if let listScopes = scopes as? [String] {
-            // Scopes are formatted as list
-            scrubbedScopes = listScopes
-            if !listScopes.contains("openid") {
-                scrubbedScopes.append("openid")
-                print("WARNING: openID scope was not included. Adding 'openid' to request scopes.")
-            }
-            return scrubbedScopes
-        }
-        
+
         if let stringScopes = scopes as? String {
-            // Scopes are forrmated as String
+            // Scopes are formatted as a string
             scrubbedScopes = stringScopes.components(separatedBy: " ")
-            if !scrubbedScopes.contains("openid") {
-                scrubbedScopes.append("openid")
-                print("WARNING: openID scope was not included. Adding 'openid' to request scopes.")
-            }
-            return scrubbedScopes
         }
-        
-        throw OktaError.error(error: "Scopes are in unspecified format. Must be an Array or String type.")
+
+        if let arrayScopes = scopes as? [String] {
+            scrubbedScopes = arrayScopes
+        }
+
+        if !scrubbedScopes.contains("openid") {
+            scrubbedScopes.append("openid")
+            print("WARNING: openID scope was not included. Adding 'openid' to request scopes.")
+        }
+
+        return scrubbedScopes
     }
-    
+
     internal class func deviceModel() -> String {
         // Returns the device information
         var system = utsname()
@@ -79,5 +73,10 @@ open class Utils: NSObject {
             return String(cString: ptr)
         }
         return model
+    }
+
+    internal class func removeTrailingSlash(_ val: String) -> String {
+        // Removes the URLs trailing slash if it exists
+        return String(val.suffix(1)) == "/" ? String(val.dropLast()) : val
     }
 }
