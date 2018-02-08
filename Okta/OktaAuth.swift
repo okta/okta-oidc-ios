@@ -96,21 +96,19 @@ public struct OktaAuthorization {
 
     func getMetadataConfig(_ issuer: URL?, callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
         // Get the metadata from the discovery endpoint
+        guard let issuer = issuer, let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
+            return callback(nil, .error(error: "Could not determine discovery metadata endpoint"))
+        }
 
-        OIDAuthorizationService.discoverConfiguration(forIssuer: issuer!) { oidConfig, error in
-
-            var configError: OktaError?
-
-            if oidConfig == nil {
+        OktaApi.get(configUrl, headers: nil) { response, error in
+            guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                 let responseError =
                     "Error returning discovery document:" +
                     "\(error!.localizedDescription) Please" +
                     "check your PList configuration"
-
-                configError = .apiError(error: responseError)
+                return callback(nil, .apiError(error: responseError))
             }
-            callback(oidConfig, configError)
-            return
+            return callback(OIDServiceConfiguration(discoveryDocument: oidcConfig), nil)
         }
     }
 }
