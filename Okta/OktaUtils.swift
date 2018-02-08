@@ -70,4 +70,14 @@ open class Utils: NSObject {
         
         throw OktaError.error(error: "Scopes are in unspecified format. Must be an Array or String type.")
     }
+    
+    internal class func deviceModel() -> String {
+        // Returns the device information
+        var system = utsname()
+        uname(&system)
+        let model = withUnsafePointer(to: &system.machine.0) { ptr in
+            return String(cString: ptr)
+        }
+        return model
+    }
 }

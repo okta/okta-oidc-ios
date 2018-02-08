@@ -21,7 +21,7 @@ open class OktaApi: NSObject {
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
         request.addValue(
-            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion)",
+            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
             forHTTPHeaderField: "X-Okta-User-Agent-Extended"
         )
 
@@ -48,7 +48,7 @@ open class OktaApi: NSObject {
         request.httpMethod = "GET"
         request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
         request.addValue(
-            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion)",
+            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
             forHTTPHeaderField: "X-Okta-User-Agent-Extended"
         )
 
