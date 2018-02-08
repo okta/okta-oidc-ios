@@ -11,6 +11,38 @@
  */
 
 public enum OktaError: Error {
-    case error(error: Any)
-    case apiError(error: Any)
+    case APIError(String)
+    case NoClientSecret(String)
+    case NoDiscoveryEndpoint
+    case NoIntrospectionEndpoint
+    case NoPListGiven
+    case NoRevocationEndpoint
+    case NoUserCredentials
+    case NoUserInfoEndpoint
+}
+
+extension OktaError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .APIError(error: let error):
+            return NSLocalizedString(error, comment: "")
+        case .NoClientSecret(plist: let plist):
+            return NSLocalizedString(
+                "ClientSecret not included in PList configuration file: " +
+                    "\(plist). See https://github.com/okta/okta-sdk-appauth-ios/#configuration " +
+                "for more information.", comment: "")
+        case .NoDiscoveryEndpoint:
+            return NSLocalizedString("Error finding the well-known OpenID Configuration endpoint.", comment: "")
+        case .NoIntrospectionEndpoint:
+            return NSLocalizedString("Error finding the introspection endpoint.", comment: "")
+        case .NoPListGiven:
+            return NSLocalizedString("PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
+        case .NoRevocationEndpoint:
+            return NSLocalizedString("Error finding the revocation endpoint.", comment: "")
+        case .NoUserCredentials:
+            return NSLocalizedString("User credentials not included.", comment: "")
+        case .NoUserInfoEndpoint:
+            return NSLocalizedString("Error finding the user info endpoint.", comment: "")
+        }
+    }
 }
