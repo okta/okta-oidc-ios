@@ -31,7 +31,7 @@ open class Utils: NSObject {
                      format: nil
                 ) as? [String: Any] {
                     OktaAuth.configuration = result
-                    return self.validatePList(result)
+                    return result
             }
         }
         return nil
