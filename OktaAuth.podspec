@@ -13,7 +13,5 @@ Integrate your native app with Okta using the AppAuth library.
 
   s.ios.deployment_target = '9.0'
   s.source_files = 'Okta/**/*'
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
   s.dependency 'AppAuth', '~> 0.91.0'
 end

@@ -16,10 +16,8 @@ public struct Introspect {
 
     public func validate(_ token: String, callback: @escaping (Bool?, OktaError?) -> Void) {
         // Validate token
-
         if let introspectionEndpoint = getIntrospectionEndpoint() {
             // Build introspect request
-
             let headers = [
                       "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -36,7 +34,6 @@ public struct Introspect {
 
     func getIntrospectionEndpoint() -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-
         if let discoveryEndpoint = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary["introspection_endpoint"] {
             return URL(string: discoveryEndpoint as! String)
         }

@@ -13,15 +13,15 @@
 import AppAuth
 
 open class OktaTokenManager: NSObject {
-    
+
     open var authState: OIDAuthState?
     open var idToken: String?
     open var refreshToken: String?
     open var accessToken: String?
-    
+
     public init(authState: OIDAuthState?) {
         super.init()
-        
+
         if authState == nil { return }
         self.authState = authState!
         self.accessToken = authState?.lastTokenResponse?.accessToken
@@ -30,20 +30,20 @@ open class OktaTokenManager: NSObject {
 
         OktaAuth.tokens = self
     }
-    
+
     public func set(value: String, forKey: String) {
         // Default to not allowing background access for keychain
         self.set(value: value, forKey: forKey, needsBackgroundAccess: false)
     }
-    
+
     public func set(value: String, forKey: String, needsBackgroundAccess: Bool) {
         OktaKeychain.set(key: forKey, object: value, access: needsBackgroundAccess)
     }
-    
+
     public func get(forKey: String) -> String? {
         return OktaKeychain.get(key: forKey)
     }
-    
+
     public func clear() {
         OktaKeychain.removeAll()
         OktaAuth.tokens = nil

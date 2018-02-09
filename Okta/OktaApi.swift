@@ -15,7 +15,6 @@ open class OktaApi: NSObject {
                     headers: [String: String]?,
                     postData: String?,
                     callback: @escaping ([String: Any]?, OktaError?) -> Void) {
-
         // Generic POST API wrapper
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -42,7 +41,6 @@ open class OktaApi: NSObject {
     class func get(_ url: URL,
                    headers: [String: String]?,
                    callback: @escaping ([String: Any]?, OktaError?) -> Void) {
-
         // Generic GET API wrapper
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
