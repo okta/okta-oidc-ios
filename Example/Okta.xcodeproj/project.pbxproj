@@ -65,6 +65,7 @@
 		7137EDF91EFB281A0082C30F /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppAuth.framework; path = "../../Library/Developer/Xcode/DerivedData/Okta-auwqmzndabniaoghxgdrvwhlmgvr/Build/Products/Debug-iphonesimulator/AppAuth/AppAuth.framework"; sourceTree = "<group>"; };
 		7169AE1A1EF5EB8B00313EB8 /* Okta.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Okta.plist; sourceTree = "<group>"; };
 		7173E8381F97F10D008BC82A /* Okta-PasswordFlow.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Okta-PasswordFlow.plist"; sourceTree = "<group>"; };
+		71A92AF2202A6AD20072EC32 /* Vinculum.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Vinculum.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A40CCA2C6BE208FDEDEA0B7A /* Pods-Okta_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4D59B5275951E9231367D12 /* Pods-Okta_UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -184,6 +185,7 @@
 		60FB530269A9A0B1F817A30F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				71A92AF2202A6AD20072EC32 /* Vinculum.framework */,
 				7137EDF91EFB281A0082C30F /* AppAuth.framework */,
 				7116BC551EF9FFDC004A4E1C /* AppAuth.framework */,
 				7116BC561EF9FFDC004A4E1C /* OktaAuth.framework */,
@@ -389,11 +391,13 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -409,11 +413,13 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -429,11 +435,13 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
