@@ -16,13 +16,10 @@ public struct OktaAuthorization {
 
     func authCodeFlow(_ config: [String: Any], view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        
         // Discover Endpoints
         getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
-
             if error != nil {
-                callback(nil, error!)
-                return
+                return callback(nil, error!)
             }
 
             // Build the Authentication request
@@ -34,7 +31,7 @@ public struct OktaAuthorization {
                         responseType: OIDResponseTypeCode,
                 additionalParameters: nil
             )
-            
+
             // Start the authorization flow
             OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
                 authorizationResponse, error in
@@ -48,16 +45,13 @@ public struct OktaAuthorization {
             }
         }
     }
-    
+
     func passwordFlow(_ config: [String: Any], credentials: [String: String]?, view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        
         // Discover Endpoints
         getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
-
             if error != nil {
-                callback(nil, error!)
-                return
+                return callback(nil, error!)
             }
 
             // Build the Authentication request
@@ -76,7 +70,6 @@ public struct OktaAuthorization {
 
             // Start the authorization flow
             OIDAuthorizationService.perform(request) { authorizationResponse, responseError in
-
                 if responseError != nil {
                     callback(nil, .apiError(error: "Authorization Error: \(responseError!.localizedDescription)"))
                 }

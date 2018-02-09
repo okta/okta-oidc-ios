@@ -25,12 +25,12 @@ public var configuration: [String: Any]?
 public var tokens: OktaTokenManager?
 
 public func login(_ username: String, password: String) -> Login {
-    // Attempt to authenticate via Resource Owner Password Grant
+    // Authenticate via Resource Owner Password Grant
     return Login(forUsername: username, forPassword: password)
 }
 
 public func login() -> Login {
-    // Attempt to authenticate via authorization code flow
+    // Authenticate via authorization code flow
     return Login()
 }
 
@@ -52,7 +52,6 @@ public func userinfo(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) 
 public func refresh() {
     // Get new tokens
     tokens?.authState?.setNeedsTokenRefresh()
-
     tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
         if error != nil {
             print("Error fetching fresh tokens: \(error!.localizedDescription)")
