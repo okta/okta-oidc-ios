@@ -11,6 +11,7 @@
  */
 
 import AppAuth
+import SafariServices
 
 public struct OktaAuthorization {
 
@@ -86,6 +87,58 @@ public struct OktaAuthorization {
             }
         }
     }
+    
+    // In the Future, when AppAuth supports the end session endpoint, this method will not be necessary anymore.
+    func logoutFlow(_ config: [String: Any], view:UIViewController, callback: @escaping (OktaError?) -> Void) -> Any? {
+        
+        let configuration = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration
+        
+        guard let endSessionEndpoint = configuration?.discoveryDocument?.discoveryDictionary["end_session_endpoint"] as? String else {
+            callback(.apiError(error: "Error: failed to find the end session endpoint."))
+            return nil
+        }
+        
+        guard var endSessionURLComponents = URLComponents(string: endSessionEndpoint) else {
+            callback(.apiError(error: "Error: Unable to parse End Session Endpoint"))
+            return nil
+        }
+        
+        guard let idToken = OktaAuth.tokens?.idToken else {
+            callback(.apiError(error: "Error: Unable to get a valid ID Token"))
+            return nil
+        }
+        
+        var queryItems = [URLQueryItem(name: "id_token_hint", value: idToken)]
+        var scheme:String?
+        if let postLogoutRedirectUri = config["post_logout_redirect_uri"] as? String,
+            let redirectURLComponents = URLComponents.init(string: postLogoutRedirectUri) {
+            scheme = redirectURLComponents.scheme
+            queryItems.append(URLQueryItem.init(name: "post_logout_redirect_uri", value: postLogoutRedirectUri))
+        }
+        endSessionURLComponents.queryItems = queryItems
+        
+        guard let url = endSessionURLComponents.url else {
+            callback(.apiError(error: "Error: Unable to set End Session Endpoint parameters"))
+            return nil
+        }
+        var logoutController:Any?
+        if #available(iOS 11.0, *) {
+            let session = SFAuthenticationSession(url: url, callbackURLScheme: scheme, completionHandler: { (_, _) in
+                callback(nil)
+            })
+            session.start()
+            logoutController = session
+        } else {
+            let safari = SFSafariViewController.init(url: url)
+            view.present(safari, animated: true, completion: {
+                callback(nil)
+            })
+            logoutController = safari
+        }
+        
+        return logoutController
+    }
+
 
     func getMetadataConfig(_ issuer: URL?, callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
         // Get the metadata from the discovery endpoint
