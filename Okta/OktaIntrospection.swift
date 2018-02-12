@@ -39,6 +39,9 @@ public struct Introspect {
         }
 
         let issuer = OktaAuth.configuration?["issuer"] as! String
+        if issuer.range(of: "oauth2") != nil {
+            return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/introspect")
+        }
         return URL(string: Utils.removeTrailingSlash(issuer) + "/oauth2/v1/introspect")
     }
 }
