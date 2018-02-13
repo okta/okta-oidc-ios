@@ -50,15 +50,7 @@ public struct Login {
             if let config = Utils.getPlistConfiguration(forResourceName: plist) {
                 // Verify the ClientSecret was included
                 if (config["clientSecret"] as! String) == "" {
-                    callback(
-                        nil,
-                        .error(
-                            error:  "ClientSecret not included in PList configuration file: "
-                            + "\(plistName!) See https://github.com/okta/okta-sdk-appauth-ios/#configuration"
-                            + "for more information."
-                        )
-                    )
-                    return
+                    callback(nil, .NoClientSecret(plist))
                 }
 
                 if self.username == nil || self.password == nil {

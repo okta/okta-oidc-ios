@@ -30,7 +30,8 @@ open class OktaApi: NSObject {
 
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             guard let data = data, error == nil else {
-                return callback(nil, .APIError(error!.localizedDescription))
+                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                return callback(nil, .APIError(errorMessage))
             }
             let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
             return callback(responseJson, nil)
@@ -52,7 +53,8 @@ open class OktaApi: NSObject {
 
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             guard let data = data, error == nil else {
-                return callback(nil, .APIError(error!.localizedDescription))
+                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                return callback(nil, .APIError(errorMessage))
             }
             let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
             return callback(responseJson, nil)
