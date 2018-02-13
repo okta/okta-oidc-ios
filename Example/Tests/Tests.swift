@@ -106,4 +106,22 @@ class Tests: XCTestCase {
         tokens.clear()
         XCTAssertNil(tokens.get(forKey: "accessToken"))
     }
+
+    func testIntrospectionEndpointURL() {
+        // Similar use case for revoke and userinfo endpoints
+        OktaAuth.configuration = [
+            "issuer": "https://example.com"
+        ]
+        let url = Introspect().getIntrospectionEndpoint()
+        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/v1/introspect")
+    }
+
+    func testIntrospectionEndpointURLWithOAuth2() {
+        // Similar use case for revoke and userinfo endpoints
+        OktaAuth.configuration = [
+            "issuer": "https://example.com/oauth2/default"
+        ]
+        let url = Introspect().getIntrospectionEndpoint()
+        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/default/v1/introspect")
+    }
 }
