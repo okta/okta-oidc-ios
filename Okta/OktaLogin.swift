@@ -50,7 +50,7 @@ public struct Login {
             if let config = Utils.getPlistConfiguration(forResourceName: plist) {
                 // Verify the ClientSecret was included
                 if (config["clientSecret"] as! String) == "" {
-                    callback(nil, .NoClientSecret(plist))
+                    return callback(nil, .NoClientSecret(plist))
                 }
 
                 if self.username == nil || self.password == nil {

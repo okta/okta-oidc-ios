@@ -35,7 +35,7 @@ public struct OktaAuthorization {
             // Start the authorization flow
             OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
                 authorizationResponse, error in
-                
+
                 if authorizationResponse != nil {
                     // Return the tokens
                     callback(OktaTokenManager(authState: authorizationResponse), nil)
