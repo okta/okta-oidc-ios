@@ -70,16 +70,16 @@ class Tests: XCTestCase {
         OktaAuth
             .login("user@example.com", password: "password")
             .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController()) { response, error in
-
-                if error!.localizedDescription.range(of: "The operation couldn’t be completed") != nil {
-                    XCTAssertTrue(true)
-                }
+                XCTAssertEqual(
+                    error!.localizedDescription,
+                    "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
+                )
                 pwdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 20, handler: { error in
+        waitForExpectations(timeout: 3, handler: { error in
             // Fail on timeout
-            if error != nil { XCTAssertNotNil(nil) }
+            if error != nil { XCTFail(error!.localizedDescription) }
        })
     }
 
