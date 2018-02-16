@@ -26,7 +26,7 @@ If you do not already have a **Developer Edition Account**, you can create one a
 | ------------------- | --------------------------------------------------- |
 | Application Name    | My iOS App                                          |
 | Login redirect URIs | com.oktapreview.{yourOrg}:/callback                 |
-| Logout redirect URIs| com.oktapreview.{yourOrg}:/logout                   |
+| Grant type allowed  | Authorization Code, Refresh Token                   |
 
 After you have created the application there are two more values you will need to gather:
 
