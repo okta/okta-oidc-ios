@@ -73,6 +73,8 @@ Create an `Okta.plist` file in your application's bundle with the following fiel
 </plist>
 ```
 
+**Note**: *To receive a **refresh_token**, you must include the `offline_access` scope.*
+
 ### Update the Private-use URI Scheme
 In order to redirect back to your application from a web browser, you must specify a unique URI to your app. To do this, open `Info.plist` in your application bundle and set a **URL Scheme** to the scheme of the redirect URI.
 
