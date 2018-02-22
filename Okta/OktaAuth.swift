@@ -9,99 +9,102 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
 import AppAuth
+import Hydra
 
 public struct OktaAuthorization {
 
-    func authCodeFlow(_ config: [String: Any], view: UIViewController,
-                      callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        // Discover Endpoints
-        getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
-            if error != nil {
-                return callback(nil, error!)
-            }
-
-            // Build the Authentication request
-            let request = OIDAuthorizationRequest(
-                       configuration: oidConfig!,
-                            clientId: config["clientId"] as! String,
-                              scopes: Utils.scrubScopes(config["scopes"]),
-                         redirectURL: URL(string: config["redirectUri"] as! String)!,
-                        responseType: OIDResponseTypeCode,
-                additionalParameters: nil
-            )
-
-            // Start the authorization flow
-            OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
-                authorizationResponse, error in
-                
-                if authorizationResponse != nil {
-                    // Return the tokens
-                    callback(OktaTokenManager(authState: authorizationResponse), nil)
-                } else {
-                    callback(nil, .APIError("Authorization Error: \(error!.localizedDescription)"))
-                }
-            }
-        }
-    }
-
-    func passwordFlow(_ config: [String: Any], credentials: [String: String]?, view: UIViewController,
-                      callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        // Discover Endpoints
-        getMetadataConfig(URL(string: config["issuer"] as! String)) { oidConfig, error in
-            if error != nil {
-                return callback(nil, error!)
-            }
-
-            // Build the Authentication request
-            let request = OIDTokenRequest(
-                           configuration: oidConfig!,
-                               grantType: OIDGrantTypePassword,
-                       authorizationCode: nil,
+    func authCodeFlow(_ config: [String: Any], _ view: UIViewController) -> Promise<OktaTokenManager> {
+        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
+            // Discover Endpoints
+            self.getMetadataConfig(URL(string: config["issuer"] as! String))
+            .then { oidConfig in
+                // Build the Authentication request
+                let request = OIDAuthorizationRequest(
+                           configuration: oidConfig,
+                                clientId: config["clientId"] as! String,
+                                  scopes: Utils.scrubScopes(config["scopes"]),
                              redirectURL: URL(string: config["redirectUri"] as! String)!,
-                                clientID: config["clientId"] as! String,
-                            clientSecret: (config["clientSecret"] as! String),
-                                   scope: Utils.scrubScopes(config["scopes"]).joined(separator: " "),
-                            refreshToken: nil,
-                            codeVerifier: nil,
-                    additionalParameters: credentials
+                            responseType: OIDResponseTypeCode,
+                    additionalParameters: nil
                 )
 
-            // Start the authorization flow
-            OIDAuthorizationService.perform(request) { authorizationResponse, responseError in
-                if responseError != nil {
-                    callback(nil, .APIError("Authorization Error: \(responseError!.localizedDescription)"))
-                }
-
-                if authorizationResponse != nil {
-                    // Return the tokens
-                    let authState = OIDAuthState(
-                            authorizationResponse: nil,
-                                    tokenResponse: authorizationResponse,
-                             registrationResponse: nil
-                        )
-                    callback(OktaTokenManager(authState: authState), nil)
+                // Start the authorization flow
+                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
+                    authorizationResponse, error in
+                    
+                    if authorizationResponse != nil {
+                        // Return the tokens
+                        return resolve(OktaTokenManager(authState: authorizationResponse))
+                    } else {
+                        return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                    }
                 }
             }
-        }
+            .catch { error in return reject(error) }
+        })
     }
 
-    func getMetadataConfig(_ issuer: URL?, callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
-        // Get the metadata from the discovery endpoint
-        guard let issuer = issuer, let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
-            return callback(nil, .NoDiscoveryEndpoint)
-        }
+    func passwordFlow(_ config: [String: Any], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
+        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
+            // Discover Endpoints
+            self.getMetadataConfig(URL(string: config["issuer"] as! String))
+            .then { oidConfig in
+                // Build the Authentication request
+                let request = OIDTokenRequest(
+                               configuration: oidConfig,
+                                   grantType: OIDGrantTypePassword,
+                           authorizationCode: nil,
+                                 redirectURL: URL(string: config["redirectUri"] as! String)!,
+                                    clientID: config["clientId"] as! String,
+                                clientSecret: (config["clientSecret"] as! String),
+                                       scope: Utils.scrubScopes(config["scopes"]).joined(separator: " "),
+                                refreshToken: nil,
+                                codeVerifier: nil,
+                        additionalParameters: credentials
+                    )
 
-        OktaApi.get(configUrl, headers: nil) { response, error in
-            guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
-                let responseError =
-                    "Error returning discovery document:" +
-                    "\(error!.localizedDescription) Please" +
-                    "check your PList configuration"
-                return callback(nil, .APIError(responseError))
+                // Start the authorization flow
+                OIDAuthorizationService.perform(request) { authorizationResponse, responseError in
+                    if responseError != nil {
+                        return reject(OktaError.APIError("Authorization Error: \(responseError!.localizedDescription)"))
+                    }
+
+                    if authorizationResponse != nil {
+                        // Return the tokens
+                        let authState = OIDAuthState(
+                                authorizationResponse: nil,
+                                        tokenResponse: authorizationResponse,
+                                 registrationResponse: nil
+                            )
+                        return resolve(OktaTokenManager(authState: authState))
+                    }
+                }
             }
-            return callback(OIDServiceConfiguration(discoveryDocument: oidcConfig), nil)
-        }
+            .catch { error in return reject(error) }
+        })
+    }
+
+    func getMetadataConfig(_ issuer: URL?) -> Promise<OIDServiceConfiguration> {
+        // Get the metadata from the discovery endpoint
+        return Promise<OIDServiceConfiguration>(in: .background, { resolve, reject, _ in
+            guard let issuer = issuer, let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
+                return reject(OktaError.NoDiscoveryEndpoint)
+            }
+
+            OktaApi.get(configUrl, headers: nil)
+            .then { response in
+                guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
+                    return reject(OktaError.ParseFailure)
+                }
+                return resolve(OIDServiceConfiguration(discoveryDocument: oidcConfig))
+            }
+            .catch { error in
+                let responseError =
+                    "Error returning discovery document: \(error.localizedDescription) Please" +
+                    "check your PList configuration"
+                return reject(OktaError.APIError(responseError))
+            }
+        })
     }
 }

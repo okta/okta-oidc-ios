@@ -41,7 +41,9 @@ public struct Login {
         if !self.passwordFlow {
             // Get client configuration from Okta.plist
             if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                OktaAuthorization().authCodeFlow(config, view: view) { response, error in callback(response, error) }
+                OktaAuthorization().authCodeFlow(config, view)
+                .then { response in callback(response, nil) }
+                .catch { error in callback(nil, error as? OktaError) }
             }
         }
 
@@ -62,7 +64,9 @@ public struct Login {
                     "password": self.password!
                 ]
 
-                OktaAuthorization().passwordFlow(config, credentials: credentials, view: view) { response, error in callback(response, error) }
+                OktaAuthorization().passwordFlow(config, credentials: credentials, view)
+                .then { response in callback(response, nil) }
+                .catch { error in callback(nil, error as? OktaError) }
             }
         }
     }

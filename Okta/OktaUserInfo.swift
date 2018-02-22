@@ -27,7 +27,9 @@ public struct UserInfo {
                 "Authorization": "Bearer \(self.token!)"
             ]
 
-            OktaApi.post(userInfoEndpoint, headers: headers, postData: nil) { response, error in callback(response, error) }
+            OktaApi.post(userInfoEndpoint, headers: headers, postData: nil)
+            .then { response in callback(response, nil) }
+            .catch { error in callback(nil, error as? OktaError) }
 
         } else {
             callback(nil, .NoUserInfoEndpoint)
