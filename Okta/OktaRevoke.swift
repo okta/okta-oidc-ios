@@ -20,7 +20,6 @@ public struct Revoke {
         // Revoke the token
         if let revokeEndpoint = getRevokeEndpoint() {
             // Build introspect request
-
             let headers = [
                 "Accept": "application/json",
                 "Content-Type": "application/x-www-form-urlencoded"
@@ -28,17 +27,17 @@ public struct Revoke {
 
             let data = "token=\(self.token!)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
-            OktaApi.post(revokeEndpoint, headers: headers, postData: data) { response, error in callback(response, error) }
-
+            OktaApi
+                .post(revokeEndpoint, headers: headers, postData: data)
+                .then { response in callback(response, nil) }
+                .catch { error in callback(nil, error as? OktaError) }
         } else {
             callback(nil, .NoRevocationEndpoint)
         }
-
     }
 
     func getRevokeEndpoint() -> URL? {
         // Get the revocation endpoint from the discovery URL, or build it
-
         if let discoveryEndpoint = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary["revocation_endpoint"] {
             return URL(string: discoveryEndpoint as! String)
         }

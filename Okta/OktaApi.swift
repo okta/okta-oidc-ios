@@ -9,56 +9,56 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+import Hydra
 
 open class OktaApi: NSObject {
-    class func post(_ url: URL,
-                    headers: [String: String]?,
-                    postData: String?,
-                    callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+    class func post(_ url: URL, headers: [String: String]?, postData: String?) -> Promise<[String: Any]?> {
         // Generic POST API wrapper
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-        request.addValue(
-            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
-            forHTTPHeaderField: "X-Okta-User-Agent-Extended"
-        )
+        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
+            request.addValue(
+                "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
+                forHTTPHeaderField: "X-Okta-User-Agent-Extended"
+            )
 
-        if let postBodyData = postData {
-            request.httpBody = postBodyData.data(using: .utf8)
-        }
-
-        let task = URLSession.shared.dataTask(with: request){ data, response, error in
-            guard let data = data, error == nil else {
-                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
-                return callback(nil, .APIError(errorMessage))
+            if let postBodyData = postData {
+                request.httpBody = postBodyData.data(using: .utf8)
             }
-            let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-            return callback(responseJson, nil)
-        }
-        task.resume()
+
+            let task = URLSession.shared.dataTask(with: request){ data, response, error in
+                guard let data = data, error == nil else {
+                    let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                    return reject(OktaError.APIError(errorMessage))
+                }
+                let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+                return resolve(responseJson)
+            }
+            task.resume()
+        })
     }
 
-    class func get(_ url: URL,
-                   headers: [String: String]?,
-                   callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+    class func get(_ url: URL, headers: [String: String]?) -> Promise<[String: Any]?> {
         // Generic GET API wrapper
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-        request.addValue(
-            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
-            forHTTPHeaderField: "X-Okta-User-Agent-Extended"
-        )
+        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
+            request.addValue(
+                "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
+                forHTTPHeaderField: "X-Okta-User-Agent-Extended"
+            )
 
-        let task = URLSession.shared.dataTask(with: request){ data, response, error in
-            guard let data = data, error == nil else {
-                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
-                return callback(nil, .APIError(errorMessage))
+            let task = URLSession.shared.dataTask(with: request){ data, response, error in
+                guard let data = data, error == nil else {
+                    let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                    return reject(OktaError.APIError(errorMessage))
+                }
+                let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+                return resolve(responseJson)
             }
-            let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-            return callback(responseJson, nil)
-        }
-        task.resume()
+            task.resume()
+        })
     }
 }

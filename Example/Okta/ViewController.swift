@@ -47,10 +47,9 @@ class ViewController: UIViewController {
 
         OktaAuth
             .introspect()
-            .validate(accessToken!) { response, error in
-                if error != nil { self.updateUI(updateText: "Error: \(error!)") }
-                if let isActive = response { self.updateUI(updateText: "Is the AccessToken valid? \(isActive)") }
-        }
+            .validate(accessToken!)
+            .then { response in self.updateUI(updateText: "Is the AccessToken valid? \(response)") }
+            .catch { error in self.updateUI(updateText: "Error: \(error)") }
     }
 
     @IBAction func revokeButton(_ sender: Any) {

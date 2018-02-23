@@ -10,6 +10,7 @@ class Tests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        OktaAuth.tokens?.clear()
     }
 
     func testPListFailure() {

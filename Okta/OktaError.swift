@@ -19,6 +19,7 @@ public enum OktaError: Error {
     case NoRevocationEndpoint
     case NoUserCredentials
     case NoUserInfoEndpoint
+    case ParseFailure
 }
 
 extension OktaError: LocalizedError {
@@ -43,6 +44,8 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("User credentials not included.", comment: "")
         case .NoUserInfoEndpoint:
             return NSLocalizedString("Error finding the user info endpoint.", comment: "")
+        case .ParseFailure:
+            return NSLocalizedString("Failed to parse and/or convert object.", comment: "")
         }
     }
 }

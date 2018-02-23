@@ -9,27 +9,37 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+import Hydra
 
 public struct Introspect {
 
     init() {}
 
-    public func validate(_ token: String, callback: @escaping (Bool?, OktaError?) -> Void) {
-        // Validate token
-        if let introspectionEndpoint = getIntrospectionEndpoint() {
-            // Build introspect request
-            let headers = [
-                      "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-            ]
+    public func validate(_ token: String) -> Promise<Bool> {
+        return Promise<Bool>(in: .background, { resolve, reject, _ in
+            // Validate token
+            if let introspectionEndpoint = self.getIntrospectionEndpoint() {
+                // Build introspect request
+                let headers = [
+                    "Accept": "application/json",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                ]
 
-            let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+                let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
-            OktaApi.post(introspectionEndpoint, headers: headers, postData: data) { response, error in callback(response?["active"] as? Bool, error) }
-
-        } else {
-            callback(nil, .NoIntrospectionEndpoint)
-        }
+                OktaApi
+                    .post(introspectionEndpoint, headers: headers, postData: data)
+                    .then { response in
+                        guard let isActive = response?["active"] as? Bool else {
+                            return reject(OktaError.ParseFailure)
+                        }
+                        return resolve(isActive)
+                    }
+                    .catch { error in reject(OktaError.NoIntrospectionEndpoint) }
+            } else {
+                return reject(OktaError.NoIntrospectionEndpoint)
+            }
+        })
     }
 
     func getIntrospectionEndpoint() -> URL? {
