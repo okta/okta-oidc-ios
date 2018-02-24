@@ -14,17 +14,23 @@ import Hydra
 
 public struct OktaAuthorization {
 
-    func authCodeFlow(_ config: [String: Any], _ view: UIViewController) -> Promise<OktaTokenManager> {
+    func authCodeFlow(_ config: [String: String], _ view: UIViewController) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
-            self.getMetadataConfig(URL(string: config["issuer"] as! String))
+            guard let issuer = config["issuer"],
+                let clientId = config["clientId"],
+                let redirectUri = config["redirectUri"] else {
+                    return reject(OktaError.MissingConfigurationValues)
+            }
+
+            self.getMetadataConfig(URL(string: issuer))
             .then { oidConfig in
                 // Build the Authentication request
                 let request = OIDAuthorizationRequest(
                            configuration: oidConfig,
-                                clientId: config["clientId"] as! String,
+                                clientId: clientId,
                                   scopes: Utils.scrubScopes(config["scopes"]),
-                             redirectURL: URL(string: config["redirectUri"] as! String)!,
+                             redirectURL: URL(string: redirectUri)!,
                             responseType: OIDResponseTypeCode,
                     additionalParameters: nil
                 )
@@ -32,7 +38,7 @@ public struct OktaAuthorization {
                 // Start the authorization flow
                 OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
                     authorizationResponse, error in
-                    
+
                     if authorizationResponse != nil {
                         // Return the tokens
                         return resolve(OktaTokenManager(authState: authorizationResponse))
@@ -45,24 +51,31 @@ public struct OktaAuthorization {
         })
     }
 
-    func passwordFlow(_ config: [String: Any], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
+    func passwordFlow(_ config: [String: String], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
-            self.getMetadataConfig(URL(string: config["issuer"] as! String))
+            guard let issuer = config["issuer"],
+                let clientId = config["clientId"],
+                let clientSecret = config["clientSecret"],
+                let redirectUri = config["redirectUri"] else {
+                    return reject(OktaError.MissingConfigurationValues)
+            }
+
+            self.getMetadataConfig(URL(string: issuer))
             .then { oidConfig in
                 // Build the Authentication request
                 let request = OIDTokenRequest(
-                               configuration: oidConfig,
-                                   grantType: OIDGrantTypePassword,
-                           authorizationCode: nil,
-                                 redirectURL: URL(string: config["redirectUri"] as! String)!,
-                                    clientID: config["clientId"] as! String,
-                                clientSecret: (config["clientSecret"] as! String),
-                                       scope: Utils.scrubScopes(config["scopes"]).joined(separator: " "),
-                                refreshToken: nil,
-                                codeVerifier: nil,
-                        additionalParameters: credentials
-                    )
+                           configuration: oidConfig,
+                               grantType: OIDGrantTypePassword,
+                       authorizationCode: nil,
+                             redirectURL: URL(string: redirectUri)!,
+                                clientID: clientId,
+                            clientSecret: clientSecret,
+                                  scopes: Utils.scrubScopes(config["scopes"]),
+                            refreshToken: nil,
+                            codeVerifier: nil,
+                    additionalParameters: credentials
+                )
 
                 // Start the authorization flow
                 OIDAuthorizationService.perform(request) { authorizationResponse, responseError in

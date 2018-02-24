@@ -41,13 +41,6 @@ class Tests: XCTestCase {
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
-    func testValidScopesArray() {
-        // Validate the scopes are in the correct format
-        let scopes = ["openid"]
-        let scrubbedScopes = Utils.scrubScopes(scopes)
-        XCTAssertEqual(scrubbedScopes, scopes)
-    }
-
     func testValidScopesString() {
         // Validate the scopes are in the correct format
         let scopes = "openid profile email"
@@ -56,10 +49,10 @@ class Tests: XCTestCase {
         XCTAssertEqual(scrubbedScopes, validScopes)
     }
 
-    func testInvalidScopes() {
-        // Validate that scopes of wrong type will still return valid scopes
-        let scopes = [1, 2, 3]
-        XCTAssertEqual(Utils.scrubScopes(scopes).first, "openid")
+    func testAddingOpenIDScopes() {
+        // Validate that scopes not including "openid" get appended
+        let scopes = "profile email"
+        XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
 
     func testPasswordFailureFlow() {

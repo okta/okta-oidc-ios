@@ -3,11 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>scopes</key>
-	<array>
-		<string>offline_access</string>
-		<string>openid</string>
-		<string>profile</string>
-	</array>
+	<string>openid profile offline_access</string>
 	<key>redirectUri</key>
 	<string>com.okta.example:/callback</string>
 	<key>clientSecret</key>
