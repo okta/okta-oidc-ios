@@ -20,7 +20,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func refreshTokens(_ sender: Any) {
-        OktaAuth.refresh()
+        OktaAuth
+            .refresh()
+            .getFreshTokens()
+            .then { self.buildTokenTextView() }
+            .catch { error in print(error) }
+
         self.buildTokenTextView()
     }
 
