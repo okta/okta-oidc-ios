@@ -28,7 +28,7 @@ public struct Introspect {
                 let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
                 OktaApi
-                    .post(introspectionEndpoint, headers: headers, postData: data)
+                    .post(introspectionEndpoint, headers: headers, postString: data)
                     .then { response in
                         guard let isActive = response?["active"] as? Bool else {
                             return reject(OktaError.ParseFailure)

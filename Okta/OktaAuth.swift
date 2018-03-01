@@ -32,7 +32,7 @@ public struct OktaAuthorization {
                                   scopes: Utils.scrubScopes(config["scopes"]),
                              redirectURL: URL(string: redirectUri)!,
                             responseType: OIDResponseTypeCode,
-                    additionalParameters: nil
+                    additionalParameters: Utils.parseAdditionalParams(config)
                 )
 
                 // Start the authorization flow
