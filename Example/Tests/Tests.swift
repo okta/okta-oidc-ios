@@ -41,7 +41,7 @@ class Tests: XCTestCase {
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
-    func testAdditionParamParse() {
+    func testAdditionalParamParse() {
         // Ensure known values from the config object are removed
         let config = [
             "issuer": "https://example.com/oauth2/default",
@@ -59,7 +59,7 @@ class Tests: XCTestCase {
         XCTAssertNotNil(additionalParams?["nonce"])
     }
 
-    func testAdditionParamParseWithNoChange() {
+    func testAdditionalParamParseWithNoChange() {
         // Ensure known values from the config object are removed
         let config = [  "nonce": "abbbbbbbc" ]
 
