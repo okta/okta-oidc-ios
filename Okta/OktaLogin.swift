@@ -31,6 +31,15 @@ public struct Login {
         self.passwordFlow = false
     }
 
+    public func start(withDictConfig dict: [String: String], view: UIViewController,
+                      callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
+
+        OktaAuth.configuration = dict
+        OktaAuthorization().authCodeFlow(dict, view)
+        .then { response in callback(response, nil) }
+        .catch { error in callback(nil, error as? OktaError) }
+    }
+
     public func start(withPListConfig plistName: String?, view: UIViewController,
                       callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
 

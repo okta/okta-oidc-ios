@@ -75,4 +75,16 @@ open class Utils: NSObject {
         // Removes the URLs trailing slash if it exists
         return String(val.suffix(1)) == "/" ? String(val.dropLast()) : val
     }
+
+    internal class func parseAdditionalParams(_ config: [String: String]) -> [String: String]? {
+        // Parse the additional parameters to be passed to the /authorization endpoint
+        var configCopy = config
+        
+        // Remove "issuer", "clientId", "redirectUri", and "scopes"
+        configCopy.removeValue(forKey: "issuer")
+        configCopy.removeValue(forKey: "clientId")
+        configCopy.removeValue(forKey: "redirectUri")
+        configCopy.removeValue(forKey: "scopes")
+        return configCopy
+    }
 }

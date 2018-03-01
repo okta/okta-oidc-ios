@@ -41,6 +41,33 @@ class Tests: XCTestCase {
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
+    func testAdditionalParamParse() {
+        // Ensure known values from the config object are removed
+        let config = [
+            "issuer": "https://example.com/oauth2/default",
+            "clientId": "clientId",
+            "redirectUri": "com.okta.example:/callback",
+            "scopes": "openid profile offline_access",
+            "nonce": "abbbbbbbc"
+        ]
+
+        let additionalParams = Utils.parseAdditionalParams(config)
+        XCTAssertNil(additionalParams?["issuer"])
+        XCTAssertNil(additionalParams?["clientId"])
+        XCTAssertNil(additionalParams?["redirectUri"])
+        XCTAssertNil(additionalParams?["scopes"])
+        XCTAssertNotNil(additionalParams?["nonce"])
+    }
+
+    func testAdditionalParamParseWithNoChange() {
+        // Ensure known values from the config object are removed
+        let config = [  "nonce": "abbbbbbbc" ]
+
+        let additionalParams = Utils.parseAdditionalParams(config)
+        XCTAssertNotNil(additionalParams?["nonce"])
+        XCTAssertEqual(config, additionalParams!)
+    }
+
     func testValidScopesString() {
         // Validate the scopes are in the correct format
         let scopes = "openid profile email"

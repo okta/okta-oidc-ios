@@ -12,7 +12,20 @@
 import Hydra
 
 open class OktaApi: NSObject {
-    class func post(_ url: URL, headers: [String: String]?, postData: String?) -> Promise<[String: Any]?> {
+
+    class func post(_ url: URL, headers: [String: String]?, postString: String?) -> Promise<[String: Any]?> {
+        // Generic POST API wrapper for data passed in as a String
+        let data = postString != nil ? postString!.data(using: .utf8) : nil
+        return OktaApi.post(url, headers: headers, postData: data)
+    }
+
+    class func post(_ url: URL, headers: [String: String]?, postJson: [String: Any]?) -> Promise<[String: Any]?> {
+        // Generic POST API wrapper for data passed in as a JSON object [String: Any]
+        let data = postJson != nil ? try? JSONSerialization.data(withJSONObject: postJson as Any, options: []) : nil
+        return OktaApi.post(url, headers: headers, postData: data)
+    }
+
+    class func post(_ url: URL, headers: [String: String]?, postData: Data?) -> Promise<[String: Any]?> {
         // Generic POST API wrapper
         return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
             var request = URLRequest(url: url)
@@ -24,7 +37,7 @@ open class OktaApi: NSObject {
             )
 
             if let postBodyData = postData {
-                request.httpBody = postBodyData.data(using: .utf8)
+                request.httpBody = postBodyData
             }
 
             let task = URLSession.shared.dataTask(with: request){ data, response, error in

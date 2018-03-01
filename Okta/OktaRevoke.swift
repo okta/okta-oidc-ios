@@ -28,7 +28,7 @@ public struct Revoke {
             let data = "token=\(self.token!)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
             OktaApi
-                .post(revokeEndpoint, headers: headers, postData: data)
+                .post(revokeEndpoint, headers: headers, postString: data)
                 .then { response in callback(response, nil) }
                 .catch { error in callback(nil, error as? OktaError) }
         } else {
