@@ -110,6 +110,9 @@ public struct OktaAuthorization {
                 guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                     return reject(OktaError.ParseFailure)
                 }
+
+                // Cache the well-known endpoint response
+                OktaAuth.wellKnown = dictResponse
                 return resolve(OIDServiceConfiguration(discoveryDocument: oidcConfig))
             }
             .catch { error in

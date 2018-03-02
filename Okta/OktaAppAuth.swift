@@ -21,6 +21,9 @@ public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 // Cache Okta.plist for reference
 public var configuration: [String: Any]?
 
+// Cache the Discovery Metadata
+public var wellKnown: [String: Any]?
+
 // Token manager
 public var tokens: OktaTokenManager?
 
