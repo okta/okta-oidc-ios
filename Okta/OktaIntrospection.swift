@@ -28,7 +28,13 @@ public struct Introspect {
                 "Content-Type": "application/x-www-form-urlencoded"
             ]
 
-            let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+            var data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+
+            // Append the clientSecret if it exists
+            if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
+                let clientSecret = clientSecretObj as? String {
+                    data += "&client_secret=\(clientSecret)"
+            }
 
             OktaApi.post(introspectionEndpoint, headers: headers, postString: data)
             .then { response in

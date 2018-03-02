@@ -138,7 +138,6 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-
         let _ = Revoke(token: nil) { response, error in
             XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
         }
