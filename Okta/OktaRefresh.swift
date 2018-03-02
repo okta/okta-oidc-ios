@@ -11,28 +11,25 @@
  */
 import Hydra
 
-public struct Refresh {
+internal struct Refresh {
 
-    init() {}
+    internal func refresh() -> Promise<String> {
+        // Attempt to refresh the accessToken using the refreshToken
+        return Promise<String>(in: .background, { resolve, reject, _ in
+            guard let _ = tokens?.refreshToken else {
+                return reject(OktaError.NoRefreshToken)
+            }
 
-    public func getFreshTokens() -> Promise<Void> {
-            return Promise<Void>(in: .background, { resolve, reject, _ in
-                guard let _ = tokens?.refreshToken else {
-                    return reject(OktaError.NoRefreshToken)
+            tokens?.authState?.setNeedsTokenRefresh()
+            tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
+                if error != nil {
+                    return reject(OktaError.ErrorFetchingFreshTokens(error!.localizedDescription))
                 }
-
-                // Attempt to refresh using AppAuth
-                tokens?.authState?.setNeedsTokenRefresh()
-                tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
-                    if error != nil {
-                        return reject(OktaError.ErrorFetchingFreshTokens(error!.localizedDescription))
-                    }
-                    guard let token = accessToken else {
-                        return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
-                    }
-                    tokens?.accessToken = token
-                    return resolve()
-                })
+                guard let token = accessToken else {
+                    return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
+                }
+                return resolve(token)
+            })
         })
     }
 }

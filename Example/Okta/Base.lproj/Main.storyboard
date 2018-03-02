@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -33,14 +34,6 @@
                                 <state key="normal" title="Login"/>
                                 <connections>
                                     <action selector="loginButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z7Q-oY-hlj"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BJh-Nv-zia">
-                                <rect key="frame" x="134" y="28" width="106" height="30"/>
-                                <accessibility key="accessibilityConfiguration" identifier="Refresh Tokens" label="Refresh Tokens"/>
-                                <state key="normal" title="Refresh Tokens"/>
-                                <connections>
-                                    <action selector="refreshTokens:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="hhZ-wT-p4R"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iA-Y3-h2v">
@@ -76,22 +69,20 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="8iA-Y3-h2v" firstAttribute="leading" secondItem="BJh-Nv-zia" secondAttribute="trailing" constant="78" id="27Y-BZ-bCj"/>
-                            <constraint firstItem="xho-P4-zw2" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="8Wv-9w-9Z0"/>
-                            <constraint firstItem="SjY-rT-EIm" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="9Aj-Ib-SvH"/>
-                            <constraint firstItem="ZEw-Bb-nHa" firstAttribute="baseline" secondItem="miL-dv-t6m" secondAttribute="baseline" id="Gej-Yc-7fZ"/>
-                            <constraint firstItem="ZEw-Bb-nHa" firstAttribute="centerX" secondItem="xho-P4-zw2" secondAttribute="centerX" id="Is2-mf-E25"/>
-                            <constraint firstItem="eoU-d4-kH8" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="KdP-zG-ODM"/>
-                            <constraint firstItem="8iA-Y3-h2v" firstAttribute="trailing" secondItem="miL-dv-t6m" secondAttribute="trailing" id="ThN-mq-pB0"/>
-                            <constraint firstItem="eoU-d4-kH8" firstAttribute="baseline" secondItem="ZEw-Bb-nHa" secondAttribute="baseline" id="Xqr-YP-qOY"/>
-                            <constraint firstItem="eoU-d4-kH8" firstAttribute="leading" secondItem="xho-P4-zw2" secondAttribute="leading" id="blD-Zo-rJ1"/>
-                            <constraint firstItem="eoU-d4-kH8" firstAttribute="top" secondItem="SjY-rT-EIm" secondAttribute="bottom" constant="19" id="et2-fH-Qky"/>
-                            <constraint firstItem="BJh-Nv-zia" firstAttribute="centerX" secondItem="ZEw-Bb-nHa" secondAttribute="centerX" id="ewI-ss-eYe"/>
-                            <constraint firstItem="xho-P4-zw2" firstAttribute="top" secondItem="eoU-d4-kH8" secondAttribute="bottom" constant="18" id="lPC-ww-aqa"/>
-                            <constraint firstItem="BJh-Nv-zia" firstAttribute="leading" secondItem="SjY-rT-EIm" secondAttribute="trailing" constant="76" id="lPT-00-dv9"/>
-                            <constraint firstItem="BJh-Nv-zia" firstAttribute="baseline" secondItem="8iA-Y3-h2v" secondAttribute="baseline" id="ojY-XZ-ydN"/>
-                            <constraint firstItem="SjY-rT-EIm" firstAttribute="baseline" secondItem="BJh-Nv-zia" secondAttribute="baseline" id="zLa-i0-XsE"/>
-                            <constraint firstAttribute="bottom" secondItem="xho-P4-zw2" secondAttribute="bottom" constant="20" symbolic="YES" id="zvb-r2-7zL"/>
+                            <constraint firstItem="SjY-rT-EIm" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="4" id="0Vf-4z-YTv"/>
+                            <constraint firstItem="eoU-d4-kH8" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="0aq-7h-Wpc"/>
+                            <constraint firstItem="miL-dv-t6m" firstAttribute="leading" secondItem="ZEw-Bb-nHa" secondAttribute="trailing" constant="82" id="0v1-Cw-8hP"/>
+                            <constraint firstItem="8iA-Y3-h2v" firstAttribute="trailing" secondItem="miL-dv-t6m" secondAttribute="trailing" id="1kw-qN-qZU"/>
+                            <constraint firstItem="ZEw-Bb-nHa" firstAttribute="baseline" secondItem="miL-dv-t6m" secondAttribute="baseline" id="Chb-tk-MAb"/>
+                            <constraint firstItem="xho-P4-zw2" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="FvD-X9-Itw"/>
+                            <constraint firstItem="eoU-d4-kH8" firstAttribute="top" secondItem="SjY-rT-EIm" secondAttribute="bottom" constant="19" id="N1j-vn-qyg"/>
+                            <constraint firstItem="xho-P4-zw2" firstAttribute="top" secondItem="eoU-d4-kH8" secondAttribute="bottom" constant="18" id="T6c-wJ-vzd"/>
+                            <constraint firstItem="SjY-rT-EIm" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="aDt-dO-FRy"/>
+                            <constraint firstItem="ZEw-Bb-nHa" firstAttribute="centerX" secondItem="xho-P4-zw2" secondAttribute="centerX" id="frH-Qy-jN3"/>
+                            <constraint firstItem="eoU-d4-kH8" firstAttribute="baseline" secondItem="ZEw-Bb-nHa" secondAttribute="baseline" id="gpL-YI-gKt"/>
+                            <constraint firstAttribute="bottom" secondItem="xho-P4-zw2" secondAttribute="bottom" constant="20" symbolic="YES" id="iVz-JK-ga9"/>
+                            <constraint firstItem="eoU-d4-kH8" firstAttribute="leading" secondItem="xho-P4-zw2" secondAttribute="leading" id="lWC-c2-mBP"/>
+                            <constraint firstItem="SjY-rT-EIm" firstAttribute="baseline" secondItem="8iA-Y3-h2v" secondAttribute="baseline" id="vxI-XV-v49"/>
                         </constraints>
                     </view>
                     <connections>

@@ -19,16 +19,6 @@ class ViewController: UIViewController {
         if tokens == nil { self.loginCodeFlow() }
     }
 
-    @IBAction func refreshTokens(_ sender: Any) {
-        OktaAuth
-            .refresh()
-            .getFreshTokens()
-            .then { self.buildTokenTextView() }
-            .catch { error in print(error) }
-
-        self.buildTokenTextView()
-    }
-
     @IBAction func clearTokens(_ sender: Any) {
         OktaAuth.clear()
         self.buildTokenTextView()

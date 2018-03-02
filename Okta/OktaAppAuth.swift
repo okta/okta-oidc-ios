@@ -49,11 +49,6 @@ public func userinfo(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) 
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
 }
 
-public func refresh() -> Refresh {
-    // Get new tokens
-    return Refresh()
-}
-
 public func clear() {
     // Clear auth state
     tokens?.clear()
