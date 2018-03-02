@@ -53,18 +53,6 @@ class OktaUITests: XCTestCase {
         let tokenValues = testUtils.getTextViewValue(label: "tokenView")
         XCTAssertNotNil(tokenValues)
 
-        // Refresh tokens
-
-        // Double tap to call twice
-        app.buttons["Refresh Tokens"].tap()
-        app.buttons["Refresh Tokens"].tap()
-
-        let newTokens = testUtils.getTextViewValue(label: "tokenView")
-        XCTAssertNotNil(newTokens)
-
-        // Validate tokens have been updated
-        XCTAssertNotEqual(tokenValues!, newTokens!)
-
         // Get User info
         app.buttons["Userinfo"].tap()
 
