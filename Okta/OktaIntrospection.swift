@@ -16,8 +16,8 @@ public struct Introspect {
     init() {}
 
     public func validate(_ token: String) -> Promise<Bool> {
+        // Validate token
         return Promise<Bool>(in: .background, { resolve, reject, _ in
-            // Validate token
             if let introspectionEndpoint = self.getIntrospectionEndpoint() {
                 // Build introspect request
                 let headers = [
@@ -44,8 +44,8 @@ public struct Introspect {
 
     func getIntrospectionEndpoint() -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-        if let discoveryEndpoint = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary["introspection_endpoint"] {
-            return URL(string: discoveryEndpoint as! String)
+        if let introspectionEndpoint = OktaAuth.wellKnown?["introspection_endpoint"] {
+            return URL(string: introspectionEndpoint as! String)
         }
 
         let issuer = OktaAuth.configuration?["issuer"] as! String

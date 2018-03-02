@@ -145,4 +145,27 @@ class Tests: XCTestCase {
         let url = Introspect().getIntrospectionEndpoint()
         XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/default/v1/introspect")
     }
+
+    func testUserInfoWithoutToken() {
+        // Verify an error is returned if the accessToken is not included
+        OktaAuth.configuration = [
+            "issuer": "https://example.com/oauth2/default"
+        ]
+
+        let _ = UserInfo(token: nil) { response, error in
+            XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
+        }
+    }
+
+    func testRevokeWithoutToken() {
+        // Verify an error is returned if the accessToken is not included
+        OktaAuth.configuration = [
+            "issuer": "https://example.com/oauth2/default"
+        ]
+
+        let _ = Revoke(token: nil) { response, error in
+            XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
+        }
+    }
+
 }
