@@ -47,8 +47,8 @@ public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> 
     _ = Revoke(token: token) { response, error in callback( response?.count == 0 ? true : false, error) }
 }
 
-public func userinfo(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
-    // Return userinfo
+public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
+    // Return user information from the /userinfo endpoint
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
 }
 

@@ -25,11 +25,11 @@ class ViewController: UIViewController {
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
-        OktaAuth.userinfo { response, error in
+        OktaAuth.getUser { response, error in
             if error != nil { print("Error: \(error!)") }
             if response != nil {
                 var userInfoText = ""
-                response?.forEach { userInfoText += ("\($0): \($1)") }
+                response?.forEach { userInfoText += ("\($0): \($1) \n") }
                 self.updateUI(updateText: userInfoText)
             }
         }
