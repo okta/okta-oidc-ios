@@ -41,6 +41,22 @@ public struct Introspect {
             }
         })
     }
+    
+    public func decode(_ token: String, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+        // Decodes the payload of a JWT
+        let payload = token.split(separator: ".")
+        var encodedPayload = "\(payload[1])"
+        if encodedPayload.count % 4 != 0 {
+            let padding = 4 - encodedPayload.count % 4
+            encodedPayload += String(repeating: "=", count: padding)
+        }
+        
+        if let data = Data(base64Encoded: encodedPayload, options: []) {
+            let jwt = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+            return callback(jwt, nil)
+        }
+        callback(nil, .JWTDecodeError)
+    }
 
     func getIntrospectionEndpoint() -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it

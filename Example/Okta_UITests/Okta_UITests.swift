@@ -54,7 +54,7 @@ class OktaUITests: XCTestCase {
         XCTAssertNotNil(tokenValues)
 
         // Get User info
-        app.buttons["Userinfo"].tap()
+        app.buttons["GetUser"].tap()
 
         let userInfoValue = testUtils.getTextViewValue(label: "tokenView")
         XCTAssertTrue(userInfoValue!.contains(username))

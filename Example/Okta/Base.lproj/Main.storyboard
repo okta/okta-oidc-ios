@@ -59,9 +59,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eoU-d4-kH8">
-                                <rect key="frame" x="16" y="77" width="59" height="30"/>
-                                <accessibility key="accessibilityConfiguration" identifier="Userinfo" label="Userinfo"/>
-                                <state key="normal" title="UserInfo"/>
+                                <rect key="frame" x="16" y="77" width="61" height="30"/>
+                                <accessibility key="accessibilityConfiguration" identifier="GetUser" label="GetUser"/>
+                                <state key="normal" title="Get User"/>
                                 <connections>
                                     <action selector="userInfoButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="eKm-XS-OCU"/>
                                 </connections>
