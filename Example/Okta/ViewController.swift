@@ -37,39 +37,31 @@ class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        let accessToken = tokens?.accessToken
-        if accessToken == nil { return }
+        guard let accessToken = tokens?.accessToken else { return }
 
-        OktaAuth
-            .introspect()
-            .validate(accessToken!)
-            .then { response in self.updateUI(updateText: "Is the AccessToken valid? \(response)") }
-            .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.introspect().validate(accessToken)
+        .then { response in self.updateUI(updateText: "Is the AccessToken valid? \(response)") }
+        .catch { error in self.updateUI(updateText: "Error: \(error)") }
     }
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        let accessToken = tokens?.accessToken
-        if accessToken == nil { return }
+        guard let accessToken = tokens?.accessToken else { return }
 
-        OktaAuth.revoke(accessToken!) { response, error in
+        OktaAuth.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }
     }
 
     func loginCodeFlow() {
-        OktaAuth
-            .login()
-            .start(self) { response, error in
-                if error != nil { print(error!) }
-                if let authResponse = response {
-                    // Store tokens in keychain
-                    tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
-                    tokens?.set(value: authResponse.idToken!, forKey: "idToken")
-                    self.buildTokenTextView()
-                }
+        OktaAuth.login().start(self)
+        .then { authResponse in
+            tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
+            tokens?.set(value: authResponse.idToken!, forKey: "idToken")
+            self.buildTokenTextView()
         }
+        .catch { error in print(error) }
     }
 
     func updateUI(updateText: String) {

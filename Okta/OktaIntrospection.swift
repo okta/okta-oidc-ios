@@ -18,44 +18,44 @@ public struct Introspect {
     public func validate(_ token: String) -> Promise<Bool> {
         // Validate token
         return Promise<Bool>(in: .background, { resolve, reject, _ in
-            if let introspectionEndpoint = self.getIntrospectionEndpoint() {
-                // Build introspect request
-                let headers = [
-                    "Accept": "application/json",
-                    "Content-Type": "application/x-www-form-urlencoded"
-                ]
-
-                let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
-
-                OktaApi
-                    .post(introspectionEndpoint, headers: headers, postString: data)
-                    .then { response in
-                        guard let isActive = response?["active"] as? Bool else {
-                            return reject(OktaError.ParseFailure)
-                        }
-                        return resolve(isActive)
-                    }
-                    .catch { error in reject(OktaError.NoIntrospectionEndpoint) }
-            } else {
+            guard let introspectionEndpoint = self.getIntrospectionEndpoint() else {
                 return reject(OktaError.NoIntrospectionEndpoint)
             }
+
+            let headers = [
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            ]
+
+            let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+
+            OktaApi.post(introspectionEndpoint, headers: headers, postString: data)
+            .then { response in
+                guard let isActive = response?["active"] as? Bool else {
+                    return reject(OktaError.ParseFailure)
+                }
+                return resolve(isActive)
+            }
+            .catch { error in reject(OktaError.NoIntrospectionEndpoint) }
         })
     }
     
-    public func decode(_ token: String, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+    public func decode(_ token: String) -> Promise<[String: Any]?> {
         // Decodes the payload of a JWT
-        let payload = token.split(separator: ".")
-        var encodedPayload = "\(payload[1])"
-        if encodedPayload.count % 4 != 0 {
-            let padding = 4 - encodedPayload.count % 4
-            encodedPayload += String(repeating: "=", count: padding)
-        }
-        
-        if let data = Data(base64Encoded: encodedPayload, options: []) {
-            let jwt = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-            return callback(jwt, nil)
-        }
-        callback(nil, .JWTDecodeError)
+        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
+            let payload = token.split(separator: ".")
+            var encodedPayload = "\(payload[1])"
+            if encodedPayload.count % 4 != 0 {
+                let padding = 4 - encodedPayload.count % 4
+                encodedPayload += String(repeating: "=", count: padding)
+            }
+
+            if let data = Data(base64Encoded: encodedPayload, options: []) {
+                let jwt = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+                return resolve(jwt)
+            }
+            return reject(OktaError.JWTDecodeError)
+        })
     }
 
     func getIntrospectionEndpoint() -> URL? {

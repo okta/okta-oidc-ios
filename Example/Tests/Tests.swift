@@ -90,9 +90,10 @@ class Tests: XCTestCase {
 
         OktaAuth
             .login("user@example.com", password: "password")
-            .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController()) { response, error in
+            .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
+            .catch { error in
                 XCTAssertEqual(
-                    error!.localizedDescription,
+                    error.localizedDescription,
                     "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
                 )
                 pwdExpectation.fulfill()
@@ -177,7 +178,8 @@ class Tests: XCTestCase {
             "iZXhwIjoxNTE5OTcyNTA4LCJjaWQiOiJ7Y2xpZW50SWR9IiwidWlkIjoie3VpZH0iLCJzY3AiOlsib3Blb" +
             "mlkIiwib2ZmbGluZV9hY2Nlc3MiLCJwcm9maWxlIl0sInN1YiI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ." +
             "fakeSignature"
-        Introspect().decode(idToken) { response, error in
+        Introspect().decode(idToken)
+        .then { response in
             XCTAssertNotNil(response)
         }
     }
