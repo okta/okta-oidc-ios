@@ -15,26 +15,30 @@ import Vinculum
 
 open class OktaTokenManager: NSObject, NSCoding {
 
-    private var _idToken: String? = nil
+    internal var _idToken: String? = nil
 
     open var authState: OIDAuthState
     open var config: [String: String]
     open var accessibility: CFString
 
-    open var idToken: String? {
-        get { return self._idToken }
-    }
-
-    open var refreshToken: String? {
+    open var accessToken: String? {
+        // Return the known accessToken
         get {
-            guard let token = self.authState.refreshToken else { return nil }
+            guard let token = self.authState.lastTokenResponse?.accessToken else { return nil }
             return token
         }
     }
 
-    open var accessToken: String? {
+    open var idToken: String? {
+        // Return the known idToken via the internal _idToken var
+        // since it gets lost on refresh
+        get { return self._idToken }
+    }
+
+    open var refreshToken: String? {
+        // Return the known refreshToken
         get {
-            guard let token = self.authState.lastTokenResponse?.accessToken else { return nil }
+            guard let token = self.authState.refreshToken else { return nil }
             return token
         }
     }

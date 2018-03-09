@@ -24,6 +24,10 @@ public struct UITestUtils {
         let usernameField = webViewsQuery.textFields["Username"]
         let passwordField = webViewsQuery.secureTextFields["Password"]
 
+        if !waitForElement(usernameField, timeout: 10) && waitForElement(passwordField, timeout: 10) {
+            return
+        }
+
         usernameField.tap()
         usernameField.typeText(username)
         passwordField.tap()

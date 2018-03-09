@@ -9,8 +9,8 @@
 	<key>clientSecret</key>
 	<string></string>
 	<key>clientId</key>
-	<string>{clientId}</string>
+	<string>0oae1enia6od2nlz00h7</string>
 	<key>issuer</key>
-	<string>https://{yourOktaDomain}.com/oauth2/default</string>
+	<string>https://demo-org.oktapreview.com/oauth2/default</string>
 </dict>
 </plist>

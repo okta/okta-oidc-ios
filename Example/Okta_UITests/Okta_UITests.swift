@@ -15,8 +15,8 @@ import OktaAuth
 
 class OktaUITests: XCTestCase {
     // Update these values along with your Plist config
-    var username = "{username}"
-    var password = "{password}"
+    var username = ProcessInfo.processInfo.environment["USERNAME"]!
+    var password = ProcessInfo.processInfo.environment["PASSWORD"]!
 
     var testUtils: UITestUtils?
     let app = XCUIApplication()
@@ -25,7 +25,7 @@ class OktaUITests: XCTestCase {
         super.setUp()
         testUtils = UITestUtils(app)
 
-        continueAfterFailure = false
+        continueAfterFailure = true
         XCUIApplication().launch()
     }
 
@@ -46,6 +46,7 @@ class OktaUITests: XCTestCase {
         // Wait for browser to load
         // This sleep bypasses the need to "click" the consent for Safari
         sleep(2)
+        app.tap()
 
         // Login
         testUtils.login(username: username, password: password)
@@ -59,7 +60,7 @@ class OktaUITests: XCTestCase {
     func testAuthCodeFlow() {
         loginAndWait()
 
-        let tokenValues = testUtils?.getTextViewValue(label: "tokenView")
+        let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertNotNil(tokenValues)
     }
 
@@ -69,7 +70,7 @@ class OktaUITests: XCTestCase {
         // Get User info
         app.buttons["GetUser"].tap()
 
-        let userInfoValue = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 2)
+        let userInfoValue = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(userInfoValue!.contains(username))
     }
 
@@ -79,19 +80,23 @@ class OktaUITests: XCTestCase {
         // Introspect Valid Token
         app.buttons["Introspect"].tap()
 
-        let valid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 2)
+        let valid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(valid!.contains("true"))
+    }
+
+    func testAuthCodeFlowRevokeAndIntrospect() {
+        loginAndWait()
 
         // Revoke Token
         app.buttons["Revoke"].tap()
 
-        let revoked = testUtils?.getTextViewValue(label: "tokenView")
+        let revoked = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(revoked!.contains("AccessToken was revoked"))
 
         // Introspect invalid Token
         app.buttons["Introspect"].tap()
 
-        let isNotValid = testUtils?.getTextViewValue(label: "tokenView")
+        let isNotValid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(isNotValid!.contains("false"))
 
         // Clear all tokens

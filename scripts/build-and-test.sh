@@ -1,33 +1,25 @@
 #!/bin/bash
+source "${0%/*}/helpers.sh"
 
 set -e
 
 # Go to correct path for install
 cd Example
 
-
-function pod_install() {
-    echo "==== Installing pods ===="
-    pod install --repo-update
-}
-
-if ! pod_install; then
+if ! pod_dependencies; then
     exit 1
 fi
 
-function build_and_test_workspace() {
-    echo "*******************"
-    echo "Building Workspace"
-    echo "*******************"
-    xcodebuild test \
-    -workspace Okta.xcworkspace/ \
-    -scheme Okta-Example \
-    -destination 'platform=iOS Simulator,OS=11.1,name=iPhone 8' \
-    -only-testing:Okta_Tests
-}
+echo "- Starting tests..."
 
-if ! build_and_test_workspace; then
+if ! build_and_run_unit_tests "$USERNAME" "$PASSWORD"; then
     exit 1
+else
+  echo -e "\xE2\x9C\x94 Passed Unit tests"
 fi
 
-echo "All tests passed"
+if ! build_and_run_ui_tests "$USERNAME" "$PASSWORD"; then
+    exit 1
+else
+  echo -e "\xE2\x9C\x94 Passed UI tests"
+fi
