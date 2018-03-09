@@ -7,11 +7,14 @@ import Vinculum
 class Tests: XCTestCase {
     override func setUp() {
         super.setUp()
-        OktaAuth.tokens?.clear()
     }
 
     override func tearDown() {
         super.tearDown()
+        
+        // Revert stored values
+        OktaAuth.tokens?.clear()
+        OktaAuth.configuration = nil
     }
 
     func testPListFailure() {
@@ -45,11 +48,11 @@ class Tests: XCTestCase {
     func testAdditionalParamParse() {
         // Ensure known values from the config object are removed
         let config = [
-            "issuer": "https://example.com/oauth2/default",
-            "clientId": "clientId",
+                 "issuer": "https://example.com/oauth2/default",
+               "clientId": "clientId",
             "redirectUri": "com.okta.example:/callback",
-            "scopes": "openid profile offline_access",
-            "nonce": "abbbbbbbc"
+                 "scopes": "openid profile offline_access",
+                  "nonce": "abbbbbbbc"
         ]
 
         let additionalParams = Utils.parseAdditionalParams(config)
@@ -129,7 +132,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = UserInfo(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
+            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
         }
     }
 
@@ -139,7 +142,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = Revoke(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
+            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
         }
     }
 
@@ -184,6 +187,7 @@ class Tests: XCTestCase {
         }
 
         waitForIt()
+
     }
 
     func testReturningTokensFromTokenManager() {
@@ -238,6 +242,52 @@ class Tests: XCTestCase {
 
         let isAuth = OktaAuth.isAuthenticated()
         XCTAssertTrue(isAuth)
+    }
+
+    func testRefreshTokenFailure() {
+        // Expect that no refresh token stored will result in an error
+        let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
+
+        Refresh().refresh()
+        .catch { error in
+            XCTAssertEqual(error.localizedDescription, OktaError.NoRefreshToken.localizedDescription)
+            refreshExpectation.fulfill()
+        }
+
+        waitForIt()
+    }
+
+    func testRefreshTokenFailureInvalidToken() {
+        // Expect that a fake refresh token stored will result in an error
+        let setupTokenManagerExpectation = expectation(description: "Will return tokens without errors")
+        
+        OktaAuth.configuration = [
+                  "issuer": TestUtils.mockIssuer,
+                "clientId": TestUtils.mockClientId,
+            "clientSecret": TestUtils.mockClientSecret,
+             "redirectUri": TestUtils.mockRedirectUri
+        ]
+
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            OktaAuthorization().storeAuthState(tokenManager)
+            setupTokenManagerExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
+        
+        waitForIt()
+
+        let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
+        Refresh().refresh()
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
+            )
+            refreshExpectation.fulfill()
+        }
+
+        waitForIt()
     }
 
     func waitForIt() {

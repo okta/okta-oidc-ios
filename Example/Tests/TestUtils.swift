@@ -14,6 +14,8 @@ import Hydra
 struct TestUtils {
     static let mockIssuer = "https://demo-org.oktapreview.com/oauth2/default"
     static let mockClientId = "0oae1enia6od2nlz00h7"
+    static let mockClientSecret = "clientSecret"
+    static let mockRedirectUri = "com.okta.example:/callback"
     static let mockScopes = "openid email"
 
     static let mockAccessToken = "abc.123.xyz"
@@ -68,7 +70,9 @@ struct TestUtils {
                     authState: tempAuthState,
                     config: [
                         "issuer": mockIssuer,
-                        "clientId": mockClientId
+                        "clientId": mockClientId,
+                        "clientSecret": mockClientSecret,
+                        "redirectUri": mockRedirectUri
                     ],
                     validationOptions: options
                 )
