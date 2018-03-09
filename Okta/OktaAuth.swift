@@ -17,8 +17,7 @@ public struct OktaAuthorization {
     func authCodeFlow(_ config: [String: String], _ view: UIViewController) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
-            guard let issuer = config["issuer"],
-                let clientId = config["clientId"],
+            guard let issuer = config["issuer"], let clientId = config["clientId"],
                 let redirectUri = config["redirectUri"] else {
                     return reject(OktaError.MissingConfigurationValues)
             }
@@ -39,12 +38,11 @@ public struct OktaAuthorization {
                 OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
                     authorizationResponse, error in
 
-                    if authorizationResponse != nil {
-                        // Return the tokens
-                        return resolve(OktaTokenManager(authState: authorizationResponse))
-                    } else {
+                    guard let authResponse = authorizationResponse else {
                         return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     }
+                    // Return the tokens
+                    return resolve(OktaTokenManager(authState: authResponse))
                 }
             }
             .catch { error in return reject(error) }

@@ -14,26 +14,26 @@ public struct Revoke {
 
     init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
         // Revoke the token
-        if let revokeEndpoint = getRevokeEndpoint() {
-            guard let token = token else {
-                callback(nil, .NoBearerToken)
-                return
-            }
-
-            let headers = [
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-            ]
-
-            let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
-
-            OktaApi
-                .post(revokeEndpoint, headers: headers, postString: data)
-                .then { response in callback(response, nil) }
-                .catch { error in callback(nil, error as? OktaError) }
-        } else {
+        guard let revokeEndpoint = getRevokeEndpoint() else {
             callback(nil, .NoRevocationEndpoint)
+            return
         }
+        
+        guard let token = token else {
+            callback(nil, .NoBearerToken)
+            return
+        }
+
+        let headers = [
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+        ]
+
+        let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+
+        OktaApi.post(revokeEndpoint, headers: headers, postString: data)
+        .then { response in callback(response, nil) }
+        .catch { error in callback(nil, error as? OktaError) }
     }
 
     func getRevokeEndpoint() -> URL? {

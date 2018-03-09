@@ -11,7 +11,7 @@
  */
 import Hydra
 
-open class OktaApi: NSObject {
+internal class OktaApi: NSObject {
 
     class func post(_ url: URL, headers: [String: String]?, postString: String?) -> Promise<[String: Any]?> {
         // Generic POST API wrapper for data passed in as a String
@@ -27,42 +27,34 @@ open class OktaApi: NSObject {
 
     class func post(_ url: URL, headers: [String: String]?, postData: Data?) -> Promise<[String: Any]?> {
         // Generic POST API wrapper
-        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-            request.addValue(
-                "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
-                forHTTPHeaderField: "X-Okta-User-Agent-Extended"
-            )
-
-            if let postBodyData = postData {
-                request.httpBody = postBodyData
-            }
-
-            let task = URLSession.shared.dataTask(with: request){ data, response, error in
-                guard let data = data, error == nil else {
-                    let errorMessage = error != nil ? error!.localizedDescription : "No response data"
-                    return reject(OktaError.APIError(errorMessage))
-                }
-                let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-                return resolve(responseJson)
-            }
-            task.resume()
-        })
+        let request = self.setupRequest(url, method: "POST", headers: headers, body: postData)
+        return self.fireRequest(request)
     }
 
     class func get(_ url: URL, headers: [String: String]?) -> Promise<[String: Any]?> {
         // Generic GET API wrapper
-        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
-            var request = URLRequest(url: url)
-            request.httpMethod = "GET"
-            request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-            request.addValue(
-                "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
-                forHTTPHeaderField: "X-Okta-User-Agent-Extended"
-            )
+        let request = self.setupRequest(url, method: "GET", headers: headers)
+        return self.fireRequest(request)
+    }
+    
+    class func setupRequest(_ url: URL, method: String, headers: [String: String]?, body: Data? = nil) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
+        request.addValue(
+            "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
+            forHTTPHeaderField: "X-Okta-User-Agent-Extended"
+        )
 
+        if let data = body {
+            request.httpBody = data
+        }
+
+        return request
+    }
+
+    class func fireRequest(_ request: URLRequest) -> Promise<[String:Any]?> {
+         return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
             let task = URLSession.shared.dataTask(with: request){ data, response, error in
                 guard let data = data, error == nil else {
                     let errorMessage = error != nil ? error!.localizedDescription : "No response data"

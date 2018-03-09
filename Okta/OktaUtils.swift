@@ -21,17 +21,10 @@ open class Utils: NSObject {
 
     open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: String]? {
         // Parse Okta.plist to build the authorization request
-
-        if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"),
-            let data = try? Data(contentsOf: path) {
-            if let result = try? PropertyListSerialization
-                .propertyList(
-                       from: data,
-                    options: [],
-                     format: nil
-                ) as? [String: String] {
-                    OktaAuth.configuration = result
-                    return result
+        if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"), let data = try? Data(contentsOf: path) {
+            if let result = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: String] {
+                OktaAuth.configuration = result
+                return result
             }
         }
         return nil
@@ -45,7 +38,6 @@ open class Utils: NSObject {
             - Are in string format separated by " "
             - Contain "openid"
         */
-
         var scrubbedScopes = [String]()
 
         if let stringScopes = scopes {
