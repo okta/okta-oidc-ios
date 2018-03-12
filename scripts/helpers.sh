@@ -22,8 +22,7 @@ build_and_run_unit_tests () {
 
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
     -destination "$IPHONE_X_DESTINATION" \
-    -only-testing:Okta_Tests \
-    USERNAME="$1" PASSWORD="$2" test | xcpretty;
+    -only-testing:Okta_Tests test | xcpretty;
 }
 
 build_and_run_ui_tests () {

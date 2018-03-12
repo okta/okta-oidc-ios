@@ -19,8 +19,6 @@ public struct UITestUtils {
     }
 
     func login(username: String, password: String) {
-        sleep(2)
-
         // Login via username and password inside of the Safari WebView
         let webViewsQuery = testApp.webViews
         let usernameField = webViewsQuery.textFields["Username"]
