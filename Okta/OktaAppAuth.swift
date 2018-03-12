@@ -11,6 +11,7 @@
  */
 
 import AppAuth
+import Vinculum
 
 // Current version of the SDK
 let VERSION = "0.3.0"
@@ -35,6 +36,24 @@ public func login(_ username: String, password: String) -> Login {
 public func login() -> Login {
     // Authenticate via authorization code flow
     return Login()
+}
+
+public func isAuthenticated() -> Bool {
+    // Restore state
+    guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
+        let encodedAuthState = encodedAuthStateItem else {
+        return false
+    }
+
+    guard let previousState = NSKeyedUnarchiver
+        .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else { return false }
+
+    tokens = previousState
+
+    if tokens?.accessToken != nil {
+        return true
+    }
+    return false
 }
 
 public func introspect() -> Introspect {

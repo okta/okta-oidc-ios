@@ -24,6 +24,10 @@ public struct UITestUtils {
         let usernameField = webViewsQuery.textFields["Username"]
         let passwordField = webViewsQuery.secureTextFields["Password"]
 
+        if !waitForElement(usernameField, timeout: 10) && waitForElement(passwordField, timeout: 10) {
+            return
+        }
+
         usernameField.tap()
         usernameField.typeText(username)
         passwordField.tap()
@@ -37,6 +41,12 @@ public struct UITestUtils {
             return value
         }
         return nil
+    }
+
+    func getTextViewValueWithDelay(label: String, delay: UInt32) -> String? {
+        // Returns the value of a textView after a given delay
+        sleep(delay)
+        return getTextViewValue(label: label)
     }
 
     func waitForElement(_ element: XCUIElement, timeout: TimeInterval) -> Bool {

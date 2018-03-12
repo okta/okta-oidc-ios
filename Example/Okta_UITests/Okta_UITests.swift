@@ -14,17 +14,18 @@ import XCTest
 import OktaAuth
 
 class OktaUITests: XCTestCase {
-    var username = ""
-    var password = ""
+    // Update these values along with your Plist config
+    var username = ProcessInfo.processInfo.environment["USERNAME"]!
+    var password = ProcessInfo.processInfo.environment["PASSWORD"]!
+
+    var testUtils: UITestUtils?
+    let app = XCUIApplication()
 
     override func setUp() {
         super.setUp()
+        testUtils = UITestUtils(app)
 
-        // Update these values along with your Plist config
-        username = "{username}"
-        password = "{password}"
-
-        continueAfterFailure = false
+        continueAfterFailure = true
         XCUIApplication().launch()
     }
 
@@ -32,55 +33,76 @@ class OktaUITests: XCTestCase {
         super.tearDown()
     }
 
-    func testAuthorizationCodeFlow() {
-        let app = XCUIApplication()
-        let testUtils = UITestUtils(app)
+    func loginAndWait() {
+        guard let testUtils = testUtils else { return }
+
+        // Check to see if there are tokens displayed (indicating an authenticated state)
+        if let tokens = testUtils.getTextViewValue(label: "tokenView"), tokens.contains("Access Token") {
+            return
+        }
 
         app.buttons["Login"].tap()
 
         // Wait for browser to load
         // This sleep bypasses the need to "click" the consent for Safari
         sleep(2)
+        
+        // Known bug with iOS 11 and system alerts (need to tap twice)
+        app.tap()
+        app.tap()
 
         // Login
         testUtils.login(username: username, password: password)
 
-        // Wait for app to redirect back (Granting 3 second delay)
-        if !testUtils.waitForElement(app.textViews["tokenView"], timeout: 3) {
+        // Wait for app to redirect back (Granting 5 second delay)
+        if !testUtils.waitForElement(app.textViews["tokenView"], timeout: 5) {
             XCTFail("Unable to redirect back from browser")
         }
+    }
 
-        let tokenValues = testUtils.getTextViewValue(label: "tokenView")
+    func testAuthCodeFlow() {
+        loginAndWait()
+
+        let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertNotNil(tokenValues)
+    }
+
+    func testAuthCodeFlowAndUserInfo(){
+        loginAndWait()
 
         // Get User info
         app.buttons["GetUser"].tap()
 
-        let userInfoValue = testUtils.getTextViewValue(label: "tokenView")
+        let userInfoValue = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(userInfoValue!.contains(username))
+    }
+
+    func testAuthCodeFlowIntrospectAndRevoke() {
+        loginAndWait()
 
         // Introspect Valid Token
         app.buttons["Introspect"].tap()
 
-        let valid = testUtils.getTextViewValue(label: "tokenView")
+        let valid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(valid!.contains("true"))
+    }
+
+    func testAuthCodeFlowRevokeAndIntrospect() {
+        loginAndWait()
 
         // Revoke Token
         app.buttons["Revoke"].tap()
 
-        let revoked = testUtils.getTextViewValue(label: "tokenView")
+        let revoked = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(revoked!.contains("AccessToken was revoked"))
 
         // Introspect invalid Token
         app.buttons["Introspect"].tap()
 
-        let isNotValid = testUtils.getTextViewValue(label: "tokenView")
+        let isNotValid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(isNotValid!.contains("false"))
 
-        // Clear Tokens
+        // Clear all tokens
         app.buttons["Clear"].tap()
-
-        let val = testUtils.getTextViewValue(label: "tokenView")
-        XCTAssertEqual(val!, "")
     }
 }
