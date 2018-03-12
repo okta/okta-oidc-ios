@@ -7,7 +7,7 @@ WORKSPACE="Okta.xcworkspace/"
 SCHEME="Okta-Example"
 
 # Set test devices
-IPHONE_8_DESTINATION="OS=11.2,name=iPhone X"
+IPHONE_X_DESTINATION="OS=11.2,name=iPhone X"
 
 pod_dependencies () {
     echo "- Installing dependencies"
@@ -21,7 +21,7 @@ build_and_run_unit_tests () {
     echo "└─  Starting Unit Tests"
 
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
-    -destination "$IPHONE_8_DESTINATION" \
+    -destination "$IPHONE_X_DESTINATION" \
     -only-testing:Okta_Tests \
     USERNAME="$1" PASSWORD="$2" test | xcpretty;
 }
@@ -32,7 +32,7 @@ build_and_run_ui_tests () {
     echo "└─  Starting UI Tests"
     
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
-    -destination "$IPHONE_8_DESTINATION" \
+    -destination "$IPHONE_X_DESTINATION" \
     -only-testing:Okta_UITests \
     USERNAME="$1" PASSWORD="$2" test | xcpretty;
 }
