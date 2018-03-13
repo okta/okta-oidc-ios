@@ -19,6 +19,13 @@ public struct UITestUtils {
     }
 
     func login(username: String, password: String) {
+        // Wait for browser to load
+        // This sleep bypasses the need to "click" the consent for Safari
+        sleep(5)
+
+        // Known bug with iOS 11 and system alerts
+        testApp.tap()
+
         // Login via username and password inside of the Safari WebView
         let webViewsQuery = testApp.webViews
         let usernameField = webViewsQuery.textFields["Username"]

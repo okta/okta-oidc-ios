@@ -43,14 +43,6 @@ class OktaUITests: XCTestCase {
 
         app.buttons["Login"].tap()
 
-        // Wait for browser to load
-        // This sleep bypasses the need to "click" the consent for Safari
-        sleep(2)
-        
-        // Known bug with iOS 11 and system alerts (need to tap twice)
-        app.tap()
-        app.tap()
-
         // Login
         testUtils.login(username: username, password: password)
 
