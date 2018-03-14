@@ -31,7 +31,7 @@ public struct UITestUtils {
         let usernameField = webViewsQuery.textFields["Username"]
         let passwordField = webViewsQuery.secureTextFields["Password"]
 
-        if !waitForElement(usernameField, timeout: 10) && waitForElement(passwordField, timeout: 10) {
+        if !waitForElement(usernameField, timeout: 5) && !waitForElement(passwordField, timeout: 5) {
             return
         }
 

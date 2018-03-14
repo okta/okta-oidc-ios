@@ -5,10 +5,10 @@ import AppAuth
 import Vinculum
 
 class Tests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         OktaAuth.tokens?.clear()
+
     }
 
     override func tearDown() {
@@ -90,15 +90,14 @@ class Tests: XCTestCase {
 
         let pwdExpectation = expectation(description: "Will error attempting username/password auth")
 
-        OktaAuth
-            .login("user@example.com", password: "password")
-            .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
-            .catch { error in
-                XCTAssertEqual(
-                    error.localizedDescription,
-                    "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-                )
-                pwdExpectation.fulfill()
+        OktaAuth.login("user@example.com", password: "password")
+        .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
+            )
+            pwdExpectation.fulfill()
         }
 
         waitForExpectations(timeout: 5, handler: { error in
@@ -164,7 +163,7 @@ class Tests: XCTestCase {
 
     func testIsAuthenticated() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        let tokenManager = setupMockTokenManager(issuer: "https://demo-org.oktapreview.com/oauth2/default")
+        let tokenManager = TestUtils.tokenManager
         OktaAuthorization().storeAuthState(tokenManager)
         let isAuth = OktaAuth.isAuthenticated()
         XCTAssertFalse(isAuth)
@@ -172,7 +171,7 @@ class Tests: XCTestCase {
 
     func testReturningTokensFromTokenManager() {
         // Validate that mock token manager returns a null token
-        let tokenManager = setupMockTokenManager(issuer: "https://demo-org.oktapreview.com/oauth2/default")
+        let tokenManager = TestUtils.tokenManager
         let accessToken = tokenManager.accessToken
         let idToken = tokenManager.idToken
         let refreshToken = tokenManager.refreshToken
@@ -183,19 +182,9 @@ class Tests: XCTestCase {
 
     func testStoreAndDeleteOfAuthState() {
         // Validate the authState is properly stored and can be removed
-        let tokenManager = setupMockTokenManager(issuer: "https://demo-org.oktapreview.com/oauth2/default")
-        OktaAuthorization().storeAuthState(tokenManager)
+        OktaAuthorization().storeAuthState(TestUtils.tokenManager)
 
-        guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
-            let encodedAuthState = encodedAuthStateItem else {
-                return XCTFail("Error retrieving authState")
-        }
-
-        guard let previousState = NSKeyedUnarchiver
-            .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else {
-                return XCTFail("Error retrieving authState")
-        }
-
+        let previousState = TestUtils.getPreviousState()
         XCTAssertNotNil(previousState)
 
         // Clear the authState
@@ -206,26 +195,5 @@ class Tests: XCTestCase {
             XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
         }
 
-    }
-
-    func setupMockTokenManager(issuer: String) -> OktaTokenManager {
-        // Creates a mock Okta Token Manager object
-        let fooURL = URL(string: issuer)!
-        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
-        let mockTokenRequest = OIDTokenRequest(
-            configuration: mockServiceConfig,
-            grantType: OIDGrantTypeRefreshToken,
-            authorizationCode: nil,
-            redirectURL: fooURL,
-            clientID: "nil",
-            clientSecret: nil,
-            scope: nil,
-            refreshToken: nil,
-            codeVerifier: nil,
-            additionalParameters: nil
-        )
-        let mockTokenResponse = OIDTokenResponse(request: mockTokenRequest, parameters: [:])
-        let tempAuthState = OIDAuthState(authorizationResponse: nil, tokenResponse: mockTokenResponse, registrationResponse: nil)
-        return OktaTokenManager(authState: tempAuthState, config: [:])
     }
 }
