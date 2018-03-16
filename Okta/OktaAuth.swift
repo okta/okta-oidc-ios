@@ -11,6 +11,7 @@
  */
 import AppAuth
 import Hydra
+import Vinculum
 
 public struct OktaAuthorization {
 
@@ -41,8 +42,12 @@ public struct OktaAuthorization {
                     guard let authResponse = authorizationResponse else {
                         return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     }
-                    // Return the tokens
-                    return resolve(OktaTokenManager(authState: authResponse))
+
+                    let tokenManager = OktaTokenManager(authState: authResponse, config: config)
+
+                    // Set the local cache and write to storage
+                    self.storeAuthState(tokenManager)
+                    return resolve(tokenManager)
                 }
             }
             .catch { error in return reject(error) }
@@ -82,13 +87,17 @@ public struct OktaAuthorization {
                     }
 
                     if authorizationResponse != nil {
-                        // Return the tokens
                         let authState = OIDAuthState(
-                                authorizationResponse: nil,
-                                        tokenResponse: authorizationResponse,
-                                 registrationResponse: nil
-                            )
-                        return resolve(OktaTokenManager(authState: authState))
+                            authorizationResponse: nil,
+                                    tokenResponse: authorizationResponse,
+                             registrationResponse: nil
+                        )
+
+                        let tokenManager = OktaTokenManager(authState: authState, config: config)
+
+                        // Set the local cache and write to storage
+                        self.storeAuthState(tokenManager)
+                        return resolve(tokenManager)
                     }
                 }
             }
@@ -108,7 +117,6 @@ public struct OktaAuthorization {
                 guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                     return reject(OktaError.ParseFailure)
                 }
-
                 // Cache the well-known endpoint response
                 OktaAuth.wellKnown = dictResponse
                 return resolve(OIDServiceConfiguration(discoveryDocument: oidcConfig))
@@ -120,5 +128,18 @@ public struct OktaAuthorization {
                 return reject(OktaError.APIError(responseError))
             }
         })
+    }
+
+    func storeAuthState(_ tokenManager: OktaTokenManager) {
+        // Encode and store the current auth state and
+        // cache the current tokens
+        OktaAuth.tokens = tokenManager
+
+        let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
+        do {
+            try Vinculum.set(key: "OktaAuthStateTokenManager", value: authStateData, accessibility: tokenManager.accessibility)
+        } catch let error {
+            print("Error: \(error)")
+        }
     }
 }

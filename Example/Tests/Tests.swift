@@ -1,16 +1,18 @@
 import UIKit
 import XCTest
 @testable import OktaAuth
+import AppAuth
+import Vinculum
 
 class Tests: XCTestCase {
-
     override func setUp() {
         super.setUp()
+        OktaAuth.tokens?.clear()
+
     }
 
     override func tearDown() {
         super.tearDown()
-        OktaAuth.tokens?.clear()
     }
 
     func testPListFailure() {
@@ -88,45 +90,20 @@ class Tests: XCTestCase {
 
         let pwdExpectation = expectation(description: "Will error attempting username/password auth")
 
-        OktaAuth
-            .login("user@example.com", password: "password")
-            .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
-            .catch { error in
-                XCTAssertEqual(
-                    error.localizedDescription,
-                    "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-                )
-                pwdExpectation.fulfill()
+        OktaAuth.login("user@example.com", password: "password")
+        .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
+            )
+            pwdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 3, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
        })
-    }
-
-    func testKeychainStorage() {
-        // Validate that tokens can be stored and retrieved via the keychain
-        let tokens = OktaTokenManager(authState: nil)
-
-        tokens.set(value: "fakeToken", forKey: "accessToken")
-        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
-
-        // Clear tokens
-        tokens.clear()
-        XCTAssertNil(tokens.get(forKey: "accessToken"))
-    }
-
-    func testBackgroundKeychainStorage() {
-        // Validate that tokens can be stored and retrieved via the keychain
-        let tokens = OktaTokenManager(authState: nil)
-
-        tokens.set(value: "fakeToken", forKey: "accessToken", needsBackgroundAccess: true)
-        XCTAssertEqual(tokens.get(forKey: "accessToken"), "fakeToken")
-
-        // Clear tokens
-        tokens.clear()
-        XCTAssertNil(tokens.get(forKey: "accessToken"))
     }
 
     func testIntrospectionEndpointURL() {
@@ -152,7 +129,6 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-
         let _ = UserInfo(token: nil) { response, error in
             XCTAssertEqual(error?.localizedDescription, "Missing Bearer token. You must authenticate first.")
         }
@@ -178,9 +154,46 @@ class Tests: XCTestCase {
             "iZXhwIjoxNTE5OTcyNTA4LCJjaWQiOiJ7Y2xpZW50SWR9IiwidWlkIjoie3VpZH0iLCJzY3AiOlsib3Blb" +
             "mlkIiwib2ZmbGluZV9hY2Nlc3MiLCJwcm9maWxlIl0sInN1YiI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ." +
             "fakeSignature"
+
         Introspect().decode(idToken)
         .then { response in
             XCTAssertNotNil(response)
         }
+    }
+
+    func testIsAuthenticated() {
+        // Validate that if there is an existing accessToken, we return an "authenticated" state
+        let tokenManager = TestUtils.tokenManager
+        OktaAuthorization().storeAuthState(tokenManager)
+        let isAuth = OktaAuth.isAuthenticated()
+        XCTAssertFalse(isAuth)
+    }
+
+    func testReturningTokensFromTokenManager() {
+        // Validate that mock token manager returns a null token
+        let tokenManager = TestUtils.tokenManager
+        let accessToken = tokenManager.accessToken
+        let idToken = tokenManager.idToken
+        let refreshToken = tokenManager.refreshToken
+        XCTAssertNil(accessToken)
+        XCTAssertNil(idToken)
+        XCTAssertNil(refreshToken)
+    }
+
+    func testStoreAndDeleteOfAuthState() {
+        // Validate the authState is properly stored and can be removed
+        OktaAuthorization().storeAuthState(TestUtils.tokenManager)
+
+        let previousState = TestUtils.getPreviousState()
+        XCTAssertNotNil(previousState)
+
+        // Clear the authState
+        OktaAuth.tokens?.clear()
+
+        XCTAssertThrowsError(try Vinculum.get("OktaAuthStateTokenManager")) { error in
+            // Expect "Not found" exception
+            XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
+        }
+
     }
 }

@@ -98,120 +98,108 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpe
 }
 ```
 
-
 Then, you can start the authorization flow by simply calling `login`:
 
 ```swift
-OktaAuth
-    .login()
-    .start(view: self) { response, error in
-        if error != nil {
-            print("Error: \(error!)")
-        }
-
-        // Success
-        if let authResponse = response {
-            // authResponse.accessToken
-            // authResponse.idToken
-        }
-    }
+OktaAuth.login().start(view: self)
+.then { tokenManager in
+    // tokenManager.accessToken
+    // tokenManager.idToken
+    // tokenManager.refreshToken
+}
+.catch { error in
+    // Error
+}
 ```
 
 To login using `username` and `password`:
 
 ```swift
-OktaAuth
-    .login(username: "user@example.com", password: "password")
-    .start(view: self) { response, error in
-        if error != nil {
-            print("Error: \(error!)")
-        }
+OktaAuth.login(username: "user@example.com", password: "password").start(view: self)
+.then { tokenManager in
+    // tokenManager.accessToken
+    // tokenManager.idToken
+    // tokenManager.refreshToken
+}
+.catch { error in
+    // Error
+}
+```
 
-        // Success
-        if let authResponse = response {
-            // authResponse.accessToken
-            // authResponse.idToken
-        }
-    }
+### Handle the Authentication State
+Returns `true` if there is a valid access token stored in the TokenManager. This is the best way to determine if a user has successfully authenticated into your app.
+
+```swift
+if !OktaAuth.isAuthenticated() {
+    // Prompt for login
+}
 ```
 
 ### Get UserInfo
 Calls the OIDC userInfo endpoint to return user information.
 
 ```swift
-OktaAuth
-    .userinfo() { response, error in
-        if error != nil {
-            print("Error: \(error!)")
-        }
-
-        if let userinfo = response {
-            userinfo.forEach { print("\($0): \($1)") }
-        }
+OktaAuth.userinfo() { response, error in
+    if error != nil {
+        print("Error: \(error!)")
     }
+
+    if let userinfo = response {
+        userinfo.forEach { print("\($0): \($1)") }
+    }
+}
 ```
 
 ### Introspect a Token
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-OktaAuth
-    .introspect()
-    .validate(token: token) { response, error in
-        if error != nil {
-            print("Error: \(error!)")
-        }
-
-        if let isActive = response {
-            print("Is token valid? \(isActive)")
-        }
-    }
+OktaAuth.introspect().validate(token: token)
+.then { isActive in
+    print("Is token valid? \(isActive)")
+}
+.catch { error in
+    // Error
+}
 ```
 
 ### Revoke a Token
 Calls the revocation endpoint to revoke the specified token.
 
 ```swift
-OktaAuth
-    .revoke(token: token) { response, error in
-        if error != nil {
-            print("Error: \(error!)")
-        }
-        if let _ = response {
-            print("Token was revoked")
-        }
+OktaAuth.revoke(token: token) { response, error in
+    if error != nil {
+        print("Error: \(error!)")
     }
-```
-
-### Refresh a Token
-Refreshes the `accessToken` if the `refreshToken` is provided.
-
-```swift
-OktaAuth.refresh()
+    if let _ = response {
+        print("Token was revoked")
+    }
+}
 ```
 
 ### Token Management
-Tokens are securely stored in the Keychain. They can be easily be set and retrieved with the helper methods `set` and `get`.
+Tokens are securely stored in the Keychain and can be retrieved from the TokenManager.
 
 ```swift
-OktaAuth
-    .login()
-    .start(self) { response, error in
-        if error != nil {
-            print(error!)
-        }
-
-        if let authResponse = response {
-            // Store tokens in keychain
-            OktaAuth.tokens?.set(value: authResponse.accessToken!, forKey: "accessToken")
-            OktaAuth.tokens?.set(value: authResponse.idToken!, forKey: "idToken")
-        }
-    }
-
-// OktaAuth.tokens?.get(forKey: "accessToken")
-// OktaAuth.tokens?.get(forKey: "idToken")
+OktaAuth.tokens?.accessToken
+OktaAuth.tokens?.idToken
+OktaAuth.tokens?.refreshToken
 ```
 
-## License
+## Development
 
+### Running Tests
+To perform an end-to-end test, update the `Okta.plist` file to match your configuration as specified in the [prerequisites](#prerequisites). Next, export the following environment variables:
+
+```bash
+export USERNAME={username}
+export PASSWORD={password}
+
+# Run E2E end Unit tests
+bash ./scripts/build-and-test.sh
+```
+
+**Note:** *You may need to update the emulator device to match your Xcode version*
+
+## License
 Okta is available under the Apache 2.0 license. See the LICENSE file for more info.
