@@ -16,4 +16,5 @@ Integrate your native app with Okta using the AppAuth library.
   s.dependency 'AppAuth', '~> 0.91.0'
   s.dependency 'Vinculum', '~> 0.2.0'
   s.dependency 'HydraAsync', '~> 1.0.1'
+  s.dependency 'OktaJWT', '~> 1.0.0'
 end

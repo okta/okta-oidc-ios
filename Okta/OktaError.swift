@@ -14,6 +14,7 @@ public enum OktaError: Error {
     case APIError(String)
     case ErrorFetchingFreshTokens(String)
     case JWTDecodeError
+    case JWTValidationError(String)
     case MissingConfigurationValues
     case NoBearerToken
     case NoClientSecret(String)
@@ -36,6 +37,8 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("Error fetching fresh tokens: \(error)", comment: "")
         case .JWTDecodeError:
             return NSLocalizedString("Could not parse the given JWT string payload.", comment: "")
+        case .JWTValidationError(error: let error):
+            return NSLocalizedString("Could not validate the JWT: \(error)", comment: "")
         case .MissingConfigurationValues:
             return NSLocalizedString("Could not parse 'issuer', 'clientId', and/or 'redirectUri' plist values. " +
                 "See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")

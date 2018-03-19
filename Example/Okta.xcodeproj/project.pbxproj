@@ -75,7 +75,7 @@
 		A4D59B5275951E9231367D12 /* Pods-Okta_UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_UITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_UITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E013FAC6C3834F6BDD80C6 /* Pods-Okta_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example.release.xcconfig"; sourceTree = "<group>"; };
-		B54721B8796F7E4B1803D294 /* OktaAuth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = OktaAuth.podspec; path = ../OktaAuth.podspec; sourceTree = "<group>"; };
+		B54721B8796F7E4B1803D294 /* OktaAuth.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = OktaAuth.podspec; path = ../OktaAuth.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BE6FD1DAFDE74ECC28A6A10E /* Pods-Okta_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C6B761A3CC831DEA678C8167 /* Pods-Okta_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D6A9C9F6477128D034833C7D /* Pods-Okta_UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -399,6 +399,7 @@
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/OktaJWT/OktaJWT.framework",
 				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -406,6 +407,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaJWT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -423,6 +425,7 @@
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/OktaJWT/OktaJWT.framework",
 				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -430,6 +433,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaJWT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +451,7 @@
 				"${BUILT_PRODUCTS_DIR}/AppAuth/AppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
+				"${BUILT_PRODUCTS_DIR}/OktaJWT/OktaJWT.framework",
 				"${BUILT_PRODUCTS_DIR}/Vinculum/Vinculum.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -454,6 +459,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaJWT.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Vinculum.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
