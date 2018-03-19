@@ -8,7 +8,6 @@ class Tests: XCTestCase {
     override func setUp() {
         super.setUp()
         OktaAuth.tokens?.clear()
-
     }
 
     override func tearDown() {
@@ -161,28 +160,58 @@ class Tests: XCTestCase {
         }
     }
 
-    func testIsAuthenticated() {
-        // Validate that if there is an existing accessToken, we return an "authenticated" state
-        let tokenManager = TestUtils.tokenManager
-        OktaAuthorization().storeAuthState(tokenManager)
-        let isAuth = OktaAuth.isAuthenticated()
-        XCTAssertFalse(isAuth)
+    func testTokenManagerStorageNoValidation() {
+        // Validate that the tokenManager object can be created
+        let validTokenExpectation = expectation(description: "Will return a tokenManager object without error")
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            XCTAssertNotNil(tokenManager)
+            validTokenExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
+    }
+
+    func testExpiredIdToken() {
+        // Verify an expired token will be caught when validating
+        let expiredExpectation = expectation(description: "Will return an error because JWT is expired")
+        TestUtils.tokenManager
+        .then { _ in XCTFail() }
+        .catch { error in
+            // We are expecting to fail here
+            XCTAssertEqual(error.localizedDescription, "Could not validate the JWT: The JWT expired and is no longer valid")
+            expiredExpectation.fulfill()
+        }
+
+        waitForIt()
     }
 
     func testReturningTokensFromTokenManager() {
         // Validate that mock token manager returns a null token
-        let tokenManager = TestUtils.tokenManager
-        let accessToken = tokenManager.accessToken
-        let idToken = tokenManager.idToken
-        let refreshToken = tokenManager.refreshToken
-        XCTAssertNil(accessToken)
-        XCTAssertNil(idToken)
-        XCTAssertNil(refreshToken)
+        let validTokensExpectation = expectation(description: "Will return tokens without errors")
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            XCTAssertEqual(tokenManager.accessToken, TestUtils.mockAccessToken)
+            XCTAssertEqual(tokenManager.idToken, TestUtils.mockIdToken)
+            XCTAssertEqual(tokenManager.refreshToken, TestUtils.mockRefreshToken)
+            validTokensExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
     }
 
     func testStoreAndDeleteOfAuthState() {
         // Validate the authState is properly stored and can be removed
-        OktaAuthorization().storeAuthState(TestUtils.tokenManager)
+        let validTokensExpectation = expectation(description: "Will return tokens without errors")
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            OktaAuthorization().storeAuthState(tokenManager)
+            validTokensExpectation.fulfill()
+        }
+
+        waitForIt()
 
         let previousState = TestUtils.getPreviousState()
         XCTAssertNotNil(previousState)
@@ -194,6 +223,29 @@ class Tests: XCTestCase {
             // Expect "Not found" exception
             XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
         }
+    }
 
+    func testIsAuthenticated() {
+        // Validate that if there is an existing accessToken, we return an "authenticated" state
+        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            OktaAuthorization().storeAuthState(tokenManager)
+            isAuthExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
+
+        let isAuth = OktaAuth.isAuthenticated()
+        XCTAssertTrue(isAuth)
+    }
+
+    func waitForIt() {
+        // XCTest Utility method to wait for expected conditions
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
     }
 }
