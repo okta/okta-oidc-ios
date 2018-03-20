@@ -58,6 +58,15 @@ public struct OktaAuthorization {
     }
 
     func passwordFlow(_ config: [String: String], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
+        return buildAndPerformTokenRequest(config, additionalParams: credentials)
+    }
+
+    func refreshTokensManually(_ config: [String: String], refreshToken: String) -> Promise<OktaTokenManager> {
+        return buildAndPerformTokenRequest(config, refreshToken: refreshToken)
+    }
+
+    func buildAndPerformTokenRequest(_ config: [String: String], refreshToken: String? = nil, authCode: String? = nil,
+                                     additionalParams: [String: String]? = nil) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
             guard let issuer = config["issuer"],
@@ -69,18 +78,26 @@ public struct OktaAuthorization {
 
             self.getMetadataConfig(URL(string: issuer))
             .then { oidConfig in
+                var grantType = OIDGrantTypePassword
+                if refreshToken == nil && authCode == nil {
+                    // Use the password grant type
+                } else {
+                    // If there is a refreshToken use the refesh_token grant type
+                    // otherwise use the authorization_code grant
+                    grantType = refreshToken != nil ? OIDGrantTypeRefreshToken : OIDGrantTypeAuthorizationCode
+                }
                 // Build the Authentication request
                 let request = OIDTokenRequest(
                            configuration: oidConfig,
-                               grantType: OIDGrantTypePassword,
-                       authorizationCode: nil,
+                               grantType: grantType,
+                       authorizationCode: authCode,
                              redirectURL: URL(string: redirectUri)!,
                                 clientID: clientId,
                             clientSecret: clientSecret,
                                   scopes: Utils.scrubScopes(config["scopes"]),
-                            refreshToken: nil,
+                            refreshToken: refreshToken,
                             codeVerifier: nil,
-                    additionalParameters: credentials
+                    additionalParameters: additionalParams
                 )
 
                 // Start the authorization flow
