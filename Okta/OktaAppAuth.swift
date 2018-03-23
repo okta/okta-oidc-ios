@@ -11,6 +11,7 @@
  */
 
 import AppAuth
+import Hydra
 import Vinculum
 
 // Current version of the SDK
@@ -59,6 +60,11 @@ public func isAuthenticated() -> Bool {
 public func introspect() -> Introspect {
     // Check the validity of the tokens
     return Introspect()
+}
+
+public func refresh() -> Promise<String> {
+    // Refreshes the access token if a refresh token is present
+    return Refresh().refresh()
 }
 
 public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
