@@ -11,7 +11,7 @@ class Tests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        
+
         // Revert stored values
         OktaAuth.tokens?.clear()
         OktaAuth.configuration = nil
@@ -205,6 +205,29 @@ class Tests: XCTestCase {
         waitForIt()
     }
 
+    func testReturningExpiredTokensFromTokenManager() {
+        // Validate that mock token manager returns a null token
+        let validTokensExpectation = expectation(description: "Will return tokens without errors")
+        TestUtils.tokenManagerNoValidationWithExpiration
+            .then { tokenManager in
+                XCTAssertEqual(tokenManager.accessToken, TestUtils.mockAccessToken)
+                XCTAssertEqual(tokenManager.idToken, TestUtils.mockIdToken)
+                XCTAssertEqual(tokenManager.refreshToken, TestUtils.mockRefreshToken)
+
+                // Wait 5 seconds for token to expire and update validation options
+                // to check for expiration
+                tokenManager.validationOptions["exp"] = true
+                sleep(5)
+
+                XCTAssertEqual(tokenManager.accessToken, nil)
+                XCTAssertEqual(tokenManager.idToken, nil)
+                validTokensExpectation.fulfill()
+            }
+            .catch { error in XCTFail(error.localizedDescription) }
+        
+        waitForIt(10)
+    }
+
     func testStoreAndDeleteOfAuthState() {
         // Validate the authState is properly stored and can be removed
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
@@ -248,7 +271,7 @@ class Tests: XCTestCase {
         // Expect that no refresh token stored will result in an error
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
 
-        Refresh().refresh()
+        OktaAuth.refresh()
         .catch { error in
             XCTAssertEqual(error.localizedDescription, OktaError.NoRefreshToken.localizedDescription)
             refreshExpectation.fulfill()
@@ -278,7 +301,7 @@ class Tests: XCTestCase {
         waitForIt()
 
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
-        Refresh().refresh()
+        OktaAuth.refresh()
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
@@ -290,9 +313,9 @@ class Tests: XCTestCase {
         waitForIt()
     }
 
-    func waitForIt() {
+    func waitForIt(_ seconds: TimeInterval = 5) {
         // XCTest Utility method to wait for expected conditions
-        waitForExpectations(timeout: 5, handler: { error in
+        waitForExpectations(timeout: seconds, handler: { error in
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })

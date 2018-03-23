@@ -32,8 +32,10 @@ struct TestUtils {
 
     static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: nil)
     static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer])
+    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer], expiresIn: 5)
 
-    static func setupMockTokenManager(issuer: String, options: [String: Any]?) -> Promise<OktaTokenManager> {
+
+    static func setupMockTokenManager(issuer: String, options: [String: Any]?, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
@@ -54,7 +56,7 @@ struct TestUtils {
             request: mockTokenRequest,
             parameters: [
                 "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
-                "expires_in": 300 as NSCopying & NSObjectProtocol,
+                "expires_in": expiresIn as NSCopying & NSObjectProtocol,
                 "token_type": "Bearer" as NSCopying & NSObjectProtocol,
                 "id_token": mockIdToken as NSCopying & NSObjectProtocol,
                 "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,

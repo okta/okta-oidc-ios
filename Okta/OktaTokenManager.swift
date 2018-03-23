@@ -23,9 +23,14 @@ open class OktaTokenManager: NSObject, NSCoding {
     open var validationOptions: [String: Any]
 
     open var accessToken: String? {
-        // Return the known accessToken
+        // Return the known accessToken if it hasn't expired
         get {
-            guard let token = self.authState.lastTokenResponse?.accessToken else { return nil }
+            guard let tokenResponse = self.authState.lastTokenResponse,
+                  let token = tokenResponse.accessToken,
+                  let tokenExp = tokenResponse.accessTokenExpirationDate,
+                  tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
+                    return nil
+            }
             return token
         }
     }
@@ -33,7 +38,21 @@ open class OktaTokenManager: NSObject, NSCoding {
     open var idToken: String? {
         // Return the known idToken via the internal _idToken var
         // since it gets lost on refresh
-        get { return self._idToken }
+        get {
+            guard let token = self._idToken else { return nil }
+            var returnToken: String?
+            do {
+                let isValid = try isValidToken(idToken: token)
+                if isValid {
+                    returnToken = token
+                }
+            } catch let error {
+                // Capture the error here since we aren't throwing
+                print(error)
+                returnToken = nil
+            }
+            return returnToken
+        }
     }
 
     open var refreshToken: String? {
@@ -70,7 +89,7 @@ open class OktaTokenManager: NSObject, NSCoding {
         if let prevIdToken = authState.lastTokenResponse?.idToken {
             // Validate the token before storing it
             do {
-                let isValid = try Introspect().validate(jwt: prevIdToken, options: self.validationOptions)
+                let isValid = try isValidToken(idToken: prevIdToken)
                 if isValid {
                     self._idToken = prevIdToken
                     try? Vinculum.set(key: "idToken", value: prevIdToken)
@@ -104,6 +123,19 @@ open class OktaTokenManager: NSObject, NSCoding {
         coder.encode(self.config, forKey: "config")
         coder.encode(self.accessibility, forKey: "accessibility")
         coder.encode(self.validationOptions, forKey: "validationOptions")
+    }
+
+    public func isValidToken(idToken: String?) throws -> Bool {
+        guard let token = idToken else { return false }
+        do {
+            let isValid = try Introspect().validate(jwt: token, options: self.validationOptions)
+            if isValid {
+                return true
+            }
+        } catch let error {
+            throw error
+        }
+        return false
     }
 
     public func clear() {
