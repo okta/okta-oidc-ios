@@ -15,6 +15,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         if OktaAuth.isAuthenticated() {
             // If there is a valid accessToken
             // build the token view.
