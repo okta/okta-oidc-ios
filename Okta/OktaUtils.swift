@@ -14,47 +14,35 @@ import Foundation
 
 open class Utils: NSObject {
 
-    open class func getPlistConfiguration() -> [String: Any]? {
+    open class func getPlistConfiguration() -> [String: String]? {
         // Parse Okta.plist to build the authorization request
         return getPlistConfiguration(forResourceName: "Okta")
     }
 
-    open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: Any]? {
+    open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: String]? {
         // Parse Okta.plist to build the authorization request
-
-        if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"),
-            let data = try? Data(contentsOf: path) {
-            if let result = try? PropertyListSerialization
-                .propertyList(
-                       from: data,
-                    options: [],
-                     format: nil
-                ) as? [String: Any] {
-                    OktaAuth.configuration = result
-                    return result
+        if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"), let data = try? Data(contentsOf: path) {
+            if let result = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: String] {
+                OktaAuth.configuration = result
+                return result
             }
         }
         return nil
     }
 
-    internal class func scrubScopes(_ scopes: Any?) -> [String]{
+    internal class func scrubScopes(_ scopes: String?) -> [String]{
         /**
          Perform scope scrubbing here.
 
          Verify that scopes:
-            - Are in list format
+            - Are in string format separated by " "
             - Contain "openid"
         */
-
         var scrubbedScopes = [String]()
 
-        if let stringScopes = scopes as? String {
+        if let stringScopes = scopes {
             // Scopes are formatted as a string
             scrubbedScopes = stringScopes.components(separatedBy: " ")
-        }
-
-        if let arrayScopes = scopes as? [String] {
-            scrubbedScopes = arrayScopes
         }
 
         if !scrubbedScopes.contains("openid") {
@@ -78,5 +66,21 @@ open class Utils: NSObject {
     internal class func removeTrailingSlash(_ val: String) -> String {
         // Removes the URLs trailing slash if it exists
         return String(val.suffix(1)) == "/" ? String(val.dropLast()) : val
+    }
+
+    internal class func parseAdditionalParams(_ config: [String: String]) -> [String: String]? {
+        // Parse the additional parameters to be passed to the /authorization endpoint
+        var configCopy = config
+        
+        // Remove "issuer", "clientId", "redirectUri", and "scopes"
+        configCopy.removeValue(forKey: "issuer")
+        configCopy.removeValue(forKey: "clientId")
+        configCopy.removeValue(forKey: "redirectUri")
+        configCopy.removeValue(forKey: "scopes")
+
+        // Add nonce to additional params
+        configCopy["nonce"] = configCopy["nonce"] != nil ? configCopy["nonce"] : UUID().uuidString
+
+        return configCopy
     }
 }

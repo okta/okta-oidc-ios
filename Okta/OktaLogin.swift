@@ -9,6 +9,7 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+import Hydra
 
 public struct Login {
 
@@ -19,7 +20,6 @@ public struct Login {
         // Login via Username/Password
         self.username = username
         self.password = password
-
         self.passwordFlow = true
     }
 
@@ -27,58 +27,52 @@ public struct Login {
         // Login via Authoriation Code Flow
         self.username = nil
         self.password = nil
-
         self.passwordFlow = false
     }
 
-    public func start(withPListConfig plistName: String?, view: UIViewController,
-                      callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        if plistName == nil {
-            return callback(
-                nil,
-                .error(error: "PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.")
-            )
-        }
-
-        if !self.passwordFlow {
-            // Get client configuration from Okta.plist
-            if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
-                OktaAuthorization().authCodeFlow(config, view: view) { response, error in callback(response, error) }
-            }
-        }
-
-        if self.passwordFlow {
-            // Get client configuratin from Okta.plist
-            if let config = Utils.getPlistConfiguration(forResourceName: plistName!) {
-                // Verify the ClientSecret was included
-                if (config["clientSecret"] as! String) == "" {
-                    callback(
-                        nil,
-                        .error(
-                            error:  "ClientSecret not included in PList configuration file: "
-                            + "\(plistName!) See https://github.com/okta/okta-sdk-appauth-ios/#configuration"
-                            + "for more information."
-                        )
-                    )
-                    return
-                }
-
-                if self.username == nil || self.password == nil {
-                    callback(nil, .error(error: "User credentials not included."))
-                    return
-                }
-
-                let credentials = [
-                    "username": self.username!,
-                    "password": self.password!
-                ]
-
-                OktaAuthorization().passwordFlow(config, credentials: credentials, view: view) { response, error in callback(response, error) }
-            }
-        }
+    public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<OktaTokenManager> {
+        OktaAuth.configuration = dict
+        return OktaAuthorization().authCodeFlow(dict, view)
     }
 
-    public func start(_ view: UIViewController, callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        self.start(withPListConfig: "Okta", view: view) { result, error in callback(result, error) }
+    public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<OktaTokenManager> {
+        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
+            guard let plist = plistName else {
+                return reject(OktaError.NoPListGiven)
+            }
+
+            if !self.passwordFlow {
+                // Get client configuration from Okta.plist
+                if let config = Utils.getPlistConfiguration(forResourceName: plist) {
+                    OktaAuthorization().authCodeFlow(config, view)
+                    .then { response in return resolve(response) }
+                    .catch { error in return reject(error) }
+                }
+            }
+
+            if self.passwordFlow {
+                // Get client configuratin from Okta.plist
+                if let config = Utils.getPlistConfiguration(forResourceName: plist) {
+                    // Verify the ClientSecret was included
+                    if config["clientSecret"] == "" {
+                        reject(OktaError.NoClientSecret(plist))
+                    }
+
+                    guard let username = self.username, let password = self.password else {
+                        return reject(OktaError.NoUserCredentials)
+                    }
+
+                    let credentials = ["username": username, "password": password]
+
+                    OktaAuthorization().passwordFlow(config, credentials: credentials, view)
+                    .then { response in return resolve(response) }
+                    .catch { error in return reject(error) }
+                }
+            }
+        })
+    }
+
+    public func start(_ view: UIViewController) -> Promise<OktaTokenManager> {
+        return self.start(withPListConfig: "Okta", view: view)
     }
 }

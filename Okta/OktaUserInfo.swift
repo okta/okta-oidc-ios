@@ -10,36 +10,35 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-public struct UserInfo {
-
-    var token: String?
+internal struct UserInfo {
 
     init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
-        self.token = token
-
         // Revoke the token
-        if let userInfoEndpoint = getUserInfoEndpoint() {
-            // Build introspect request
-
-            let headers = [
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded",
-                "Authorization": "Bearer \(self.token!)"
-            ]
-
-            OktaApi.post(userInfoEndpoint, headers: headers, postData: nil) { response, error in callback(response, error) }
-
-        } else {
-            callback(nil, .error(error: "Error finding the userinfo endpoint"))
+        guard let userInfoEndpoint = getUserInfoEndpoint() else {
+            callback(nil, .NoUserInfoEndpoint)
+            return
         }
 
+        guard let token = token else {
+            callback(nil, .NoBearerToken)
+            return
+        }
+
+        let headers = [
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": "Bearer \(token)"
+        ]
+
+        OktaApi.post(userInfoEndpoint, headers: headers, postData: nil)
+        .then { response in callback(response, nil) }
+        .catch { error in callback(nil, error as? OktaError) }
     }
 
     func getUserInfoEndpoint() -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-
-        if let discoveryEndpoint = OktaAuth.tokens?.authState?.lastAuthorizationResponse.request.configuration.discoveryDocument?.userinfoEndpoint {
-            return discoveryEndpoint
+        if let userInfoEndpoint = OktaAuth.wellKnown?["userinfo_endpoint"] {
+            return URL(string: userInfoEndpoint as! String)
         }
 
         let issuer = OktaAuth.configuration?["issuer"] as! String

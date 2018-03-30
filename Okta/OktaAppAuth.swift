@@ -11,6 +11,8 @@
  */
 
 import AppAuth
+import Hydra
+import Vinculum
 
 // Current version of the SDK
 let VERSION = "0.3.0"
@@ -20,6 +22,9 @@ public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
 
 // Cache Okta.plist for reference
 public var configuration: [String: Any]?
+
+// Cache the Discovery Metadata
+public var wellKnown: [String: Any]?
 
 // Token manager
 public var tokens: OktaTokenManager?
@@ -34,9 +39,32 @@ public func login() -> Login {
     return Login()
 }
 
+public func isAuthenticated() -> Bool {
+    // Restore state
+    guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
+        let encodedAuthState = encodedAuthStateItem else {
+        return false
+    }
+
+    guard let previousState = NSKeyedUnarchiver
+        .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else { return false }
+
+    tokens = previousState
+
+    if tokens?.accessToken != nil {
+        return true
+    }
+    return false
+}
+
 public func introspect() -> Introspect {
     // Check the validity of the tokens
     return Introspect()
+}
+
+public func refresh() -> Promise<String> {
+    // Refreshes the access token if a refresh token is present
+    return Refresh().refresh()
 }
 
 public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
@@ -44,21 +72,9 @@ public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> 
     _ = Revoke(token: token) { response, error in callback( response?.count == 0 ? true : false, error) }
 }
 
-public func userinfo(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
-    // Return userinfo
+public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
+    // Return user information from the /userinfo endpoint
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
-}
-
-public func refresh() {
-    // Get new tokens
-    tokens?.authState?.setNeedsTokenRefresh()
-    tokens?.authState?.performAction(freshTokens: { accessToken, idToken, error in
-        if error != nil {
-            print("Error fetching fresh tokens: \(error!.localizedDescription)")
-            return
-        }
-        tokens?.accessToken = accessToken
-    })
 }
 
 public func clear() {
