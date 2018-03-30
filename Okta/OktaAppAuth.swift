@@ -15,7 +15,7 @@ import Hydra
 import Vinculum
 
 // Current version of the SDK
-let VERSION = "0.3.0"
+let VERSION = "1.0.0"
 
 // Holds the browser session
 public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
