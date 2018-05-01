@@ -26,7 +26,7 @@ class LoginFormViewController: UIViewController {
             return
         }
         
-        if Utils.getPlistConfiguration(forResourceName: "Okta-PasswordFlowz") == nil {
+        if Utils.getPlistConfiguration(forResourceName: "Okta-PasswordFlow") == nil {
             errorField.text = "Please update the Okta-PasswordFlow.plist file to use this flow."
             return
         }
