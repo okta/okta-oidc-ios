@@ -151,7 +151,7 @@ if !OktaAuth.isAuthenticated() {
 Calls the OIDC userInfo endpoint to return user information.
 
 ```swift
-OktaAuth.userinfo() { response, error in
+OktaAuth.getUser() { response, error in
     if error != nil {
         print("Error: \(error!)")
     }
