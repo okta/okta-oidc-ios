@@ -15,8 +15,6 @@ import Vinculum
 
 open class OktaTokenManager: NSObject, NSCoding {
 
-    internal var _idToken: String? = nil
-
     open var authState: OIDAuthState
     open var config: [String: String]
     open var accessibility: CFString
@@ -36,22 +34,21 @@ open class OktaTokenManager: NSObject, NSCoding {
     }
 
     open var idToken: String? {
-        // Return the known idToken via the internal _idToken var
-        // since it gets lost on refresh
+        // Return the known idToken if it is valid
         get {
-            guard let token = self._idToken else { return nil }
-            var returnToken: String?
+            guard let tokenResponse = self.authState.lastTokenResponse,
+                let token = tokenResponse.idToken else {
+                    return nil
+            }
             do {
-                let isValid = try isValidToken(idToken: token)
-                if isValid {
-                    returnToken = token
-                }
+                // Attempt to validate the token
+                let valid = try isValidToken(idToken: token)
+                return valid ? token : nil
             } catch let error {
                 // Capture the error here since we aren't throwing
                 print(error)
-                returnToken = nil
+                return nil
             }
-            return returnToken
         }
     }
 
@@ -83,27 +80,6 @@ open class OktaTokenManager: NSObject, NSCoding {
         }
 
         super.init()
-
-        // Since the idToken isn't stored in the last tokenResponse after refresh,
-        // refer to the cached keychain version.
-        if let prevIdToken = authState.lastTokenResponse?.idToken {
-            // Validate the token before storing it
-            do {
-                let isValid = try isValidToken(idToken: prevIdToken)
-                if isValid {
-                    self._idToken = prevIdToken
-                    try? Vinculum.set(key: "idToken", value: prevIdToken)
-                }
-            } catch let error {
-                throw error
-            }
-        } else {
-            guard let prevIdToken = try? Vinculum.get("idToken")?.getString() else {
-                self._idToken = nil
-                return
-            }
-            self._idToken = prevIdToken
-        }
 
         // Store the current configuration
         OktaAuth.configuration = config

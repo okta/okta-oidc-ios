@@ -55,12 +55,12 @@ struct TestUtils {
         let mockTokenResponse = OIDTokenResponse(
             request: mockTokenRequest,
             parameters: [
-                "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
-                "expires_in": expiresIn as NSCopying & NSObjectProtocol,
-                "token_type": "Bearer" as NSCopying & NSObjectProtocol,
-                "id_token": mockIdToken as NSCopying & NSObjectProtocol,
+                 "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
+                   "expires_in": expiresIn as NSCopying & NSObjectProtocol,
+                   "token_type": "Bearer" as NSCopying & NSObjectProtocol,
+                     "id_token": mockIdToken as NSCopying & NSObjectProtocol,
                 "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
-                "scope": mockScopes as NSCopying & NSObjectProtocol
+                        "scope": mockScopes as NSCopying & NSObjectProtocol
             ]
         )
 

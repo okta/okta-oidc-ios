@@ -56,20 +56,15 @@ class Tests: XCTestCase {
         ]
 
         let additionalParams = Utils.parseAdditionalParams(config)
-        XCTAssertNil(additionalParams?["issuer"])
-        XCTAssertNil(additionalParams?["clientId"])
-        XCTAssertNil(additionalParams?["redirectUri"])
-        XCTAssertNil(additionalParams?["scopes"])
-        XCTAssertNotNil(additionalParams?["nonce"])
+        XCTAssertEqual(additionalParams!, ["nonce": "abbbbbbbc"])
     }
 
     func testAdditionalParamParseWithNoChange() {
         // Ensure known values from the config object are removed
-        let config = [  "nonce": "abbbbbbbc" ]
+        let config = [ "nonce": "abbbbbbbc" ]
 
         let additionalParams = Utils.parseAdditionalParams(config)
-        XCTAssertNotNil(additionalParams?["nonce"])
-        XCTAssertEqual(config, additionalParams!)
+        XCTAssertEqual(additionalParams!, config)
     }
 
     func testValidScopesString() {
@@ -167,7 +162,7 @@ class Tests: XCTestCase {
         let validTokenExpectation = expectation(description: "Will return a tokenManager object without error")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            XCTAssertNotNil(tokenManager)
+            self.assertTokenManagerContents(tokenManager)
             validTokenExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -177,17 +172,14 @@ class Tests: XCTestCase {
 
     func testExpiredIdToken() {
         // Verify an expired token will be caught when validating
-        let expiredExpectation = expectation(description: "Will return an error because JWT is expired")
+        let expiredExpectation = expectation(description: "Will return an undefined idToken because JWT is expired")
         TestUtils.tokenManager
-        .then { _ in XCTFail() }
-        .catch { error in
-            // We are expecting to fail here
-            XCTAssertEqual(error.localizedDescription, "Could not validate the JWT: The JWT expired and is no longer valid")
+        .then { tokenManager in
+            XCTAssertEqual(tokenManager.idToken, nil)
             expiredExpectation.fulfill()
         }
 
         waitForIt()
-
     }
 
     func testReturningTokensFromTokenManager() {
@@ -195,9 +187,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            XCTAssertEqual(tokenManager.accessToken, TestUtils.mockAccessToken)
-            XCTAssertEqual(tokenManager.idToken, TestUtils.mockIdToken)
-            XCTAssertEqual(tokenManager.refreshToken, TestUtils.mockRefreshToken)
+            self.assertTokenManagerContents(tokenManager)
             validTokensExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -208,24 +198,22 @@ class Tests: XCTestCase {
     func testReturningExpiredTokensFromTokenManager() {
         // Validate that mock token manager returns a null token
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
-        TestUtils.tokenManagerNoValidationWithExpiration
-            .then { tokenManager in
-                XCTAssertEqual(tokenManager.accessToken, TestUtils.mockAccessToken)
-                XCTAssertEqual(tokenManager.idToken, TestUtils.mockIdToken)
-                XCTAssertEqual(tokenManager.refreshToken, TestUtils.mockRefreshToken)
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            self.assertTokenManagerContents(tokenManager)
+            validTokensExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
 
-                // Wait 5 seconds for token to expire and update validation options
-                // to check for expiration
-                tokenManager.validationOptions["exp"] = true
-                sleep(5)
-
-                XCTAssertEqual(tokenManager.accessToken, nil)
-                XCTAssertEqual(tokenManager.idToken, nil)
-                validTokensExpectation.fulfill()
-            }
-            .catch { error in XCTFail(error.localizedDescription) }
-        
         waitForIt(10)
+
+        OktaAuth.tokens?.validationOptions["exp"] = true
+        // Wait for the token to expire and update validation options
+        // to check for expiration
+        sleep(5)
+
+        XCTAssertEqual(OktaAuth.tokens?.accessToken, nil)
+        XCTAssertEqual(OktaAuth.tokens?.idToken, nil)
     }
 
     func testStoreAndDeleteOfAuthState() {
@@ -239,8 +227,7 @@ class Tests: XCTestCase {
 
         waitForIt()
 
-        let previousState = TestUtils.getPreviousState()
-        XCTAssertNotNil(previousState)
+        self.assertAuthenticationState(OktaAuth.tokens!)
 
         // Clear the authState
         OktaAuth.tokens?.clear()
@@ -267,6 +254,25 @@ class Tests: XCTestCase {
         XCTAssertTrue(isAuth)
     }
 
+    func testIsNotAuthenticated() {
+        // Validate that if there is an existing accessToken, we return an "authenticated" state
+        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
+        TestUtils.tokenManagerNoValidationWithExpiration
+            .then { tokenManager in
+                OktaAuthorization().storeAuthState(tokenManager)
+                isAuthExpectation.fulfill()
+            }
+            .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
+
+        // Wait for token to expire
+        sleep(5)
+
+        let isAuth = OktaAuth.isAuthenticated()
+        XCTAssertFalse(isAuth)
+    }
+
     func testRefreshTokenFailure() {
         // Expect that no refresh token stored will result in an error
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
@@ -283,7 +289,7 @@ class Tests: XCTestCase {
     func testRefreshTokenFailureInvalidToken() {
         // Expect that a fake refresh token stored will result in an error
         let setupTokenManagerExpectation = expectation(description: "Will return tokens without errors")
-        
+
         OktaAuth.configuration = [
                   "issuer": TestUtils.mockIssuer,
                 "clientId": TestUtils.mockClientId,
@@ -297,7 +303,7 @@ class Tests: XCTestCase {
             setupTokenManagerExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
-        
+
         waitForIt()
 
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
@@ -313,11 +319,53 @@ class Tests: XCTestCase {
         waitForIt()
     }
 
+    func testResumeAuthenticationStateFromExpiredState() {
+        // Validate that if there is an existing accessToken, we return an "authenticated" state
+        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
+        TestUtils.tokenManagerNoValidationWithExpiration
+            .then { tokenManager in
+                tokenManager.validationOptions["exp"] = true
+                OktaAuthorization().storeAuthState(tokenManager)
+                isAuthExpectation.fulfill()
+            }
+            .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
+
+        // Wait for tokens to expire
+        sleep(3)
+
+        // Re-store the authState
+        OktaAuthorization().storeAuthState(OktaAuth.tokens!)
+
+        self.assertAuthenticationState(OktaAuth.tokens!)
+    }
+
+    // Helpers for asserting unit tests
     func waitForIt(_ seconds: TimeInterval = 5) {
         // XCTest Utility method to wait for expected conditions
         waitForExpectations(timeout: seconds, handler: { error in
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })
+    }
+
+    func assertTokenManagerContents(_ tm: OktaTokenManager) {
+        XCTAssertEqual(tm.accessToken, TestUtils.mockAccessToken)
+        XCTAssertEqual(tm.idToken, TestUtils.mockIdToken)
+        XCTAssertEqual(tm.refreshToken, TestUtils.mockRefreshToken)
+    }
+
+    func assertAuthenticationState(_ tm: OktaTokenManager) {
+        guard let prevState = TestUtils.getPreviousState() else {
+            return XCTFail("Previous authentication state does not exist")
+        }
+
+        XCTAssertEqual(prevState.accessibility, tm.accessibility)
+        XCTAssertEqual(prevState.accessToken, tm.accessToken)
+        XCTAssertEqual(prevState.config, tm.config)
+        XCTAssertEqual(prevState.idToken, tm.idToken)
+        XCTAssertEqual(prevState.refreshToken, tm.refreshToken)
+        XCTAssertEqual(prevState.validationOptions as NSObject, tm.validationOptions as NSObject)
     }
 }

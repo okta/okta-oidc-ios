@@ -45,6 +45,8 @@ internal struct Refresh {
                 guard let token = accessToken else {
                     return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
                 }
+                // Re-store the authState on token refreshing
+                OktaAuthorization().storeAuthState(tokens!)
                 return resolve(token)
             })
         })
