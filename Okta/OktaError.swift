@@ -23,6 +23,7 @@ public enum OktaError: Error {
     case NoPListGiven
     case NoRefreshToken
     case NoRevocationEndpoint
+    case NoTokens
     case NoUserCredentials
     case NoUserInfoEndpoint
     case ParseFailure
@@ -59,6 +60,8 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("No refresh token stored. Make sure the 'offline_access' scope is included in your PList.", comment: "")
         case .NoRevocationEndpoint:
             return NSLocalizedString("Error finding the revocation endpoint.", comment: "")
+        case .NoTokens:
+            return NSLocalizedString("No tokens stored in the token manager.", comment: "")
         case .NoUserCredentials:
             return NSLocalizedString("User credentials not included.", comment: "")
         case .NoUserInfoEndpoint:

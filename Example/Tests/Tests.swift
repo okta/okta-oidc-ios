@@ -279,7 +279,7 @@ class Tests: XCTestCase {
 
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.NoRefreshToken.localizedDescription)
+            XCTAssertEqual(error.localizedDescription, OktaError.NoTokens.localizedDescription)
             refreshExpectation.fulfill()
         }
 
