@@ -5,6 +5,8 @@ import AppAuth
 import Vinculum
 
 class Tests: XCTestCase {
+    let TOKEN_EXPIRATION_WAIT: UInt32 = 5
+
     override func setUp() {
         super.setUp()
     }
@@ -208,9 +210,9 @@ class Tests: XCTestCase {
         waitForIt(10)
 
         OktaAuth.tokens?.validationOptions["exp"] = true
-        // Wait for the token to expire and update validation options
-        // to check for expiration
-        sleep(5)
+
+        // Wait for tokens to expire and update validation options to check for expiration
+        sleep(TOKEN_EXPIRATION_WAIT)
 
         XCTAssertEqual(OktaAuth.tokens?.accessToken, nil)
         XCTAssertEqual(OktaAuth.tokens?.idToken, nil)
@@ -266,8 +268,8 @@ class Tests: XCTestCase {
 
         waitForIt()
 
-        // Wait for token to expire
-        sleep(5)
+        // Wait for tokens to expire
+        sleep(TOKEN_EXPIRATION_WAIT)
 
         let isAuth = OktaAuth.isAuthenticated()
         XCTAssertFalse(isAuth)
@@ -333,7 +335,7 @@ class Tests: XCTestCase {
         waitForIt()
 
         // Wait for tokens to expire
-        sleep(3)
+        sleep(TOKEN_EXPIRATION_WAIT)
 
         // Re-store the authState
         OktaAuthorization().storeAuthState(OktaAuth.tokens!)
