@@ -16,11 +16,15 @@ internal struct Refresh {
     internal func refresh() -> Promise<String> {
         // Attempt to refresh the accessToken using the refreshToken
         return Promise<String>(in: .background, { resolve, reject, _ in
-            guard let refreshToken = tokens?.refreshToken else {
+            guard let tokens = tokens else {
+                return reject(OktaError.NoTokens)
+            }
+
+            guard let refreshToken = tokens.refreshToken else {
                 return reject(OktaError.NoRefreshToken)
             }
 
-            if tokens?.authState.lastAuthorizationResponse == nil {
+            if tokens.authState.lastAuthorizationResponse == nil {
                 // Use the cached refreshToken to mint new tokens
                 guard let config = OktaAuth.configuration as? [String: String] else {
                     return reject(OktaError.ParseFailure)
@@ -37,14 +41,16 @@ internal struct Refresh {
                 return
             }
 
-            tokens?.authState.setNeedsTokenRefresh()
-            tokens?.authState.performAction(freshTokens: { accessToken, idToken, error in
+            tokens.authState.setNeedsTokenRefresh()
+            tokens.authState.performAction(freshTokens: { accessToken, idToken, error in
                 if error != nil {
                     return reject(OktaError.ErrorFetchingFreshTokens(error!.localizedDescription))
                 }
                 guard let token = accessToken else {
                     return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
                 }
+                // Re-store the authState on token refreshing
+                OktaAuthorization().storeAuthState(tokens)
                 return resolve(token)
             })
         })
