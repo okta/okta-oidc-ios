@@ -11,7 +11,6 @@
  */
 import AppAuth
 import Hydra
-import Vinculum
 
 public struct OktaAuthorization {
 
@@ -161,7 +160,7 @@ public struct OktaAuthorization {
 
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
         do {
-            try Vinculum.set(key: "OktaAuthStateTokenManager", value: authStateData, accessibility: tokenManager.accessibility)
+            try Keychain.set(key: "OktaAuthStateTokenManager", value: authStateData, accessibility: tokenManager.accessibility)
         } catch let error {
             print("Error: \(error)")
         }

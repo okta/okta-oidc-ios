@@ -7,8 +7,7 @@
 //
 
 import AppAuth
-import OktaAuth
-import Vinculum
+@testable import OktaAuth
 import Hydra
 
 struct TestUtils {
@@ -87,9 +86,8 @@ struct TestUtils {
 
     static func getPreviousState() -> OktaTokenManager? {
         // Return the previous archived state
-        guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
-            let encodedAuthState = encodedAuthStateItem else {
-                return nil
+        guard let encodedAuthState = try? Keychain.get("OktaAuthStateTokenManager") else {
+            return nil
         }
         guard let previousState = NSKeyedUnarchiver
             .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else {

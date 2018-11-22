@@ -11,7 +11,6 @@
  */
 
 import AppAuth
-import Vinculum
 
 open class OktaTokenManager: NSObject, NSCoding {
 
@@ -115,7 +114,7 @@ open class OktaTokenManager: NSObject, NSCoding {
     }
 
     public func clear() {
-        Vinculum.removeAll()
+        Keychain.removeAll()
         OktaAuth.tokens = nil
     }
 }

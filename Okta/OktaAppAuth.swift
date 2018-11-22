@@ -12,7 +12,6 @@
 
 import AppAuth
 import Hydra
-import Vinculum
 
 // Current version of the SDK
 let VERSION = "1.0.0"
@@ -41,8 +40,7 @@ public func login() -> Login {
 
 public func isAuthenticated() -> Bool {
     // Restore state
-    guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
-        let encodedAuthState = encodedAuthStateItem else {
+    guard let encodedAuthState = try? Keychain.get("OktaAuthStateTokenManager") else {
         return false
     }
 
@@ -82,7 +80,7 @@ public func clear() {
     tokens?.clear()
 }
 
-public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
     if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeAuthorizationFlow(with: url){
         currentAuthorizationFlow = nil
         return true

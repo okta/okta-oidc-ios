@@ -2,7 +2,6 @@ import UIKit
 import XCTest
 @testable import OktaAuth
 import AppAuth
-import Vinculum
 
 class Tests: XCTestCase {
     let TOKEN_EXPIRATION_WAIT: UInt32 = 5
@@ -234,7 +233,7 @@ class Tests: XCTestCase {
         // Clear the authState
         OktaAuth.tokens?.clear()
 
-        XCTAssertThrowsError(try Vinculum.get("OktaAuthStateTokenManager")) { error in
+        XCTAssertThrowsError(try Keychain.get("OktaAuthStateTokenManager")) { error in
             // Expect "Not found" exception
             XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
         }
