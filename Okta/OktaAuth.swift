@@ -19,7 +19,7 @@ public struct OktaAuthorization {
             // Discover Endpoints
             guard let issuer = config["issuer"], let clientId = config["clientId"],
                 let redirectUri = config["redirectUri"] else {
-                    return reject(OktaError.MissingConfigurationValues)
+                    return reject(OktaError.missingConfigurationValues)
             }
 
             self.getMetadataConfig(URL(string: issuer))
@@ -72,7 +72,7 @@ public struct OktaAuthorization {
                 let clientId = config["clientId"],
                 let clientSecret = config["clientSecret"],
                 let redirectUri = config["redirectUri"] else {
-                    return reject(OktaError.MissingConfigurationValues)
+                    return reject(OktaError.missingConfigurationValues)
             }
 
             self.getMetadataConfig(URL(string: issuer))
@@ -132,13 +132,13 @@ public struct OktaAuthorization {
         // Get the metadata from the discovery endpoint
         return Promise<OIDServiceConfiguration>(in: .background, { resolve, reject, _ in
             guard let issuer = issuer, let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
-                return reject(OktaError.NoDiscoveryEndpoint)
+                return reject(OktaError.noDiscoveryEndpoint)
             }
 
             OktaApi.get(configUrl, headers: nil)
             .then { response in
                 guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
-                    return reject(OktaError.ParseFailure)
+                    return reject(OktaError.parseFailure)
                 }
                 // Cache the well-known endpoint response
                 OktaAuth.wellKnown = dictResponse

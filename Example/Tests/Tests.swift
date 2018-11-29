@@ -91,10 +91,7 @@ class Tests: XCTestCase {
         OktaAuth.login("user@example.com", password: "password")
         .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
         .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-            )
+            XCTAssertTrue(error.localizedDescription.starts(with: "Authorization Error"))
             pwdExpectation.fulfill()
         }
 
@@ -128,7 +125,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = UserInfo(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
         }
     }
 
@@ -138,7 +135,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = Revoke(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
         }
     }
 
@@ -280,7 +277,7 @@ class Tests: XCTestCase {
 
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.NoTokens.localizedDescription)
+            XCTAssertEqual(error.localizedDescription, OktaError.noTokens.localizedDescription)
             refreshExpectation.fulfill()
         }
 

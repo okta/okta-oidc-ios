@@ -20,7 +20,7 @@ public struct Introspect {
         // Validate token
         return Promise<Bool>(in: .background, { resolve, reject, _ in
             guard let introspectionEndpoint = self.getIntrospectionEndpoint() else {
-                return reject(OktaError.NoIntrospectionEndpoint)
+                return reject(OktaError.noIntrospectionEndpoint)
             }
 
             let headers = [
@@ -39,11 +39,11 @@ public struct Introspect {
             OktaApi.post(introspectionEndpoint, headers: headers, postString: data)
             .then { response in
                 guard let isActive = response?["active"] as? Bool else {
-                    return reject(OktaError.ParseFailure)
+                    return reject(OktaError.parseFailure)
                 }
                 return resolve(isActive)
             }
-            .catch { error in reject(OktaError.NoIntrospectionEndpoint) }
+            .catch { error in reject(OktaError.noIntrospectionEndpoint) }
         })
     }
 

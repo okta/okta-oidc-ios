@@ -17,23 +17,23 @@ internal struct Refresh {
         // Attempt to refresh the accessToken using the refreshToken
         return Promise<String>(in: .background, { resolve, reject, _ in
             guard let tokens = tokens else {
-                return reject(OktaError.NoTokens)
+                return reject(OktaError.noTokens)
             }
 
             guard let refreshToken = tokens.refreshToken else {
-                return reject(OktaError.NoRefreshToken)
+                return reject(OktaError.noRefreshToken)
             }
 
             if tokens.authState.lastAuthorizationResponse == nil {
                 // Use the cached refreshToken to mint new tokens
                 guard let config = OktaAuth.configuration as? [String: String] else {
-                    return reject(OktaError.ParseFailure)
+                    return reject(OktaError.parseFailure)
                 }
 
                 OktaAuthorization().refreshTokensManually(config, refreshToken: refreshToken)
                 .then { response in
                     guard let accessToken = response.accessToken else {
-                        return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
+                        return reject(OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
                     }
                     return resolve(accessToken)
                 }
@@ -44,10 +44,10 @@ internal struct Refresh {
             tokens.authState.setNeedsTokenRefresh()
             tokens.authState.performAction(freshTokens: { accessToken, idToken, error in
                 if error != nil {
-                    return reject(OktaError.ErrorFetchingFreshTokens(error!.localizedDescription))
+                    return reject(OktaError.errorFetchingFreshTokens(error!.localizedDescription))
                 }
                 guard let token = accessToken else {
-                    return reject(OktaError.ErrorFetchingFreshTokens("Access Token could not be refreshed."))
+                    return reject(OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
                 }
                 // Re-store the authState on token refreshing
                 OktaAuthorization().storeAuthState(tokens)
