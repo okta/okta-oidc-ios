@@ -17,7 +17,7 @@ import Hydra
 let VERSION = "1.0.0"
 
 // Holds the browser session
-public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
+public var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
 // Cache Okta.plist for reference
 public var configuration: [String: Any]?
@@ -81,7 +81,7 @@ public func clear() {
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeAuthorizationFlow(with: url){
+    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: url){
         currentAuthorizationFlow = nil
         return true
     }

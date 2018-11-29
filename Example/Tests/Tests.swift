@@ -307,10 +307,7 @@ class Tests: XCTestCase {
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-            )
+            XCTAssertTrue(error.localizedDescription.starts(with: "Authorization Error"))
             refreshExpectation.fulfill()
         }
 
