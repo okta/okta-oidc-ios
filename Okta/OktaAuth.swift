@@ -42,7 +42,7 @@ public struct OktaAuthorization {
                         return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     }
                     do {
-                        let tokenManager = try OktaTokenManager(authState: authResponse, config: config, validationOptions: nil)
+                        let tokenManager = try OktaTokenManager(authState: authResponse, config: config)
 
                         // Set the local cache and write to storage
                         self.storeAuthState(tokenManager)
@@ -113,7 +113,7 @@ public struct OktaAuthorization {
                         )
 
                         do {
-                            let tokenManager = try OktaTokenManager(authState: authState, config: config, validationOptions: nil)
+                            let tokenManager = try OktaTokenManager(authState: authState, config: config)
 
                             // Set the local cache and write to storage
                             self.storeAuthState(tokenManager)

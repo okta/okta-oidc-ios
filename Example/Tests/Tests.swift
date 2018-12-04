@@ -160,7 +160,7 @@ class Tests: XCTestCase {
         let validTokenExpectation = expectation(description: "Will return a tokenManager object without error")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
+            self.assertTokenManagerContents(tokenManager, validateID: false)
             validTokenExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -185,7 +185,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
+            self.assertTokenManagerContents(tokenManager, validateID: false)
             validTokensExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -198,14 +198,12 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
+            self.assertTokenManagerContents(tokenManager, validateID: false)
             validTokensExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
 
         waitForIt(10)
-
-        OktaAuth.tokens?.validationOptions["exp"] = true
 
         // Wait for tokens to expire and update validation options to check for expiration
         sleep(TOKEN_EXPIRATION_WAIT)
@@ -319,7 +317,6 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                tokenManager.validationOptions["exp"] = true
                 OktaAuthorization().storeAuthState(tokenManager)
                 isAuthExpectation.fulfill()
             }
@@ -345,9 +342,11 @@ class Tests: XCTestCase {
         })
     }
 
-    func assertTokenManagerContents(_ tm: OktaTokenManager) {
+    func assertTokenManagerContents(_ tm: OktaTokenManager, validateID: Bool) {
         XCTAssertEqual(tm.accessToken, TestUtils.mockAccessToken)
-        XCTAssertEqual(tm.idToken, TestUtils.mockIdToken)
+        if validateID {
+            XCTAssertEqual(tm.idToken, TestUtils.mockIdToken)
+        }
         XCTAssertEqual(tm.refreshToken, TestUtils.mockRefreshToken)
     }
 
@@ -361,6 +360,5 @@ class Tests: XCTestCase {
         XCTAssertEqual(prevState.config, tm.config)
         XCTAssertEqual(prevState.idToken, tm.idToken)
         XCTAssertEqual(prevState.refreshToken, tm.refreshToken)
-        XCTAssertEqual(prevState.validationOptions as NSObject, tm.validationOptions as NSObject)
     }
 }

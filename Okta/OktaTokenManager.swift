@@ -17,7 +17,6 @@ open class OktaTokenManager: NSObject, NSCoding {
     open var authState: OIDAuthState
     open var config: [String: String]
     open var accessibility: CFString
-    open var validationOptions: [String: Any]
 
     open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
@@ -59,24 +58,10 @@ open class OktaTokenManager: NSObject, NSCoding {
         }
     }
 
-    public init(authState: OIDAuthState, config: [String: String], accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly, validationOptions: [String: Any]?) throws {
+    public init(authState: OIDAuthState, config: [String: String], accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) throws {
         self.authState = authState
         self.config = config
         self.accessibility = accessibility
-
-        if validationOptions != nil {
-            // Override config options
-            self.validationOptions = validationOptions!
-        } else {
-            // Opinionated validation options
-            self.validationOptions = [
-                "issuer": config["issuer"] as Any,
-                "audience": config["clientId"] as Any,
-                "exp": true,
-                "iat": true,
-                "nonce": authState.lastTokenResponse?.request.additionalParameters?["nonce"] as Any
-            ] as [String: Any]
-        }
 
         super.init()
 
@@ -88,8 +73,7 @@ open class OktaTokenManager: NSObject, NSCoding {
         try? self.init(
                     authState: decoder.decodeObject(forKey: "authState") as! OIDAuthState,
                        config: decoder.decodeObject(forKey: "config") as! [String: String],
-                accessibility: (decoder.decodeObject(forKey: "accessibility") as! CFString),
-            validationOptions: (decoder.decodeObject(forKey: "validationOptions") as! [String: Any])
+                accessibility: (decoder.decodeObject(forKey: "accessibility") as! CFString)
         )
     }
 
@@ -97,20 +81,19 @@ open class OktaTokenManager: NSObject, NSCoding {
         coder.encode(self.authState, forKey: "authState")
         coder.encode(self.config, forKey: "config")
         coder.encode(self.accessibility, forKey: "accessibility")
-        coder.encode(self.validationOptions, forKey: "validationOptions")
     }
 
     public func isValidToken(idToken: String?) throws -> Bool {
-        guard let token = idToken else { return false }
-        do {
-            let isValid = try Introspect().validate(jwt: token, options: self.validationOptions)
-            if isValid {
-                return true
-            }
-        } catch let error {
-            throw error
+        guard let idToken = idToken,
+            let tokenObject = OIDIDToken(idTokenString: idToken) else {
+                throw OktaError.JWTDecodeError
         }
-        return false
+        
+        if tokenObject.expiresAt.timeIntervalSinceNow < 0 {
+            throw OktaError.JWTValidationError("ID Token expired")
+        }
+        
+        return true
     }
 
     public func clear() {

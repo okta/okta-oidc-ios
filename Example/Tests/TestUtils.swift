@@ -29,12 +29,12 @@ struct TestUtils {
         "pu1WrZzuBHoQXuDkuYH6xKbKU2bopZGnA8PwrsIbr6PmmTaeH5ww0Q"
     static let mockRefreshToken = "mockRefreshToken"
 
-    static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: nil)
-    static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer])
-    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer], expiresIn: 5)
+    static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer)
+    static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer)
+    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5)
 
 
-    static func setupMockTokenManager(issuer: String, options: [String: Any]?, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
+    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
@@ -74,8 +74,7 @@ struct TestUtils {
                         "clientId": mockClientId,
                         "clientSecret": mockClientSecret,
                         "redirectUri": mockRedirectUri
-                    ],
-                    validationOptions: options
+                    ]
                 )
                 return resolve(tm)
             } catch let error {
