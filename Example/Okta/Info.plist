@@ -25,8 +25,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.ios-okta-sdk-redirect-test-app</string>
-				<string>com.ios-okta-sdk-ui-test-app</string>
+				<string>com.oktapreview.{Your Organization}</string>
 			</array>
 		</dict>
 	</array>
