@@ -82,6 +82,28 @@ class Tests: XCTestCase {
         XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
 
+    func testPasswordFailureFlow() {
+        // Validate the username & password flow fails without clientSecret
+        _ = Utils.getPlistConfiguration(forResourceName: "Okta-PasswordFlow")
+
+        let pwdExpectation = expectation(description: "Will error attempting username/password auth")
+
+        OktaAuth.login("user@example.com", password: "password")
+        .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Authorization Error: invalid_client: The client secret supplied for a confidential client is invalid."
+            )
+            pwdExpectation.fulfill()
+        }
+
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+       })
+    }
+
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
         OktaAuth.configuration = [
@@ -256,7 +278,10 @@ class Tests: XCTestCase {
 
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.noTokens.localizedDescription)
+            XCTAssertEqual(
+                error.localizedDescription,
+                "Authorization Error: invalid_client: Client authentication failed. Either the client or the client credentials are invalid."
+            )
             refreshExpectation.fulfill()
         }
 
