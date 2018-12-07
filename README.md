@@ -77,6 +77,7 @@ Create an `Okta.plist` file in your application's bundle with the following fiel
 ```
 
 **Note**: *To receive a **refresh_token**, you must include the `offline_access` scope.*
+**Note**: *To perform a **logout**, you must specify the `logoutRedirectUri`.*
 
 ### Update the Private-use URI Scheme
 
@@ -133,6 +134,31 @@ OktaAuth.login(username: "user@example.com", password: "password").start(view: s
 }
 .catch { error in
     // Error
+}
+```
+
+## Logout
+
+First, update your `AppDelegate` to include the following function to allow the redirect to occur:
+
+```swift
+// AppDelegate.swift
+import OktaAuth
+
+func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+return OktaAuth.resume(url: url, options: options)
+}
+```
+
+Then, you can start the logout flow by simply calling `logout`:
+
+```swift
+OktaAuth.logout().start(view: self)
+.then {
+// Clean tokenManager
+}
+.catch { error in
+// Error
 }
 ```
 
