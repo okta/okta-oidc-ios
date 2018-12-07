@@ -38,6 +38,11 @@ public func login() -> Login {
     return Login()
 }
 
+public func logout() -> Logout {
+    // Logout for authorization code flow
+    return Logout(idToken: tokens?.idToken)
+}
+
 public func isAuthenticated() -> Bool {
     // Restore state
     guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
