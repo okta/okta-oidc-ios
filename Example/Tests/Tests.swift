@@ -103,6 +103,24 @@ class Tests: XCTestCase {
             if error != nil { XCTFail(error!.localizedDescription) }
        })
     }
+    
+    func testLogoutFailureFlow() {
+        let logoutExpectation = expectation(description: "Will error attempting logout")
+        
+        OktaAuth.logout().start(UIViewController())
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                "User ID token needed to fulfill this operation."
+            )
+            logoutExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 60, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
+    }
 
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
