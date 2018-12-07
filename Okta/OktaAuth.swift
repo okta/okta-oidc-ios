@@ -35,7 +35,9 @@ public struct OktaAuthorization {
                 )
 
                 // Start the authorization flow
-                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
+                let externalUserAgent = OktaExternalUserAgentIOS(presenting: view)
+                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent)
+                {
                     authorizationResponse, error in
 
                     guard let authResponse = authorizationResponse else {
@@ -58,6 +60,42 @@ public struct OktaAuthorization {
 
     func passwordFlow(_ config: [String: String], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
         return buildAndPerformTokenRequest(config, additionalParams: credentials)
+    }
+    
+    func logout(_ config: [String: String], idToken: String?, view: UIViewController) -> Promise<Void> {
+        return Promise<Void>(in: .background, { resolve, reject, _ in
+            guard let issuer = config["issuer"],
+                let logoutRedirectUri = config["logoutRedirectUri"] else {
+                    return reject(OktaError.MissingConfigurationValues)
+            }
+            
+            self.getMetadataConfig(URL(string: issuer))
+                .then { oidConfig in
+
+                    let request = OIDEndSessionRequest(
+                            configuration: oidConfig,
+                            idTokenHint: idToken ?? "",
+                            postLogoutRedirectURL: URL(string: logoutRedirectUri)!,
+                            additionalParameters: nil
+                    )
+                    
+                    let agent = OktaExternalUserAgentIOS(presenting: view)
+                    
+                    // Present the logout flow
+                    
+                    OktaAuth.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent)
+                    { response, responseError in
+
+                        if let responseError = responseError {
+                            return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
+                        }
+
+                        self.clearAuthState()
+                        return resolve()
+                    }
+                }
+                .catch { error in return reject(error) }
+        })
     }
 
     func refreshTokensManually(_ config: [String: String], refreshToken: String) -> Promise<OktaTokenManager> {
@@ -161,6 +199,15 @@ public struct OktaAuthorization {
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
         do {
             try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
+        } catch let error {
+            print("Error: \(error)")
+        }
+    }
+    
+    func clearAuthState() {
+        OktaAuth.tokens = nil
+        do {
+            try Vinculum.remove("OktaAuthStateTokenManager")
         } catch let error {
             print("Error: \(error)")
         }

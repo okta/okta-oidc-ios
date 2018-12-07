@@ -12,6 +12,7 @@ import OktaAuth
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
+    @IBOutlet weak var redirectLoginButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,10 @@ class ViewController: UIViewController {
 
     @IBAction func loginButton(_ sender: Any) {
         self.loginCodeFlow()
+    }
+    
+    @IBAction func logoutButton(_ sender: Any) {
+        self.logoutCodeFlow()
     }
 
     @IBAction func clearTokens(_ sender: Any) {
@@ -75,6 +80,12 @@ class ViewController: UIViewController {
         } else {
             OktaAuth.login().start(self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
         }
+    }
+    
+    func logoutCodeFlow() {
+        OktaAuth.logout().start(self)
+        .then { self.buildTokenTextView() }
+        .catch { error in print(error) }
     }
 
     func updateUI(updateText: String) {

@@ -2,7 +2,8 @@ platform :ios, '9.0'
 use_frameworks!
 
 def shared_pods
-  pod 'OktaAuth', :path => '../'
+    pod 'AppAuth', git: 'https://github.com/openid/AppAuth-iOS.git', branch: 'dev-logout' 
+    pod 'OktaAuth', :path => '../'
 end
 
 target 'Okta_Example' do
