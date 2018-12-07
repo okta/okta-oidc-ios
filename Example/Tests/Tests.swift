@@ -91,7 +91,7 @@ class Tests: XCTestCase {
         OktaAuth.login("user@example.com", password: "password")
         .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
         .catch { error in
-            XCTAssertTrue(error.localizedDescription.starts(with: "Authorization Error"))
+            XCTAssertEqual(error.localizedDescription, "Authorization Error: invalid_grant: The credentials provided were invalid.")
             pwdExpectation.fulfill()
         }
 
