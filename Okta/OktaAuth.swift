@@ -64,6 +64,10 @@ public struct OktaAuthorization {
     
     func logout(_ config: [String: String], idToken: String?, view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
+            guard let idToken = idToken else {
+                return reject(OktaError.MissingUserIdToken)
+            }
+
             guard let issuer = config["issuer"],
                 let logoutRedirectUri = config["logoutRedirectUri"] else {
                     return reject(OktaError.MissingConfigurationValues)
@@ -74,7 +78,7 @@ public struct OktaAuthorization {
 
                     let request = OIDEndSessionRequest(
                             configuration: oidConfig,
-                            idTokenHint: idToken ?? "",
+                            idTokenHint: idToken,
                             postLogoutRedirectURL: URL(string: logoutRedirectUri)!,
                             additionalParameters: nil
                     )
