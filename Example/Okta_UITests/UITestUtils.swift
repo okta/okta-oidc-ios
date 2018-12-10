@@ -59,7 +59,8 @@ public struct UITestUtils {
     func waitForElement(_ element: XCUIElement, timeout: TimeInterval) -> Bool {
         // Generic wait for element to apepar function w/ timeout
         let pred = NSPredicate(format: "exists == true")
-        let exp = XCTestCase().expectation(for: pred, evaluatedWith: element, handler: nil)
+        let testcase = XCTestCase()
+        let exp = testcase.expectation(for: pred, evaluatedWith: element, handler: nil)
         let result = XCTWaiter.wait(for: [exp], timeout: timeout)
         return result == .completed
     }
