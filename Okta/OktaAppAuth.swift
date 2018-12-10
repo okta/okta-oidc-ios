@@ -40,12 +40,12 @@ public func login() -> Login {
 
 public func isAuthenticated() -> Bool {
     // Restore state
-    guard let encodedAuthState = try? Keychain.get("OktaAuthStateTokenManager") else {
+    guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
         return false
     }
 
     guard let previousState = NSKeyedUnarchiver
-        .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else { return false }
+        .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
 
     tokens = previousState
 

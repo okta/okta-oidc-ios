@@ -160,7 +160,7 @@ public struct OktaAuthorization {
 
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
         do {
-            try Keychain.set(key: "OktaAuthStateTokenManager", value: authStateData, accessibility: tokenManager.accessibility)
+            try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
         } catch let error {
             print("Error: \(error)")
         }

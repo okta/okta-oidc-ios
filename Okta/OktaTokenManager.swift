@@ -97,7 +97,7 @@ open class OktaTokenManager: NSObject, NSCoding {
     }
 
     public func clear() {
-        Keychain.removeAll()
+        OktaKeychain.clearAll()
         OktaAuth.tokens = nil
     }
 }

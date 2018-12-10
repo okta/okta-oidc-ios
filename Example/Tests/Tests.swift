@@ -160,7 +160,7 @@ class Tests: XCTestCase {
         let validTokenExpectation = expectation(description: "Will return a tokenManager object without error")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager, validateID: false)
+            self.assertTokenManagerContents(tokenManager)
             validTokenExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -185,7 +185,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager, validateID: false)
+            self.assertTokenManagerContents(tokenManager)
             validTokensExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -198,7 +198,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager, validateID: false)
+            self.assertTokenManagerContents(tokenManager)
             validTokensExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -228,9 +228,9 @@ class Tests: XCTestCase {
         // Clear the authState
         OktaAuth.tokens?.clear()
 
-        XCTAssertThrowsError(try Keychain.get("OktaAuthStateTokenManager")) { error in
+        XCTAssertThrowsError(try OktaKeychain.get(key: "OktaAuthStateTokenManager") as Data) { error in
             // Expect "Not found" exception
-            XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
+            XCTAssertEqual(error.localizedDescription, "The operation couldn’t be completed. (OktaAuth.OktaKeychainError error 0.)")
         }
     }
 
@@ -342,11 +342,8 @@ class Tests: XCTestCase {
         })
     }
 
-    func assertTokenManagerContents(_ tm: OktaTokenManager, validateID: Bool) {
+    func assertTokenManagerContents(_ tm: OktaTokenManager) {
         XCTAssertEqual(tm.accessToken, TestUtils.mockAccessToken)
-        if validateID {
-            XCTAssertEqual(tm.idToken, TestUtils.mockIdToken)
-        }
         XCTAssertEqual(tm.refreshToken, TestUtils.mockRefreshToken)
     }
 
