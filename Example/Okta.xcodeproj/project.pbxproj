@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F334CBC21BFFBE600EF1E32 /* OktaAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */; };
 		58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F10D9BB02A65C1CEC3B2993 /* Pods_Okta_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -14,7 +15,6 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		7116BC581EF9FFDC004A4E1C /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC551EF9FFDC004A4E1C /* AppAuth.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		7116BC591EF9FFDC004A4E1C /* OktaAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC561EF9FFDC004A4E1C /* OktaAuth.framework */; };
 		7116BC5A1EF9FFDC004A4E1C /* Pods_Okta_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC571EF9FFDC004A4E1C /* Pods_Okta_Tests.framework */; };
 		7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712745EC1EFB0B3F00E820FC /* Okta_UITests.swift */; };
@@ -47,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		29991E729AD593DD12330109 /* Pods_Okta_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OktaAppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		373F2D6C1A0A57F307B30B30 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Okta_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okta_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -88,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7116BC581EF9FFDC004A4E1C /* AppAuth.framework in Frameworks */,
+				2F334CBC21BFFBE600EF1E32 /* OktaAppAuth.framework in Frameworks */,
 				7116BC591EF9FFDC004A4E1C /* OktaAuth.framework in Frameworks */,
 				7116BC5A1EF9FFDC004A4E1C /* Pods_Okta_Tests.framework in Frameworks */,
 				58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */,
@@ -193,6 +194,7 @@
 		60FB530269A9A0B1F817A30F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */,
 				71A92AF2202A6AD20072EC32 /* Vinculum.framework */,
 				7137EDF91EFB281A0082C30F /* AppAuth.framework */,
 				7116BC551EF9FFDC004A4E1C /* AppAuth.framework */,
