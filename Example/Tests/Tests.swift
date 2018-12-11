@@ -1,7 +1,7 @@
 import UIKit
 import XCTest
 @testable import OktaAuth
-import AppAuth
+import OktaAppAuth
 
 class Tests: XCTestCase {
     let TOKEN_EXPIRATION_WAIT: UInt32 = 5
