@@ -11,7 +11,7 @@
  */
 
 import Foundation
-import AppAuth
+import OktaAppAuth
 import SafariServices
 
 class OktaExternalUserAgentIOS : NSObject, OIDExternalUserAgent {
