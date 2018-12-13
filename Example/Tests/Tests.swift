@@ -107,11 +107,11 @@ class Tests: XCTestCase {
     func testLogoutFailureFlow() {
         let logoutExpectation = expectation(description: "Will error attempting logout")
         
-        OktaAuth.logout().start(UIViewController())
+        OktaAuth.signOutFromOkta().start(UIViewController())
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
-                "User ID token needed to fulfill this operation."
+                "ID token needed to fulfill this operation."
             )
             logoutExpectation.fulfill()
         }

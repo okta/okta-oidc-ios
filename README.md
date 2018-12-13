@@ -139,21 +139,10 @@ OktaAuth.login(username: "user@example.com", password: "password").start(view: s
 
 ## Logout
 
-First, update your `AppDelegate` to include the following function to allow the redirect to occur:
+You can start the logout flow by simply calling `signOutFromOkta`. This method wil end the user's Okta session in the browser.
 
 ```swift
-// AppDelegate.swift
-import OktaAuth
-
-func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-return OktaAuth.resume(url: url, options: options)
-}
-```
-
-Then, you can start the logout flow by simply calling `logout`:
-
-```swift
-OktaAuth.logout().start(view: self)
+OktaAuth.signOutFromOkta().start(view: self)
 .then {
 // Clean tokenManager
 }
