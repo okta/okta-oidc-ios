@@ -83,7 +83,7 @@ class ViewController: UIViewController {
     }
     
     func logoutCodeFlow() {
-        OktaAuth.logout().start(self)
+        OktaAuth.signOutFromOkta().start(self)
         .then { self.buildTokenTextView() }
         .catch { error in print(error) }
     }

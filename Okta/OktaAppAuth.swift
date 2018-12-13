@@ -38,7 +38,7 @@ public func login() -> Login {
     return Login()
 }
 
-public func logout() -> Logout {
+public func signOutFromOkta() -> Logout {
     // Logout for authorization code flow
     return Logout(idToken: tokens?.idToken)
 }

@@ -36,8 +36,7 @@ public struct OktaAuthorization {
 
                 // Start the authorization flow
                 let externalUserAgent = OktaExternalUserAgentIOS(presenting: view)
-                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent)
-                {
+                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
                     authorizationResponse, error in
 
                     guard let authResponse = authorizationResponse else {
@@ -62,14 +61,11 @@ public struct OktaAuthorization {
         return buildAndPerformTokenRequest(config, additionalParams: credentials)
     }
     
-    func logout(_ config: [String: String], idToken: String?, view: UIViewController) -> Promise<Void> {
+    func logout(_ config: [String: String], idToken: String, view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
-            guard let idToken = idToken else {
-                return reject(OktaError.MissingUserIdToken)
-            }
-
             guard let issuer = config["issuer"],
-                let logoutRedirectUri = config["logoutRedirectUri"] else {
+                let logoutRedirectUriString = config["logoutRedirectUri"],
+                let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
                     return reject(OktaError.MissingConfigurationValues)
             }
             
@@ -79,7 +75,7 @@ public struct OktaAuthorization {
                     let request = OIDEndSessionRequest(
                             configuration: oidConfig,
                             idTokenHint: idToken,
-                            postLogoutRedirectURL: URL(string: logoutRedirectUri)!,
+                            postLogoutRedirectURL: logoutRedirectURL,
                             additionalParameters: nil
                     )
                     

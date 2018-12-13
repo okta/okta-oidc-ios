@@ -70,7 +70,7 @@ extension OktaError: LocalizedError {
         case .parseFailure:
             return NSLocalizedString("Failed to parse and/or convert object.", comment: "")
         case .MissingUserIdToken:
-            return NSLocalizedString("User ID token needed to fulfill this operation.", comment: "")
+            return NSLocalizedString("ID token needed to fulfill this operation.", comment: "")
         }
     }
 }
