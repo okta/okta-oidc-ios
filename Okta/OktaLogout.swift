@@ -18,20 +18,28 @@ public struct Logout {
         self.idToken = idToken
     }
     
-    public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {
+    public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let idToken = self.idToken else {
                 return reject(OktaError.MissingIdToken)
             }
-
-            guard let plist = plistName,
-                  let config = Utils.getPlistConfiguration(forResourceName: plist) else {
-                return reject(OktaError.NoPListGiven)
-            }
-
-            OktaAuthorization().logout(config, idToken: idToken, view: view)
+            
+            OktaAuthorization().logout(dict, idToken: idToken, view: view)
                 .then { _ in return resolve() }
                 .catch { error in return reject(error) }
+        })
+    }
+    
+    public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {
+        return Promise<Void>(in: .background, { resolve, reject, _ in
+            guard let plist = plistName,
+                let config = Utils.getPlistConfiguration(forResourceName: plist) else {
+                    return reject(OktaError.NoPListGiven)
+            }
+            
+            self.start(withDictConfig: config, view: view)
+            .then { _ in return resolve() }
+            .catch { error in return reject(error) }
         })
     }
     
