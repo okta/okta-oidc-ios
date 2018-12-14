@@ -98,8 +98,8 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "REDIR_URI"
-            value = "$(REDIR_URI)"
+            key = "REDIRECT_URI"
+            value = "$(REDIRECT_URI)"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable

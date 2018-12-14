@@ -8,7 +8,6 @@
 
 import UIKit
 import OktaAuth
-import Hydra
 
 class ViewController: UIViewController {
 
@@ -67,17 +66,15 @@ class ViewController: UIViewController {
     }
 
     func loginCodeFlow() {
-        let promise: Promise<OktaTokenManager>
         if ProcessInfo.processInfo.environment["UITEST"] == "1" {
             let config = ["issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
                           "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
-                          "redirectUri": ProcessInfo.processInfo.environment["REDIR_URI"]!,
+                          "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
                           "scopes": "openid profile offline_access"]
-            promise = OktaAuth.login().start(withDictConfig: config, view: self)
+            OktaAuth.login().start(withDictConfig: config, view: self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
         } else {
-            promise = OktaAuth.login().start(self)
+            OktaAuth.login().start(self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
         }
-        promise.then { _ in self.buildTokenTextView() }.catch { error in print(error) }
     }
 
     func updateUI(updateText: String) {

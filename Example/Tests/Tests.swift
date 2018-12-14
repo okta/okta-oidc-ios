@@ -286,7 +286,7 @@ class Tests: XCTestCase {
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertTrue(error.localizedDescription.starts(with: "Authorization Error"))
+            XCTAssertEqual(error.localizedDescription, "Authorization Error: invalid_client: Client authentication failed. Either the client or the client credentials are invalid.")
             refreshExpectation.fulfill()
         }
 

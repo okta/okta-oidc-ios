@@ -18,7 +18,7 @@ class OktaUITests: XCTestCase {
     var username = ProcessInfo.processInfo.environment["USERNAME"]!
     var password = ProcessInfo.processInfo.environment["PASSWORD"]!
     var issuer = ProcessInfo.processInfo.environment["ISSUER"]!
-    var redirectURI = ProcessInfo.processInfo.environment["REDIR_URI"]!
+    var redirectURI = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
     var clientID = ProcessInfo.processInfo.environment["CLIENT_ID"]!
 
     var testUtils: UITestUtils?
@@ -28,7 +28,7 @@ class OktaUITests: XCTestCase {
         super.setUp()
         
         app = XCUIApplication()
-        app.launchEnvironment = ["UITEST": "1", "ISSUER": issuer, "CLIENT_ID": clientID, "REDIR_URI": redirectURI]
+        app.launchEnvironment = ["UITEST": "1", "ISSUER": issuer, "CLIENT_ID": clientID, "REDIRECT_URI": redirectURI]
         
         testUtils = UITestUtils(app)
 

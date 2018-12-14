@@ -5,7 +5,7 @@
 	<key>scopes</key>
 	<string>openid profile offline_access</string>
 	<key>redirectUri</key>
-	<string>com.oktapreview.{orgName}:/callback</string>
+	<string>{scheme}:/callback</string>
 	<key>clientId</key>
 	<string>{clientID}</string>
 	<key>issuer</key>

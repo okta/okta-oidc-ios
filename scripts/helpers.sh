@@ -33,7 +33,7 @@ build_and_run_ui_tests () {
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
     -destination "$IPHONE_X_DESTINATION" \
     -only-testing:Okta_UITests \
-    USERNAME="$1" PASSWORD="$2" ISSUER="$3" REDIR_URI="$4" CLIENT_ID="$5" test | xcpretty;
+    USERNAME="$1" PASSWORD="$2" ISSUER="$3" REDIRECT_URI="$4" CLIENT_ID="$5" test | xcpretty;
 }
 
 remove_simulator_data () {

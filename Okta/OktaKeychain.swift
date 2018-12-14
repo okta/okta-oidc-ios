@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -23,11 +23,11 @@ class OktaKeychain: NSObject {
      - key: Hash to reference the stored Keychain item
      - string: String to store inside of the keychain
      */
-    class func set(key: String, string: String, expiration: TimeInterval? = nil, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
+    class func set(key: String, string: String, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
         guard let objectData = string.data(using: .utf8) else {
             throw OktaKeychainError.codingError
         }
-        try set(key: key, data: objectData, expiration: expiration, accessGroup: accessGroup, accessibility: accessibility)
+        try set(key: key, data: objectData, accessGroup: accessGroup, accessibility: accessibility)
     }
     
     /**
@@ -36,7 +36,7 @@ class OktaKeychain: NSObject {
      - key: Hash to reference the stored Keychain item
      - data: Data to store inside of the keychain
      */
-    class func set(key: String, data: Data, expiration: TimeInterval? = nil, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
+    class func set(key: String, data: Data, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
         var q = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecValueData as String: data,
@@ -55,13 +55,7 @@ class OktaKeychain: NSObject {
         let sanityCheck = SecItemAdd(cfDictionary, nil)
         if sanityCheck != noErr {
             throw OktaKeychainError.failed(sanityCheck.description)
-        }
-        
-        if let expiration = expiration {
-            DispatchQueue.main.asyncAfter(deadline: .now() + expiration) {
-                try? remove(key: key)
-            }
-        }
+        }        
     }
     
     /**
