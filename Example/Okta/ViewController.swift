@@ -31,8 +31,12 @@ class ViewController: UIViewController {
         self.loginCodeFlow()
     }
     
-    @IBAction func logoutButton(_ sender: Any) {
-        self.logoutCodeFlow()
+    @IBAction func signoutFromOktaButton(_ sender: Any) {
+        self.signoutFromOkta()
+    }
+    
+    @IBAction func signoutLocallyButton(_ sender: Any) {
+        self.signoutLocally()
     }
 
     @IBAction func clearTokens(_ sender: Any) {
@@ -82,8 +86,14 @@ class ViewController: UIViewController {
         }
     }
     
-    func logoutCodeFlow() {
+    func signoutFromOkta() {
         OktaAuth.signOutFromOkta().start(self)
+        .then { self.buildTokenTextView() }
+        .catch { error in print(error) }
+    }
+    
+    func signoutLocally() {
+        OktaAuth.signOutLocally()
         .then { self.buildTokenTextView() }
         .catch { error in print(error) }
     }
