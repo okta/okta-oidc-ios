@@ -139,7 +139,7 @@ OktaAuth.login(username: "user@example.com", password: "password").start(view: s
 
 ## Logout
 
-You can start the logout flow by simply calling `signOutFromOkta`. This method wil end the user's Okta session in the browser.
+You can start the logout flow by simply calling `signOutFromOkta`. This method will end the user's Okta session in the browser.
 
 ```swift
 OktaAuth.signOutFromOkta().start(view: self)

@@ -33,7 +33,7 @@ internal struct Refresh {
                     return reject(OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
                 }
                 // Re-store the authState on token refreshing
-                OktaAuthorization().storeAuthState(tokens)
+                OktaAuth.tokens = tokens
                 return resolve(token)
             })
         })

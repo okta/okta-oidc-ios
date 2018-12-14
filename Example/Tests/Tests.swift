@@ -104,19 +104,45 @@ class Tests: XCTestCase {
        })
     }
     
-    func testLogoutFailureFlow() {
-        let logoutExpectation = expectation(description: "Will error attempting logout")
+    func testSignOutFromOktaFailureFlow() {
+        let signOutExpectation = expectation(description: "Will error attempting sign out locally")
         
         OktaAuth.signOutFromOkta().start(UIViewController())
+        .then {
+            XCTFail("Sign out should fail!")
+            signOutExpectation.fulfill()
+        }
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
-                "ID token needed to fulfill this operation."
+                OktaError.MissingIdToken.localizedDescription
             )
-            logoutExpectation.fulfill()
+            signOutExpectation.fulfill()
         }
         
-        waitForExpectations(timeout: 60, handler: { error in
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
+    }
+    
+    func testSignOutLocallyFailureFlow() {
+        let signOutExpectation = expectation(description: "Will error attempting sign out from Okta")
+        
+        OktaAuth.signOutLocally()
+        .then {
+            XCTFail("Sign out should fail!")
+            signOutExpectation.fulfill()
+        }
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                OktaError.NoTokens.localizedDescription
+            )
+            signOutExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })
@@ -155,9 +181,23 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-        let _ = Revoke(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
+        
+        let pwdExpectation = expectation(description: "Will error attempting revoke token")
+        
+        Revoke(token: nil).revoke()
+        .then { response in
+            pwdExpectation.fulfill()
+            XCTFail("Revoke should fail!")
         }
+        .catch { error in
+            pwdExpectation.fulfill()
+            XCTAssertEqual(error.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
     }
 
     func testIdTokenDecode() {
@@ -238,7 +278,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            OktaAuthorization().storeAuthState(tokenManager)
+            OktaAuth.tokens = tokenManager
             validTokensExpectation.fulfill()
         }
 
@@ -260,7 +300,7 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            OktaAuthorization().storeAuthState(tokenManager)
+            OktaAuth.tokens = tokenManager
             isAuthExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -276,7 +316,7 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                OktaAuthorization().storeAuthState(tokenManager)
+                OktaAuth.tokens = tokenManager
                 isAuthExpectation.fulfill()
             }
             .catch { error in XCTFail(error.localizedDescription) }
@@ -293,6 +333,35 @@ class Tests: XCTestCase {
     func testRefreshTokenFailure() {
         // Expect that no refresh token stored will result in an error
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
+
+        OktaAuth.refresh()
+        .catch { error in
+            XCTAssertEqual(error.localizedDescription, OktaError.NoTokens.localizedDescription)
+            refreshExpectation.fulfill()
+        }
+
+        waitForIt()
+    }
+
+    func testRefreshTokenFailureInvalidToken() {
+        // Expect that a fake refresh token stored will result in an error
+        let setupTokenManagerExpectation = expectation(description: "Will return tokens without errors")
+
+        OktaAuth.configuration = [
+                  "issuer": TestUtils.mockIssuer,
+                "clientId": TestUtils.mockClientId,
+            "clientSecret": TestUtils.mockClientSecret,
+             "redirectUri": TestUtils.mockRedirectUri
+        ]
+
+        TestUtils.tokenManagerNoValidation
+        .then { tokenManager in
+            OktaAuth.tokens = tokenManager
+            setupTokenManagerExpectation.fulfill()
+        }
+        .catch { error in XCTFail(error.localizedDescription) }
+
+        waitForIt()
 
         OktaAuth.refresh()
         .catch { error in
@@ -315,7 +384,8 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                OktaAuthorization().storeAuthState(tokenManager)
+                tokenManager.validationOptions["exp"] = true
+                OktaAuth.tokens = tokenManager
                 isAuthExpectation.fulfill()
             }
             .catch { error in XCTFail(error.localizedDescription) }
@@ -326,7 +396,7 @@ class Tests: XCTestCase {
         sleep(TOKEN_EXPIRATION_WAIT)
 
         // Re-store the authState
-        OktaAuthorization().storeAuthState(OktaAuth.tokens!)
+        OktaAuth.tokens = OktaAuth.tokens!
 
         self.assertAuthenticationState(OktaAuth.tokens!)
     }

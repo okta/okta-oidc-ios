@@ -9,37 +9,48 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
+import Hydra
 
 public struct Revoke {
+    
+    let token: String?
 
-    init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
-        // Revoke the token
-        guard let revokeEndpoint = getRevokeEndpoint() else {
-            callback(nil, .noRevocationEndpoint)
-            return
-        }
-        
-        guard let token = token else {
-            callback(nil, .noBearerToken)
-            return
-        }
+    init(token: String?) {
+        self.token = token
+    }
+    
+    func revoke() -> Promise<[String: Any]?> {
+        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
+            // Revoke the token
+            guard let revokeEndpoint = self.getRevokeEndpoint() else {
+                return reject(OktaError.NoRevocationEndpoint)
+            }
+            
+            guard let token = self.token else {
+                return reject(OktaError.NoBearerToken)
+            }
 
-        let headers = [
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-        ]
+            let headers = [
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            ]
 
-        var data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+            var data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
-        // Append the clientSecret if it exists
-        if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
-            let clientSecret = clientSecretObj as? String {
-            data += "&client_secret=\(clientSecret)"
-        }
+            // Append the clientSecret if it exists
+            if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
+                let clientSecret = clientSecretObj as? String {
+                data += "&client_secret=\(clientSecret)"
+            }
 
-        OktaApi.post(revokeEndpoint, headers: headers, postString: data)
-        .then { response in callback(response, nil) }
-        .catch { error in callback(nil, error as? OktaError) }
+            OktaApi.post(revokeEndpoint, headers: headers, postString: data)
+            .then { response in
+                return resolve(response)
+            }
+            .catch { error in
+                return reject(error)
+            }
+        })
     }
 
     func getRevokeEndpoint() -> URL? {
