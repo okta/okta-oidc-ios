@@ -26,7 +26,15 @@ public var configuration: [String: Any]?
 public var wellKnown: [String: Any]?
 
 // Token manager
-public var tokens: OktaTokenManager?
+public var tokens: OktaTokenManager? {
+    didSet {
+        if let tokens = tokens {
+            OktaAuthStateStorage.store(tokens)
+        } else {
+            OktaAuthStateStorage.clear()
+        }
+    }
+}
 
 public func login(_ username: String, password: String) -> Login {
     // Authenticate via Resource Owner Password Grant
@@ -41,6 +49,23 @@ public func login() -> Login {
 public func signOutFromOkta() -> Logout {
     // Logout for authorization code flow
     return Logout(idToken: tokens?.idToken)
+}
+
+public func signOutLocally() -> Promise<Void> {
+    return Promise<Void>(in: .background, { resolve, reject, _ in
+        guard let accessToken = tokens?.accessToken else {
+            return reject(OktaError.NoTokens)
+        }
+        
+        // refresh tokens
+        Revoke(token: accessToken).revoke()
+        .then {_ in
+            // clear tokens stored locally
+            tokens = nil
+            return resolve()
+        }
+        .catch { error in return reject(error)}
+    })
 }
 
 public func isAuthenticated() -> Bool {
@@ -72,7 +97,13 @@ public func refresh() -> Promise<String> {
 
 public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
     // Revokes the given token
-    _ = Revoke(token: token) { response, error in callback( response?.count == 0 ? true : false, error) }
+    Revoke(token: token).revoke()
+    .then { response in
+        callback( response?.count == 0 ? true : false, nil)
+    }
+    .catch { error in
+        callback( false, error as? OktaError)
+    }
 }
 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {

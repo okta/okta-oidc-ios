@@ -46,7 +46,7 @@ public struct OktaAuthorization {
                         let tokenManager = try OktaTokenManager(authState: authResponse, config: config)
 
                         // Set the local cache and write to storage
-                        self.storeAuthState(tokenManager)
+                        OktaAuth.tokens = tokenManager
                         return resolve(tokenManager)
                     } catch let error {
                         return reject(error)
@@ -85,12 +85,9 @@ public struct OktaAuthorization {
                     
                     OktaAuth.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent)
                     { response, responseError in
-
                         if let responseError = responseError {
                             return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
                         }
-
-                        self.clearAuthState()
                         return resolve()
                     }
                 }
@@ -154,7 +151,7 @@ public struct OktaAuthorization {
                             let tokenManager = try OktaTokenManager(authState: authState, config: config)
 
                             // Set the local cache and write to storage
-                            self.storeAuthState(tokenManager)
+                            OktaAuth.tokens = tokenManager
                             return resolve(tokenManager)
                         } catch let error {
                             return reject(error)
@@ -189,27 +186,5 @@ public struct OktaAuthorization {
                 return reject(OktaError.APIError(responseError))
             }
         })
-    }
-
-    func storeAuthState(_ tokenManager: OktaTokenManager) {
-        // Encode and store the current auth state and
-        // cache the current tokens
-        OktaAuth.tokens = tokenManager
-
-        let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
-        do {
-            try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
-        } catch let error {
-            print("Error: \(error)")
-        }
-    }
-    
-    func clearAuthState() {
-        OktaAuth.tokens = nil
-        do {
-            try Vinculum.remove("OktaAuthStateTokenManager")
-        } catch let error {
-            print("Error: \(error)")
-        }
     }
 }
