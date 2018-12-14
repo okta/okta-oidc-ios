@@ -41,6 +41,36 @@ public struct UITestUtils {
         passwordField.typeText(password)
         webViewsQuery.buttons["Sign In"].tap()
     }
+    
+    func isBrowserShown() -> Bool {
+        return testApp.webViews.count != 0
+    }
+    
+    func closeBrowserIfNeeded() -> Bool {
+        // Wait for browser to load
+        // This sleep bypasses the need to "click" the consent for Safari
+        sleep(5)
+        
+        guard isBrowserShown() else {
+            return false
+        }
+        
+        testApp.buttons["Done"].tap()
+        
+        sleep(5)
+        return true
+    }
+    
+    func closeBrowser() {
+        // Wait for browser to load
+        // This sleep bypasses the need to "click" the consent for Safari
+        sleep(5)
+        
+        // Known bug with iOS 11 and system alerts
+        testApp.tap()
+        
+        testApp.buttons["Done"].tap()
+    }
 
     func getTextViewValue(label: String) -> String? {
         // Returns the value of a textView

@@ -21,7 +21,7 @@ class OktaUITests: XCTestCase {
     var redirectURI = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
     var clientID = ProcessInfo.processInfo.environment["CLIENT_ID"]!
 
-    var testUtils: UITestUtils?
+    var testUtils: UITestUtils!
     var app: XCUIApplication!
 
     override func setUp() {
@@ -42,11 +42,6 @@ class OktaUITests: XCTestCase {
 
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
-
-        // Check to see if there are tokens displayed (indicating an authenticated state)
-        if let tokens = testUtils.getTextViewValue(label: "tokenView"), tokens.contains("Access Token") {
-            return
-        }
 
         app.buttons["Login"].tap()
 
@@ -103,5 +98,32 @@ class OktaUITests: XCTestCase {
 
         // Clear all tokens
         app.buttons["Clear"].tap()
+    }
+    
+    func testSignOutFlow() {
+        loginAndWait()
+        
+        // Sign Out from Okta
+        app.buttons["Sign out from Okta"].tap()
+
+        // Wait for browser to load
+        sleep(5)
+        XCTAssertFalse(testUtils.isBrowserShown())
+        
+        app.buttons["Login"].tap()
+
+        // If Sign Out from browser succeeded, browser should appear presenting login UI.
+        // If user is still logged in in the browser, browser will appear and redirect to app automatically.
+        let browserWasShown = testUtils.closeBrowserIfNeeded()
+        XCTAssertTrue(browserWasShown)
+        
+        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
+        XCTAssertFalse(tokenValues?.isEmpty ?? false)
+        
+        // Sign Out Locally
+        app.buttons["Sign out Locally"].tap()
+
+        tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
+        XCTAssertTrue(tokenValues?.isEmpty ?? true)
     }
 }
