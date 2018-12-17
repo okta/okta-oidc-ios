@@ -37,28 +37,12 @@ class OktaExternalUserAgentIOS : NSObject, OIDExternalUserAgent {
         }
         self.session = session
         externalUserAgentFlowInProgress = true
-        var isBrowserLaunched = false
         
-        if #available(iOS 9.0, *) {
-            safariViewController = SFSafariViewController(url: requestURL, entersReaderIfAvailable: false)
-            safariViewController?.delegate = self
-            presentingViewController.present(safariViewController!, animated: true)
-            isBrowserLaunched = true
-        }
-        else {
-            isBrowserLaunched = UIApplication.shared.openURL(requestURL)
-        }
+        safariViewController = SFSafariViewController(url: requestURL, entersReaderIfAvailable: false)
+        safariViewController?.delegate = self
+        presentingViewController.present(safariViewController!, animated: true)
         
-        if !isBrowserLaunched {
-            cleanup()
-            let error = OIDErrorUtilities.error(
-                with: .safariOpenError,
-                underlyingError: nil,
-                description: "Unable to open Safari.")
-            session.failExternalUserAgentFlowWithError(error)
-        }
-        
-        return isBrowserLaunched
+        return true
     }
     
     func dismiss(animated: Bool, completion: @escaping () -> Void) {
