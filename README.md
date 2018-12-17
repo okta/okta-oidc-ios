@@ -103,7 +103,7 @@ First, update your `AppDelegate` to include the following function to allow the 
 // AppDelegate.swift
 import OktaAuth
 
-func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
+func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
     return OktaAuth.resume(url: url, options: options)
 }
 ```
@@ -225,6 +225,9 @@ To perform an end-to-end test, update the `Okta.plist` file to match your config
 ```bash
 export USERNAME={username}
 export PASSWORD={password}
+export CLIENT_ID={client_id}
+export ISSUER={issuer url}
+export REDIRECT_URI={redirect uri}
 
 # Run E2E end Unit tests
 bash ./scripts/build-and-test.sh
