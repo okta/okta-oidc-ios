@@ -9,6 +9,8 @@
 
 This library is a **wrapper** around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS) SDK for communicating with OAuth 2.0 + OpenID Connect providers, and follows current best practice outlined in [RFC 8252 - OAuth 2.0 for Native Apps](https://tools.ietf.org/html/rfc8252).
 
+**Note**: *Uses Okta fork of [AppAuth-iOS](https://github.com/okta/AppAuth-iOS) with logout functionality. *
+
 This library currently supports:
 
 - [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
