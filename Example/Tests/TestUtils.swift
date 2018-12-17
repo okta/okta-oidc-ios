@@ -51,19 +51,34 @@ struct TestUtils {
             additionalParameters: nil
         )
 
+        let mockAuthRequest = OIDAuthorizationRequest(
+                   configuration: mockServiceConfig,
+                        clientId: mockClientId,
+                    clientSecret: nil,
+                          scopes: ["openid", "email"],
+                     redirectURL: fooURL,
+                    responseType: OIDResponseTypeCode,
+            additionalParameters: nil
+        )
+
+        let mockAuthResponse = OIDAuthorizationResponse(
+               request: mockAuthRequest,
+            parameters: ["code": "mockAuthCode" as NSCopying & NSObjectProtocol]
+        )
+
         let mockTokenResponse = OIDTokenResponse(
             request: mockTokenRequest,
             parameters: [
-                 "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
-                   "expires_in": expiresIn as NSCopying & NSObjectProtocol,
-                   "token_type": "Bearer" as NSCopying & NSObjectProtocol,
-                     "id_token": mockIdToken as NSCopying & NSObjectProtocol,
+                "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
+                "expires_in": expiresIn as NSCopying & NSObjectProtocol,
+                "token_type": "Bearer" as NSCopying & NSObjectProtocol,
+                "id_token": mockIdToken as NSCopying & NSObjectProtocol,
                 "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
-                        "scope": mockScopes as NSCopying & NSObjectProtocol
+                "scope": mockScopes as NSCopying & NSObjectProtocol
             ]
         )
 
-        let tempAuthState = OIDAuthState(authorizationResponse: nil, tokenResponse: mockTokenResponse, registrationResponse: nil)
+        let tempAuthState = OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
 
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             do {
