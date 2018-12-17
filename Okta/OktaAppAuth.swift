@@ -57,12 +57,22 @@ public func signOutLocally() -> Promise<Void> {
             return reject(OktaError.NoTokens)
         }
         
-        // refresh tokens
+        // revoke tokens
         Revoke(token: accessToken).revoke()
         .then {_ in
-            // clear tokens stored locally
-            tokens = nil
-            return resolve()
+            guard let refreshToken = tokens?.refreshToken else {
+                // clear tokens stored locally
+                tokens = nil
+                return resolve()
+            }
+            
+            Revoke(token: refreshToken).revoke()
+            .then {_ in
+                // clear tokens stored locally
+                tokens = nil
+                return resolve()
+            }
+            .catch{ error in return reject(error) }
         }
         .catch { error in return reject(error)}
     })
