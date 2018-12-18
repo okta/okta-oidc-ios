@@ -263,6 +263,7 @@ export PASSWORD={password}
 export CLIENT_ID={client_id}
 export ISSUER={issuer url}
 export REDIRECT_URI={redirect uri}
+export LOGOUT_REDIRECT_URI={logout redirect uri}
 
 # Run E2E end Unit tests
 bash ./scripts/build-and-test.sh

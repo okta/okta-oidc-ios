@@ -15,10 +15,11 @@ import OktaAuth
 
 class OktaUITests: XCTestCase {
     // Update these values along with your Plist config
-    var username = ProcessInfo.processInfo.environment["USERNAME"]!
-    var password = ProcessInfo.processInfo.environment["PASSWORD"]!
+    var username = ProcessInfo.processInfo.environment["USERNAME"] ?? ""
+    var password = ProcessInfo.processInfo.environment["PASSWORD"] ?? ""
     var issuer = ProcessInfo.processInfo.environment["ISSUER"]!
     var redirectURI = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
+    var logoutRedirectURI = ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!
     var clientID = ProcessInfo.processInfo.environment["CLIENT_ID"]!
 
     var testUtils: UITestUtils!
@@ -28,7 +29,13 @@ class OktaUITests: XCTestCase {
         super.setUp()
         
         app = XCUIApplication()
-        app.launchEnvironment = ["UITEST": "1", "ISSUER": issuer, "CLIENT_ID": clientID, "REDIRECT_URI": redirectURI]
+        app.launchEnvironment = [
+            "UITEST": "1",
+            "ISSUER": issuer,
+            "CLIENT_ID": clientID,
+            "REDIRECT_URI": redirectURI,
+            "LOGOUT_REDIRECT_URI" : logoutRedirectURI
+        ]
         
         testUtils = UITestUtils(app)
 
@@ -49,8 +56,9 @@ class OktaUITests: XCTestCase {
         testUtils.login(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
-        if !testUtils.waitForElement(app.textViews["tokenView"], timeout: 5) {
+        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
             XCTFail("Unable to redirect back from browser")
+            return
         }
     }
 
@@ -104,7 +112,7 @@ class OktaUITests: XCTestCase {
         loginAndWait()
         
         // Sign Out from Okta
-        app.buttons["Sign out from Okta"].tap()
+        app.buttons["SignOutOkta"].tap()
 
         // Wait for browser to load
         sleep(5)
@@ -121,7 +129,7 @@ class OktaUITests: XCTestCase {
         XCTAssertFalse(tokenValues?.isEmpty ?? false)
         
         // Sign Out Locally
-        app.buttons["Sign out Locally"].tap()
+        app.buttons["SignOutLocal"].tap()
 
         tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(tokenValues?.isEmpty ?? true)
