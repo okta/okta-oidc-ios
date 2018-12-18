@@ -81,28 +81,6 @@ class Tests: XCTestCase {
         let scopes = "profile email"
         XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
-
-    func testPasswordFailureFlow() {
-        // Validate the username & password flow fails without clientSecret
-        _ = Utils.getPlistConfiguration(forResourceName: "Okta-PasswordFlow")
-
-        let pwdExpectation = expectation(description: "Will error attempting username/password auth")
-
-        OktaAuth.login("user@example.com", password: "password")
-        .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
-        .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: invalid_client: The client secret supplied for a confidential client is invalid."
-            )
-            pwdExpectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: { error in
-            // Fail on timeout
-            if error != nil { XCTFail(error!.localizedDescription) }
-       })
-    }
     
     func testSignOutFromOktaFailureFlow() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally")
@@ -115,7 +93,7 @@ class Tests: XCTestCase {
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
-                OktaError.MissingIdToken.localizedDescription
+                OktaError.missingIdToken.localizedDescription
             )
             signOutExpectation.fulfill()
         }
@@ -137,7 +115,7 @@ class Tests: XCTestCase {
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
-                OktaError.NoTokens.localizedDescription
+                OktaError.noTokens.localizedDescription
             )
             signOutExpectation.fulfill()
         }
@@ -181,7 +159,6 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-        
         let pwdExpectation = expectation(description: "Will error attempting revoke token")
         
         Revoke(token: nil).revoke()
@@ -191,7 +168,7 @@ class Tests: XCTestCase {
         }
         .catch { error in
             pwdExpectation.fulfill()
-            XCTAssertEqual(error.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+            XCTAssertEqual(error.localizedDescription, OktaError.noBearerToken.localizedDescription)
         }
         
         waitForExpectations(timeout: 5, handler: { error in
@@ -336,39 +313,7 @@ class Tests: XCTestCase {
 
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.NoTokens.localizedDescription)
-            refreshExpectation.fulfill()
-        }
-
-        waitForIt()
-    }
-
-    func testRefreshTokenFailureInvalidToken() {
-        // Expect that a fake refresh token stored will result in an error
-        let setupTokenManagerExpectation = expectation(description: "Will return tokens without errors")
-
-        OktaAuth.configuration = [
-                  "issuer": TestUtils.mockIssuer,
-                "clientId": TestUtils.mockClientId,
-            "clientSecret": TestUtils.mockClientSecret,
-             "redirectUri": TestUtils.mockRedirectUri
-        ]
-
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            OktaAuth.tokens = tokenManager
-            setupTokenManagerExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
-
-        OktaAuth.refresh()
-        .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: invalid_client: Client authentication failed. Either the client or the client credentials are invalid."
-            )
+            XCTAssertEqual(error.localizedDescription, OktaError.noTokens.localizedDescription)
             refreshExpectation.fulfill()
         }
 
@@ -384,7 +329,6 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                tokenManager.validationOptions["exp"] = true
                 OktaAuth.tokens = tokenManager
                 isAuthExpectation.fulfill()
             }
@@ -416,7 +360,7 @@ class Tests: XCTestCase {
     }
 
     func assertAuthenticationState(_ tm: OktaTokenManager) {
-        guard let prevState = TestUtils.getPreviousState() else {
+        guard let prevState = OktaAuthStateStorage.getStoredState() else {
             return XCTFail("Previous authentication state does not exist")
         }
 

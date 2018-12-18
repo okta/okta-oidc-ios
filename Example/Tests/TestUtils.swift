@@ -6,9 +6,10 @@
 //  Copyright © 2018 Okta. All rights reserved.
 //
 
-import AppAuth
-@testable import OktaAuth
+import OktaAppAuth
 import Hydra
+
+@testable import OktaAuth
 
 struct TestUtils {
     static let mockIssuer = "https://demo-org.oktapreview.com/oauth2/default"
@@ -96,17 +97,5 @@ struct TestUtils {
                 return reject(error)
             }
         })
-    }
-
-    static func getPreviousState() -> OktaTokenManager? {
-        // Return the previous archived state
-        guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
-            return nil
-        }
-        guard let previousState = NSKeyedUnarchiver
-            .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
-                return nil
-        }
-        return previousState
     }
 }

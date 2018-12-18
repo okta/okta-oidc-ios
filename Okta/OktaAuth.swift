@@ -66,7 +66,7 @@ public struct OktaAuthorization {
             guard let issuer = config["issuer"],
                 let logoutRedirectUriString = config["logoutRedirectUri"],
                 let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
-                    return reject(OktaError.MissingConfigurationValues)
+                    return reject(OktaError.missingConfigurationValues)
             }
             
             self.getMetadataConfig(URL(string: issuer))
@@ -88,7 +88,7 @@ public struct OktaAuthorization {
                         if let responseError = responseError {
                             return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
                         }
-                        return resolve()
+                        return resolve(())
                     }
                 }
                 .catch { error in return reject(error) }

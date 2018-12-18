@@ -10,24 +10,34 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import Hydra
-import Vinculum
-
 internal struct OktaAuthStateStorage {
     static let storageKey = "OktaAuthStateTokenManager"
     
     static func store(_ tokenManager: OktaTokenManager) {
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
         do {
-            try Vinculum.set(key: self.storageKey, value: authStateData, accessibility: tokenManager.accessibility)
+            try OktaKeychain.set(key: self.storageKey, data: authStateData, accessibility: tokenManager.accessibility)
         } catch let error {
             print("Error: \(error)")
         }
     }
     
+    static func getStoredState() -> OktaTokenManager? {
+        guard let encodedAuthState: Data = try? OktaKeychain.get(key: self.storageKey) else {
+            return nil
+        }
+    
+        guard let storedState = NSKeyedUnarchiver
+              .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
+            return nil
+        }
+        
+        return storedState
+    }
+    
     static func clear() {
         do {
-            try Vinculum.remove(self.storageKey)
+            try OktaKeychain.remove(key: self.storageKey)
         } catch let error {
             print("Error: \(error)")
         }

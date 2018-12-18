@@ -23,11 +23,11 @@ public struct Revoke {
         return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
             // Revoke the token
             guard let revokeEndpoint = self.getRevokeEndpoint() else {
-                return reject(OktaError.NoRevocationEndpoint)
+                return reject(OktaError.noRevocationEndpoint)
             }
             
             guard let token = self.token else {
-                return reject(OktaError.NoBearerToken)
+                return reject(OktaError.noBearerToken)
             }
 
             let headers = [

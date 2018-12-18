@@ -24,58 +24,33 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="UQ8-c7-4jx">
                                 <rect key="frame" x="16" y="28" width="343" height="565"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="201"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="arr-ir-cyv">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="166"/>
-                                                <subviews>
-                                                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="w7b-5e-G99">
-                                                        <rect key="frame" x="0.0" y="0.0" width="343" height="67.5"/>
-                                                    </imageView>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="2zY-Xb-bsx">
-                                                        <rect key="frame" x="0.0" y="72.5" width="343" height="93.5"/>
-                                                        <subviews>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
-                                                                <rect key="frame" x="0.0" y="0.0" width="343" height="44.5"/>
-                                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <accessibility key="accessibilityConfiguration" hint="Login" identifier="Login" label="Login"/>
-                                                                <state key="normal" title="Login by Redirect">
-                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                </state>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                        <integer key="value" value="10"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                                <connections>
-                                                                    <action selector="loginButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z7Q-oY-hlj"/>
-                                                                </connections>
-                                                            </button>
-                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2JZ-Po-D82">
-                                                                <rect key="frame" x="0.0" y="49.5" width="343" height="44"/>
-                                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                <state key="normal" title="Login with Password">
-                                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                </state>
-                                                                <userDefinedRuntimeAttributes>
-                                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                                        <integer key="value" value="10"/>
-                                                                    </userDefinedRuntimeAttribute>
-                                                                </userDefinedRuntimeAttributes>
-                                                                <connections>
-                                                                    <segue destination="S5q-Wq-xQo" kind="presentation" id="e2m-xG-3Ta"/>
-                                                                </connections>
-                                                            </button>
-                                                        </subviews>
-                                                    </stackView>
-                                                </subviews>
-                                            </stackView>
+                                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="w7b-5e-G99">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="83"/>
+                                            </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
+                                                <rect key="frame" x="0.0" y="85" width="343" height="52"/>
+                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <accessibility key="accessibilityConfiguration" hint="Login" identifier="Login" label="Login"/>
+                                                <state key="normal" title="Login by Redirect">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="loginButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z7Q-oY-hlj"/>
+                                                </connections>
+                                            </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hZp-HF-Wta">
-                                                <rect key="frame" x="0.0" y="168" width="343" height="33"/>
+                                                <rect key="frame" x="0.0" y="139" width="343" height="62"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eoU-d4-kH8">
-                                                        <rect key="frame" x="0.0" y="2" width="111" height="29"/>
+                                                        <rect key="frame" x="0.0" y="2" width="111" height="58"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="GetUser" label="GetUser"/>
                                                         <state key="normal" title="Get User">
@@ -91,7 +66,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZEw-Bb-nHa">
-                                                        <rect key="frame" x="116" y="2" width="111" height="29"/>
+                                                        <rect key="frame" x="116" y="2" width="111" height="58"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="Introspect" label="Introspect"/>
                                                         <state key="normal" title="Introspect">
@@ -107,7 +82,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miL-dv-t6m">
-                                                        <rect key="frame" x="232" y="2" width="111" height="29"/>
+                                                        <rect key="frame" x="232" y="2" width="111" height="58"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <state key="normal" title="Revoke">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -129,9 +104,6 @@
                                                 </constraints>
                                             </stackView>
                                         </subviews>
-                                        <constraints>
-                                            <constraint firstItem="hZp-HF-Wta" firstAttribute="top" secondItem="1UI-fm-Y5s" secondAttribute="top" constant="168" id="qQt-qC-Mpn"/>
-                                        </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YO7-Wr-HVG">
                                         <rect key="frame" x="0.0" y="201" width="343" height="364"/>
@@ -140,6 +112,9 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="259"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="tokenView"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="259" id="bb4-0J-JsF"/>
+                                                </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
@@ -198,7 +173,7 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="UQ8-c7-4jx" secondAttribute="bottom" constant="74" id="2Ux-EI-iBR"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UQ8-c7-4jx" secondAttribute="bottom" constant="74" id="2Ux-EI-iBR"/>
                             <constraint firstItem="UQ8-c7-4jx" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="ZAR-Fy-S78"/>
                             <constraint firstItem="UQ8-c7-4jx" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="wJN-1E-9Nv"/>
                             <constraint firstItem="UQ8-c7-4jx" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="xyG-W3-mlR"/>
