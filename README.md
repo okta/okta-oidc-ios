@@ -14,7 +14,6 @@ This library is a **wrapper** around the [AppAuth-iOS](https://github.com/openid
 This library currently supports:
 
 - [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
-- [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749#section-1.3.3)
 
 ## Give it a Test Run
 
@@ -45,8 +44,6 @@ After you have created the application there are two more values you will need t
 These values will be used in your iOS application to setup the OpenID Connect flow with Okta.
 
 **Note:** *As with any Okta application, make sure you assign Users or Groups to the OpenID Connect Client. Otherwise, no one can use it.*
-
-> If using the [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749#section-1.3.3), make sure to select it in the **Allowed Grant Types** and select **Client authentication**.
 
 ## Installation
 
@@ -89,17 +86,6 @@ In order to redirect back to your application from a web browser, you must speci
 
 For example, if your **Redirect URI** is `com.okta.example:/callback`, the **URL Scheme** will be `com.okta.example`.
 
-### Resource Owner Password
-
-If using the [Resource Owner Password Grant](https://tools.ietf.org/html/rfc6749#section-1.3.3), you must specify the `clientSecret` in `Okta.plist`:
-
-```xml
-<key>clientSecret</key>
-<string>{clientSecret}</string>
-```
-
-**IMPORTANT**: *It is strongly discouraged to store a `clientSecret` on a distributed app. Please refer to [OAuth 2.0 for Native Apps](https://tools.ietf.org/html/draft-ietf-oauth-native-apps-12#section-8.5) for more information.*
-
 ## Authorization
 
 First, update your `AppDelegate` to include the following function to allow the redirect to occur:
@@ -117,20 +103,6 @@ Then, you can start the authorization flow by simply calling `login`:
 
 ```swift
 OktaAuth.login().start(view: self)
-.then { tokenManager in
-    // tokenManager.accessToken
-    // tokenManager.idToken
-    // tokenManager.refreshToken
-}
-.catch { error in
-    // Error
-}
-```
-
-To login using `username` and `password`:
-
-```swift
-OktaAuth.login(username: "user@example.com", password: "password").start(view: self)
 .then { tokenManager in
     // tokenManager.accessToken
     // tokenManager.idToken

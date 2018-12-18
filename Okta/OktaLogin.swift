@@ -13,22 +13,7 @@ import Hydra
 
 public struct Login {
 
-    var username, password: String?
-    var passwordFlow = false
-
-    init(forUsername username: String, forPassword password: String){
-        // Login via Username/Password
-        self.username = username
-        self.password = password
-        self.passwordFlow = true
-    }
-
-    init(){
-        // Login via Authoriation Code Flow
-        self.username = nil
-        self.password = nil
-        self.passwordFlow = false
-    }
+    init(){}
 
     public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<OktaTokenManager> {
         OktaAuth.configuration = dict
@@ -41,33 +26,11 @@ public struct Login {
                 return reject(OktaError.noPListGiven)
             }
 
-            if !self.passwordFlow {
-                // Get client configuration from Okta.plist
-                if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                    OktaAuthorization().authCodeFlow(config, view)
-                    .then { response in return resolve(response) }
-                    .catch { error in return reject(error) }
-                }
-            }
-
-            if self.passwordFlow {
-                // Get client configuratin from Okta.plist
-                if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                    // Verify the ClientSecret was included
-                    if config["clientSecret"] == "" {
-                        reject(OktaError.noClientSecret(plist))
-                    }
-
-                    guard let username = self.username, let password = self.password else {
-                        return reject(OktaError.noUserCredentials)
-                    }
-
-                    let credentials = ["username": username, "password": password]
-
-                    OktaAuthorization().passwordFlow(config, credentials: credentials, view)
-                    .then { response in return resolve(response) }
-                    .catch { error in return reject(error) }
-                }
+            // Get client configuration from Okta.plist
+            if let config = Utils.getPlistConfiguration(forResourceName: plist) {
+                OktaAuthorization().authCodeFlow(config, view)
+                .then { response in return resolve(response) }
+                .catch { error in return reject(error) }
             }
         })
     }

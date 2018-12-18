@@ -28,11 +28,6 @@ public var wellKnown: [String: Any]?
 // Token manager
 public var tokens: OktaTokenManager?
 
-public func login(_ username: String, password: String) -> Login {
-    // Authenticate via Resource Owner Password Grant
-    return Login(forUsername: username, forPassword: password)
-}
-
 public func login() -> Login {
     // Authenticate via authorization code flow
     return Login()
