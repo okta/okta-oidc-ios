@@ -66,9 +66,15 @@ class ViewController: UIViewController {
     }
 
     func loginCodeFlow() {
-        OktaAuth.login().start(self)
-        .then { _ in self.buildTokenTextView() }
-        .catch { error in print(error) }
+        if ProcessInfo.processInfo.environment["UITEST"] == "1" {
+            let config = ["issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
+                          "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
+                          "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
+                          "scopes": "openid profile offline_access"]
+            OktaAuth.login().start(withDictConfig: config, view: self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+        } else {
+            OktaAuth.login().start(self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+        }
     }
 
     func updateUI(updateText: String) {

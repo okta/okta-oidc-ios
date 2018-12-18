@@ -15,12 +15,12 @@ internal struct UserInfo {
     init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
         // Revoke the token
         guard let userInfoEndpoint = getUserInfoEndpoint() else {
-            callback(nil, .NoUserInfoEndpoint)
+            callback(nil, .noUserInfoEndpoint)
             return
         }
 
         guard let token = token else {
-            callback(nil, .NoBearerToken)
+            callback(nil, .noBearerToken)
             return
         }
 

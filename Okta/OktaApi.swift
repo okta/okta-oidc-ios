@@ -43,7 +43,7 @@ internal class OktaApi: NSObject {
         request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
         request.addValue(
             "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(Utils.deviceModel())",
-            forHTTPHeaderField: "X-Okta-User-Agent-Extended"
+            forHTTPHeaderField: "User-Agent"
         )
 
         if let data = body {

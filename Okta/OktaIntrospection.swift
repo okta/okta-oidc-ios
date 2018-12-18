@@ -10,7 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 import Hydra
-import OktaJWT
 
 public struct Introspect {
 
@@ -20,7 +19,7 @@ public struct Introspect {
         // Validate token
         return Promise<Bool>(in: .background, { resolve, reject, _ in
             guard let introspectionEndpoint = self.getIntrospectionEndpoint() else {
-                return reject(OktaError.NoIntrospectionEndpoint)
+                return reject(OktaError.noIntrospectionEndpoint)
             }
 
             let headers = [
@@ -39,11 +38,11 @@ public struct Introspect {
             OktaApi.post(introspectionEndpoint, headers: headers, postString: data)
             .then { response in
                 guard let isActive = response?["active"] as? Bool else {
-                    return reject(OktaError.ParseFailure)
+                    return reject(OktaError.parseFailure)
                 }
                 return resolve(isActive)
             }
-            .catch { error in reject(OktaError.NoIntrospectionEndpoint) }
+            .catch { error in reject(OktaError.noIntrospectionEndpoint) }
         })
     }
 
@@ -63,18 +62,6 @@ public struct Introspect {
             }
             return reject(OktaError.JWTDecodeError)
         })
-    }
-
-    public func validate(jwt: String, options: [String: Any]) throws -> Bool {
-        // Validates a JWT String based on a series of options
-        let validator = OktaJWTValidator(options)
-
-        do {
-            let isValid = try validator.isValid(jwt)
-            return isValid
-        } catch let error {
-            throw OktaError.JWTValidationError(error.localizedDescription)
-        }
     }
 
     func getIntrospectionEndpoint() -> URL? {

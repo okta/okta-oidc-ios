@@ -2,7 +2,6 @@ import UIKit
 import XCTest
 @testable import OktaAuth
 import AppAuth
-import Vinculum
 
 class Tests: XCTestCase {
     let TOKEN_EXPIRATION_WAIT: UInt32 = 5
@@ -83,28 +82,6 @@ class Tests: XCTestCase {
         XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
 
-    func testPasswordFailureFlow() {
-        // Validate the username & password flow fails without clientSecret
-        _ = Utils.getPlistConfiguration(forResourceName: "Okta-PasswordFlow")
-
-        let pwdExpectation = expectation(description: "Will error attempting username/password auth")
-
-        OktaAuth.login("user@example.com", password: "password")
-        .start(withPListConfig: "Okta-PasswordFlow", view: UIViewController())
-        .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-            )
-            pwdExpectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 5, handler: { error in
-            // Fail on timeout
-            if error != nil { XCTFail(error!.localizedDescription) }
-       })
-    }
-
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
         OktaAuth.configuration = [
@@ -129,7 +106,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = UserInfo(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
         }
     }
 
@@ -139,7 +116,7 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = Revoke(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.NoBearerToken.localizedDescription)
+            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
         }
     }
 
@@ -209,8 +186,6 @@ class Tests: XCTestCase {
 
         waitForIt(10)
 
-        OktaAuth.tokens?.validationOptions["exp"] = true
-
         // Wait for tokens to expire and update validation options to check for expiration
         sleep(TOKEN_EXPIRATION_WAIT)
 
@@ -234,9 +209,9 @@ class Tests: XCTestCase {
         // Clear the authState
         OktaAuth.tokens?.clear()
 
-        XCTAssertThrowsError(try Vinculum.get("OktaAuthStateTokenManager")) { error in
+        XCTAssertThrowsError(try OktaKeychain.get(key: "OktaAuthStateTokenManager") as Data) { error in
             // Expect "Not found" exception
-            XCTAssertEqual(error.localizedDescription, "Error retrieving from Keychain: -25300")
+            XCTAssertEqual(error.localizedDescription, "The operation couldn’t be completed. (OktaAuth.OktaKeychainError error 0.)")
         }
     }
 
@@ -281,7 +256,7 @@ class Tests: XCTestCase {
 
         OktaAuth.refresh()
         .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.NoTokens.localizedDescription)
+            XCTAssertEqual(error.localizedDescription, OktaError.noTokens.localizedDescription)
             refreshExpectation.fulfill()
         }
 
@@ -289,36 +264,7 @@ class Tests: XCTestCase {
     }
 
     func testRefreshTokenFailureInvalidToken() {
-        // Expect that a fake refresh token stored will result in an error
-        let setupTokenManagerExpectation = expectation(description: "Will return tokens without errors")
-
-        OktaAuth.configuration = [
-                  "issuer": TestUtils.mockIssuer,
-                "clientId": TestUtils.mockClientId,
-            "clientSecret": TestUtils.mockClientSecret,
-             "redirectUri": TestUtils.mockRedirectUri
-        ]
-
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            OktaAuthorization().storeAuthState(tokenManager)
-            setupTokenManagerExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
-
-        let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
-        OktaAuth.refresh()
-        .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                "Authorization Error: The operation couldn’t be completed. (org.openid.appauth.general error -6.)"
-            )
-            refreshExpectation.fulfill()
-        }
-
-        waitForIt()
+        // TODO: Look into a better way to mock out responses from the AppAuth lib
     }
 
     func testResumeAuthenticationStateFromExpiredState() {
@@ -326,7 +272,6 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                tokenManager.validationOptions["exp"] = true
                 OktaAuthorization().storeAuthState(tokenManager)
                 isAuthExpectation.fulfill()
             }
@@ -354,7 +299,6 @@ class Tests: XCTestCase {
 
     func assertTokenManagerContents(_ tm: OktaTokenManager) {
         XCTAssertEqual(tm.accessToken, TestUtils.mockAccessToken)
-        XCTAssertEqual(tm.idToken, TestUtils.mockIdToken)
         XCTAssertEqual(tm.refreshToken, TestUtils.mockRefreshToken)
     }
 
@@ -368,6 +312,5 @@ class Tests: XCTestCase {
         XCTAssertEqual(prevState.config, tm.config)
         XCTAssertEqual(prevState.idToken, tm.idToken)
         XCTAssertEqual(prevState.refreshToken, tm.refreshToken)
-        XCTAssertEqual(prevState.validationOptions as NSObject, tm.validationOptions as NSObject)
     }
 }

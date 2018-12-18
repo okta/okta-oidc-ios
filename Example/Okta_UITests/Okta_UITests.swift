@@ -17,16 +17,23 @@ class OktaUITests: XCTestCase {
     // Update these values along with your Plist config
     var username = ProcessInfo.processInfo.environment["USERNAME"]!
     var password = ProcessInfo.processInfo.environment["PASSWORD"]!
+    var issuer = ProcessInfo.processInfo.environment["ISSUER"]!
+    var redirectURI = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
+    var clientID = ProcessInfo.processInfo.environment["CLIENT_ID"]!
 
     var testUtils: UITestUtils?
-    let app = XCUIApplication()
+    var app: XCUIApplication!
 
     override func setUp() {
         super.setUp()
+        
+        app = XCUIApplication()
+        app.launchEnvironment = ["UITEST": "1", "ISSUER": issuer, "CLIENT_ID": clientID, "REDIRECT_URI": redirectURI]
+        
         testUtils = UITestUtils(app)
 
         continueAfterFailure = true
-        XCUIApplication().launch()
+        app.launch()
     }
 
     override func tearDown() {

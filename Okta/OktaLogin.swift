@@ -38,7 +38,7 @@ public struct Login {
     public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             guard let plist = plistName else {
-                return reject(OktaError.NoPListGiven)
+                return reject(OktaError.noPListGiven)
             }
 
             if !self.passwordFlow {
@@ -55,11 +55,11 @@ public struct Login {
                 if let config = Utils.getPlistConfiguration(forResourceName: plist) {
                     // Verify the ClientSecret was included
                     if config["clientSecret"] == "" {
-                        reject(OktaError.NoClientSecret(plist))
+                        reject(OktaError.noClientSecret(plist))
                     }
 
                     guard let username = self.username, let password = self.password else {
-                        return reject(OktaError.NoUserCredentials)
+                        return reject(OktaError.noUserCredentials)
                     }
 
                     let credentials = ["username": username, "password": password]

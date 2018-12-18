@@ -7,8 +7,7 @@
 //
 
 import AppAuth
-import OktaAuth
-import Vinculum
+@testable import OktaAuth
 import Hydra
 
 struct TestUtils {
@@ -30,12 +29,12 @@ struct TestUtils {
         "pu1WrZzuBHoQXuDkuYH6xKbKU2bopZGnA8PwrsIbr6PmmTaeH5ww0Q"
     static let mockRefreshToken = "mockRefreshToken"
 
-    static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: nil)
-    static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer])
-    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, options: ["issuer": mockIssuer], expiresIn: 5)
+    static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer)
+    static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer)
+    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5)
 
 
-    static func setupMockTokenManager(issuer: String, options: [String: Any]?, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
+    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
@@ -52,19 +51,34 @@ struct TestUtils {
             additionalParameters: nil
         )
 
+        let mockAuthRequest = OIDAuthorizationRequest(
+                   configuration: mockServiceConfig,
+                        clientId: mockClientId,
+                    clientSecret: nil,
+                          scopes: ["openid", "email"],
+                     redirectURL: fooURL,
+                    responseType: OIDResponseTypeCode,
+            additionalParameters: nil
+        )
+
+        let mockAuthResponse = OIDAuthorizationResponse(
+               request: mockAuthRequest,
+            parameters: ["code": "mockAuthCode" as NSCopying & NSObjectProtocol]
+        )
+
         let mockTokenResponse = OIDTokenResponse(
             request: mockTokenRequest,
             parameters: [
-                 "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
-                   "expires_in": expiresIn as NSCopying & NSObjectProtocol,
-                   "token_type": "Bearer" as NSCopying & NSObjectProtocol,
-                     "id_token": mockIdToken as NSCopying & NSObjectProtocol,
+                "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
+                "expires_in": expiresIn as NSCopying & NSObjectProtocol,
+                "token_type": "Bearer" as NSCopying & NSObjectProtocol,
+                "id_token": mockIdToken as NSCopying & NSObjectProtocol,
                 "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
-                        "scope": mockScopes as NSCopying & NSObjectProtocol
+                "scope": mockScopes as NSCopying & NSObjectProtocol
             ]
         )
 
-        let tempAuthState = OIDAuthState(authorizationResponse: nil, tokenResponse: mockTokenResponse, registrationResponse: nil)
+        let tempAuthState = OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
 
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             do {
@@ -75,8 +89,7 @@ struct TestUtils {
                         "clientId": mockClientId,
                         "clientSecret": mockClientSecret,
                         "redirectUri": mockRedirectUri
-                    ],
-                    validationOptions: options
+                    ]
                 )
                 return resolve(tm)
             } catch let error {
@@ -87,12 +100,11 @@ struct TestUtils {
 
     static func getPreviousState() -> OktaTokenManager? {
         // Return the previous archived state
-        guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
-            let encodedAuthState = encodedAuthStateItem else {
-                return nil
+        guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
+            return nil
         }
         guard let previousState = NSKeyedUnarchiver
-            .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else {
+            .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
                 return nil
         }
         return previousState
