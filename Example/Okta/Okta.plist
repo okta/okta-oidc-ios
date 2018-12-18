@@ -11,6 +11,6 @@
 	<key>issuer</key>
 	<string>https://{yourOktaDomain}/oauth2/default</string>
 	<key>logoutRedirectUri</key>
-	<string>com.okta.example:/logout</string>
+	<string>{scheme}:/logout</string>
 </dict>
 </plist>

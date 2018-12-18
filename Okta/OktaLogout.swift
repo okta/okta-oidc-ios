@@ -21,11 +21,11 @@ public struct Logout {
     public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let idToken = self.idToken else {
-                return reject(OktaError.MissingIdToken)
+                return reject(OktaError.missingIdToken)
             }
             
             OktaAuthorization().logout(dict, idToken: idToken, view: view)
-                .then { _ in return resolve() }
+                .then { _ in return resolve(()) }
                 .catch { error in return reject(error) }
         })
     }
@@ -34,11 +34,11 @@ public struct Logout {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let plist = plistName,
                 let config = Utils.getPlistConfiguration(forResourceName: plist) else {
-                    return reject(OktaError.NoPListGiven)
+                    return reject(OktaError.noPListGiven)
             }
             
             self.start(withDictConfig: config, view: view)
-            .then { _ in return resolve() }
+            .then { _ in return resolve(()) }
             .catch { error in return reject(error) }
         })
     }

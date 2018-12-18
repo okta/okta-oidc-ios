@@ -54,7 +54,7 @@ public func signOutFromOkta() -> Logout {
 public func signOutLocally() -> Promise<Void> {
     return Promise<Void>(in: .background, { resolve, reject, _ in
         guard let accessToken = tokens?.accessToken else {
-            return reject(OktaError.NoTokens)
+            return reject(OktaError.noTokens)
         }
         
         // revoke tokens
@@ -63,14 +63,14 @@ public func signOutLocally() -> Promise<Void> {
             guard let refreshToken = tokens?.refreshToken else {
                 // clear tokens stored locally
                 tokens = nil
-                return resolve()
+                return resolve(())
             }
             
             Revoke(token: refreshToken).revoke()
             .then {_ in
                 // clear tokens stored locally
                 tokens = nil
-                return resolve()
+                return resolve(())
             }
             .catch{ error in return reject(error) }
         }
@@ -80,12 +80,9 @@ public func signOutLocally() -> Promise<Void> {
 
 public func isAuthenticated() -> Bool {
     // Restore state
-    guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
+    guard let previousState = OktaAuthStateStorage.getStoredState() else {
         return false
     }
-
-    guard let previousState = NSKeyedUnarchiver
-        .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
 
     tokens = previousState
 
