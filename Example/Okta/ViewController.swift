@@ -13,6 +13,20 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
     @IBOutlet weak var redirectLoginButton: UIButton!
+    
+    private var isUITest: Bool {
+        return ProcessInfo.processInfo.environment["UITEST"] == "1"
+    }
+    
+    private var testConfig: [String: String] {
+        return [
+            "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
+            "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
+            "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
+            "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
+            "scopes": "openid profile offline_access"
+        ]
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,21 +89,27 @@ class ViewController: UIViewController {
     }
 
     func loginCodeFlow() {
-        if ProcessInfo.processInfo.environment["UITEST"] == "1" {
-            let config = ["issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
-                          "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
-                          "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
-                          "scopes": "openid profile offline_access"]
-            OktaAuth.login().start(withDictConfig: config, view: self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+        if self.isUITest {
+            OktaAuth.login().start(withDictConfig: testConfig, view: self)
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in print(error) }
         } else {
-            OktaAuth.login().start(self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+            OktaAuth.login().start(self)
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in print(error) }
         }
     }
     
     func signoutFromOkta() {
-        OktaAuth.signOutFromOkta().start(self)
-        .then { self.buildTokenTextView() }
-        .catch { error in print(error) }
+        if self.isUITest {
+            OktaAuth.signOutFromOkta().start(withDictConfig: testConfig, view: self)
+                .then { _ in self.buildTokenTextView() }
+                .catch { error in print(error) }
+        } else {
+            OktaAuth.signOutFromOkta().start(self)
+                .then { self.buildTokenTextView() }
+                .catch { error in print(error) }
+        }
     }
     
     func signoutLocally() {
