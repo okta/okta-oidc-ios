@@ -48,11 +48,14 @@ public func isAuthenticated() -> Bool {
         .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
 
     tokens = previousState
-
-    if tokens?.accessToken != nil {
-        return true
+    
+    guard let _ = tokens?.accessToken,
+          let tokenExp = tokens?.accessTokenExpirationDate,
+          tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
+        return false
     }
-    return false
+
+    return true
 }
 
 public func introspect() -> Introspect {

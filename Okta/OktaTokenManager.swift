@@ -21,14 +21,12 @@ open class OktaTokenManager: NSObject, NSCoding {
     open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
         get {
-            guard let tokenResponse = self.authState.lastTokenResponse,
-                  let token = tokenResponse.accessToken,
-                  let tokenExp = tokenResponse.accessTokenExpirationDate,
-                  tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
-                    return nil
-            }
-            return token
+            return self.authState.lastTokenResponse?.accessToken
         }
+    }
+    
+    open var accessTokenExpirationDate: Date? {
+        return self.authState.lastTokenResponse?.accessTokenExpirationDate
     }
 
     open var idToken: String? {
