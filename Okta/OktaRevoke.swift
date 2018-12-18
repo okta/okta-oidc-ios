@@ -15,12 +15,12 @@ public struct Revoke {
     init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
         // Revoke the token
         guard let revokeEndpoint = getRevokeEndpoint() else {
-            callback(nil, .NoRevocationEndpoint)
+            callback(nil, .noRevocationEndpoint)
             return
         }
         
         guard let token = token else {
-            callback(nil, .NoBearerToken)
+            callback(nil, .noBearerToken)
             return
         }
 

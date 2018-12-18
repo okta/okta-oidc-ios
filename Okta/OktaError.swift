@@ -12,21 +12,21 @@
 
 public enum OktaError: Error {
     case APIError(String)
-    case ErrorFetchingFreshTokens(String)
+    case errorFetchingFreshTokens(String)
     case JWTDecodeError
     case JWTValidationError(String)
-    case MissingConfigurationValues
-    case NoBearerToken
-    case NoClientSecret(String)
-    case NoDiscoveryEndpoint
-    case NoIntrospectionEndpoint
-    case NoPListGiven
-    case NoRefreshToken
-    case NoRevocationEndpoint
-    case NoTokens
-    case NoUserCredentials
-    case NoUserInfoEndpoint
-    case ParseFailure
+    case missingConfigurationValues
+    case noBearerToken
+    case noClientSecret(String)
+    case noDiscoveryEndpoint
+    case noIntrospectionEndpoint
+    case noPListGiven
+    case noRefreshToken
+    case noRevocationEndpoint
+    case noTokens
+    case noUserCredentials
+    case noUserInfoEndpoint
+    case parseFailure
 }
 
 extension OktaError: LocalizedError {
@@ -34,39 +34,39 @@ extension OktaError: LocalizedError {
         switch self {
         case .APIError(error: let error):
             return NSLocalizedString(error, comment: "")
-        case .ErrorFetchingFreshTokens(error: let error):
+        case .errorFetchingFreshTokens(error: let error):
             return NSLocalizedString("Error fetching fresh tokens: \(error)", comment: "")
         case .JWTDecodeError:
             return NSLocalizedString("Could not parse the given JWT string payload.", comment: "")
         case .JWTValidationError(error: let error):
             return NSLocalizedString("Could not validate the JWT: \(error)", comment: "")
-        case .MissingConfigurationValues:
+        case .missingConfigurationValues:
             return NSLocalizedString("Could not parse 'issuer', 'clientId', and/or 'redirectUri' plist values. " +
                 "See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
-        case .NoBearerToken:
+        case .noBearerToken:
             return NSLocalizedString("Missing Bearer token. You must authenticate first.", comment: "")
-        case .NoClientSecret(plist: let plist):
+        case .noClientSecret(plist: let plist):
             return NSLocalizedString(
                 "ClientSecret not included in PList configuration file: " +
                     "\(plist). See https://github.com/okta/okta-sdk-appauth-ios/#configuration " +
                 "for more information.", comment: "")
-        case .NoDiscoveryEndpoint:
+        case .noDiscoveryEndpoint:
             return NSLocalizedString("Error finding the well-known OpenID Configuration endpoint.", comment: "")
-        case .NoIntrospectionEndpoint:
+        case .noIntrospectionEndpoint:
             return NSLocalizedString("Error finding the introspection endpoint.", comment: "")
-        case .NoPListGiven:
+        case .noPListGiven:
             return NSLocalizedString("PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
-        case .NoRefreshToken:
+        case .noRefreshToken:
             return NSLocalizedString("No refresh token stored. Make sure the 'offline_access' scope is included in your PList.", comment: "")
-        case .NoRevocationEndpoint:
+        case .noRevocationEndpoint:
             return NSLocalizedString("Error finding the revocation endpoint.", comment: "")
-        case .NoTokens:
+        case .noTokens:
             return NSLocalizedString("No tokens stored in the token manager.", comment: "")
-        case .NoUserCredentials:
+        case .noUserCredentials:
             return NSLocalizedString("User credentials not included.", comment: "")
-        case .NoUserInfoEndpoint:
+        case .noUserInfoEndpoint:
             return NSLocalizedString("Error finding the user info endpoint.", comment: "")
-        case .ParseFailure:
+        case .parseFailure:
             return NSLocalizedString("Failed to parse and/or convert object.", comment: "")
         }
     }

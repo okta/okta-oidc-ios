@@ -12,13 +12,12 @@
 
 import AppAuth
 import Hydra
-import Vinculum
 
 // Current version of the SDK
 let VERSION = "1.0.0"
 
 // Holds the browser session
-public var currentAuthorizationFlow: OIDAuthorizationFlowSession?
+public var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
 // Cache Okta.plist for reference
 public var configuration: [String: Any]?
@@ -41,13 +40,12 @@ public func login() -> Login {
 
 public func isAuthenticated() -> Bool {
     // Restore state
-    guard let encodedAuthStateItem = try? Vinculum.get("OktaAuthStateTokenManager"),
-        let encodedAuthState = encodedAuthStateItem else {
+    guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
         return false
     }
 
     guard let previousState = NSKeyedUnarchiver
-        .unarchiveObject(with: encodedAuthState.value) as? OktaTokenManager else { return false }
+        .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
 
     tokens = previousState
 
@@ -82,8 +80,8 @@ public func clear() {
     tokens?.clear()
 }
 
-public func resume(_ url: URL, options: [UIApplicationOpenURLOptionsKey : Any]) -> Bool {
-    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeAuthorizationFlow(with: url){
+public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: url){
         currentAuthorizationFlow = nil
         return true
     }

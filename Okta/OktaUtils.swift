@@ -78,9 +78,6 @@ open class Utils: NSObject {
         configCopy.removeValue(forKey: "redirectUri")
         configCopy.removeValue(forKey: "scopes")
 
-        // Add nonce to additional params
-        configCopy["nonce"] = configCopy["nonce"] != nil ? configCopy["nonce"] : UUID().uuidString
-
         return configCopy
     }
 }

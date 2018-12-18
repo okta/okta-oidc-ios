@@ -11,7 +11,6 @@
  */
 import AppAuth
 import Hydra
-import Vinculum
 
 public struct OktaAuthorization {
 
@@ -20,7 +19,7 @@ public struct OktaAuthorization {
             // Discover Endpoints
             guard let issuer = config["issuer"], let clientId = config["clientId"],
                 let redirectUri = config["redirectUri"] else {
-                    return reject(OktaError.MissingConfigurationValues)
+                    return reject(OktaError.missingConfigurationValues)
             }
 
             self.getMetadataConfig(URL(string: issuer))
@@ -43,7 +42,7 @@ public struct OktaAuthorization {
                         return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     }
                     do {
-                        let tokenManager = try OktaTokenManager(authState: authResponse, config: config, validationOptions: nil)
+                        let tokenManager = try OktaTokenManager(authState: authResponse, config: config)
 
                         // Set the local cache and write to storage
                         self.storeAuthState(tokenManager)
@@ -73,7 +72,7 @@ public struct OktaAuthorization {
                 let clientId = config["clientId"],
                 let clientSecret = config["clientSecret"],
                 let redirectUri = config["redirectUri"] else {
-                    return reject(OktaError.MissingConfigurationValues)
+                    return reject(OktaError.missingConfigurationValues)
             }
 
             self.getMetadataConfig(URL(string: issuer))
@@ -114,7 +113,7 @@ public struct OktaAuthorization {
                         )
 
                         do {
-                            let tokenManager = try OktaTokenManager(authState: authState, config: config, validationOptions: nil)
+                            let tokenManager = try OktaTokenManager(authState: authState, config: config)
 
                             // Set the local cache and write to storage
                             self.storeAuthState(tokenManager)
@@ -133,13 +132,13 @@ public struct OktaAuthorization {
         // Get the metadata from the discovery endpoint
         return Promise<OIDServiceConfiguration>(in: .background, { resolve, reject, _ in
             guard let issuer = issuer, let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
-                return reject(OktaError.NoDiscoveryEndpoint)
+                return reject(OktaError.noDiscoveryEndpoint)
             }
 
             OktaApi.get(configUrl, headers: nil)
             .then { response in
                 guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
-                    return reject(OktaError.ParseFailure)
+                    return reject(OktaError.parseFailure)
                 }
                 // Cache the well-known endpoint response
                 OktaAuth.wellKnown = dictResponse
@@ -161,7 +160,7 @@ public struct OktaAuthorization {
 
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
         do {
-            try Vinculum.set(key: "OktaAuthStateTokenManager", value: authStateData, accessibility: tokenManager.accessibility)
+            try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
         } catch let error {
             print("Error: \(error)")
         }
