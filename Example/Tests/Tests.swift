@@ -104,19 +104,15 @@ class Tests: XCTestCase {
         })
     }
     
-    func testSignOutLocallyFailureFlow() {
+    func testSignOutLocallyFlow() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
         
         OktaAuth.signOutLocally()
         .then {
-            XCTFail("Sign out should fail!")
             signOutExpectation.fulfill()
         }
         .catch { error in
-            XCTAssertEqual(
-                error.localizedDescription,
-                OktaError.noTokens.localizedDescription
-            )
+            XCTFail()
             signOutExpectation.fulfill()
         }
         
@@ -126,7 +122,7 @@ class Tests: XCTestCase {
         })
 		
 		XCTAssertNil(OktaAuth.tokens)
-		XCTAssertNil(OktaAuthStateStorage.getStoredState())
+		XCTAssertNil(TestUtils.getPreviousState())
     }
 
     func testIntrospectionEndpointURL() {
@@ -164,15 +160,10 @@ class Tests: XCTestCase {
         ]
         let pwdExpectation = expectation(description: "Will error attempting revoke token")
         
-        Revoke(token: nil).revoke()
-        .then { response in
-            pwdExpectation.fulfill()
-            XCTFail("Revoke should fail!")
-        }
-        .catch { error in
-            pwdExpectation.fulfill()
-            XCTAssertEqual(error.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        }
+		_ = Revoke(token: nil, callback: { (response, error) in
+			pwdExpectation.fulfill()
+			XCTAssertEqual(error!.localizedDescription, OktaError.noBearerToken.localizedDescription)
+		})
         
         waitForExpectations(timeout: 5, handler: { error in
             // Fail on timeout
@@ -258,7 +249,7 @@ class Tests: XCTestCase {
         let validTokensExpectation = expectation(description: "Will return tokens without errors")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            OktaAuth.tokens = tokenManager
+            OktaAuthorization().storeAuthState(tokenManager)
             validTokensExpectation.fulfill()
         }
 
@@ -280,7 +271,7 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidation
         .then { tokenManager in
-            OktaAuth.tokens = tokenManager
+            OktaAuthorization().storeAuthState(tokenManager)
             isAuthExpectation.fulfill()
         }
         .catch { error in XCTFail(error.localizedDescription) }
@@ -332,7 +323,7 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                OktaAuth.tokens = tokenManager
+                OktaAuthorization().storeAuthState(tokenManager)
                 isAuthExpectation.fulfill()
             }
             .catch { error in XCTFail(error.localizedDescription) }
@@ -343,7 +334,7 @@ class Tests: XCTestCase {
         sleep(TOKEN_EXPIRATION_WAIT)
 
         // Re-store the authState
-        OktaAuth.tokens = OktaAuth.tokens!
+        OktaAuthorization().storeAuthState(OktaAuth.tokens!)
 
         self.assertAuthenticationState(OktaAuth.tokens!)
     }
@@ -363,7 +354,7 @@ class Tests: XCTestCase {
     }
 
     func assertAuthenticationState(_ tm: OktaTokenManager) {
-        guard let prevState = OktaAuthStateStorage.getStoredState() else {
+        guard let prevState = TestUtils.getPreviousState() else {
             return XCTFail("Previous authentication state does not exist")
         }
 

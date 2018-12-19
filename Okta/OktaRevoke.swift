@@ -12,46 +12,40 @@
 import Hydra
 
 public struct Revoke {
-    
-    let token: String?
 
-    init(token: String?) {
-        self.token = token
-    }
-    
-    func revoke() -> Promise<[String: Any]?> {
-        return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
-            // Revoke the token
-            guard let revokeEndpoint = self.getRevokeEndpoint() else {
-                return reject(OktaError.noRevocationEndpoint)
-            }
-            
-            guard let token = self.token else {
-                return reject(OktaError.noBearerToken)
-            }
+	init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
+		// Revoke the token
+		guard let revokeEndpoint = getRevokeEndpoint() else {
+			callback(nil, .noRevocationEndpoint)
+			return
+		}
+		
+		guard let token = token else {
+			callback(nil, .noBearerToken)
+			return
+		}
 
-            let headers = [
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-            ]
 
-            var data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+		let headers = [
+			"Accept": "application/json",
+			"Content-Type": "application/x-www-form-urlencoded"
+		]
 
-            // Append the clientSecret if it exists
-            if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
-                let clientSecret = clientSecretObj as? String {
-                data += "&client_secret=\(clientSecret)"
-            }
 
-            OktaApi.post(revokeEndpoint, headers: headers, postString: data)
-            .then { response in
-                return resolve(response)
-            }
-            .catch { error in
-                return reject(error)
-            }
-        })
-    }
+		var data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
+
+
+		// Append the clientSecret if it exists
+		if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
+			let clientSecret = clientSecretObj as? String {
+			data += "&client_secret=\(clientSecret)"
+		}
+
+
+		OktaApi.post(revokeEndpoint, headers: headers, postString: data)
+			.then { response in callback(response, nil) }
+			.catch { error in callback(nil, error as? OktaError) }
+	}
 
     func getRevokeEndpoint() -> URL? {
         // Get the revocation endpoint from the discovery URL, or build it

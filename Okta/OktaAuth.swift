@@ -90,7 +90,9 @@ public struct OktaAuthorization {
 						return resolve(())
                     }
                 }
-                .catch { error in return reject(error) }
+                .catch { error in
+					return reject(error)
+			}
         })
     }
 
@@ -150,7 +152,7 @@ public struct OktaAuthorization {
                             let tokenManager = try OktaTokenManager(authState: authState, config: config)
 
                             // Set the local cache and write to storage
-                            OktaAuth.tokens = tokenManager
+                            self.storeAuthState(tokenManager)
                             return resolve(tokenManager)
                         } catch let error {
                             return reject(error)
@@ -185,5 +187,18 @@ public struct OktaAuthorization {
                 return reject(OktaError.APIError(responseError))
             }
         })
+    }
+
+    func storeAuthState(_ tokenManager: OktaTokenManager) {
+        // Encode and store the current auth state and
+        // cache the current tokens
+        OktaAuth.tokens = tokenManager
+
+        let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
+        do {
+            try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
+        } catch let error {
+            print("Error: \(error)")
+        }
     }
 }
