@@ -115,7 +115,7 @@ class OktaUITests: XCTestCase {
         app.buttons["SignOutOkta"].tap()
 		
         // Wait for browser to load
-        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 500.0) else {
+        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 5.0) else {
             XCTFail()
             return
         }
