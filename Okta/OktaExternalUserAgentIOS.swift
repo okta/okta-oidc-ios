@@ -49,16 +49,12 @@ class OktaExternalUserAgentIOS : NSObject, OIDExternalUserAgent {
         guard externalUserAgentFlowInProgress else {
             return
         }
-        
-        if #available(iOS 9.0, *) {
-            if let safariVC = safariViewController {
-                safariVC.dismiss(animated: true, completion: completion)
-            } else {
-                completion()
-            }
-        } else {
-            completion()
-        }
+		
+		if let safariVC = safariViewController {
+			safariVC.dismiss(animated: true, completion: completion)
+		} else {
+			completion()
+		}
         
         cleanup()
     }
