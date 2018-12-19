@@ -49,6 +49,11 @@ class OktaUITests: XCTestCase {
 
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
+        
+        guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
+            XCTFail("Cannot start the app!")
+            return
+        }
 
         app.buttons["Login"].tap()
 
