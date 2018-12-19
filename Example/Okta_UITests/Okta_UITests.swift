@@ -49,6 +49,11 @@ class OktaUITests: XCTestCase {
 
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
+        
+        // Check to see if there are tokens displayed (indicating an authenticated state)
+        if let tokens = testUtils.getTextViewValue(label: "tokenView"), tokens.contains("Access Token") {
+            return
+        }
 
         app.buttons["Login"].tap()
 
