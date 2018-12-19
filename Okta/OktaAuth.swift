@@ -70,25 +70,24 @@ public struct OktaAuthorization {
             }
             
             self.getMetadataConfig(URL(string: issuer))
-                .then { oidConfig in
-
-                    let request = OIDEndSessionRequest(
-                            configuration: oidConfig,
-                            idTokenHint: idToken,
-                            postLogoutRedirectURL: logoutRedirectURL,
-                            additionalParameters: nil
+				.then { oidConfig in
+					let request = OIDEndSessionRequest(
+						configuration: oidConfig,
+						idTokenHint: idToken,
+						postLogoutRedirectURL: logoutRedirectURL,
+						additionalParameters: nil
                     )
-                    
-                    let agent = OktaExternalUserAgentIOS(presenting: view)
-                    
-                    // Present the logout flow
-                    
-                    OktaAuth.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent)
-                    { response, responseError in
-                        if let responseError = responseError {
-                            return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
-                        }
-                        return resolve(())
+					
+					let agent = OktaExternalUserAgentIOS(presenting: view)
+					
+					// Present the logout flow
+					
+					OktaAuth.currentAuthorizationFlow =
+					OIDAuthorizationService.present(request, externalUserAgent: agent) { response, responseError in
+						if let responseError = responseError {
+							return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
+						}
+						return resolve(())
                     }
                 }
                 .catch { error in return reject(error) }
