@@ -64,35 +64,35 @@ public struct OktaAuthorization {
     func logout(_ config: [String: String], idToken: String, view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let issuer = config["issuer"],
-                let logoutRedirectUriString = config["logoutRedirectUri"],
-                let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
+                  let logoutRedirectUriString = config["logoutRedirectUri"],
+                  let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
                     return reject(OktaError.missingConfigurationValues)
             }
-            
+
             self.getMetadataConfig(URL(string: issuer))
-				.then { oidConfig in
-					let request = OIDEndSessionRequest(
-						configuration: oidConfig,
-						idTokenHint: idToken,
-						postLogoutRedirectURL: logoutRedirectURL,
-						additionalParameters: nil
-                    )
-					
-					let agent = OktaExternalUserAgentIOS(presenting: view)
-					
-					// Present the logout flow
-					
-					OktaAuth.currentAuthorizationFlow =
-					OIDAuthorizationService.present(request, externalUserAgent: agent) { response, responseError in
-						if let responseError = responseError {
-							return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
-						}
-						return resolve(())
+            .then { oidConfig in
+                let request = OIDEndSessionRequest(
+                    configuration: oidConfig,
+                    idTokenHint: idToken,
+                    postLogoutRedirectURL: logoutRedirectURL,
+                    additionalParameters: nil
+                )
+
+                let agent = OktaExternalUserAgentIOS(presenting: view)
+
+                // Present the logout flow
+
+                OktaAuth.currentAuthorizationFlow =
+                    OIDAuthorizationService.present(request, externalUserAgent: agent) { response, responseError in
+                        if let responseError = responseError {
+                            return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
+                        }
+                        return resolve(())
                     }
-                }
-                .catch { error in
-					return reject(error)
-			}
+            }
+            .catch { error in
+                return reject(error)
+            }
         })
     }
 
