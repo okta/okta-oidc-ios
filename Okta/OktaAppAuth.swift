@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import AppAuth
+import OktaAppAuth
 import Hydra
 
 // Current version of the SDK
@@ -36,6 +36,45 @@ public func login(_ username: String, password: String) -> Login {
 public func login() -> Login {
     // Authenticate via authorization code flow
     return Login()
+}
+
+public func  signOutOfOkta() -> Logout {
+    // Logout for authorization code flow
+    return Logout(idToken: tokens?.idToken)
+}
+
+public func clearTokens(revokeTokens: Bool = true) -> Promise<Void> {
+	return Promise<Void>(in: .background, { resolve, reject, _ in
+		guard revokeTokens else {
+			OktaAuth.tokens?.clear()
+			return resolve(())
+		}
+		
+		var revokedTokens = [String]()
+		if let accessToken = tokens?.accessToken {
+			revokedTokens.append(accessToken)
+		}
+		
+		if let refreshToken = tokens?.refreshToken {
+			revokedTokens.append(refreshToken)
+		}
+		
+		all(revokedTokens.map({ token in
+			return Promise<Void>(in: .background, { resolve, reject, _ in
+				_ = Revoke(token: token, callback: { (response, error) in
+					if let error = error {
+						return reject(error)
+					}
+					resolve(())
+				})
+			})
+		}))
+		.then { _ in
+			OktaAuth.tokens?.clear()
+			resolve(())
+		}
+		.catch { error in reject(error) }
+	})
 }
 
 public func isAuthenticated() -> Bool {
@@ -73,11 +112,6 @@ public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
     // Return user information from the /userinfo endpoint
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
-}
-
-public func clear() {
-    // Clear auth state
-    tokens?.clear()
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
