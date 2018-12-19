@@ -56,9 +56,8 @@ class OktaUITests: XCTestCase {
         testUtils.login(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
-        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
+		if !testUtils.waitForElement(app.textViews["tokenView"], timeout: 10) {
             XCTFail("Unable to redirect back from browser")
-            return
         }
     }
 
