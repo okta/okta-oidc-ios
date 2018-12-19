@@ -26,15 +26,7 @@ public var configuration: [String: Any]?
 public var wellKnown: [String: Any]?
 
 // Token manager
-public var tokens: OktaTokenManager? {
-    didSet {
-        if let tokens = tokens {
-            OktaAuthStateStorage.store(tokens)
-        } else {
-            OktaAuthStateStorage.clear()
-        }
-    }
-}
+public var tokens: OktaTokenManager?
 
 public func login(_ username: String, password: String) -> Login {
     // Authenticate via Resource Owner Password Grant
@@ -52,37 +44,42 @@ public func  signOutFromOkta() -> Logout {
 }
 
 public func signOutLocally() -> Promise<Void> {
-    return Promise<Void>(in: .background, { resolve, reject, _ in
-        guard let accessToken = tokens?.accessToken else {
-            return reject(OktaError.noTokens)
-        }
-        
-        // revoke tokens
-        Revoke(token: accessToken).revoke()
-        .then {_ in
-            guard let refreshToken = tokens?.refreshToken else {
-                // clear tokens stored locally
-                tokens = nil
-                return resolve(())
-            }
-            
-            Revoke(token: refreshToken).revoke()
-            .then {_ in
-                // clear tokens stored locally
-                tokens = nil
-                return resolve(())
-            }
-            .catch{ error in return reject(error) }
-        }
-        .catch { error in return reject(error)}
-    })
+	var revokedTokens = [String]()
+	if let accessToken = tokens?.accessToken {
+		revokedTokens.append(accessToken)
+	}
+	
+	if let refreshToken = tokens?.refreshToken {
+		revokedTokens.append(refreshToken)
+	}
+	
+	return Promise<Void>(in: .background, { resolve, reject, _ in
+		all(revokedTokens.map({ token in
+			return Promise<Void>(in: .background, { resolve, reject, _ in
+				_ = Revoke(token: token, callback: { (response, error) in
+					if let error = error {
+						return reject(error)
+					}
+					resolve(())
+				})
+			})
+		}))
+		.then { _ in
+			OktaAuth.clear()
+			resolve(())
+		}
+		.catch { error in reject(error) }
+	})
 }
 
 public func isAuthenticated() -> Bool {
     // Restore state
-    guard let previousState = OktaAuthStateStorage.getStoredState() else {
+    guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
         return false
     }
+
+    guard let previousState = NSKeyedUnarchiver
+        .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
 
     tokens = previousState
 
@@ -104,13 +101,7 @@ public func refresh() -> Promise<String> {
 
 public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
     // Revokes the given token
-    Revoke(token: token).revoke()
-    .then { response in
-        callback( response?.count == 0 ? true : false, nil)
-    }
-    .catch { error in
-        callback( false, error as? OktaError)
-    }
+    _ = Revoke(token: token) { response, error in callback( response?.count == 0 ? true : false, error) }
 }
 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {

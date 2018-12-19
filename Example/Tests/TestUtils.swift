@@ -98,4 +98,16 @@ struct TestUtils {
             }
         })
     }
+
+    static func getPreviousState() -> OktaTokenManager? {
+        // Return the previous archived state
+        guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
+            return nil
+        }
+        guard let previousState = NSKeyedUnarchiver
+            .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
+                return nil
+        }
+        return previousState
+    }
 }
