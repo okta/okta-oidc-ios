@@ -38,22 +38,27 @@ public func login() -> Login {
     return Login()
 }
 
-public func  signOutFromOkta() -> Logout {
+public func  signOutOfOkta() -> Logout {
     // Logout for authorization code flow
     return Logout(idToken: tokens?.idToken)
 }
 
-public func signOutLocally() -> Promise<Void> {
-	var revokedTokens = [String]()
-	if let accessToken = tokens?.accessToken {
-		revokedTokens.append(accessToken)
-	}
-	
-	if let refreshToken = tokens?.refreshToken {
-		revokedTokens.append(refreshToken)
-	}
-	
+public func clearTokens(revokeTokens: Bool = true) -> Promise<Void> {
 	return Promise<Void>(in: .background, { resolve, reject, _ in
+		guard revokeTokens else {
+			OktaAuth.tokens?.clear()
+			return resolve(())
+		}
+		
+		var revokedTokens = [String]()
+		if let accessToken = tokens?.accessToken {
+			revokedTokens.append(accessToken)
+		}
+		
+		if let refreshToken = tokens?.refreshToken {
+			revokedTokens.append(refreshToken)
+		}
+		
 		all(revokedTokens.map({ token in
 			return Promise<Void>(in: .background, { resolve, reject, _ in
 				_ = Revoke(token: token, callback: { (response, error) in
@@ -65,7 +70,7 @@ public func signOutLocally() -> Promise<Void> {
 			})
 		}))
 		.then { _ in
-			OktaAuth.clear()
+			OktaAuth.tokens?.clear()
 			resolve(())
 		}
 		.catch { error in reject(error) }
@@ -107,11 +112,6 @@ public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
     // Return user information from the /userinfo endpoint
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
-}
-
-public func clear() {
-    // Clear auth state
-    tokens?.clear()
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {

@@ -82,10 +82,10 @@ class Tests: XCTestCase {
         XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
     
-    func testSignOutFromOktaFailureFlow() {
+    func testSignOutOfOktaFailure() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally")
         
-        OktaAuth.signOutFromOkta().start(UIViewController())
+        OktaAuth.signOutOfOkta().start(UIViewController())
         .then {
             XCTFail("Sign out should fail!")
             signOutExpectation.fulfill()
@@ -104,13 +104,14 @@ class Tests: XCTestCase {
         })
     }
     
-    func testSignOutLocallyFlow() {
+    func testClearTokensNoTokensAvailable() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
-        
-        OktaAuth.signOutLocally()
-        .then {
-            signOutExpectation.fulfill()
-        }
+		
+		XCTAssertNil(OktaAuth.tokens)
+		XCTAssertNil(TestUtils.getPreviousState())
+		
+        OktaAuth.clearTokens()
+        .then { signOutExpectation.fulfill() }
         .catch { error in
             XCTFail()
             signOutExpectation.fulfill()
@@ -124,6 +125,25 @@ class Tests: XCTestCase {
 		XCTAssertNil(OktaAuth.tokens)
 		XCTAssertNil(TestUtils.getPreviousState())
     }
+	
+	func testClearTokensInvalidToken() {
+		let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
+		
+		TestUtils.tokenManagerNoValidation
+		.then { _ in
+			OktaAuth.clearTokens()
+			.then { signOutExpectation.fulfill() }
+			.catch { _ in signOutExpectation.fulfill() }
+		}
+
+		waitForExpectations(timeout: 5, handler: { error in
+			// Fail on timeout
+			if error != nil { XCTFail(error!.localizedDescription) }
+		})
+		
+		XCTAssertNil(OktaAuth.tokens)
+		XCTAssertNil(TestUtils.getPreviousState())
+	}
 
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints

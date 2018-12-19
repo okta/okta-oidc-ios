@@ -45,17 +45,20 @@ class ViewController: UIViewController {
         self.loginCodeFlow()
     }
     
-    @IBAction func signoutFromOktaButton(_ sender: Any) {
-        self.signOutFromOkta()
+    @IBAction func signoutOfOktaButton(_ sender: Any) {
+        self.signOutOfOkta()
     }
     
-    @IBAction func signoutLocallyButton(_ sender: Any) {
-        self.signoutLocally()
+    @IBAction func clearAndRevokeTokensButton(_ sender: Any) {
+		OktaAuth.clearTokens()
+		.then { self.buildTokenTextView() }
+		.catch { error in print(error) }
     }
 
     @IBAction func clearTokens(_ sender: Any) {
-        OktaAuth.clear()
-        self.buildTokenTextView()
+        OktaAuth.clearTokens(revokeTokens: false)
+		.then{ self.buildTokenTextView() }
+		.catch { error in print(error) }
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
@@ -100,22 +103,16 @@ class ViewController: UIViewController {
         }
     }
     
-    func signOutFromOkta() {
+    func signOutOfOkta() {
         if self.isUITest {
-            OktaAuth.signOutFromOkta().start(withDictConfig: testConfig, view: self)
+            OktaAuth.signOutOfOkta().start(withDictConfig: testConfig, view: self)
                 .then { _ in self.buildTokenTextView() }
                 .catch { error in print(error) }
         } else {
-            OktaAuth.signOutFromOkta().start(self)
+            OktaAuth.signOutOfOkta().start(self)
                 .then { self.buildTokenTextView() }
                 .catch { error in print(error) }
         }
-    }
-    
-    func signoutLocally() {
-        OktaAuth.signOutLocally()
-        .then { self.buildTokenTextView() }
-        .catch { error in print(error) }
     }
 
     func updateUI(updateText: String) {

@@ -134,8 +134,8 @@ class OktaUITests: XCTestCase {
         var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertFalse(tokenValues?.isEmpty ?? false)
         
-        // Sign Out Locally
-        app.buttons["SignOutLocal"].tap()
+        // Clear and Revoke tokens
+        app.buttons["ClearAndRevoke"].tap()
 
         tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(tokenValues?.isEmpty ?? true)
