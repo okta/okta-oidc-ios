@@ -50,6 +50,11 @@ class OktaUITests: XCTestCase {
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
         
+        guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
+            XCTFail("App not loaded!")
+            return
+        }
+        
         // Check to see if there are tokens displayed (indicating an authenticated state)
         if let tokens = testUtils.getTextViewValue(label: "tokenView"), tokens.contains("Access Token") {
             return
