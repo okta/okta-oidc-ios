@@ -116,12 +116,12 @@ Then, you can start the authorization flow by simply calling `login`:
 ```swift
 OktaAuth.login().start(view: self)
 .then { tokenManager in
-// tokenManager.accessToken
-// tokenManager.idToken
-// tokenManager.refreshToken
+	// tokenManager.accessToken
+	// tokenManager.idToken
+	// tokenManager.refreshToken
 }
 .catch { error in
-// Error
+	// Error
 }
 ```
 
@@ -130,12 +130,12 @@ To login using `username` and `password`:
 ```swift
 OktaAuth.login(username: "user@example.com", password: "password").start(view: self)
 .then { tokenManager in
-// tokenManager.accessToken
-// tokenManager.idToken
-// tokenManager.refreshToken
+	// tokenManager.accessToken
+	// tokenManager.idToken
+	// tokenManager.refreshToken
 }
 .catch { error in
-// Error
+	// Error
 }
 ```
 
@@ -146,10 +146,10 @@ You can start the Sign Out flow by simply calling `signOutFromOkta`. This method
 ```swift
 OktaAuth.signOutFromOkta().start(view: self)
 .then {
-// Clean tokenManager
+	// Clean tokenManager
 }
 .catch { error in
-// Error
+	// Error
 }
 ```
 
@@ -162,10 +162,10 @@ You can finalize the Sign Out flow by  calling `signOutLocally`. This method wil
 ```swift
 OktaAuth.signOutLocally().
 .then {
-// Tokens revoked and storage is cleared
+	// Tokens revoked and storage is cleared
 }
 .catch { error in
-// Error
+	// Error
 }
 ```
 
@@ -177,7 +177,7 @@ Returns `true` if there is a valid access token stored in the TokenManager. This
 
 ```swift
 if !OktaAuth.isAuthenticated() {
-// Prompt for login
+	// Prompt for login
 }
 ```
 
@@ -187,13 +187,13 @@ Calls the OIDC userInfo endpoint to return user information.
 
 ```swift
 OktaAuth.getUser() { response, error in
-if error != nil {
-print("Error: \(error!)")
-}
+	if error != nil {
+		print("Error: \(error!)")
+	}
 
-if let userinfo = response {
-userinfo.forEach { print("\($0): \($1)") }
-}
+	if let userinfo = response {
+		userinfo.forEach { print("\($0): \($1)") }
+	}
 }
 ```
 
@@ -204,10 +204,10 @@ Calls the introspection endpoint to inspect the validity of the specified token.
 ```swift
 OktaAuth.introspect().validate(token: token)
 .then { isActive in
-print("Is token valid? \(isActive)")
+	print("Is token valid? \(isActive)")
 }
 .catch { error in
-// Error
+	// Error
 }
 ```
 
@@ -218,10 +218,10 @@ Since access tokens are traditionally short-lived, you can refresh them by using
 ```swift
 OktaAuth.refresh()
 .then { newAccessToken in
-print(newAccessToken)
+	print(newAccessToken)
 }
 .catch { error in
-// Error
+	// Error
 }
 
 ```
@@ -232,12 +232,12 @@ Calls the revocation endpoint to revoke the specified token.
 
 ```swift
 OktaAuth.revoke(token: token) { response, error in
-if error != nil {
-print("Error: \(error!)")
-}
-if let _ = response {
-print("Token was revoked")
-}
+	if error != nil {
+		print("Error: \(error!)")
+	}
+	if let _ = response {
+		print("Token was revoked")
+	}
 }
 ```
 
