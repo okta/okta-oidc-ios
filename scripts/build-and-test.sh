@@ -12,12 +12,12 @@ fi
 
 echo "- Starting tests..."
 
-echo "$(USERNAME)"
-echo "$(PASSWORD)"
-echo "$(ISSUER)"
-echo "$(REDIRECT_URI)"
-echo "$(CLIENT_ID)"
-echo "$(LOGOUT_REDIRECT_URI)"
+echo "$USERNAME"
+echo "$PASSWORD"
+echo "$ISSUER"
+echo "$REDIRECT_URI"
+echo "$CLIENT_ID"
+echo "$LOGOUT_REDIRECT_URI"
 
 if ! build_and_run_ui_tests "$USERNAME" "$PASSWORD" "$ISSUER" "$REDIRECT_URI" "$CLIENT_ID" "$LOGOUT_REDIRECT_URI"; then
     exit 1
