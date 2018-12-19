@@ -44,37 +44,37 @@ public func  signOutOfOkta() -> Logout {
 }
 
 public func clearTokens(revokeTokens: Bool = true) -> Promise<Void> {
-	return Promise<Void>(in: .background, { resolve, reject, _ in
-		guard revokeTokens else {
-			OktaAuth.tokens?.clear()
-			return resolve(())
-		}
-		
-		var revokedTokens = [String]()
-		if let accessToken = tokens?.accessToken {
-			revokedTokens.append(accessToken)
-		}
-		
-		if let refreshToken = tokens?.refreshToken {
-			revokedTokens.append(refreshToken)
-		}
-		
-		all(revokedTokens.map({ token in
-			return Promise<Void>(in: .background, { resolve, reject, _ in
-				_ = Revoke(token: token, callback: { (response, error) in
-					if let error = error {
-						return reject(error)
-					}
-					resolve(())
-				})
-			})
-		}))
-		.then { _ in
-			OktaAuth.tokens?.clear()
-			resolve(())
-		}
-		.catch { error in reject(error) }
-	})
+    return Promise<Void>(in: .background, { resolve, reject, _ in
+        guard revokeTokens else {
+            OktaAuth.tokens?.clear()
+            return resolve(())
+        }
+
+        var revokedTokens = [String]()
+        if let accessToken = tokens?.accessToken {
+            revokedTokens.append(accessToken)
+        }
+
+        if let refreshToken = tokens?.refreshToken {
+            revokedTokens.append(refreshToken)
+        }
+
+        all(revokedTokens.map({ token in
+            return Promise<Void>(in: .background, { resolve, reject, _ in
+            _ = Revoke(token: token, callback: { (response, error) in
+                    if let error = error {
+                        return reject(error)
+                    }
+                    resolve(())
+                })
+            })
+        }))
+        .then { _ in
+            OktaAuth.tokens?.clear()
+            resolve(())
+        }
+        .catch { error in reject(error) }
+    })
 }
 
 public func isAuthenticated() -> Bool {

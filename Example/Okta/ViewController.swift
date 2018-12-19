@@ -50,15 +50,15 @@ class ViewController: UIViewController {
     }
     
     @IBAction func clearAndRevokeTokensButton(_ sender: Any) {
-		OktaAuth.clearTokens()
-		.then { self.buildTokenTextView() }
-		.catch { error in print(error) }
+        OktaAuth.clearTokens()
+        .then { self.buildTokenTextView() }
+        .catch { error in print(error) }
     }
 
     @IBAction func clearTokens(_ sender: Any) {
         OktaAuth.clearTokens(revokeTokens: false)
-		.then{ self.buildTokenTextView() }
-		.catch { error in print(error) }
+        .then{ self.buildTokenTextView() }
+        .catch { error in print(error) }
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
@@ -106,12 +106,12 @@ class ViewController: UIViewController {
     func signOutOfOkta() {
         if self.isUITest {
             OktaAuth.signOutOfOkta().start(withDictConfig: testConfig, view: self)
-                .then { _ in self.buildTokenTextView() }
-                .catch { error in print(error) }
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in print(error) }
         } else {
             OktaAuth.signOutOfOkta().start(self)
-                .then { self.buildTokenTextView() }
-                .catch { error in print(error) }
+            .then { self.buildTokenTextView() }
+            .catch { error in print(error) }
         }
     }
 

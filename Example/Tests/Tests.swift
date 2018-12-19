@@ -180,10 +180,10 @@ class Tests: XCTestCase {
         ]
         let pwdExpectation = expectation(description: "Will error attempting revoke token")
         
-		_ = Revoke(token: nil, callback: { (response, error) in
-			pwdExpectation.fulfill()
-			XCTAssertEqual(error!.localizedDescription, OktaError.noBearerToken.localizedDescription)
-		})
+        _ = Revoke(token: nil, callback: { (response, error) in
+            pwdExpectation.fulfill()
+            XCTAssertEqual(error!.localizedDescription, OktaError.noBearerToken.localizedDescription)
+        })
         
         waitForExpectations(timeout: 5, handler: { error in
             // Fail on timeout
