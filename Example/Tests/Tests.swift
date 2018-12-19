@@ -105,7 +105,7 @@ class Tests: XCTestCase {
     }
     
     func testSignOutLocallyFailureFlow() {
-        let signOutExpectation = expectation(description: "Will error attempting sign out from Okta")
+        let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
         
         OktaAuth.signOutLocally()
         .then {
@@ -124,6 +124,9 @@ class Tests: XCTestCase {
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })
+		
+		XCTAssertNil(OktaAuth.tokens)
+		XCTAssertNil(OktaAuthStateStorage.getStoredState())
     }
 
     func testIntrospectionEndpointURL() {

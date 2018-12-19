@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func signoutFromOktaButton(_ sender: Any) {
-        self.signoutFromOkta()
+        self.signOutFromOkta()
     }
     
     @IBAction func signoutLocallyButton(_ sender: Any) {
@@ -100,7 +100,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func signoutFromOkta() {
+    func signOutFromOkta() {
         if self.isUITest {
             OktaAuth.signOutFromOkta().start(withDictConfig: testConfig, view: self)
                 .then { _ in self.buildTokenTextView() }

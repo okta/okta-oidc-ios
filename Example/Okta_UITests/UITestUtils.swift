@@ -42,25 +42,6 @@ public struct UITestUtils {
         webViewsQuery.buttons["Sign In"].tap()
     }
     
-    func isBrowserShown() -> Bool {
-        return testApp.webViews.count != 0
-    }
-    
-    func closeBrowserIfNeeded() -> Bool {
-        // Wait for browser to load
-        // This sleep bypasses the need to "click" the consent for Safari
-        sleep(5)
-        
-        guard isBrowserShown() else {
-            return false
-        }
-        
-        testApp.buttons["Done"].tap()
-        
-        sleep(5)
-        return true
-    }
-    
     func closeBrowser() {
         // Wait for browser to load
         // This sleep bypasses the need to "click" the consent for Safari

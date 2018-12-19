@@ -107,23 +107,29 @@ class OktaUITests: XCTestCase {
         // Clear all tokens
         app.buttons["Clear"].tap()
     }
-    
+	
     func testSignOutFlow() {
         loginAndWait()
         
         // Sign Out from Okta
         app.buttons["SignOutOkta"].tap()
-
+		
         // Wait for browser to load
-        sleep(5)
-        XCTAssertFalse(testUtils.isBrowserShown())
+        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 500.0) else {
+            XCTFail()
+            return
+        }
         
         app.buttons["Login"].tap()
 
         // If Sign Out from browser succeeded, browser should appear presenting login UI.
         // If user is still logged in in the browser, browser will appear and redirect to app automatically.
-        let browserWasShown = testUtils.closeBrowserIfNeeded()
-        XCTAssertTrue(browserWasShown)
+        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail()
+            return
+        }
+		
+        app.buttons["Done"].tap()
         
         var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertFalse(tokenValues?.isEmpty ?? false)
