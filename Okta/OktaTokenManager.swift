@@ -19,10 +19,7 @@ open class OktaTokenManager: NSObject, NSCoding {
     open var accessibility: CFString
 
     open var accessToken: String? {
-        // Return the known accessToken if it hasn't expired
-        get {
-            return self.authState.lastTokenResponse?.accessToken
-        }
+        return self.authState.lastTokenResponse?.accessToken
     }
     
     open var accessTokenExpirationDate: Date? {
