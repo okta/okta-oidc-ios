@@ -146,7 +146,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="signoutOfOktaButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="grd-Oo-dTc"/>
+                                                    <action selector="signOutOfOktaButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fKW-Oi-9Ya"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWi-Us-eQN">

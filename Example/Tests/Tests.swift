@@ -113,7 +113,7 @@ class Tests: XCTestCase {
         OktaAuth.clearTokens()
         .then { signOutExpectation.fulfill() }
         .catch { error in
-            XCTFail()
+            XCTFail("Unexpected error: \(error)")
             signOutExpectation.fulfill()
         }
         
@@ -126,24 +126,27 @@ class Tests: XCTestCase {
 		XCTAssertNil(TestUtils.getPreviousState())
     }
 	
-	func testClearTokensInvalidToken() {
-		let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
-		
-		TestUtils.tokenManagerNoValidation
-		.then { _ in
-			OktaAuth.clearTokens()
-			.then { signOutExpectation.fulfill() }
-			.catch { _ in signOutExpectation.fulfill() }
-		}
+    func testClearTokensInvalidToken() {
+        let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
 
-		waitForExpectations(timeout: 5, handler: { error in
-			// Fail on timeout
-			if error != nil { XCTFail(error!.localizedDescription) }
-		})
-		
-		XCTAssertNil(OktaAuth.tokens)
-		XCTAssertNil(TestUtils.getPreviousState())
-	}
+        TestUtils.tokenManagerNoValidation
+        .then { _ in
+            OktaAuth.clearTokens()
+            .then { signOutExpectation.fulfill() }
+            .catch { error in
+                XCTFail("Unexpected error: \(error)")
+                signOutExpectation.fulfill()
+            }
+        }
+
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
+
+        XCTAssertNil(OktaAuth.tokens)
+        XCTAssertNil(TestUtils.getPreviousState())
+    }
 
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
@@ -178,17 +181,9 @@ class Tests: XCTestCase {
         OktaAuth.configuration = [
             "issuer": "https://example.com/oauth2/default"
         ]
-        let pwdExpectation = expectation(description: "Will error attempting revoke token")
-        
-        _ = Revoke(token: nil, callback: { (response, error) in
-            pwdExpectation.fulfill()
-            XCTAssertEqual(error!.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        })
-        
-        waitForExpectations(timeout: 5, handler: { error in
-            // Fail on timeout
-            if error != nil { XCTFail(error!.localizedDescription) }
-        })
+        let _ = Revoke(token: nil) { response, error in
+                XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
+            }
     }
 
     func testIdTokenDecode() {

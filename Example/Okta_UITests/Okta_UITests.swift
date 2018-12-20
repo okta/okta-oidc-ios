@@ -49,7 +49,7 @@ class OktaUITests: XCTestCase {
 
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
-        
+
         guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
             XCTFail("Cannot start the app!")
             return
@@ -120,29 +120,34 @@ class OktaUITests: XCTestCase {
         app.buttons["SignOutOkta"].tap()
 		
         // Wait for browser to load
-        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 5.0) else {
-            XCTFail()
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail("Cannot locate web browser!")
             return
         }
         
         app.buttons["Login"].tap()
 
-        // If Sign Out from browser succeeded, browser should appear presenting login UI.
-        // If user is still logged in in the browser, browser will appear and redirect to app automatically.
-        guard testUtils.waitForElement(app!.webViews.firstMatch, timeout: 5.0) else {
-            XCTFail()
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail("Cannot locate web browser!")
             return
         }
 		
         app.buttons["Done"].tap()
         
         var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
-        XCTAssertFalse(tokenValues?.isEmpty ?? false)
+        XCTAssertTrue(nil != tokenValues && tokenValues!.isEmpty)
+    }
+    
+    func testClearAndRevoke() {
+        loginAndWait()
+        
+        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
+        XCTAssertTrue(nil != tokenValues && tokenValues!.isEmpty)
         
         // Clear and Revoke tokens
         app.buttons["ClearAndRevoke"].tap()
 
         tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
-        XCTAssertTrue(tokenValues?.isEmpty ?? true)
+        XCTAssertTrue(nil == tokenValues || tokenValues!.isEmpty)
     }
 }
