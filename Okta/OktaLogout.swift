@@ -12,22 +12,8 @@
 import Hydra
 
 public struct Logout {
-    private let idToken: String?
-    
-    init(idToken: String?) {
-        self.idToken = idToken
-    }
-    
     public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<Void> {
-        return Promise<Void>(in: .background, { resolve, reject, _ in
-            guard let idToken = self.idToken else {
-                return reject(OktaError.missingIdToken)
-            }
-            
-            OktaAuthorization().logout(dict, idToken: idToken, view: view)
-                .then { _ in return resolve(()) }
-                .catch { error in return reject(error) }
-        })
+        return OktaAuthorization().logout(dict, view: view)
     }
     
     public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {

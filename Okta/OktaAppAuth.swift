@@ -39,8 +39,8 @@ public func login() -> Login {
 }
 
 public func  signOutOfOkta() -> Logout {
-    // Logout for authorization code flow
-    return Logout(idToken: tokens?.idToken)
+    // End the Okta session
+    return Logout()
 }
 
 public func clearTokens(revokeTokens: Bool = true) -> Promise<Void> {

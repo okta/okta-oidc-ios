@@ -63,7 +63,7 @@ class ViewController: UIViewController {
 
     @IBAction func userInfoButton(_ sender: Any) {
         OktaAuth.getUser { response, error in
-            if error != nil { self.updateUI(updateText: "Error: \(error)") }
+            if let error = error { self.updateUI(updateText: "Error: \(error)") }
             if response != nil {
                 var userInfoText = ""
                 response?.forEach { userInfoText += ("\($0): \($1) \n") }

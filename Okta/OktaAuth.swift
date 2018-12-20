@@ -61,12 +61,16 @@ public struct OktaAuthorization {
         return buildAndPerformTokenRequest(config, additionalParams: credentials)
     }
     
-    func logout(_ config: [String: String], idToken: String, view: UIViewController) -> Promise<Void> {
+    func logout(_ config: [String: String], view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let issuer = config["issuer"],
                   let logoutRedirectUriString = config["logoutRedirectUri"],
                   let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
                     return reject(OktaError.missingConfigurationValues)
+            }
+            
+            guard let idToken = OktaAuth.tokens?.authState.lastTokenResponse?.idToken else {
+                return reject(OktaError.missingIdToken)
             }
 
             self.getMetadataConfig(URL(string: issuer))
