@@ -137,17 +137,4 @@ class OktaUITests: XCTestCase {
         let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
     }
-    
-    func testClearAndRevoke() {
-        loginAndWait()
-        
-        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
-        XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
-        
-        // Clear and Revoke tokens
-        app.buttons["ClearAndRevoke"].tap()
-
-        tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
-        XCTAssertTrue(nil == tokenValues || tokenValues!.isEmpty)
-    }
 }
