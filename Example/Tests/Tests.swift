@@ -1,7 +1,7 @@
 import UIKit
 import XCTest
 @testable import OktaAuth
-import AppAuth
+import OktaAppAuth
 
 class Tests: XCTestCase {
     let TOKEN_EXPIRATION_WAIT: UInt32 = 5
@@ -80,6 +80,28 @@ class Tests: XCTestCase {
         // Validate that scopes not including "openid" get appended
         let scopes = "profile email"
         XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
+    }
+    
+    func testSignOutOfOktaFailure() {
+        let signOutExpectation = expectation(description: "Will error attempting sign out locally")
+        
+        OktaAuth.signOutOfOkta().start(UIViewController())
+        .then {
+            XCTFail("Sign out should fail!")
+            signOutExpectation.fulfill()
+        }
+        .catch { error in
+            XCTAssertEqual(
+                error.localizedDescription,
+                OktaError.missingConfigurationValues.localizedDescription
+            )
+            signOutExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: { error in
+            // Fail on timeout
+            if error != nil { XCTFail(error!.localizedDescription) }
+        })
     }
 
     func testIntrospectionEndpointURL() {
@@ -236,7 +258,7 @@ class Tests: XCTestCase {
         let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
         TestUtils.tokenManagerNoValidationWithExpiration
             .then { tokenManager in
-                OktaAuthorization().storeAuthState(tokenManager)
+                OktaAuth.tokens = tokenManager
                 isAuthExpectation.fulfill()
             }
             .catch { error in XCTFail(error.localizedDescription) }

@@ -122,6 +122,11 @@
             value = "$(PASSWORD)"
             isEnabled = "YES">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "LOGOUT_REDIRECT_URI"
+            value = "$(LOGOUT_REDIRECT_URI)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>

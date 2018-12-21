@@ -19,16 +19,23 @@ class OktaUITests: XCTestCase {
     var password = ProcessInfo.processInfo.environment["PASSWORD"]!
     var issuer = ProcessInfo.processInfo.environment["ISSUER"]!
     var redirectURI = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
+    var logoutRedirectURI = ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!
     var clientID = ProcessInfo.processInfo.environment["CLIENT_ID"]!
 
-    var testUtils: UITestUtils?
+    var testUtils: UITestUtils!
     var app: XCUIApplication!
 
     override func setUp() {
         super.setUp()
         
         app = XCUIApplication()
-        app.launchEnvironment = ["UITEST": "1", "ISSUER": issuer, "CLIENT_ID": clientID, "REDIRECT_URI": redirectURI]
+        app.launchEnvironment = [
+            "UITEST": "1",
+            "ISSUER": issuer,
+            "CLIENT_ID": clientID,
+            "REDIRECT_URI": redirectURI,
+            "LOGOUT_REDIRECT_URI" : logoutRedirectURI
+        ]
         
         testUtils = UITestUtils(app)
 
@@ -43,8 +50,8 @@ class OktaUITests: XCTestCase {
     func loginAndWait() {
         guard let testUtils = testUtils else { return }
 
-        // Check to see if there are tokens displayed (indicating an authenticated state)
-        if let tokens = testUtils.getTextViewValue(label: "tokenView"), tokens.contains("Access Token") {
+        guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
+            XCTFail("Cannot start the app!")
             return
         }
 
@@ -54,8 +61,9 @@ class OktaUITests: XCTestCase {
         testUtils.login(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
-        if !testUtils.waitForElement(app.textViews["tokenView"], timeout: 5) {
+        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
             XCTFail("Unable to redirect back from browser")
+            return
         }
     }
 
@@ -103,5 +111,30 @@ class OktaUITests: XCTestCase {
 
         // Clear all tokens
         app.buttons["Clear"].tap()
+    }
+	
+    func testSignOutFlow() {
+        loginAndWait()
+        
+        // Sign Out from Okta
+        app.buttons["SignOutOkta"].tap()
+		
+        // Wait for browser to load
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail("Cannot locate web browser!")
+            return
+        }
+        
+        app.buttons["Login"].tap()
+
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail("Cannot locate web browser!")
+            return
+        }
+		
+        app.buttons["Done"].tap()
+        
+        let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
+        XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
     }
 }

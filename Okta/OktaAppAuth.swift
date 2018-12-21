@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import AppAuth
+import OktaAppAuth
 import Hydra
 
 // Current version of the SDK
@@ -38,6 +38,11 @@ public func login() -> Login {
     return Login()
 }
 
+public func  signOutOfOkta() -> Logout {
+    // End the Okta session
+    return Logout()
+}
+
 public func isAuthenticated() -> Bool {
     // Restore state
     guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
@@ -53,6 +58,11 @@ public func isAuthenticated() -> Bool {
         return true
     }
     return false
+}
+
+public func clear() {
+    // Clear auth state
+    tokens?.clear()
 }
 
 public func introspect() -> Introspect {
@@ -73,11 +83,6 @@ public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
     // Return user information from the /userinfo endpoint
     _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
-}
-
-public func clear() {
-    // Clear auth state
-    tokens?.clear()
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {

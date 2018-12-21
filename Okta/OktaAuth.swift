@@ -9,7 +9,7 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import AppAuth
+import OktaAppAuth
 import Hydra
 
 public struct OktaAuthorization {
@@ -35,7 +35,8 @@ public struct OktaAuthorization {
                 )
 
                 // Start the authorization flow
-                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, presenting: view){
+                let externalUserAgent = OktaExternalUserAgentIOS(presenting: view)
+                OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
                     authorizationResponse, error in
 
                     guard let authResponse = authorizationResponse else {
@@ -45,7 +46,7 @@ public struct OktaAuthorization {
                         let tokenManager = try OktaTokenManager(authState: authResponse, config: config)
 
                         // Set the local cache and write to storage
-                        self.storeAuthState(tokenManager)
+                        OktaAuth.tokens = tokenManager
                         return resolve(tokenManager)
                     } catch let error {
                         return reject(error)
@@ -58,6 +59,45 @@ public struct OktaAuthorization {
 
     func passwordFlow(_ config: [String: String], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
         return buildAndPerformTokenRequest(config, additionalParams: credentials)
+    }
+    
+    func logout(_ config: [String: String], view: UIViewController) -> Promise<Void> {
+        return Promise<Void>(in: .background, { resolve, reject, _ in
+            guard let issuer = config["issuer"],
+                  let logoutRedirectUriString = config["logoutRedirectUri"],
+                  let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
+                    return reject(OktaError.missingConfigurationValues)
+            }
+            
+            guard let idToken = OktaAuth.tokens?.authState.lastTokenResponse?.idToken else {
+                return reject(OktaError.missingIdToken)
+            }
+
+            self.getMetadataConfig(URL(string: issuer))
+            .then { oidConfig in
+                let request = OIDEndSessionRequest(
+                    configuration: oidConfig,
+                    idTokenHint: idToken,
+                    postLogoutRedirectURL: logoutRedirectURL,
+                    additionalParameters: nil
+                )
+
+                let agent = OktaExternalUserAgentIOS(presenting: view)
+
+                // Present the logout flow
+
+                OktaAuth.currentAuthorizationFlow =
+                    OIDAuthorizationService.present(request, externalUserAgent: agent) { response, responseError in
+                        if let responseError = responseError {
+                            return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
+                        }
+                        return resolve(())
+                    }
+            }
+            .catch { error in
+                return reject(error)
+            }
+        })
     }
 
     func refreshTokensManually(_ config: [String: String], refreshToken: String) -> Promise<OktaTokenManager> {

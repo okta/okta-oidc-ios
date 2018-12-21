@@ -9,6 +9,8 @@
 
 This library is a **wrapper** around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS) SDK for communicating with OAuth 2.0 + OpenID Connect providers, and follows current best practice outlined in [RFC 8252 - OAuth 2.0 for Native Apps](https://tools.ietf.org/html/rfc8252).
 
+**Note**: *Uses Okta fork of [AppAuth-iOS](https://github.com/okta/AppAuth-iOS) with logout functionality. *
+
 This library currently supports:
 
 - [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
@@ -64,19 +66,22 @@ Create an `Okta.plist` file in your application's bundle with the following fiel
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>issuer</key>
-    <string>https://{yourOktaDomain}.com/oauth2/default</string>
-    <key>clientId</key>
-    <string>{clientIdValue}</string>
-    <key>redirectUri</key>
-    <string>{redirectUrlValue}</string>
-    <key>scopes</key>
-    <string>openid profile offline_access</string>
+<key>issuer</key>
+<string>https://{yourOktaDomain}.com/oauth2/default</string>
+<key>clientId</key>
+<string>{clientIdValue}</string>
+<key>redirectUri</key>
+<string>{redirectUrlValue}</string>
+<key>logoutRedirectUri</key>
+<string>{logoutRedirectUriValue}</string>
+<key>scopes</key>
+<string>openid profile offline_access</string>
 </dict>
 </plist>
 ```
 
 **Note**: *To receive a **refresh_token**, you must include the `offline_access` scope.*
+**Note**: *To perform a **logout**, you must specify the `logoutRedirectUri`.*
 
 ### Update the Private-use URI Scheme
 
@@ -135,6 +140,22 @@ OktaAuth.login(username: "user@example.com", password: "password").start(view: s
     // Error
 }
 ```
+
+## Sign Out from Okta
+
+You can start the Sign Out flow by simply calling `signOutFromOkta`. This method will end the user's Okta session in the browser.
+
+```swift
+OktaAuth.signOutFromOkta().start(view: self)
+.then {
+    // Clean tokenManager
+}
+.catch { error in
+    // Error
+}
+```
+
+**Note**: *This method does not clear tokens stored locally, neither revoke them.*
 
 ### Handle the Authentication State
 
@@ -228,6 +249,7 @@ export PASSWORD={password}
 export CLIENT_ID={client_id}
 export ISSUER={issuer url}
 export REDIRECT_URI={redirect uri}
+export LOGOUT_REDIRECT_URI={logout redirect uri}
 
 # Run E2E end Unit tests
 bash ./scripts/build-and-test.sh
