@@ -6,9 +6,10 @@
 //  Copyright © 2018 Okta. All rights reserved.
 //
 
-import AppAuth
-@testable import OktaAuth
+import OktaAppAuth
 import Hydra
+
+@testable import OktaAuth
 
 struct TestUtils {
     static let mockIssuer = "https://demo-org.oktapreview.com/oauth2/default"

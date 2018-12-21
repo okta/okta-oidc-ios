@@ -27,6 +27,7 @@ public enum OktaError: Error {
     case noUserCredentials
     case noUserInfoEndpoint
     case parseFailure
+    case missingIdToken
 }
 
 extension OktaError: LocalizedError {
@@ -68,6 +69,8 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("Error finding the user info endpoint.", comment: "")
         case .parseFailure:
             return NSLocalizedString("Failed to parse and/or convert object.", comment: "")
+        case .missingIdToken:
+            return NSLocalizedString("ID token needed to fulfill this operation.", comment: "")
         }
     }
 }

@@ -12,6 +12,21 @@ import OktaAuth
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
+    @IBOutlet weak var redirectLoginButton: UIButton!
+    
+    private var isUITest: Bool {
+        return ProcessInfo.processInfo.environment["UITEST"] == "1"
+    }
+    
+    private var testConfig: [String: String] {
+        return [
+            "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
+            "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
+            "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
+            "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
+            "scopes": "openid profile offline_access"
+        ]
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,15 +44,18 @@ class ViewController: UIViewController {
     @IBAction func loginButton(_ sender: Any) {
         self.loginCodeFlow()
     }
+    
+    @IBAction func signOutOfOktaButton(_ sender: Any) {
+        self.signOutOfOkta()
+    }
 
     @IBAction func clearTokens(_ sender: Any) {
         OktaAuth.clear()
-        self.buildTokenTextView()
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
         OktaAuth.getUser { response, error in
-            if error != nil { print("Error: \(error!)") }
+            if let error = error { self.updateUI(updateText: "Error: \(error)") }
             if response != nil {
                 var userInfoText = ""
                 response?.forEach { userInfoText += ("\($0): \($1) \n") }
@@ -66,14 +84,26 @@ class ViewController: UIViewController {
     }
 
     func loginCodeFlow() {
-        if ProcessInfo.processInfo.environment["UITEST"] == "1" {
-            let config = ["issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
-                          "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
-                          "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
-                          "scopes": "openid profile offline_access"]
-            OktaAuth.login().start(withDictConfig: config, view: self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+        if self.isUITest {
+            OktaAuth.login().start(withDictConfig: testConfig, view: self)
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in self.updateUI(updateText: "Error: \(error)") }
         } else {
-            OktaAuth.login().start(self).then { _ in self.buildTokenTextView() }.catch { error in print(error) }
+            OktaAuth.login().start(self)
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        }
+    }
+    
+    func signOutOfOkta() {
+        if self.isUITest {
+            OktaAuth.signOutOfOkta().start(withDictConfig: testConfig, view: self)
+            .then { _ in self.buildTokenTextView() }
+            .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        } else {
+            OktaAuth.signOutOfOkta().start(self)
+            .then { self.buildTokenTextView() }
+            .catch { error in self.updateUI(updateText: "Error: \(error)") }
         }
     }
 

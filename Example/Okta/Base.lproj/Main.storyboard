@@ -21,25 +21,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YO7-Wr-HVG">
-                                <rect key="frame" x="16" y="20" width="343" height="627"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="UQ8-c7-4jx">
+                                <rect key="frame" x="16" y="28" width="343" height="445"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="arr-ir-cyv">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="184"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="116"/>
                                         <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="w7b-5e-G99">
-                                                <rect key="frame" x="0.0" y="0.0" width="343" height="64"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="64" id="q6S-sO-s7v"/>
-                                                </constraints>
+                                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="w7b-5e-G99">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="48"/>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
-                                                <rect key="frame" x="0.0" y="74" width="343" height="50"/>
+                                                <rect key="frame" x="0.0" y="50" width="343" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <accessibility key="accessibilityConfiguration" hint="Login" identifier="Login" label="Login"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="50" id="X6X-nD-X5j"/>
-                                                </constraints>
                                                 <state key="normal" title="Login by Redirect">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -52,11 +46,11 @@
                                                     <action selector="loginButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z7Q-oY-hlj"/>
                                                 </connections>
                                             </button>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="hZp-HF-Wta">
-                                                <rect key="frame" x="0.0" y="134" width="343" height="50"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hZp-HF-Wta">
+                                                <rect key="frame" x="0.0" y="82" width="343" height="34"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eoU-d4-kH8">
-                                                        <rect key="frame" x="0.0" y="0.0" width="107.5" height="50"/>
+                                                        <rect key="frame" x="0.0" y="2" width="111" height="30"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="GetUser" label="GetUser"/>
                                                         <state key="normal" title="Get User">
@@ -72,12 +66,9 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZEw-Bb-nHa">
-                                                        <rect key="frame" x="117.5" y="0.0" width="108" height="50"/>
+                                                        <rect key="frame" x="116" y="2" width="111" height="30"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <accessibility key="accessibilityConfiguration" identifier="Introspect" label="Introspect"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="50" id="ULl-z6-NGc"/>
-                                                        </constraints>
                                                         <state key="normal" title="Introspect">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                         </state>
@@ -91,7 +82,7 @@
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miL-dv-t6m">
-                                                        <rect key="frame" x="235.5" y="0.0" width="107.5" height="50"/>
+                                                        <rect key="frame" x="232" y="2" width="111" height="30"/>
                                                         <color key="backgroundColor" red="0.082239262760000001" green="0.22937607769999999" blue="0.33745151759999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <state key="normal" title="Revoke">
                                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -106,46 +97,73 @@
                                                         </connections>
                                                     </button>
                                                 </subviews>
+                                                <constraints>
+                                                    <constraint firstItem="eoU-d4-kH8" firstAttribute="top" secondItem="hZp-HF-Wta" secondAttribute="top" constant="2" id="4eH-X5-2eb"/>
+                                                    <constraint firstItem="eoU-d4-kH8" firstAttribute="top" secondItem="ZEw-Bb-nHa" secondAttribute="top" id="Aa6-m1-bnT"/>
+                                                    <constraint firstItem="ZEw-Bb-nHa" firstAttribute="top" secondItem="miL-dv-t6m" secondAttribute="top" id="ymS-Gp-ujP"/>
+                                                </constraints>
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xho-P4-zw2">
-                                        <rect key="frame" x="0.0" y="189" width="343" height="383"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <accessibility key="accessibilityConfiguration" identifier="tokenView"/>
-                                        <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="12"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iA-Y3-h2v">
-                                        <rect key="frame" x="0.0" y="577" width="343" height="50"/>
-                                        <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="9v6-1I-B9a"/>
-                                        </constraints>
-                                        <state key="normal" title="Clear">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="10"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="clearTokens:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Sha-AY-dfQ"/>
-                                        </connections>
-                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YO7-Wr-HVG">
+                                        <rect key="frame" x="0.0" y="116" width="343" height="329"/>
+                                        <subviews>
+                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xho-P4-zw2">
+                                                <rect key="frame" x="0.0" y="0.0" width="343" height="259"/>
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="tokenView"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="259" id="bb4-0J-JsF"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iA-Y3-h2v">
+                                                <rect key="frame" x="0.0" y="264" width="343" height="30"/>
+                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="Clear">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="clearTokens:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Sha-AY-dfQ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi2-qn-che">
+                                                <rect key="frame" x="0.0" y="299" width="343" height="30"/>
+                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <accessibility key="accessibilityConfiguration" hint="SignOutOkta" identifier="SignOutOkta" label="SignOutOkta"/>
+                                                <state key="normal" title="Sign out of Okta">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="signOutOfOktaButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fKW-Oi-9Ya"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
                                 </subviews>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="YO7-Wr-HVG" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="HzQ-ca-OVt"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="YO7-Wr-HVG" secondAttribute="bottom" constant="20" id="NWu-bM-fhS"/>
-                            <constraint firstItem="YO7-Wr-HVG" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="WoH-VV-DTS"/>
-                            <constraint firstItem="YO7-Wr-HVG" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="eyG-do-urE"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="UQ8-c7-4jx" secondAttribute="bottom" constant="20" id="2Ux-EI-iBR"/>
+                            <constraint firstItem="UQ8-c7-4jx" firstAttribute="trailing" secondItem="kh9-bI-dsS" secondAttribute="trailingMargin" id="ZAR-Fy-S78"/>
+                            <constraint firstItem="UQ8-c7-4jx" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" symbolic="YES" id="wJN-1E-9Nv"/>
+                            <constraint firstItem="UQ8-c7-4jx" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" id="xyG-W3-mlR"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="redirectLoginButton" destination="SjY-rT-EIm" id="8tq-n5-pF3"/>
                         <outlet property="tokenView" destination="xho-P4-zw2" id="2Yt-Jc-3c0"/>
                     </connections>
                 </viewController>

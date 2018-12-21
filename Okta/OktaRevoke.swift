@@ -18,7 +18,7 @@ public struct Revoke {
             callback(nil, .noRevocationEndpoint)
             return
         }
-        
+
         guard let token = token else {
             callback(nil, .noBearerToken)
             return
@@ -33,8 +33,8 @@ public struct Revoke {
 
         // Append the clientSecret if it exists
         if let clientSecretObj = OktaAuth.configuration?["clientSecret"],
-            let clientSecret = clientSecretObj as? String {
-            data += "&client_secret=\(clientSecret)"
+           let clientSecret = clientSecretObj as? String {
+                data += "&client_secret=\(clientSecret)"
         }
 
         OktaApi.post(revokeEndpoint, headers: headers, postString: data)
