@@ -72,6 +72,8 @@ Create an `Okta.plist` file in your application's bundle with the following fiel
 <string>{clientIdValue}</string>
 <key>redirectUri</key>
 <string>{redirectUrlValue}</string>
+<key>logoutRedirectUri</key>
+<string>{logoutRedirectUriValue}</string>
 <key>scopes</key>
 <string>openid profile offline_access</string>
 </dict>
@@ -153,23 +155,7 @@ OktaAuth.signOutFromOkta().start(view: self)
 }
 ```
 
-**Note**: *This method does not clear tokens stored locally, neither revoke them. You must call `signOutLocally` afterwards to do that.*
-
-## Sign Out Locally
-
-You can finalize the Sign Out flow by  calling `signOutLocally`. This method will end the user's Okta session in the browser.
-
-```swift
-OktaAuth.signOutLocally().
-.then {
-    // Tokens revoked and storage is cleared
-}
-.catch { error in
-    // Error
-}
-```
-
-**Note**: *This method does not perform sign out in browser. You must call `signOutFromOkta` before local sign out to do that.*
+**Note**: *This method does not clear tokens stored locally, neither revoke them.*
 
 ### Handle the Authentication State
 

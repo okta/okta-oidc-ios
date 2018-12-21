@@ -25,7 +25,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.oktapreview.{orgName}</string>
+				<string>com.okta.example</string>
 			</array>
 		</dict>
 	</array>

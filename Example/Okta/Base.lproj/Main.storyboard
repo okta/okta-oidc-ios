@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="UQ8-c7-4jx">
-                                <rect key="frame" x="16" y="28" width="343" height="480"/>
+                                <rect key="frame" x="16" y="28" width="343" height="445"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
                                         <rect key="frame" x="0.0" y="0.0" width="343" height="116"/>
@@ -106,7 +106,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YO7-Wr-HVG">
-                                        <rect key="frame" x="0.0" y="116" width="343" height="364"/>
+                                        <rect key="frame" x="0.0" y="116" width="343" height="329"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xho-P4-zw2">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="259"/>
@@ -147,22 +147,6 @@
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="signOutOfOktaButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fKW-Oi-9Ya"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cWi-Us-eQN">
-                                                <rect key="frame" x="0.0" y="334" width="343" height="30"/>
-                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <accessibility key="accessibilityConfiguration" hint="ClearAndRevoke" identifier="ClearAndRevoke" label="ClearAndRevoke"/>
-                                                <state key="normal" title="Clear &amp; Revoke Tokens">
-                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="10"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="clearAndRevokeTokensButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="193-6Q-bnt"/>
                                                 </connections>
                                             </button>
                                         </subviews>

@@ -103,50 +103,6 @@ class Tests: XCTestCase {
             if error != nil { XCTFail(error!.localizedDescription) }
         })
     }
-    
-    func testClearTokensNoTokensAvailable() {
-        let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
-		
-		XCTAssertNil(OktaAuth.tokens)
-		XCTAssertNil(TestUtils.getPreviousState())
-		
-        OktaAuth.clearTokens()
-        .then { signOutExpectation.fulfill() }
-        .catch { error in
-            XCTFail("Unexpected error: \(error)")
-            signOutExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 5, handler: { error in
-            // Fail on timeout
-            if error != nil { XCTFail(error!.localizedDescription) }
-        })
-		
-		XCTAssertNil(OktaAuth.tokens)
-		XCTAssertNil(TestUtils.getPreviousState())
-    }
-	
-    func testClearTokensInvalidToken() {
-        let signOutExpectation = expectation(description: "Will error attempting sign out locally.")
-
-        TestUtils.tokenManagerNoValidation
-        .then { _ in
-            OktaAuth.clearTokens()
-            .then { signOutExpectation.fulfill() }
-            .catch { error in
-                XCTFail("Unexpected error: \(error)")
-                signOutExpectation.fulfill()
-            }
-        }
-
-        waitForExpectations(timeout: 5, handler: { error in
-            // Fail on timeout
-            if error != nil { XCTFail(error!.localizedDescription) }
-        })
-
-        XCTAssertNil(OktaAuth.tokens)
-        XCTAssertNil(TestUtils.getPreviousState())
-    }
 
     func testIntrospectionEndpointURL() {
         // Similar use case for revoke and userinfo endpoints
@@ -182,8 +138,8 @@ class Tests: XCTestCase {
             "issuer": "https://example.com/oauth2/default"
         ]
         let _ = Revoke(token: nil) { response, error in
-                XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
-            }
+            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
+        }
     }
 
     func testIdTokenDecode() {

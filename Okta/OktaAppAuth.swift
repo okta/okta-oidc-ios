@@ -43,40 +43,6 @@ public func  signOutOfOkta() -> Logout {
     return Logout()
 }
 
-public func clearTokens(revokeTokens: Bool = true) -> Promise<Void> {
-    return Promise<Void>(in: .background, { resolve, reject, _ in
-        guard revokeTokens else {
-            OktaAuth.tokens?.clear()
-            return resolve(())
-        }
-
-        var revokedTokens = [String]()
-        if let accessToken = tokens?.accessToken {
-            revokedTokens.append(accessToken)
-        }
-
-        if let refreshToken = tokens?.refreshToken {
-            revokedTokens.append(refreshToken)
-        }
-
-        all(revokedTokens.map({ token in
-            return Promise<Void>(in: .background, { resolve, reject, _ in
-            _ = Revoke(token: token, callback: { (response, error) in
-                    if let error = error {
-                        return reject(error)
-                    }
-                    resolve(())
-                })
-            })
-        }))
-        .then { _ in
-            OktaAuth.tokens?.clear()
-            resolve(())
-        }
-        .catch { error in reject(error) }
-    })
-}
-
 public func isAuthenticated() -> Bool {
     // Restore state
     guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
@@ -92,6 +58,11 @@ public func isAuthenticated() -> Bool {
         return true
     }
     return false
+}
+
+public func clear() {
+    // Clear auth state
+    tokens?.clear()
 }
 
 public func introspect() -> Introspect {

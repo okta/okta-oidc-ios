@@ -48,17 +48,9 @@ class ViewController: UIViewController {
     @IBAction func signOutOfOktaButton(_ sender: Any) {
         self.signOutOfOkta()
     }
-    
-    @IBAction func clearAndRevokeTokensButton(_ sender: Any) {
-        OktaAuth.clearTokens()
-        .then { self.buildTokenTextView() }
-        .catch { error in self.updateUI(updateText: "Error: \(error)") }
-    }
 
     @IBAction func clearTokens(_ sender: Any) {
-        OktaAuth.clearTokens(revokeTokens: false)
-        .then{ self.buildTokenTextView() }
-        .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.clear()
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
