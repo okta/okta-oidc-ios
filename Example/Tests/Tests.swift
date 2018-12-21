@@ -93,7 +93,7 @@ class Tests: XCTestCase {
         .catch { error in
             XCTAssertEqual(
                 error.localizedDescription,
-                OktaError.missingIdToken.localizedDescription
+                OktaError.missingConfigurationValues.localizedDescription
             )
             signOutExpectation.fulfill()
         }
