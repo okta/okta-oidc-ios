@@ -30,12 +30,12 @@ public var tokens: OktaTokenManager?
 
 public func login() -> Login {
     // Authenticate via authorization code flow
-    return Login()
+    return SignIn()
 }
 
 public func signOutOfOkta() -> Logout {
     // End the Okta session
-    return Logout()
+    return SignOut()
 }
 
 public func isAuthenticated() -> Bool {

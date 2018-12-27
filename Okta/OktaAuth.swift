@@ -57,7 +57,7 @@ public struct OktaAuthorization {
         })
     }
 
-    func logout(_ config: [String: String], view: UIViewController) -> Promise<Void> {
+    func signOut(_ config: [String: String], view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let issuer = config["issuer"],
                   let logoutRedirectUriString = config["logoutRedirectUri"],
@@ -80,12 +80,12 @@ public struct OktaAuthorization {
 
                 let agent = OktaExternalUserAgentIOS(presenting: view)
 
-                // Present the logout flow
+                // Present the Sign Out flow
 
                 OktaAuth.currentAuthorizationFlow =
                     OIDAuthorizationService.present(request, externalUserAgent: agent) { response, responseError in
                         if let responseError = responseError {
-                            return reject(OktaError.APIError("Logout Error: \(responseError.localizedDescription)"))
+                            return reject(OktaError.APIError("Sign Out Error: \(responseError.localizedDescription)"))
                         }
                         return resolve(())
                     }
