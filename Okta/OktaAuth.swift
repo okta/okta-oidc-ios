@@ -57,10 +57,6 @@ public struct OktaAuthorization {
         })
     }
 
-    func passwordFlow(_ config: [String: String], credentials: [String: String]?, _ view: UIViewController) -> Promise<OktaTokenManager> {
-        return buildAndPerformTokenRequest(config, additionalParams: credentials)
-    }
-    
     func logout(_ config: [String: String], view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
             guard let issuer = config["issuer"],
@@ -68,7 +64,7 @@ public struct OktaAuthorization {
                   let logoutRedirectURL = URL(string: logoutRedirectUriString) else {
                     return reject(OktaError.missingConfigurationValues)
             }
-            
+
             guard let idToken = OktaAuth.tokens?.authState.lastTokenResponse?.idToken else {
                 return reject(OktaError.missingIdToken)
             }
@@ -97,74 +93,6 @@ public struct OktaAuthorization {
             .catch { error in
                 return reject(error)
             }
-        })
-    }
-
-    func refreshTokensManually(_ config: [String: String], refreshToken: String) -> Promise<OktaTokenManager> {
-        return buildAndPerformTokenRequest(config, refreshToken: refreshToken)
-    }
-
-    func buildAndPerformTokenRequest(_ config: [String: String], refreshToken: String? = nil, authCode: String? = nil,
-                                     additionalParams: [String: String]? = nil) -> Promise<OktaTokenManager> {
-        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
-            // Discover Endpoints
-            guard let issuer = config["issuer"],
-                let clientId = config["clientId"],
-                let clientSecret = config["clientSecret"],
-                let redirectUri = config["redirectUri"] else {
-                    return reject(OktaError.missingConfigurationValues)
-            }
-
-            self.getMetadataConfig(URL(string: issuer))
-            .then { oidConfig in
-                var grantType = OIDGrantTypePassword
-                if refreshToken == nil && authCode == nil {
-                    // Use the password grant type
-                } else {
-                    // If there is a refreshToken use the refesh_token grant type
-                    // otherwise use the authorization_code grant
-                    grantType = refreshToken != nil ? OIDGrantTypeRefreshToken : OIDGrantTypeAuthorizationCode
-                }
-                // Build the Authentication request
-                let request = OIDTokenRequest(
-                           configuration: oidConfig,
-                               grantType: grantType,
-                       authorizationCode: authCode,
-                             redirectURL: URL(string: redirectUri)!,
-                                clientID: clientId,
-                            clientSecret: clientSecret,
-                                  scopes: Utils.scrubScopes(config["scopes"]),
-                            refreshToken: refreshToken,
-                            codeVerifier: nil,
-                    additionalParameters: additionalParams
-                )
-
-                // Start the authorization flow
-                OIDAuthorizationService.perform(request) { authorizationResponse, responseError in
-                    if responseError != nil {
-                        return reject(OktaError.APIError("Authorization Error: \(responseError!.localizedDescription)"))
-                    }
-
-                    if authorizationResponse != nil {
-                        let authState = OIDAuthState(
-                            authorizationResponse: nil,
-                                    tokenResponse: authorizationResponse,
-                             registrationResponse: nil
-                        )
-
-                        do {
-                            let tokenManager = try OktaTokenManager(authState: authState, config: config)
-
-                            // Set the local cache and write to storage
-                            self.storeAuthState(tokenManager)
-                            return resolve(tokenManager)
-                        } catch let error {
-                            return reject(error)
-                        }
-                    }
-                }
-            }
-            .catch { error in return reject(error) }
         })
     }
 

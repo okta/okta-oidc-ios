@@ -17,14 +17,12 @@ public enum OktaError: Error {
     case JWTValidationError(String)
     case missingConfigurationValues
     case noBearerToken
-    case noClientSecret(String)
     case noDiscoveryEndpoint
     case noIntrospectionEndpoint
     case noPListGiven
     case noRefreshToken
     case noRevocationEndpoint
     case noTokens
-    case noUserCredentials
     case noUserInfoEndpoint
     case parseFailure
     case missingIdToken
@@ -46,11 +44,6 @@ extension OktaError: LocalizedError {
                 "See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .noBearerToken:
             return NSLocalizedString("Missing Bearer token. You must authenticate first.", comment: "")
-        case .noClientSecret(plist: let plist):
-            return NSLocalizedString(
-                "ClientSecret not included in PList configuration file: " +
-                    "\(plist). See https://github.com/okta/okta-sdk-appauth-ios/#configuration " +
-                "for more information.", comment: "")
         case .noDiscoveryEndpoint:
             return NSLocalizedString("Error finding the well-known OpenID Configuration endpoint.", comment: "")
         case .noIntrospectionEndpoint:
@@ -63,8 +56,6 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("Error finding the revocation endpoint.", comment: "")
         case .noTokens:
             return NSLocalizedString("No tokens stored in the token manager.", comment: "")
-        case .noUserCredentials:
-            return NSLocalizedString("User credentials not included.", comment: "")
         case .noUserInfoEndpoint:
             return NSLocalizedString("Error finding the user info endpoint.", comment: "")
         case .parseFailure:
