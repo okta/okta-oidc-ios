@@ -1,94 +1,73 @@
-# Okta
-
+[<img src="https://devforum.okta.com/uploads/oktadev/original/1X/bf54a16b5fda189e4ad2706fb57cbb7a1e5b8deb.png" align="right" width="256px"/>](https://devforum.okta.com/)
 [![CI Status](http://img.shields.io/travis/okta/okta-sdk-appauth-ios.svg?style=flat)](https://travis-ci.org/okta/okta-sdk-appauth-ios)
 [![Version](https://img.shields.io/cocoapods/v/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 [![License](https://img.shields.io/cocoapods/l/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 [![Platform](https://img.shields.io/cocoapods/p/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 
-## Overview
+# Okta AppAuth-iOS Wrapper Library
 
-This library is a **wrapper** around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS) SDK for communicating with OAuth 2.0 + OpenID Connect providers, and follows current best practice outlined in [RFC 8252 - OAuth 2.0 for Native Apps](https://tools.ietf.org/html/rfc8252).
+This library is a wrapper around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS)* SDK for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
-**Note**: *Uses Okta fork of [AppAuth-iOS](https://github.com/okta/AppAuth-iOS) with logout functionality. *
+> *Okta is using a forked version of [AppAuth-iOS](https://github.com/okta/AppAuth-iOS) with logout functionality. See [#259](https://github.com/openid/AppAuth-iOS/pull/259) for more details on this pending addition.
 
-This library currently supports:
+You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation.
 
-- [OAuth 2.0 Authorization Code Flow](https://tools.ietf.org/html/rfc6749#section-4.1) using the [PKCE extension](https://tools.ietf.org/html/rfc7636)
+**Table of Contents**
 
-## Give it a Test Run
+<!-- TOC depthFrom:2 depthTo:3 -->
 
-To run the example project, run `pod try OktaAuth`.
+- [Getting Started](#getting-started)
+  - [Using Cocoapods](#using-cocoapods)
+  - [Handle the redirect](#handle-the-redirect)
+- [Usage Guide](#usage-guide)
+- [Configuration Reference](#configuration-reference)
+  - [Property list](#property-list)
+  - [Configuration object](#configuration-object)
+- [API Reference](#api-reference)
+  - [login](#login)
+  - [signOutOfOkta](#signoutofokta)
+  - [isAuthenticated](#isauthenticated)
+  - [getUser](#getuser)
+  - [introspect](#introspect)
+  - [refresh](#refresh)
+  - [revoke](#revoke)
+  - [tokens](#tokens)
+  - [clear](#clear)
+- [Development](#development)
+  - [Running Tests](#running-tests)
 
-## Prerequisites
+<!-- /TOC -->
 
-If you do not already have a **Developer Edition Account**, you can create one at [https://developer.okta.com/signup/](https://developer.okta.com/signup/).
+## Getting Started
 
-### Add an OpenID Connect Client
+Installing the Okta AppAuth wrapper into your project is simple. The easiest way to include this library into your project is through [CocoaPods](http://cocoapods.org).
 
-- Log into the Okta Developer Dashboard, click **Applications** then **Add Application**.
-- Choose **Native app** as the platform, then populate your new OpenID Connect application with values similar to:
+You'll also need:
 
-| Setting             | Value                                               |
-| ------------------- | --------------------------------------------------- |
-| Application Name    | My iOS App                                          |
-| Login redirect URIs | com.oktapreview.{yourOrg}:/callback                 |
-| Grant type allowed  | Authorization Code, Refresh Token                   |
+- An Okta account, called an _organization_ (sign up for a free [developer organization](https://developer.okta.com/signup/) if you need one).
+- An Okta Application, configured as a Native App. This is done from the Okta Developer Console and you can find instructions [here](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce). When following the wizard, use the default properties. They are are designed to work with our sample applications.
 
-After you have created the application there are two more values you will need to gather:
+### Using Cocoapods
 
-| Setting       | Where to Find                                                                  |
-| ------------- | ------------------------------------------------------------------------------ |
-| Client ID     | In the applications list, or on the "General" tab of a specific application.   |
-| Org URL       | On the home screen of the developer dashboard, in the upper right.             |
-
-These values will be used in your iOS application to setup the OpenID Connect flow with Okta.
-
-**Note:** *As with any Okta application, make sure you assign Users or Groups to the OpenID Connect Client. Otherwise, no one can use it.*
-
-## Installation
-
-Okta is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+Simply add the following line to your `Podfile`:
 
 ```ruby
-pod "OktaAuth"
+pod 'OktaAuth'
 ```
 
-### Configuration
+Then install it into your project:
 
-Create an `Okta.plist` file in your application's bundle with the following fields:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-<key>issuer</key>
-<string>https://{yourOktaDomain}.com/oauth2/default</string>
-<key>clientId</key>
-<string>{clientIdValue}</string>
-<key>redirectUri</key>
-<string>{redirectUrlValue}</string>
-<key>logoutRedirectUri</key>
-<string>{logoutRedirectUriValue}</string>
-<key>scopes</key>
-<string>openid profile offline_access</string>
-</dict>
-</plist>
+```bash
+pod install
 ```
 
-**Note**: *To receive a **refresh_token**, you must include the `offline_access` scope.*
-**Note**: *To perform a **logout**, you must specify the `logoutRedirectUri`.*
-
-### Update the Private-use URI Scheme
+### Handle the redirect
 
 In order to redirect back to your application from a web browser, you must specify a unique URI to your app. To do this, open `Info.plist` in your application bundle and set a **URL Scheme** to the scheme of the redirect URI.
 
 For example, if your **Redirect URI** is `com.okta.example:/callback`, the **URL Scheme** will be `com.okta.example`.
 
-## Authorization
-
-First, update your `AppDelegate` to include the following function to allow the redirect to occur:
+Next, update your `AppDelegate` to include the following function to allow the redirect to occur:
 
 ```swift
 // AppDelegate.swift
@@ -99,114 +78,254 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 }
 ```
 
-Then, you can start the authorization flow by simply calling `login`:
+## Usage Guide
 
-```swift
-OktaAuth.login().start(view: self)
-.then { tokenManager in
-    // tokenManager.accessToken
-    // tokenManager.idToken
-    // tokenManager.refreshToken
-}
-.catch { error in
-    // Error
-}
+For an overview of this library's features and authentication flows, check out [our developer docs](https://developer.okta.com/code/ios).
+
+<!--
+TODO: Once the developer site provides code walkthroughs, update this with a bulleted list of possible flows.
+-->
+
+You can also browse the full [API reference documentation](#api-reference).
+
+## Configuration Reference
+
+There are multiple ways you can configure this library to perform authentication into your application. You can create a new `plist` file with shared values or directly pass your configuration into the login method directly.
+
+**Need a refresh token?**
+A refresh token is a special token that is used to generate additional access and ID tokens. Make sure to include the `offline_access` scope in your configuration to silently renew the user's session in your application!
+
+### Property list
+
+The easiest way is to create a proptery list in your application's bundle. By default, this library checks for the existance of the file `Okta.plist`, however any property list file will suffice. Ensure one is created with the following fields:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>issuer</key>
+    <string>https://{yourOktaDomain}.com/oauth2/default</string>
+    <key>clientId</key>
+    <string>{clientId}</string>
+    <key>redirectUri</key>
+    <string>{redirectUri}</string>
+    <key>logoutRedirectUri</key>
+    <string>{logoutRedirectUri}</string>
+    <key>scopes</key>
+    <string>openid profile offline_access</string>
+  </dict>
+</plist>
 ```
 
-## Sign Out from Okta
+### Configuration object
 
-You can start the Sign Out flow by simply calling `signOutFromOkta`. This method will end the user's Okta session in the browser.
+Alternatively, you can create a dictionary with the required values:
 
 ```swift
-OktaAuth.signOutFromOkta().start(view: self)
-.then {
-    // Clean tokenManager
-}
-.catch { error in
-    // Error
-}
+let config = [
+  "issuer": "https://{yourOktaDomain}/oauth2/default",
+  "clientId": "{clientID}",
+  "redirectUri": "{redirectUri}",
+  "logoutRedirectUri": "{logoutRedirectUri}",
+  "scopes": "openid profile offline_access",
+  // Custom parameters
+  "login_hint": "username@email.com"
+]
 ```
 
-**Note**: *This method does not clear tokens stored locally, neither revoke them.*
+## API Reference
 
-### Handle the Authentication State
+### login
+
+Start the authorization flow by simply calling `login`. By default, this method uses the values specified in the `Okta.plist` file:
+
+```swift
+OktaAuth
+  .login()
+  .start(view: self)
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+Alternatively, use a custom `plist` file using the `withPListConfig` argument:
+
+```swift
+OktaAuth
+  .start(withPListConfig: "CustomPlist", view: self)
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+Finally, use a dictionary instead of a `plist`:
+
+```swift
+let config: [String: String] = [
+  // Your configuation
+]
+
+OktaAuth
+  .start(withDictConfig: config, view: self)
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+### signOutOfOkta
+
+You can start the sign out flow by simply calling `signOutFromOkta`. This method will end the user's Okta session in the browser.
+
+**Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods to terminate the user's local session in your application.
+
+```swift
+// Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
+OktaAuth
+  .signOutFromOkta()
+  .start(view: self)
+  .then {
+    // Additional signout logic
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+Similar to the [`login`](#login) method, `signOutOfOkta` can accept a custom `plist` or dictionary configuration:
+
+```swift
+// Use a custom plist file
+OktaAuth
+  .signOutFromOkta()
+  .start(withPListConfig: "CustomPlist", view: self)
+  .then {
+    // Additional signout logic
+  }
+  .catch { error in
+    // Error
+  }
+
+// Use a dictionary object for configuration
+let config: [String: String] = [
+  // Your configuation
+]
+
+OktaAuth
+  .signOutFromOkta()
+  .start(withDictConfig: config, view: self)
+  .then {
+    // Additional signout logic
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+### isAuthenticated
 
 Returns `true` if there is a valid access token stored in the TokenManager. This is the best way to determine if a user has successfully authenticated into your app.
 
 ```swift
 if !OktaAuth.isAuthenticated() {
-    // Prompt for login
+  // Prompt for login
 }
 ```
 
-### Get UserInfo
+### getUser
 
-Calls the OIDC userInfo endpoint to return user information.
+Calls the OpenID Connect UserInfo endpoint with the stored access token to return user claim information.
 
 ```swift
 OktaAuth.getUser() { response, error in
-    if error != nil {
-        print("Error: \(error!)")
-    }
+  if error != nil {
+    print("Error: \(error!)")
+  }
 
-    if let userinfo = response {
-        userinfo.forEach { print("\($0): \($1)") }
-    }
+  if let userinfo = response {
+    // JSON response
+  }
 }
 ```
 
-### Introspect a Token
+### introspect
 
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-OktaAuth.introspect().validate(token: token)
-.then { isActive in
+OktaAuth
+  .introspect()
+  .validate(token: token)
+  .then { isActive in
     print("Is token valid? \(isActive)")
-}
-.catch { error in
+  }
+  .catch { error in
     // Error
-}
+  }
 ```
 
-### Refresh a Token
+### refresh
 
-Since access tokens are traditionally short-lived, you can refresh them by using a refresh token. See [configuration](#configuration) to ensure your app is configured properly for this flow.
+Since access tokens are traditionally short-lived, you can refresh expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
 
 ```swift
-OktaAuth.refresh()
-.then { newAccessToken in
+OktaAuth
+  .refresh()
+  .then { newAccessToken in
     print(newAccessToken)
-}
-.catch { error in
+  }
+  .catch { error in
     // Error
-}
-
+  }
 ```
 
-### Revoke a Token
+### revoke
 
 Calls the revocation endpoint to revoke the specified token.
 
 ```swift
-OktaAuth.revoke(token: token) { response, error in
+OktaAuth
+  .revoke(token: token) { response, error in
     if error != nil {
-        print("Error: \(error!)")
+      print("Error: \(error!)")
     }
     if let _ = response {
-        print("Token was revoked")
+      print("Token was revoked")
     }
 }
 ```
 
-### Token Management
+### tokens
 
-Tokens are securely stored in the Keychain and can be retrieved from the TokenManager.
+Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `token` object bound to `OktaAuth`:
 
 ```swift
 OktaAuth.tokens?.accessToken
 OktaAuth.tokens?.idToken
 OktaAuth.tokens?.refreshToken
+```
+
+### clear
+
+Removes the local authentication state by removing cached tokens in the keychain.
+
+```swift
+OktaAuth.clear()
 ```
 
 ## Development
@@ -218,17 +337,13 @@ To perform an end-to-end test, update the `Okta.plist` file to match your config
 ```bash
 export USERNAME={username}
 export PASSWORD={password}
-export CLIENT_ID={client_id}
-export ISSUER={issuer url}
-export REDIRECT_URI={redirect uri}
-export LOGOUT_REDIRECT_URI={logout redirect uri}
+export CLIENT_ID={clientId}
+export ISSUER=https://{yourOktaDomain}/oauth2/default
+export REDIRECT_URI={redirectUri}
+export LOGOUT_REDIRECT_URI={logoutRedirectUri}
 
 # Run E2E end Unit tests
 bash ./scripts/build-and-test.sh
 ```
 
 **Note:** *You may need to update the emulator device to match your Xcode version*
-
-## License
-
-Okta is available under the Apache 2.0 license. See the LICENSE file for more info.
