@@ -33,7 +33,7 @@ public func login() -> Login {
     return Login()
 }
 
-public func  signOutOfOkta() -> Logout {
+public func signOutOfOkta() -> Logout {
     // End the Okta session
     return Logout()
 }
