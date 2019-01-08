@@ -33,7 +33,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
                                                 <rect key="frame" x="0.0" y="50" width="343" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Login" identifier="Login" label="Login"/>
+                                                <accessibility key="accessibilityConfiguration" hint="SignIn" identifier="SignIn" label="SignIn"/>
                                                 <state key="normal" title="Sign In with Browser">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -163,7 +163,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="redirectLoginButton" destination="SjY-rT-EIm" id="8tq-n5-pF3"/>
+                        <outlet property="signInButton" destination="SjY-rT-EIm" id="Vzo-a2-OAh"/>
                         <outlet property="tokenView" destination="xho-P4-zw2" id="2Yt-Jc-3c0"/>
                     </connections>
                 </viewController>

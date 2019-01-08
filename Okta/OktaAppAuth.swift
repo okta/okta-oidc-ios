@@ -28,12 +28,12 @@ public var wellKnown: [String: Any]?
 // Token manager
 public var tokens: OktaTokenManager?
 
-public func login() -> Login {
+public func signIn() -> SignIn {
     // Authenticate via authorization code flow
     return SignIn()
 }
 
-public func signOutOfOkta() -> Logout {
+public func signOutOfOkta() -> SignOut {
     // End the Okta session
     return SignOut()
 }

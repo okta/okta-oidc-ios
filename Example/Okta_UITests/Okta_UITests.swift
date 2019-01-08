@@ -47,7 +47,7 @@ class OktaUITests: XCTestCase {
         super.tearDown()
     }
 
-    func loginAndWait() {
+    func signInAndWait() {
         guard let testUtils = testUtils else { return }
 
         guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
@@ -55,10 +55,10 @@ class OktaUITests: XCTestCase {
             return
         }
 
-        app.buttons["Login"].tap()
+        app.buttons["SignIn"].tap()
 
-        // Login
-        testUtils.login(username: username, password: password)
+        // Sign In
+        testUtils.signIn(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
         guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
@@ -68,14 +68,14 @@ class OktaUITests: XCTestCase {
     }
 
     func testAuthCodeFlow() {
-        loginAndWait()
+        signInAndWait()
 
         let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertNotNil(tokenValues)
     }
 
     func testAuthCodeFlowAndUserInfo(){
-        loginAndWait()
+        signInAndWait()
 
         // Get User info
         app.buttons["GetUser"].tap()
@@ -85,7 +85,7 @@ class OktaUITests: XCTestCase {
     }
 
     func testAuthCodeFlowIntrospectAndRevoke() {
-        loginAndWait()
+        signInAndWait()
 
         // Introspect Valid Token
         app.buttons["Introspect"].tap()
@@ -95,7 +95,7 @@ class OktaUITests: XCTestCase {
     }
 
     func testAuthCodeFlowRevokeAndIntrospect() {
-        loginAndWait()
+        signInAndWait()
 
         // Revoke Token
         app.buttons["Revoke"].tap()
@@ -114,7 +114,7 @@ class OktaUITests: XCTestCase {
     }
 	
     func testSignOutFlow() {
-        loginAndWait()
+        signInAndWait()
         
         // Sign Out from Okta
         app.buttons["SignOutOkta"].tap()
@@ -125,7 +125,7 @@ class OktaUITests: XCTestCase {
             return
         }
         
-        app.buttons["Login"].tap()
+        app.buttons["SignIn"].tap()
 
         guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
             XCTFail("Cannot locate web browser!")

@@ -24,7 +24,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [Property list](#property-list)
   - [Configuration object](#configuration-object)
 - [API Reference](#api-reference)
-  - [login](#login)
+  - [signin](#signin)
   - [signOutOfOkta](#signoutofokta)
   - [isAuthenticated](#isauthenticated)
   - [getUser](#getuser)
@@ -90,7 +90,7 @@ You can also browse the full [API reference documentation](#api-reference).
 
 ## Configuration Reference
 
-There are multiple ways you can configure this library to perform authentication into your application. You can create a new `plist` file with shared values or directly pass your configuration into the login method directly.
+There are multiple ways you can configure this library to perform authentication into your application. You can create a new `plist` file with shared values or directly pass your configuration into the sign in method directly.
 
 **Need a refresh token?**
 A refresh token is a special token that is used to generate additional access and ID tokens. Make sure to include the `offline_access` scope in your configuration to silently renew the user's session in your application!
@@ -136,13 +136,13 @@ let config = [
 
 ## API Reference
 
-### login
+### signin
 
-Start the authorization flow by simply calling `login`. By default, this method uses the values specified in the `Okta.plist` file:
+Start the authorization flow by simply calling `signIn`. By default, this method uses the values specified in the `Okta.plist` file:
 
 ```swift
 OktaAuth
-  .login()
+  .signIn()
   .start(view: self)
   .then { tokens in
     // tokens.accessToken
@@ -207,7 +207,7 @@ OktaAuth
   }
 ```
 
-Similar to the [`login`](#login) method, `signOutOfOkta` can accept a custom `plist` or dictionary configuration:
+Similar to the [`signIn`](#signin) method, `signOutOfOkta` can accept a custom `plist` or dictionary configuration:
 
 ```swift
 // Use a custom plist file
@@ -243,7 +243,7 @@ Returns `true` if there is a valid access token stored in the TokenManager. This
 
 ```swift
 if !OktaAuth.isAuthenticated() {
-  // Prompt for login
+  // Prompt for sign in
 }
 ```
 
