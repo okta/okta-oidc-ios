@@ -13,6 +13,6 @@ Integrate your native app with Okta using the AppAuth library.
 
   s.ios.deployment_target = '9.0'
   s.source_files = 'Okta/**/*'
-  s.dependency 'OktaAppAuth', '= 1.0.0.beta-okta'
+  s.dependency 'OktaAppAuth', '= 1.1.0.beta-okta'
   s.dependency 'HydraAsync', '~> 1.2.1'
 end
