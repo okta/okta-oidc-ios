@@ -85,11 +85,11 @@ class ViewController: UIViewController {
 
     func signInWithBrowser() {
         if self.isUITest {
-            OktaAuth.signIn().start(withDictConfig: testConfig, view: self)
+            OktaAuth.signInWithBrowser().start(withDictConfig: testConfig, view: self)
             .then { _ in self.buildTokenTextView() }
             .catch { error in self.updateUI(updateText: "Error: \(error)") }
         } else {
-            OktaAuth.signIn().start(self)
+            OktaAuth.signInWithBrowser().start(self)
             .then { _ in self.buildTokenTextView() }
             .catch { error in self.updateUI(updateText: "Error: \(error)") }
         }

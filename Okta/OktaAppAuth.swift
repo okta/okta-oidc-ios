@@ -28,7 +28,7 @@ public var wellKnown: [String: Any]?
 // Token manager
 public var tokens: OktaTokenManager?
 
-public func signIn() -> SignIn {
+public func signInWithBrowser() -> SignIn {
     // Authenticate via authorization code flow
     return SignIn()
 }

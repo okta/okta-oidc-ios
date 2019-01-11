@@ -237,6 +237,7 @@
 				607FACCE1AFB9204008FA782 /* Resources */,
 				526329C609C1874268418CBE /* [CP] Embed Pods Frameworks */,
 				7167B86D1F0480ED0088C484 /* ShellScript */,
+				F6787EE65D913B02D7E63D4F /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -256,6 +257,7 @@
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
 				2F859308753DAB4AC712FE5A /* [CP] Embed Pods Frameworks */,
+				72F7119D292AA1D43492416E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -276,6 +278,7 @@
 				7137EDEC1EFB25670082C30F /* Frameworks */,
 				7137EDED1EFB25670082C30F /* Resources */,
 				03757DFC3F737ADF6576BF26 /* [CP] Embed Pods Frameworks */,
+				BEA3F9380B6723E1710F48B1 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -390,7 +393,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
@@ -403,7 +406,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2F859308753DAB4AC712FE5A /* [CP] Embed Pods Frameworks */ = {
@@ -412,7 +415,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
@@ -425,7 +428,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		526329C609C1874268418CBE /* [CP] Embed Pods Frameworks */ = {
@@ -434,7 +437,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
@@ -447,7 +450,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7167B86D1F0480ED0088C484 /* ShellScript */ = {
@@ -462,6 +465,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "";
+		};
+		72F7119D292AA1D43492416E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		965D04F4337C70309B3AB0B4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -481,6 +499,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BEA3F9380B6723E1710F48B1 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F009F0345E0984D8E69615C3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -497,6 +530,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6787EE65D913B02D7E63D4F /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
