@@ -48,6 +48,8 @@ public struct OktaAuthorization {
 
                         // Set the local cache and write to storage
                         OktaAuth.tokens = tokenManager
+                        self.storeAuthState(tokenManager)
+                        
                         return resolve(tokenManager)
                     } catch let error {
                         return reject(error)
