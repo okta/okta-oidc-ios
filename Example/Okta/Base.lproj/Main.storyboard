@@ -49,8 +49,8 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h30-Kg-tkQ" userLabel="Resume Session">
                                                 <rect key="frame" x="0.0" y="82" width="343" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <accessibility key="accessibilityConfiguration" hint="ResumeSession" identifier="ResumeSession" label="ResumeSession"/>
-                                                <state key="normal" title="Resume Session">
+                                                <accessibility key="accessibilityConfiguration" hint="Authorize" identifier="Authorize" label="Authorize"/>
+                                                <state key="normal" title="Authorize">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
@@ -187,10 +187,10 @@
             </objects>
             <point key="canvasLocation" x="117.59999999999999" y="102.99850074962519"/>
         </scene>
-        <!--Resume Session View Controller-->
+        <!--Authorize View Controller-->
         <scene sceneID="zNv-bR-Tlh">
             <objects>
-                <viewController id="Q0H-n6-O4s" customClass="ResumeSessionViewController" customModule="Okta_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Q0H-n6-O4s" customClass="AuthorizeViewController" customModule="Okta_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zHL-c1-dbf"/>
                         <viewControllerLayoutGuide type="bottom" id="8A8-uz-Zh3"/>
@@ -225,11 +225,12 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eu1-db-qaa">
                                         <rect key="frame" x="0.0" y="143" width="303" height="30"/>
                                         <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Resume Session">
+                                        <accessibility key="accessibilityConfiguration" hint="Authorize" identifier="Authorize" label="Authorize"/>
+                                        <state key="normal" title="Authorize">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
-                                            <action selector="resume" destination="Q0H-n6-O4s" eventType="touchUpInside" id="hzF-Rs-KQ5"/>
+                                            <action selector="authorize" destination="Q0H-n6-O4s" eventType="touchUpInside" id="aig-GV-uVl"/>
                                         </connections>
                                     </button>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2hx-jd-yel">
@@ -269,10 +270,10 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="authorizeButton" destination="eu1-db-qaa" id="zSe-ff-lxp"/>
                         <outlet property="messageView" destination="2hx-jd-yel" id="kCK-Gr-mTL"/>
                         <outlet property="progessIndicator" destination="tIm-Kj-df9" id="kNE-Mg-pcb"/>
                         <outlet property="progessOverlay" destination="Lqa-RL-dei" id="lhF-1i-vuk"/>
-                        <outlet property="resumeButton" destination="eu1-db-qaa" id="g6Q-5Z-iNQ"/>
                         <outlet property="tokenTextView" destination="Ok9-2u-zan" id="3JD-o6-mW0"/>
                     </connections>
                 </viewController>

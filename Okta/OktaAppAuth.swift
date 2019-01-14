@@ -38,8 +38,8 @@ public func signOutOfOkta() -> SignOut {
     return SignOut()
 }
 
-public func resumeSession(_ sessionToken: String) -> SessionResume {
-    return SessionResume(sessionToken: sessionToken)
+public func authoize(withSessionToken sessionToken: String) -> Authorize {
+    return Authorize(sessionToken: sessionToken)
 }
 
 public func isAuthenticated() -> Bool {
@@ -62,7 +62,6 @@ public func isAuthenticated() -> Bool {
 public func clear() {
     // Clear auth state
     tokens?.clear()
-    OktaKeychain.clearAll()
 }
 
 public func introspect() -> Introspect {

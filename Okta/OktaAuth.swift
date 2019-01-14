@@ -98,7 +98,7 @@ public struct OktaAuthorization {
         })
     }
     
-    func authenticate(withSessionToken sessionToken: String, config: [String: String]) -> Promise<OktaTokenManager> {
+    func authorize(withSessionToken sessionToken: String, config: [String: String]) -> Promise<OktaTokenManager> {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
             guard let issuer = config["issuer"],

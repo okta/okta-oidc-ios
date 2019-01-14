@@ -45,7 +45,7 @@ extension OIDAuthState {
         })
         .always {
             // Restore default URL session
-            self.restoreURLSettion()
+            self.restoreURLSession()
         }
     }
     
@@ -67,7 +67,7 @@ extension OIDAuthState {
         OIDURLSessionProvider.setSession(session)
     }
     
-    private static func restoreURLSettion() {
+    private static func restoreURLSession() {
         OIDURLSessionProvider.setSession(URLSession.shared)
     }
     
