@@ -142,7 +142,7 @@ Start the authorization flow by simply calling `signIn`. By default, this method
 
 ```swift
 OktaAuth
-  .signIn()
+  .signInWithBrowser()
   .start(view: self)
   .then { tokens in
     // tokens.accessToken
@@ -158,6 +158,7 @@ Alternatively, use a custom `plist` file using the `withPListConfig` argument:
 
 ```swift
 OktaAuth
+  .signInWithBrowser()
   .start(withPListConfig: "CustomPlist", view: self)
   .then { tokens in
     // tokens.accessToken
@@ -177,6 +178,7 @@ let config: [String: String] = [
 ]
 
 OktaAuth
+  .signInWithBrowser()
   .start(withDictConfig: config, view: self)
   .then { tokens in
     // tokens.accessToken
