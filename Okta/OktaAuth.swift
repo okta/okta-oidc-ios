@@ -47,7 +47,6 @@ public struct OktaAuthorization {
                         let tokenManager = try OktaTokenManager(authState: authResponse, config: config)
 
                         // Set the local cache and write to storage
-                        OktaAuth.tokens = tokenManager
                         self.storeAuthState(tokenManager)
                         
                         return resolve(tokenManager)
