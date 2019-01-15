@@ -104,8 +104,7 @@ public struct OktaAuthorization {
             guard let issuer = config["issuer"],
                   let clientId = config["clientId"],
                   let redirectUriString = config["redirectUri"],
-                  let redirectUri = URL(string: redirectUriString),
-                  let scopes = config["scopes"] else {
+                  let redirectUri = URL(string: redirectUriString) else {
                     return reject(OktaError.missingConfigurationValues)
             }
 
@@ -119,7 +118,7 @@ public struct OktaAuthorization {
                     configuration: oidConfig,
                     clientId: clientId,
                     clientSecret: nil,
-                    scope: scopes,
+                    scope: config["scopes"],
                     redirectURL: redirectUri,
                     responseType: OIDResponseTypeCode,
                     state: state,

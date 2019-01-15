@@ -145,4 +145,27 @@ class OktaUITests: XCTestCase {
         let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
     }
+    
+    func testAuthorizeWithSessionToken() {
+        app.buttons["Authorize"].tap()
+        
+        guard testUtils.waitForElement(app.textViews["TokenTextView"], timeout: 5) else {
+            XCTFail("Should redirect to authorization screen.")
+            return
+        }
+        
+        let tokenView = app.textViews["TokenTextView"]
+        
+        tokenView.tap()
+        tokenView.typeText("Some_Invalid_Token")
+        
+        app.buttons["Authorize"].tap()
+        
+        guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 5) else {
+            XCTFail("Authorization with invalid token should fail.")
+            return
+        }
+        
+        XCTAssertTrue(errorDescription.contains(OktaError.unableToGetAuthCode.localizedDescription))
+    }
 }

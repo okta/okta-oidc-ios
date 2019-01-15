@@ -212,6 +212,7 @@
                                         <rect key="frame" x="0.0" y="33" width="303" height="100"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <accessibility key="accessibilityConfiguration" hint="TokenTextView" identifier="TokenTextView" label="TokenTextView"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="LUo-0m-oPi"/>
                                         </constraints>
@@ -236,6 +237,7 @@
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="2hx-jd-yel">
                                         <rect key="frame" x="0.0" y="183" width="303" height="100"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <accessibility key="accessibilityConfiguration" hint="MessageView" identifier="MessageView" label="MessageView"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="100" id="2Y1-Ta-xCH"/>
                                         </constraints>
