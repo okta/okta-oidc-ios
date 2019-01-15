@@ -11,9 +11,9 @@
  */
 import Hydra
 
-public struct Logout {
+public struct SignOut {
     public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<Void> {
-        return OktaAuthorization().logout(dict, view: view)
+        return OktaAuthorization().signOut(dict, view: view)
     }
     
     public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {

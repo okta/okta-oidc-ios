@@ -33,8 +33,8 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
                                                 <rect key="frame" x="0.0" y="50" width="343" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <accessibility key="accessibilityConfiguration" hint="Login" identifier="Login" label="Login"/>
-                                                <state key="normal" title="Login by Redirect">
+                                                <accessibility key="accessibilityConfiguration" hint="SignIn" identifier="SignIn" label="SignIn"/>
+                                                <state key="normal" title="Sign In with Browser">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
@@ -43,7 +43,7 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <action selector="loginButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="z7Q-oY-hlj"/>
+                                                    <action selector="signInButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="HIy-Xk-tcf"/>
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="hZp-HF-Wta">
@@ -163,7 +163,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="redirectLoginButton" destination="SjY-rT-EIm" id="8tq-n5-pF3"/>
+                        <outlet property="signInButton" destination="SjY-rT-EIm" id="Vzo-a2-OAh"/>
                         <outlet property="tokenView" destination="xho-P4-zw2" id="2Yt-Jc-3c0"/>
                     </connections>
                 </viewController>

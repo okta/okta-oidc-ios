@@ -11,7 +11,7 @@
  */
 import Hydra
 
-public struct Login {
+public struct SignIn {
 
     init(){}
 

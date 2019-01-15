@@ -12,7 +12,7 @@ import OktaAuth
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
-    @IBOutlet weak var redirectLoginButton: UIButton!
+    @IBOutlet weak var signInButton: UIButton!
     
     private var isUITest: Bool {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
@@ -41,8 +41,8 @@ class ViewController: UIViewController {
         }
     }
 
-    @IBAction func loginButton(_ sender: Any) {
-        self.loginCodeFlow()
+    @IBAction func signInButton(_ sender: Any) {
+        self.signInWithBrowser()
     }
     
     @IBAction func signOutOfOktaButton(_ sender: Any) {
@@ -83,13 +83,13 @@ class ViewController: UIViewController {
         }
     }
 
-    func loginCodeFlow() {
+    func signInWithBrowser() {
         if self.isUITest {
-            OktaAuth.login().start(withDictConfig: testConfig, view: self)
+            OktaAuth.signInWithBrowser().start(withDictConfig: testConfig, view: self)
             .then { _ in self.buildTokenTextView() }
             .catch { error in self.updateUI(updateText: "Error: \(error)") }
         } else {
-            OktaAuth.login().start(self)
+            OktaAuth.signInWithBrowser().start(self)
             .then { _ in self.buildTokenTextView() }
             .catch { error in self.updateUI(updateText: "Error: \(error)") }
         }
