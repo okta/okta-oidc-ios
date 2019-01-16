@@ -24,7 +24,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [Property list](#property-list)
   - [Configuration object](#configuration-object)
 - [API Reference](#api-reference)
-  - [signin](#signin)
+  - [signInWithBrowser](#signInWithBrowser)
   - [signOutOfOkta](#signoutofokta)
   - [isAuthenticated](#isauthenticated)
   - [getUser](#getuser)
@@ -136,7 +136,7 @@ let config = [
 
 ## API Reference
 
-### signin
+### signInWithBrowser
 
 Start the authorization flow by simply calling `signIn`. By default, this method uses the values specified in the `Okta.plist` file:
 
