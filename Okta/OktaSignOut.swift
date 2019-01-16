@@ -18,9 +18,12 @@ public struct SignOut {
     
     public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {
         return Promise<Void>(in: .background, { resolve, reject, _ in
-            guard let plist = plistName,
-                let config = Utils.getPlistConfiguration(forResourceName: plist) else {
+            guard let plist = plistName else {
                     return reject(OktaError.noPListGiven)
+            }
+            
+            guard let config = Utils.getPlistConfiguration(forResourceName: plist) else {
+                return reject(OktaError.pListParseFailure)
             }
             
             self.start(withDictConfig: config, view: view)
