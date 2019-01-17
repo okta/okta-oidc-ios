@@ -20,6 +20,7 @@ public enum OktaError: Error {
     case noDiscoveryEndpoint
     case noIntrospectionEndpoint
     case noPListGiven
+    case pListParseFailure
     case noRefreshToken
     case noRevocationEndpoint
     case noTokens
@@ -50,6 +51,8 @@ extension OktaError: LocalizedError {
             return NSLocalizedString("Error finding the introspection endpoint.", comment: "")
         case .noPListGiven:
             return NSLocalizedString("PList name required. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
+        case .pListParseFailure:
+            return NSLocalizedString("Unable to read and/or parse. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .noRefreshToken:
             return NSLocalizedString("No refresh token stored. Make sure the 'offline_access' scope is included in your PList.", comment: "")
         case .noRevocationEndpoint:

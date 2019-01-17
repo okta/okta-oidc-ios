@@ -25,13 +25,16 @@ public struct SignIn {
             guard let plist = plistName else {
                 return reject(OktaError.noPListGiven)
             }
+            
+            guard let config = Utils.getPlistConfiguration(forResourceName: plist) else {
+                return reject(OktaError.pListParseFailure)
+            }
 
             // Get client configuration from Okta.plist
-            if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                OktaAuthorization().authCodeFlow(config, view)
-                .then { response in return resolve(response) }
-                .catch { error in return reject(error) }
-            }
+            OktaAuthorization()
+            .authCodeFlow(config, view)
+            .then { response in return resolve(response) }
+            .catch { error in return reject(error) }
         })
     }
 

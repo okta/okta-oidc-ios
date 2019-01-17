@@ -18,7 +18,8 @@ public struct OktaAuthorization {
         return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
             // Discover Endpoints
             guard let issuer = config["issuer"], let clientId = config["clientId"],
-                let redirectUri = config["redirectUri"] else {
+                let redirectUriString = config["redirectUri"],
+                let redirectUri = URL(string: redirectUriString) else {
                     return reject(OktaError.missingConfigurationValues)
             }
 
@@ -29,7 +30,7 @@ public struct OktaAuthorization {
                            configuration: oidConfig,
                                 clientId: clientId,
                                   scopes: Utils.scrubScopes(config["scopes"]),
-                             redirectURL: URL(string: redirectUri)!,
+                             redirectURL: redirectUri,
                             responseType: OIDResponseTypeCode,
                     additionalParameters: Utils.parseAdditionalParams(config)
                 )
