@@ -51,6 +51,7 @@ class ViewController: UIViewController {
 
     @IBAction func clearTokens(_ sender: Any) {
         OktaAuth.clear()
+        self.buildTokenTextView()
     }
 
     @IBAction func userInfoButton(_ sender: Any) {

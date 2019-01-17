@@ -69,9 +69,17 @@ class OktaUITests: XCTestCase {
 
     func testAuthCodeFlow() {
         signInAndWait()
-
-        let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
+        
+        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertNotNil(tokenValues)
+        XCTAssertNotEqual(tokenValues, "")
+
+        app.terminate()
+        app.launch()
+        
+        tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 1)
+        XCTAssertNotNil(tokenValues)
+        XCTAssertNotEqual(tokenValues, "")
     }
 
     func testAuthCodeFlowAndUserInfo(){
