@@ -14,7 +14,7 @@ import OktaAppAuth
 import Hydra
 
 // Current version of the SDK
-let VERSION = "1.0.0"
+let VERSION = "2.0.0"
 
 // Holds the browser session
 public var currentAuthorizationFlow: OIDExternalUserAgentSession?
