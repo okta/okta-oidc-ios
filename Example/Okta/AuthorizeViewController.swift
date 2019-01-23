@@ -54,7 +54,7 @@ class AuthorizeViewController : UIViewController {
         
         if isUITest {
             OktaAuth
-            .authoize(withSessionToken: token)
+            .authorize(withSessionToken: token)
             .start(withDictConfig: testConfig)
             .then { tokenManager in
                 self.hideProgress()
@@ -65,7 +65,7 @@ class AuthorizeViewController : UIViewController {
                 self.presentError(error)
             }
         } else {
-            OktaAuth.authoize(withSessionToken: token)
+            OktaAuth.authorize(withSessionToken: token)
             .start()
             .then { tokenManager in
                 self.hideProgress()

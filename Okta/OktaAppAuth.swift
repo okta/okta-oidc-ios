@@ -38,7 +38,7 @@ public func signOutOfOkta() -> SignOut {
     return SignOut()
 }
 
-public func authoize(withSessionToken sessionToken: String) -> Authorize {
+public func authorize(withSessionToken sessionToken: String) -> Authorize {
     return Authorize(sessionToken: sessionToken)
 }
 
