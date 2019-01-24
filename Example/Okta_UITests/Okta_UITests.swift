@@ -146,11 +146,11 @@ class OktaUITests: XCTestCase {
         XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
     }
     
-    func testAuthorizeWithSessionToken() {
-        app.buttons["Authorize"].tap()
+    func testAuthenticateWithSessionToken() {
+        app.buttons["Authenticate"].tap()
         
         guard testUtils.waitForElement(app.textViews["TokenTextView"], timeout: 5) else {
-            XCTFail("Should redirect to authorization screen.")
+            XCTFail("Should redirect to authentication screen.")
             return
         }
         
@@ -159,10 +159,10 @@ class OktaUITests: XCTestCase {
         tokenView.tap()
         tokenView.typeText("Some_Invalid_Token")
         
-        app.buttons["Authorize"].tap()
+        app.buttons["Authenticate"].tap()
         
         guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 5) else {
-            XCTFail("Authorization with invalid token should fail.")
+            XCTFail("Authentication with invalid token should fail.")
             return
         }
         

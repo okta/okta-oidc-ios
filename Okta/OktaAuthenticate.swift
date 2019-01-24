@@ -11,7 +11,7 @@
  */
 import Hydra
 
-public struct Authorize {
+public struct Authenticate {
 
     let sessionToken: String
     
@@ -20,7 +20,7 @@ public struct Authorize {
     }
 
     public func start(withDictConfig dict: [String: String]) -> Promise<OktaTokenManager> {
-       return performAuthorize(withConfig: dict)
+       return performAuthenticate(withConfig: dict)
     }
 
     public func start(withPListConfig plistName: String?) -> Promise<OktaTokenManager> {
@@ -31,7 +31,7 @@ public struct Authorize {
 
             // Get client configuration from specified config
             if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                self.performAuthorize(withConfig: config)
+                self.performAuthenticate(withConfig: config)
                 .then { authState in resolve(authState) }
                 .catch { error in reject(error) }
             }
@@ -42,7 +42,7 @@ public struct Authorize {
         return self.start(withPListConfig: "Okta")
     }
     
-    private func performAuthorize(withConfig config: [String: String]) -> Promise<OktaTokenManager> {
-        return OktaAuthorization().authorize(withSessionToken: self.sessionToken, config: config)
+    private func performAuthenticate(withConfig config: [String: String]) -> Promise<OktaTokenManager> {
+        return OktaAuthorization().authenticate(withSessionToken: self.sessionToken, config: config)
     }
 }

@@ -239,13 +239,13 @@ OktaAuth
   }
 ```
 
-### authorize
+### authenticate
 
-If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authorize(withSessionToken:)`. By default, this method uses the values specified in the `Okta.plist` file:
+If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. By default, this method uses the values specified in the `Okta.plist` file:
 
 ```swift
 OktaAuth
-  .authorize(withSessionToken: sessionToken)
+  .authenticate(withSessionToken: sessionToken)
   .start()
   .then { tokens in
     // tokens.accessToken
@@ -257,12 +257,12 @@ OktaAuth
   }
 ```
 
-Similar to the [`login`](#login) method, `authorize(withSessionToken:)` can accept a custom `plist` or dictionary configuration:
+Similar to the [`login`](#login) method, `authenticate(withSessionToken:)` can accept a custom `plist` or dictionary configuration:
 
 ```swift
 // Use a custom plist file
 OktaAuth
-  .authorize(withSessionToken: sessionToken)
+  .authenticate(withSessionToken: sessionToken)
   .start(withPListConfig: "CustomPlist")
   .then { tokens in
     // tokens.accessToken
@@ -279,7 +279,7 @@ let config: [String: String] = [
 ]
 
 OktaAuth
-  .authorize(withSessionToken: sessionToken)
+  .authenticate(withSessionToken: sessionToken)
   .start(withDictConfig: config)
   .then { tokens in
     // tokens.accessToken

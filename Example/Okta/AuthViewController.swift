@@ -1,5 +1,5 @@
 //
-//  AuthorizeViewController.swift
+//  AuthViewController.swift
 //  Okta_Example
 //
 //  Created by Anastasiia Iurok on 1/11/19.
@@ -9,10 +9,10 @@
 import UIKit
 import OktaAuth
 
-class AuthorizeViewController : UIViewController {
+class AuthViewController : UIViewController {
     
     @IBOutlet var tokenTextView: UITextView!
-    @IBOutlet var authorizeButton: UIButton!
+    @IBOutlet var authenticateButton: UIButton!
     @IBOutlet var messageView: UITextView!
     
     @IBOutlet var progessOverlay: UIView!
@@ -43,9 +43,9 @@ class AuthorizeViewController : UIViewController {
         clearMessageView()
     }
     
-    @IBAction func authorize() {
+    @IBAction func authenticate() {
         guard let token = token, !token.isEmpty else {
-            self.showMessage("You MUST specify session token to authorize!")
+            self.showMessage("You MUST specify session token to authenticate!")
             return
         }
         
@@ -54,7 +54,7 @@ class AuthorizeViewController : UIViewController {
         
         if isUITest {
             OktaAuth
-            .authorize(withSessionToken: token)
+            .authenticate(withSessionToken: token)
             .start(withDictConfig: testConfig)
             .then { tokenManager in
                 self.hideProgress()
@@ -65,7 +65,7 @@ class AuthorizeViewController : UIViewController {
                 self.presentError(error)
             }
         } else {
-            OktaAuth.authorize(withSessionToken: token)
+            OktaAuth.authenticate(withSessionToken: token)
             .start()
             .then { tokenManager in
                 self.hideProgress()

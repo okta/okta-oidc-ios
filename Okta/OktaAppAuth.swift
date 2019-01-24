@@ -38,8 +38,8 @@ public func signOutOfOkta() -> SignOut {
     return SignOut()
 }
 
-public func authorize(withSessionToken sessionToken: String) -> Authorize {
-    return Authorize(sessionToken: sessionToken)
+public func authenticate(withSessionToken sessionToken: String) -> Authenticate {
+    return Authenticate(sessionToken: sessionToken)
 }
 
 public func isAuthenticated() -> Bool {
