@@ -7,6 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2FAEDA662200A37C009FF889 /* OIDURLSessionProviderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA472200A37C009FF889 /* OIDURLSessionProviderTests.m */; };
+		2FAEDA672200A37C009FF889 /* OIDAuthorizationRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA482200A37C009FF889 /* OIDAuthorizationRequestTests.m */; };
+		2FAEDA682200A37C009FF889 /* OIDAuthorizationResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA492200A37C009FF889 /* OIDAuthorizationResponseTests.m */; };
+		2FAEDA692200A37C009FF889 /* OIDRegistrationRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA4A2200A37C009FF889 /* OIDRegistrationRequestTests.m */; };
+		2FAEDA6A2200A37C009FF889 /* OIDScopesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA4B2200A37C009FF889 /* OIDScopesTests.m */; };
+		2FAEDA6B2200A37C009FF889 /* OIDRegistrationResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA4D2200A37C009FF889 /* OIDRegistrationResponseTests.m */; };
+		2FAEDA6C2200A37C009FF889 /* OIDURLQueryComponentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA4E2200A37C009FF889 /* OIDURLQueryComponentTests.m */; };
+		2FAEDA6D2200A37C009FF889 /* OIDServiceConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA512200A37C009FF889 /* OIDServiceConfigurationTests.m */; };
+		2FAEDA6E2200A37C009FF889 /* OIDGrantTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA522200A37C009FF889 /* OIDGrantTypesTests.m */; };
+		2FAEDA6F2200A37C009FF889 /* OIDTokenResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA532200A37C009FF889 /* OIDTokenResponseTests.m */; };
+		2FAEDA702200A37C009FF889 /* OIDEndSessionRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA542200A37C009FF889 /* OIDEndSessionRequestTests.m */; };
+		2FAEDA712200A37C009FF889 /* OIDTokenUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA562200A37C009FF889 /* OIDTokenUtilitiesTests.m */; };
+		2FAEDA722200A37C009FF889 /* OIDSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA582200A37C009FF889 /* OIDSwiftTests.swift */; };
+		2FAEDA732200A37C009FF889 /* OIDServiceDiscoveryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA592200A37C009FF889 /* OIDServiceDiscoveryTests.m */; };
+		2FAEDA742200A37C009FF889 /* OIDAuthStateTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA5A2200A37C009FF889 /* OIDAuthStateTests.m */; };
+		2FAEDA752200A37C009FF889 /* OIDResponseTypesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA5C2200A37C009FF889 /* OIDResponseTypesTests.m */; };
+		2FAEDA762200A37C009FF889 /* OIDRPProfileCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA5D2200A37C009FF889 /* OIDRPProfileCode.m */; };
+		2FAEDA772200A37C009FF889 /* OIDTokenRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA5E2200A37C009FF889 /* OIDTokenRequestTests.m */; };
+		2FAEDA782200A37C009FF889 /* OIDURLQueryComponentTestsIOS7.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FAEDA652200A37C009FF889 /* OIDURLQueryComponentTestsIOS7.m */; };
 		2F334CBC21BFFBE600EF1E32 /* OktaAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */; };
 		2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B847221E91A14003E6F17 /* AuthViewController.swift */; };
 		58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F10D9BB02A65C1CEC3B2993 /* Pods_Okta_Example.framework */; };
@@ -47,6 +66,38 @@
 /* Begin PBXFileReference section */
 		29991E729AD593DD12330109 /* Pods_Okta_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OktaAppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FAEDA462200A37C009FF889 /* OIDServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceDiscoveryTests.h; sourceTree = "<group>"; };
+		2FAEDA472200A37C009FF889 /* OIDURLSessionProviderTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDURLSessionProviderTests.m; sourceTree = "<group>"; };
+		2FAEDA482200A37C009FF889 /* OIDAuthorizationRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDAuthorizationRequestTests.m; sourceTree = "<group>"; };
+		2FAEDA492200A37C009FF889 /* OIDAuthorizationResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDAuthorizationResponseTests.m; sourceTree = "<group>"; };
+		2FAEDA4A2200A37C009FF889 /* OIDRegistrationRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDRegistrationRequestTests.m; sourceTree = "<group>"; };
+		2FAEDA4B2200A37C009FF889 /* OIDScopesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDScopesTests.m; sourceTree = "<group>"; };
+		2FAEDA4C2200A37C009FF889 /* OIDAuthStateTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDAuthStateTests.h; sourceTree = "<group>"; };
+		2FAEDA4D2200A37C009FF889 /* OIDRegistrationResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDRegistrationResponseTests.m; sourceTree = "<group>"; };
+		2FAEDA4E2200A37C009FF889 /* OIDURLQueryComponentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDURLQueryComponentTests.m; sourceTree = "<group>"; };
+		2FAEDA502200A37C009FF889 /* OIDTokenRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDTokenRequestTests.h; sourceTree = "<group>"; };
+		2FAEDA512200A37C009FF889 /* OIDServiceConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDServiceConfigurationTests.m; sourceTree = "<group>"; };
+		2FAEDA522200A37C009FF889 /* OIDGrantTypesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDGrantTypesTests.m; sourceTree = "<group>"; };
+		2FAEDA532200A37C009FF889 /* OIDTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenResponseTests.m; sourceTree = "<group>"; };
+		2FAEDA542200A37C009FF889 /* OIDEndSessionRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDEndSessionRequestTests.m; sourceTree = "<group>"; };
+		2FAEDA552200A37C009FF889 /* OIDAuthorizationResponseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDAuthorizationResponseTests.h; sourceTree = "<group>"; };
+		2FAEDA562200A37C009FF889 /* OIDTokenUtilitiesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenUtilitiesTests.m; sourceTree = "<group>"; };
+		2FAEDA572200A37C009FF889 /* OIDAuthorizationRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDAuthorizationRequestTests.h; sourceTree = "<group>"; };
+		2FAEDA582200A37C009FF889 /* OIDSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OIDSwiftTests.swift; sourceTree = "<group>"; };
+		2FAEDA592200A37C009FF889 /* OIDServiceDiscoveryTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDServiceDiscoveryTests.m; sourceTree = "<group>"; };
+		2FAEDA5A2200A37C009FF889 /* OIDAuthStateTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDAuthStateTests.m; sourceTree = "<group>"; };
+		2FAEDA5B2200A37C009FF889 /* OIDRegistrationRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDRegistrationRequestTests.h; sourceTree = "<group>"; };
+		2FAEDA5C2200A37C009FF889 /* OIDResponseTypesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDResponseTypesTests.m; sourceTree = "<group>"; };
+		2FAEDA5D2200A37C009FF889 /* OIDRPProfileCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDRPProfileCode.m; sourceTree = "<group>"; };
+		2FAEDA5E2200A37C009FF889 /* OIDTokenRequestTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenRequestTests.m; sourceTree = "<group>"; };
+		2FAEDA5F2200A37C009FF889 /* OIDURLQueryComponentTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDURLQueryComponentTests.h; sourceTree = "<group>"; };
+		2FAEDA602200A37C009FF889 /* OIDRegistrationResponseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDRegistrationResponseTests.h; sourceTree = "<group>"; };
+		2FAEDA612200A37C009FF889 /* OIDTokenResponseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDTokenResponseTests.h; sourceTree = "<group>"; };
+		2FAEDA622200A37C009FF889 /* OIDEndSessionRequestTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDEndSessionRequestTests.h; sourceTree = "<group>"; };
+		2FAEDA632200A37C009FF889 /* OIDAppAuthTests-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OIDAppAuthTests-Bridging-Header.h"; sourceTree = "<group>"; };
+		2FAEDA642200A37C009FF889 /* OIDServiceConfigurationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceConfigurationTests.h; sourceTree = "<group>"; };
+		2FAEDA652200A37C009FF889 /* OIDURLQueryComponentTestsIOS7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDURLQueryComponentTestsIOS7.m; sourceTree = "<group>"; };
+		2FAEDA792200A568009FF889 /* OIDRPProfileCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDRPProfileCode.h; sourceTree = "<group>"; };
 		2F9B847221E91A14003E6F17 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		373F2D6C1A0A57F307B30B30 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Okta_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okta_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,6 +163,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2FAEDA452200A37C009FF889 /* AppAuthTests */ = {
+			isa = PBXGroup;
+			children = (
+				2FAEDA462200A37C009FF889 /* OIDServiceDiscoveryTests.h */,
+				2FAEDA472200A37C009FF889 /* OIDURLSessionProviderTests.m */,
+				2FAEDA482200A37C009FF889 /* OIDAuthorizationRequestTests.m */,
+				2FAEDA492200A37C009FF889 /* OIDAuthorizationResponseTests.m */,
+				2FAEDA4A2200A37C009FF889 /* OIDRegistrationRequestTests.m */,
+				2FAEDA4B2200A37C009FF889 /* OIDScopesTests.m */,
+				2FAEDA4C2200A37C009FF889 /* OIDAuthStateTests.h */,
+				2FAEDA4D2200A37C009FF889 /* OIDRegistrationResponseTests.m */,
+				2FAEDA4E2200A37C009FF889 /* OIDURLQueryComponentTests.m */,
+				2FAEDA502200A37C009FF889 /* OIDTokenRequestTests.h */,
+				2FAEDA512200A37C009FF889 /* OIDServiceConfigurationTests.m */,
+				2FAEDA522200A37C009FF889 /* OIDGrantTypesTests.m */,
+				2FAEDA532200A37C009FF889 /* OIDTokenResponseTests.m */,
+				2FAEDA542200A37C009FF889 /* OIDEndSessionRequestTests.m */,
+				2FAEDA552200A37C009FF889 /* OIDAuthorizationResponseTests.h */,
+				2FAEDA562200A37C009FF889 /* OIDTokenUtilitiesTests.m */,
+				2FAEDA572200A37C009FF889 /* OIDAuthorizationRequestTests.h */,
+				2FAEDA582200A37C009FF889 /* OIDSwiftTests.swift */,
+				2FAEDA592200A37C009FF889 /* OIDServiceDiscoveryTests.m */,
+				2FAEDA5A2200A37C009FF889 /* OIDAuthStateTests.m */,
+				2FAEDA5B2200A37C009FF889 /* OIDRegistrationRequestTests.h */,
+				2FAEDA5C2200A37C009FF889 /* OIDResponseTypesTests.m */,
+				2FAEDA792200A568009FF889 /* OIDRPProfileCode.h */,
+				2FAEDA5D2200A37C009FF889 /* OIDRPProfileCode.m */,
+				2FAEDA5E2200A37C009FF889 /* OIDTokenRequestTests.m */,
+				2FAEDA5F2200A37C009FF889 /* OIDURLQueryComponentTests.h */,
+				2FAEDA602200A37C009FF889 /* OIDRegistrationResponseTests.h */,
+				2FAEDA612200A37C009FF889 /* OIDTokenResponseTests.h */,
+				2FAEDA622200A37C009FF889 /* OIDEndSessionRequestTests.h */,
+				2FAEDA632200A37C009FF889 /* OIDAppAuthTests-Bridging-Header.h */,
+				2FAEDA642200A37C009FF889 /* OIDServiceConfigurationTests.h */,
+				2FAEDA652200A37C009FF889 /* OIDURLQueryComponentTestsIOS7.m */,
+			);
+			path = AppAuthTests;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				2FAEDA452200A37C009FF889 /* AppAuthTests */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				71ED66182058BF8E00B5D800 /* TestUtils.swift */,
 			);
@@ -560,9 +651,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FAEDA6F2200A37C009FF889 /* OIDTokenResponseTests.m in Sources */,
+				2FAEDA712200A37C009FF889 /* OIDTokenUtilitiesTests.m in Sources */,
+				2FAEDA772200A37C009FF889 /* OIDTokenRequestTests.m in Sources */,
+				2FAEDA662200A37C009FF889 /* OIDURLSessionProviderTests.m in Sources */,
+				2FAEDA762200A37C009FF889 /* OIDRPProfileCode.m in Sources */,
+				2FAEDA6C2200A37C009FF889 /* OIDURLQueryComponentTests.m in Sources */,
 				71ED661A2058C24B00B5D800 /* TestUtils.swift in Sources */,
+				2FAEDA752200A37C009FF889 /* OIDResponseTypesTests.m in Sources */,
+				2FAEDA6E2200A37C009FF889 /* OIDGrantTypesTests.m in Sources */,
+				2FAEDA742200A37C009FF889 /* OIDAuthStateTests.m in Sources */,
+				2FAEDA6D2200A37C009FF889 /* OIDServiceConfigurationTests.m in Sources */,
+				2FAEDA782200A37C009FF889 /* OIDURLQueryComponentTestsIOS7.m in Sources */,
+				2FAEDA692200A37C009FF889 /* OIDRegistrationRequestTests.m in Sources */,
+				2FAEDA672200A37C009FF889 /* OIDAuthorizationRequestTests.m in Sources */,
+				2FAEDA6B2200A37C009FF889 /* OIDRegistrationResponseTests.m in Sources */,
+				2FAEDA722200A37C009FF889 /* OIDSwiftTests.swift in Sources */,
 				7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				2FAEDA702200A37C009FF889 /* OIDEndSessionRequestTests.m in Sources */,
+				2FAEDA682200A37C009FF889 /* OIDAuthorizationResponseTests.m in Sources */,
+				2FAEDA732200A37C009FF889 /* OIDServiceDiscoveryTests.m in Sources */,
+				2FAEDA6A2200A37C009FF889 /* OIDScopesTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
