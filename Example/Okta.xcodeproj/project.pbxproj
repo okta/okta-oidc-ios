@@ -87,7 +87,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2F334CBC21BFFBE600EF1E32 /* OktaAppAuth.framework in Frameworks */,
 				7116BC591EF9FFDC004A4E1C /* OktaAuth.framework in Frameworks */,
 				7116BC5A1EF9FFDC004A4E1C /* Pods_Okta_Tests.framework in Frameworks */,
 				58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */,
@@ -398,13 +397,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
-				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -420,13 +417,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
-				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -442,13 +437,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HydraAsync/Hydra.framework",
-				"${BUILT_PRODUCTS_DIR}/OktaAppAuth/OktaAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR}/OktaAuth/OktaAuth.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Hydra.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAppAuth.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/OktaAuth.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
