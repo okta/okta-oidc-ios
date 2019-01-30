@@ -297,6 +297,7 @@
 		712745EB1EFB0B3F00E820FC /* Okta_UITests */ = {
 			isa = PBXGroup;
 			children = (
+				2FAEDAC922030053009FF889 /* OktaExternalUserAgentIOS.swift */,
 				712745EC1EFB0B3F00E820FC /* Okta_UITests.swift */,
 				71A92AF3202A7C160072EC32 /* UITestUtils.swift */,
 				712745EE1EFB0B3F00E820FC /* Info.plist */,
@@ -681,6 +682,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */,
+				2FAEDACA22030053009FF889 /* OktaExternalUserAgentIOS.swift in Sources */,
 				71A92AF5202A7C4D0072EC32 /* UITestUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
