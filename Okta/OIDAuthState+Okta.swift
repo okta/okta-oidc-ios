@@ -55,9 +55,7 @@ extension OIDAuthState {
          implies redirection and passing authCode as a query parameter.
         */
         let config = URLSessionConfiguration.default
-        
-        // Fix issue when token request ends up with 403 error
-        config.httpAdditionalHeaders = ["Cookie" : "troute=t1;"]
+        config.httpShouldSetCookies = false
 
         let session = URLSession(
             configuration: config,
