@@ -252,6 +252,14 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                             additionalParameters:additionalParameters], @"");
 }
 
+- (void)testUserAgentHeader {
+  OIDTokenRequest *request = [[self class] testInstanceCodeExchangeClientAuth];
+  NSURLRequest* urlRequest = [request URLRequest];
+
+  id userAgent = [urlRequest.allHTTPHeaderFields objectForKey:@"User-Agent"];
+  XCTAssertNotNil(userAgent);
+}
+
 @end
 
 #pragma GCC diagnostic pop

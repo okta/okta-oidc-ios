@@ -30,6 +30,11 @@ open class Utils: NSObject {
         return nil
     }
 
+    @objc
+    open class func userAgentHeader() -> String {
+        return "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(deviceModel())"
+    }
+
     internal class func scrubScopes(_ scopes: String?) -> [String]{
         /**
          Perform scope scrubbing here.

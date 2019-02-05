@@ -24,6 +24,7 @@
 #import "OIDServiceConfiguration.h"
 #import "OIDURLQueryComponent.h"
 #import "OIDTokenUtilities.h"
+#import <OktaAuth/OktaAuth-Swift.h>
 
 /*! @brief The key for the @c configuration property for @c NSSecureCoding
  */
@@ -265,11 +266,13 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   static NSString *const kHTTPContentTypeHeaderKey = @"Content-Type";
   static NSString *const kHTTPContentTypeHeaderValue =
       @"application/x-www-form-urlencoded; charset=UTF-8";
+  static NSString *const kHTTPUserAgentHeaderKey = @"User-Agent";
 
   NSURL *tokenRequestURL = [self tokenRequestURL];
   NSMutableURLRequest *URLRequest = [[NSURLRequest requestWithURL:tokenRequestURL] mutableCopy];
   URLRequest.HTTPMethod = kHTTPPost;
   [URLRequest setValue:kHTTPContentTypeHeaderValue forHTTPHeaderField:kHTTPContentTypeHeaderKey];
+  [URLRequest setValue:[Utils userAgentHeader] forHTTPHeaderField:kHTTPUserAgentHeaderKey];
 
   OIDURLQueryComponent *bodyParameters = [self tokenRequestBody];
   NSMutableDictionary *httpHeaders = [[NSMutableDictionary alloc] init];
