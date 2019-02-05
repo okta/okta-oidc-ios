@@ -239,6 +239,58 @@ OktaAuth
   }
 ```
 
+### authenticate
+
+If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. By default, this method uses the values specified in the `Okta.plist` file:
+
+```swift
+OktaAuth
+  .authenticate(withSessionToken: sessionToken)
+  .start()
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+```
+
+Similar to the [`login`](#login) method, `authenticate(withSessionToken:)` can accept a custom `plist` or dictionary configuration:
+
+```swift
+// Use a custom plist file
+OktaAuth
+  .authenticate(withSessionToken: sessionToken)
+  .start(withPListConfig: "CustomPlist")
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+
+// Use a dictionary object for configuration
+let config: [String: String] = [
+  // Your configuation
+]
+
+OktaAuth
+  .authenticate(withSessionToken: sessionToken)
+  .start(withDictConfig: config)
+  .then { tokens in
+    // tokens.accessToken
+    // tokens.idToken
+    // tokens.refreshToken
+  }
+  .catch { error in
+    // Error
+  }
+```
+
 ### isAuthenticated
 
 Returns `true` if there is a valid access token stored in the TokenManager. This is the best way to determine if a user has successfully authenticated into your app.
