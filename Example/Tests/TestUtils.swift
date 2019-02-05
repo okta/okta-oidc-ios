@@ -6,7 +6,6 @@
 //  Copyright © 2018 Okta. All rights reserved.
 //
 
-import OktaAppAuth
 import Hydra
 
 @testable import OktaAuth
