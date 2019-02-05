@@ -97,6 +97,57 @@ public struct OktaAuthorization {
             }
         })
     }
+    
+    func authenticate(withSessionToken sessionToken: String, config: [String: String]) -> Promise<OktaTokenManager> {
+        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
+            // Discover Endpoints
+            guard let issuer = config["issuer"],
+                  let clientId = config["clientId"],
+                  let redirectUriString = config["redirectUri"],
+                  let redirectUri = URL(string: redirectUriString) else {
+                    return reject(OktaError.missingConfigurationValues)
+            }
+
+            self.getMetadataConfig(URL(string: issuer))
+            .then { oidConfig in
+                let codeVerifier = OIDAuthorizationRequest.generateCodeVerifier()!
+                let codeChallenge = OIDAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
+                let state = OIDAuthorizationRequest.generateState()
+
+                let request = OIDAuthorizationRequest(
+                    configuration: oidConfig,
+                    clientId: clientId,
+                    clientSecret: nil,
+                    scope: config["scopes"],
+                    redirectURL: redirectUri,
+                    responseType: OIDResponseTypeCode,
+                    state: state,
+                    nonce: nil,
+                    codeVerifier: codeVerifier,
+                    codeChallenge: codeChallenge,
+                    codeChallengeMethod: OIDOAuthorizationRequestCodeChallengeMethodS256,
+                    additionalParameters: ["sessionToken" : sessionToken]
+                )
+                
+                OIDAuthState.getState(withAuthRequest: request)
+                .then { authState in
+                    do {
+                        let tokenManager = try OktaTokenManager(authState: authState, config: config)
+
+                        // Set the local cache and write to storage
+                        OktaAuth.tokens = tokenManager
+                        self.storeAuthState(tokenManager)
+                
+                        return resolve(tokenManager)
+                    } catch let error {
+                        return reject(error)
+                    }
+                }
+                .catch { error in return reject(error) }
+            }
+            .catch { error in return reject(error) }
+        })
+    }
 
     func getMetadataConfig(_ issuer: URL?) -> Promise<OIDServiceConfiguration> {
         // Get the metadata from the discovery endpoint

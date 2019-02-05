@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2F334CBC21BFFBE600EF1E32 /* OktaAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */; };
+		2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B847221E91A14003E6F17 /* AuthViewController.swift */; };
 		58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F10D9BB02A65C1CEC3B2993 /* Pods_Okta_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		29991E729AD593DD12330109 /* Pods_Okta_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F334CBB21BFFBE600EF1E32 /* OktaAppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = OktaAppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F9B847221E91A14003E6F17 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		373F2D6C1A0A57F307B30B30 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Okta_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okta_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				2F9B847221E91A14003E6F17 /* AuthViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -556,6 +559,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
