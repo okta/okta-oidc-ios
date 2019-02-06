@@ -178,11 +178,6 @@ public struct OktaAuthorization {
         // cache the current tokens
         OktaAuth.tokens = tokenManager
 
-        let authStateData = NSKeyedArchiver.archivedData(withRootObject: tokenManager)
-        do {
-            try OktaKeychain.set(key: "OktaAuthStateTokenManager", data: authStateData, accessibility: tokenManager.accessibility)
-        } catch let error {
-            print("Error: \(error)")
-        }
+        tokenManager.writeToSecureStorage()
     }
 }

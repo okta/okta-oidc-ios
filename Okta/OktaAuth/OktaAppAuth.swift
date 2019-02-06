@@ -25,7 +25,7 @@ public var configuration: [String: Any]?
 public var wellKnown: [String: Any]?
 
 // Token manager
-public var tokens: OktaTokenManager?
+public var tokens = OktaTokenManager.readFromSecureStorage()
 
 public func signInWithBrowser() -> SignIn {
     // Authenticate via authorization code flow
@@ -42,16 +42,6 @@ public func authenticate(withSessionToken sessionToken: String) -> Authenticate 
 }
 
 public func isAuthenticated() -> Bool {
-    // Restore state
-    guard let encodedAuthState: Data = try? OktaKeychain.get(key: "OktaAuthStateTokenManager") else {
-        return false
-    }
-
-    guard let previousState = NSKeyedUnarchiver
-        .unarchiveObject(with: encodedAuthState) as? OktaTokenManager else { return false }
-
-    tokens = previousState
-
     if tokens?.accessToken != nil {
         return true
     }
