@@ -231,10 +231,7 @@ class Tests: XCTestCase {
         // Clear the authState
         OktaAuth.tokens?.clear()
 
-        XCTAssertThrowsError(try OktaKeychain.get(key: "OktaAuthStateTokenManager") as Data) { error in
-            // Expect "Not found" exception
-            XCTAssertEqual(error.localizedDescription, "The operation couldn’t be completed. (OktaAuth.OktaKeychainError error 0.)")
-        }
+        XCTAssertNil(OktaTokenManager.readFromSecureStorage())
     }
 
     func testIsAuthenticated() {
@@ -325,7 +322,7 @@ class Tests: XCTestCase {
     }
 
     func assertAuthenticationState(_ tm: OktaTokenManager) {
-        guard let prevState = TestUtils.getPreviousState() else {
+        guard let prevState = OktaTokenManager.readFromSecureStorage() else {
             return XCTFail("Previous authentication state does not exist")
         }
 
