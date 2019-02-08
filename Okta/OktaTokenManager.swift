@@ -101,3 +101,33 @@ open class OktaTokenManager: NSObject, NSCoding {
         OktaAuth.tokens = nil
     }
 }
+
+extension OktaTokenManager {
+    
+    static let secureStorageKey = "OktaAuthStateTokenManager"
+
+    class func readFromSecureStorage() -> OktaTokenManager? {
+        guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
+            return nil
+        }
+
+        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
+            return nil
+        }
+
+        return state
+    }
+    
+    func writeToSecureStorage() {
+        let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
+        do {
+            try OktaKeychain.set(
+                key: OktaTokenManager.secureStorageKey,
+                data: authStateData,
+                accessibility: self.accessibility
+            )
+        } catch let error {
+            print("Error: \(error)")
+        }
+    }
+}
