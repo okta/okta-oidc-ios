@@ -35,7 +35,7 @@ public struct OktaAuthorization {
                 )
 
                 // Start the authorization flow
-                let externalUserAgent = OktaExternalUserAgentIOS(presenting: view)
+                let externalUserAgent = OIDExternalUserAgentIOS(presenting: view)
                 OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
                     authorizationResponse, error in
 
@@ -79,7 +79,7 @@ public struct OktaAuthorization {
                     additionalParameters: nil
                 )
 
-                let agent = OktaExternalUserAgentIOS(presenting: view)
+                let agent = OIDExternalUserAgentIOS(presenting: view)
 
                 // Present the Sign Out flow
 
