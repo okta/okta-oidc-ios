@@ -7,7 +7,7 @@
 	<key>redirectUri</key>
 	<string>{scheme}:/callback</string>
 	<key>clientId</key>
-	<string>{clientID}</string>
+	<string>{clientId}</string>
 	<key>issuer</key>
 	<string>https://{yourOktaDomain}/oauth2/default</string>
 	<key>logoutRedirectUri</key>
