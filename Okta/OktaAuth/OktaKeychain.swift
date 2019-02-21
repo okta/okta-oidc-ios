@@ -13,6 +13,7 @@
 enum OktaKeychainError: Error {
     case codingError
     case failed(String)
+    case notFound
 }
 
 class OktaKeychain: NSObject {
@@ -88,7 +89,11 @@ class OktaKeychain: NSObject {
         
         let sanityCheck = SecItemCopyMatching(q, &ref)
         guard sanityCheck == noErr else {
-            throw OktaKeychainError.failed(sanityCheck.description)
+            if sanityCheck == errSecItemNotFound {
+                throw OktaKeychainError.notFound
+            } else {
+                throw OktaKeychainError.failed(sanityCheck.description)
+            }
         }
         guard let data = ref as? Data else {
             throw OktaKeychainError.failed("No data for \(key)")

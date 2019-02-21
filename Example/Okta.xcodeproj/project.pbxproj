@@ -43,6 +43,7 @@
 		71ED661A2058C24B00B5D800 /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71ED66182058BF8E00B5D800 /* TestUtils.swift */; };
 		71F76E51BDB207F788887141 /* Pods_Okta_UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4DF4896AAAB9BD5CAE67A8F /* Pods_Okta_UITests.framework */; };
 		E5E32C428E4371BB3E148847 /* Pods_Okta_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29991E729AD593DD12330109 /* Pods_Okta_Tests.framework */; };
+		FA58179F221D8138002C527E /* OktaKeychainTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA58179D221D811B002C527E /* OktaKeychainTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +130,7 @@
 		BE6FD1DAFDE74ECC28A6A10E /* Pods-Okta_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Example/Pods-Okta_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		C6B761A3CC831DEA678C8167 /* Pods-Okta_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_Tests/Pods-Okta_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D6A9C9F6477128D034833C7D /* Pods-Okta_UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Okta_UITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Okta_UITests/Pods-Okta_UITests.release.xcconfig"; sourceTree = "<group>"; };
+		FA58179D221D811B002C527E /* OktaKeychainTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaKeychainTests.swift; sourceTree = "<group>"; };
 		FAA9C6AEAF6AAF0B483984DE /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -255,6 +257,7 @@
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				71ED66182058BF8E00B5D800 /* TestUtils.swift */,
+				FA58179D221D811B002C527E /* OktaKeychainTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				2F74364322098C9B00B47967 /* OIDResponseTypesTests.m in Sources */,
 				2F74363C22098C9B00B47967 /* OIDGrantTypesTests.m in Sources */,
 				2F74364222098C9B00B47967 /* OIDAuthStateTests.m in Sources */,
+				FA58179F221D8138002C527E /* OktaKeychainTests.swift in Sources */,
 				2F74363B22098C9B00B47967 /* OIDServiceConfigurationTests.m in Sources */,
 				2F74364622098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m in Sources */,
 				2F74363722098C9B00B47967 /* OIDRegistrationRequestTests.m in Sources */,
