@@ -126,23 +126,34 @@ class OktaUITests: XCTestCase {
         
         // Sign Out from Okta
         app.buttons["SignOutOkta"].tap()
-		
+        
         // Wait for browser to load
-        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
-            XCTFail("Cannot locate web browser!")
-            return
-        }
-        
-        app.buttons["SignIn"].tap()
+        // This sleep bypasses the need to "click" the consent for Safari
+        sleep(5)
 
-        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
-            XCTFail("Cannot locate web browser!")
+        // Known bug with iOS 11 and system alerts
+        app.tap()
+		
+        // Wait for browser to dismiss
+        guard let _ = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
+            XCTFail("Should return to main screen!")
             return
         }
-		
-        app.buttons["Done"].tap()
+
+        // Sign In to Okta
+        app.buttons["SignIn"].tap()
         
-        let tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
-        XCTAssertFalse(nil == tokenValues || tokenValues!.isEmpty)
+        // Wait for browser to load
+        // This sleep bypasses the need to "click" the consent for Safari
+        sleep(5)
+
+        // Known bug with iOS 11 and system alerts
+        app.tap()
+        
+        // Broweser should appear for user who is not signed in
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
+            XCTFail("Broweser should be loaded!")
+            return
+        }
     }
 }
