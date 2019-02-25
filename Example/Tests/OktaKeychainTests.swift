@@ -49,6 +49,20 @@ class OktaKeychainTests : XCTestCase {
             XCTFail(e.localizedDescription)
         }
     }
+    
+    func testReadFailure() {
+        let key = "unknown_key"
+        
+        do {
+            let _: String = try OktaKeychain.get(key: key)
+            
+        } catch OktaKeychainError.notFound {
+            XCTAssertTrue(true)
+            
+        } catch let e {
+            XCTFail(e.localizedDescription)
+        }
+    }
 
     func testRemove() {
         let key = "test_key"
@@ -64,6 +78,20 @@ class OktaKeychainTests : XCTestCase {
         } catch OktaKeychainError.notFound {
             XCTAssertTrue(true)
 
+        } catch let e {
+            XCTFail(e.localizedDescription)
+        }
+    }
+    
+    func testRemoveFailure() {
+        let key = "unknown_key"
+        
+        do {
+            try OktaKeychain.remove(key: key)
+            
+        } catch OktaKeychainError.notFound {
+            XCTAssertTrue(true)
+            
         } catch let e {
             XCTFail(e.localizedDescription)
         }
