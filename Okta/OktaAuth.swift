@@ -80,7 +80,7 @@ public struct OktaAuthorization {
                     additionalParameters: nil
                 )
 
-                let agent = OIDExternalUserAgentIOS(presenting: view)
+                let agent = OIDExternalUserAgentIOS(presenting: view)!
 
                 // Present the Sign Out flow
 
