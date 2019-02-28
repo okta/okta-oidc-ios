@@ -31,9 +31,9 @@ public struct Revoke {
 
         let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
-        OktaApi.post(revokeEndpoint, headers: headers, postString: data)
-        .then { response in callback(response, nil) }
-        .catch { error in callback(nil, error as? OktaError) }
+        OktaApi.post(revokeEndpoint, headers: headers, postString: data,
+            onSuccess: { response in callback(response, nil)},
+            onError: { error in callback(nil, error) })
     }
 
     func getRevokeEndpoint() -> URL? {
