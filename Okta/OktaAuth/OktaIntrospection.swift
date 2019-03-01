@@ -29,14 +29,15 @@ public struct Introspect {
 
             let data = "token=\(token)&client_id=\(OktaAuth.configuration?["clientId"] as! String)"
 
-            OktaApi.post(introspectionEndpoint, headers: headers, postString: data)
-            .then { response in
+            OktaApi.post(introspectionEndpoint, headers: headers, postString: data, onSuccess: { response in
                 guard let isActive = response?["active"] as? Bool else {
-                    return reject(OktaError.parseFailure)
+                    reject(OktaError.parseFailure)
+                    return
                 }
-                return resolve(isActive)
-            }
-            .catch { error in reject(OktaError.noIntrospectionEndpoint) }
+                resolve(isActive)
+            }, onError: { error in
+                reject(OktaError.noIntrospectionEndpoint)
+            })
         })
     }
 
