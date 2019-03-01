@@ -111,6 +111,43 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         
         return jsonObject as? [String: Any]
     }
+    
+    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+        guard let configuration = OktaAuth.configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        IntrospectTask(token: token, config: configuration, oktaAPI: restAPI)
+        .run(callback: callback)
+    }
+
+    public func refresh(callback: @escaping ((String?, OktaError?) -> Void)) {
+        authState.setNeedsTokenRefresh()
+        authState.performAction(freshTokens: { accessToken, idToken, error in
+            if error != nil {
+                callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
+                return
+            }
+
+            guard let token = accessToken else {
+                callback(nil, OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
+                return
+            }
+            
+            callback(token, nil)
+        })
+    }
+
+    public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
+        guard let configuration = OktaAuth.configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        RevokeTask(token: token, config: configuration, oktaAPI: restAPI)
+        .run(callback: callback)
+    }
 
     public func renew(callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
         authState.setNeedsTokenRefresh()
