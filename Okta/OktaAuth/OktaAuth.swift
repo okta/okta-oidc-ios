@@ -155,21 +155,20 @@ public struct OktaAuthorization {
                 return reject(OktaError.noDiscoveryEndpoint)
             }
 
-            OktaApi.get(configUrl, headers: nil)
-            .then { response in
+            OktaApi.get(configUrl, headers: nil, onSuccess: { response in
                 guard let dictResponse = response, let oidcConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
-                    return reject(OktaError.parseFailure)
+                    reject(OktaError.parseFailure)
+                    return
                 }
                 // Cache the well-known endpoint response
                 OktaAuth.wellKnown = dictResponse
-                return resolve(OIDServiceConfiguration(discoveryDocument: oidcConfig))
-            }
-            .catch { error in
+                resolve(OIDServiceConfiguration(discoveryDocument: oidcConfig))
+            }, onError: { error in
                 let responseError =
                     "Error returning discovery document: \(error.localizedDescription) Please" +
                     "check your PList configuration"
-                return reject(OktaError.APIError(responseError))
-            }
+                reject(OktaError.APIError(responseError))
+            })
         })
     }
 
