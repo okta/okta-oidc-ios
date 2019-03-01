@@ -30,9 +30,9 @@ internal struct UserInfo {
             "Authorization": "Bearer \(token)"
         ]
 
-        OktaApi.post(userInfoEndpoint, headers: headers, postData: nil)
-        .then { response in callback(response, nil) }
-        .catch { error in callback(nil, error as? OktaError) }
+        OktaApi.post(userInfoEndpoint, headers: headers, postData: nil,
+            onSuccess: { response in callback(response, nil)},
+            onError: { error in callback(nil, error) })
     }
 
     func getUserInfoEndpoint() -> URL? {

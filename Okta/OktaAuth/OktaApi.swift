@@ -9,32 +9,49 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
-internal class OktaApi: NSObject {
+class OktaApi: NSObject {
 
-    class func post(_ url: URL, headers: [String: String]?, postString: String?) -> Promise<[String: Any]?> {
+    typealias OktaApiSuccessCallback = ([String: Any]?) -> Void
+    typealias OktaApiErrorCallback = (OktaError) -> Void
+
+    class func post(_ url: URL,
+                    headers: [String: String]?,
+                    postString: String?,
+                    onSuccess: @escaping OktaApiSuccessCallback,
+                    onError: @escaping OktaApiErrorCallback) {
         // Generic POST API wrapper for data passed in as a String
         let data = postString != nil ? postString!.data(using: .utf8) : nil
-        return OktaApi.post(url, headers: headers, postData: data)
+        return OktaApi.post(url, headers: headers, postData: data, onSuccess: onSuccess, onError: onError)
     }
 
-    class func post(_ url: URL, headers: [String: String]?, postJson: [String: Any]?) -> Promise<[String: Any]?> {
+    class func post(_ url: URL,
+                    headers: [String: String]?,
+                    postJson: [String: Any]?,
+                    onSuccess: @escaping OktaApiSuccessCallback,
+                    onError: @escaping OktaApiErrorCallback) {
         // Generic POST API wrapper for data passed in as a JSON object [String: Any]
         let data = postJson != nil ? try? JSONSerialization.data(withJSONObject: postJson as Any, options: []) : nil
-        return OktaApi.post(url, headers: headers, postData: data)
+        return OktaApi.post(url, headers: headers, postData: data, onSuccess: onSuccess, onError: onError)
     }
 
-    class func post(_ url: URL, headers: [String: String]?, postData: Data?) -> Promise<[String: Any]?> {
+    class func post(_ url: URL,
+                    headers: [String: String]?,
+                    postData: Data?,
+                    onSuccess: @escaping OktaApiSuccessCallback,
+                    onError: @escaping OktaApiErrorCallback) {
         // Generic POST API wrapper
         let request = self.setupRequest(url, method: "POST", headers: headers, body: postData)
-        return self.fireRequest(request)
+        return self.fireRequest(request, onSuccess: onSuccess, onError: onError)
     }
 
-    class func get(_ url: URL, headers: [String: String]?) -> Promise<[String: Any]?> {
+    class func get(_ url: URL,
+                   headers: [String: String]?,
+                   onSuccess: @escaping OktaApiSuccessCallback,
+                   onError: @escaping OktaApiErrorCallback) {
         // Generic GET API wrapper
         let request = self.setupRequest(url, method: "GET", headers: headers)
-        return self.fireRequest(request)
+        return self.fireRequest(request, onSuccess: onSuccess, onError: onError)
     }
     
     class func setupRequest(_ url: URL, method: String, headers: [String: String]?, body: Data? = nil) -> URLRequest {
@@ -50,17 +67,19 @@ internal class OktaApi: NSObject {
         return request
     }
 
-    class func fireRequest(_ request: URLRequest) -> Promise<[String:Any]?> {
-         return Promise<[String: Any]?>(in: .background, { resolve, reject, _ in
-            let task = URLSession.shared.dataTask(with: request){ data, response, error in
-                guard let data = data, error == nil else {
-                    let errorMessage = error != nil ? error!.localizedDescription : "No response data"
-                    return reject(OktaError.APIError(errorMessage))
-                }
-                let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-                return resolve(responseJson)
+    class func fireRequest(_ request: URLRequest,
+                           onSuccess: @escaping OktaApiSuccessCallback,
+                           onError: @escaping OktaApiErrorCallback) {
+        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+            guard let data = data, error == nil else {
+                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                    onError(OktaError.APIError(errorMessage))
+                    return
             }
-            task.resume()
-        })
+            
+            let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+            onSuccess(responseJson)
+        }
+        task.resume()
     }
 }
