@@ -148,22 +148,6 @@ class Tests: XCTestCase {
         XCTAssertFalse(isAuth)
     }
 
-    func testRefreshTokenFailure() {
-        // Expect that no refresh token stored will result in an error
-        let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
-
-        OktaAuth.refresh { _, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noTokens.localizedDescription)
-            refreshExpectation.fulfill()
-        }
-
-        waitForIt()
-    }
-
-    func testRefreshTokenFailureInvalidToken() {
-        // TODO: Look into a better way to mock out responses from the AppAuth lib
-    }
-
     func testResumeAuthenticationStateFromExpiredState() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
         let tokenManager = TestUtils.tokenManagerWithExpiration()
@@ -196,7 +180,6 @@ class Tests: XCTestCase {
 
         XCTAssertEqual(prevState.accessibility, tm.accessibility)
         XCTAssertEqual(prevState.accessToken, tm.accessToken)
-        XCTAssertEqual(prevState.config, tm.config)
         XCTAssertEqual(prevState.idToken, tm.idToken)
         XCTAssertEqual(prevState.refreshToken, tm.refreshToken)
     }

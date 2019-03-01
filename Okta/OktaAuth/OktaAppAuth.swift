@@ -22,6 +22,8 @@ public var configuration = try? OktaAuthConfig.default()
 // Cache the Discovery Metadata
 public var discoveredMetadata: [String: Any]?
 
+internal var authApi: OktaApi = OktaApiImpl()
+
 // Token manager
 public var tokenManager = OktaTokenManager.readFromSecureStorage() {
     didSet {
@@ -46,7 +48,7 @@ public func signInWithBrowser(from presenter: UIViewController, callback: @escap
             return
         }
         
-        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        let tokenManager = OktaTokenManager(authState: authState)
         OktaAuth.tokenManager = tokenManager
         callback(tokenManager, nil)
     }
@@ -75,7 +77,7 @@ public func authenticate(withSessionToken sessionToken: String, callback: @escap
             return
         }
         
-        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        let tokenManager = OktaTokenManager(authState: authState)
         OktaAuth.tokenManager = tokenManager
         callback(tokenManager, nil)
     }
@@ -84,37 +86,6 @@ public func authenticate(withSessionToken sessionToken: String, callback: @escap
 public func clear() {
     // Clear auth state
     tokenManager?.clear()
-}
-
-public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
-    }
-    
-    // Check the validity of the tokens
-    IntrospectTask(token: token, config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
-}
-
-public func refresh(callback: @escaping ((String?, OktaError?) -> Void)) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
-    }
-    
-    RefreshTask(config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
-}
-
-public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
-    }
-
-    RevokeTask(token: token, config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
 }
 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {

@@ -70,7 +70,7 @@ class ViewController: UIViewController {
         // Get current accessToken
         guard let accessToken = tokenManager?.accessToken else { return }
 
-        OktaAuth.introspect(token: accessToken, callback: { payload, error in
+        tokenManager?.introspect(token: accessToken, callback: { payload, error in
             guard let isValid = payload?["active"] as? Bool else {
                 self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
                 return
@@ -84,7 +84,7 @@ class ViewController: UIViewController {
         // Get current accessToken
         guard let accessToken = tokenManager?.accessToken else { return }
 
-        OktaAuth.revoke(accessToken) { response, error in
+        tokenManager?.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }

@@ -28,9 +28,8 @@ struct TestUtils {
 
     static var tokenManager = { return TestUtils.setupMockTokenManager(issuer: mockIssuer) }
     static var tokenManagerWithExpiration = { return TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5) }
-
-
-    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaTokenManager {
+    
+    static func setupMockAuthState(issuer: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
@@ -74,16 +73,12 @@ struct TestUtils {
             ]
         )
 
-        let tempAuthState = OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+        return OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+    }
 
-        return OktaTokenManager(
-            authState: tempAuthState,
-            config: try! OktaAuthConfig(with: [
-                "issuer": mockIssuer,
-                "clientId": mockClientId,
-                "redirectUri": mockRedirectUri,
-                "scopes": mockScopes
-            ])
-        )
+
+    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaTokenManager {
+        let tempAuthState = setupMockAuthState(issuer: issuer, expiresIn: expiresIn)
+        return OktaTokenManager(authState: tempAuthState)
     }
 }

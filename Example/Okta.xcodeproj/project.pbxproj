@@ -27,6 +27,7 @@
 		2F74364522098C9B00B47967 /* OIDTokenRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74362C22098C9B00B47967 /* OIDTokenRequestTests.m */; };
 		2F74364622098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74363322098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m */; };
 		2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B847221E91A14003E6F17 /* AuthViewController.swift */; };
+		2FA6431B223BDF220008DC97 /* OktaTokenManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA6431A223BDF220008DC97 /* OktaTokenManagerTests.swift */; };
 		2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */; };
 		2FEBB66A223005B000BF1D16 /* RevokeTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */; };
 		2FEBB66C223020FF00BF1D16 /* IntrospectTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */; };
@@ -105,6 +106,7 @@
 		2F74363222098C9B00B47967 /* OIDServiceConfigurationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceConfigurationTests.h; sourceTree = "<group>"; };
 		2F74363322098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDURLQueryComponentTestsIOS7.m; sourceTree = "<group>"; };
 		2F9B847221E91A14003E6F17 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		2FA6431A223BDF220008DC97 /* OktaTokenManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaTokenManagerTests.swift; sourceTree = "<group>"; };
 		2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApiMock.swift; sourceTree = "<group>"; };
 		2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeTaskTests.swift; sourceTree = "<group>"; };
 		2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrospectTaskTests.swift; sourceTree = "<group>"; };
@@ -276,6 +278,7 @@
 				2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */,
 				2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */,
 				2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */,
+				2FA6431A223BDF220008DC97 /* OktaTokenManagerTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -641,6 +644,7 @@
 				7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */,
 				2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */,
 				2FEBB66E2231350500BF1D16 /* UserInfoTaskTests.swift in Sources */,
+				2FA6431B223BDF220008DC97 /* OktaTokenManagerTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				2F74363E22098C9B00B47967 /* OIDEndSessionRequestTests.m in Sources */,
 				2F74363622098C9B00B47967 /* OIDAuthorizationResponseTests.m in Sources */,

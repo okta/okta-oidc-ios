@@ -13,7 +13,6 @@
 open class OktaTokenManager: NSObject, NSCoding {
 
     open var authState: OIDAuthState
-    open var config: OktaAuthConfig
     open var accessibility: CFString
 
     open var accessToken: String? {
@@ -49,40 +48,25 @@ open class OktaTokenManager: NSObject, NSCoding {
     }
 
     open var refreshToken: String? {
-        // Return the known refreshToken
-        get {
-            guard let token = self.authState.refreshToken else { return nil }
-            return token
-        }
+        return self.authState.refreshToken
     }
+    
+    var restAPI: OktaHttpApiProtocol = OktaRestApi()
 
-    public init(authState: OIDAuthState, config: OktaAuthConfig, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
+    public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
-        self.config = config
         self.accessibility = accessibility
 
         super.init()
-
-        // Store the current configuration
-        OktaAuth.configuration = config
     }
 
     required public convenience init?(coder decoder: NSCoder) {
-        guard let configDict = decoder.decodeObject(forKey: "config") as? [String : String] else {
-            return nil
-        }
-        
-        guard let config = try? OktaAuthConfig(with: configDict) else {
-            return nil
-        }
-        
         guard let state = decoder.decodeObject(forKey: "authState") as? OIDAuthState else {
             return nil
         }
         
         self.init(
             authState: state,
-            config: config,
             accessibility: decoder.decodeObject(forKey: "accessibility") as! CFString
         )
     }
@@ -90,7 +74,6 @@ open class OktaTokenManager: NSObject, NSCoding {
     public func encode(with coder: NSCoder) {
         coder.encode(self.authState, forKey: "authState")
         coder.encode(self.accessibility, forKey: "accessibility")
-        coder.encode(self.config.toDictionary(), forKey: "config")
     }
 
     public func isValidToken(idToken: String?) throws -> Bool {
@@ -127,6 +110,43 @@ open class OktaTokenManager: NSObject, NSCoding {
         
         return jsonObject as? [String: Any]
     }
+    
+    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+        guard let configuration = OktaAuth.configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        IntrospectTask(token: token, config: configuration, oktaAPI: restAPI)
+        .run(callback: callback)
+    }
+
+    public func refresh(callback: @escaping ((String?, OktaError?) -> Void)) {
+        authState.setNeedsTokenRefresh()
+        authState.performAction(freshTokens: { accessToken, idToken, error in
+            if error != nil {
+                callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
+                return
+            }
+
+            guard let token = accessToken else {
+                callback(nil, OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
+                return
+            }
+            
+            callback(token, nil)
+        })
+    }
+
+    public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
+        guard let configuration = OktaAuth.configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        RevokeTask(token: token, config: configuration, oktaAPI: restAPI)
+        .run(callback: callback)
+    }
 
     public func clear() {
         OktaKeychain.clearAll()
@@ -161,28 +181,5 @@ extension OktaTokenManager {
         } catch let error {
             print("Error: \(error)")
         }
-    }
-}
-
-// Handles serialization of OktaAuthConfig.
-// Needed as a temporary solution to omit changing the structre of serialized
-// OktaTokenManager state.
-// TODO: rework this approach in terms of OktaTokenManager refactoring.
-private extension OktaAuthConfig {
-
-    func toDictionary() -> [String:String] {
-        var dict = [String:String]()
-        
-        dict["clientId"] = self.clientId
-        dict["issuer"] = self.issuer
-        dict["scopes"] = self.scopes
-        dict["redirectUri"] = self.redirectUri.absoluteString
-        dict["logoutRedirectUri"] = self.logoutRedirectUri?.absoluteString
-        
-        if let additionalParams = additionalParams {
-            dict.merge(additionalParams) { (current, _) -> String in return current }
-        }
-
-        return dict
     }
 }
