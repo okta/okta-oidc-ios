@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -9,33 +9,36 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
-internal struct Refresh {
+class RefreshTask: OktaAuthTask<String> {
 
-    internal func refresh() -> Promise<String> {
-        // Attempt to refresh the accessToken using the refreshToken
-        return Promise<String>(in: .background, { resolve, reject, _ in
-            guard let tokens = tokens else {
-                return reject(OktaError.noTokens)
+    override func run(callback: @escaping (String?, OktaError?) -> Void) {
+        guard let tokens = tokens else {
+            callback(nil, OktaError.noTokens)
+            return
+        }
+
+        guard let _ = tokens.refreshToken else {
+            callback(nil, OktaError.noRefreshToken)
+            return
+        }
+        
+         tokens.authState.setNeedsTokenRefresh()
+        
+         tokens.authState.performAction(freshTokens: { accessToken, idToken, error in
+            if error != nil {
+                callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
+                return
+            }
+            guard let token = accessToken else {
+                callback(nil, OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
+                return
             }
 
-            guard let _ = tokens.refreshToken else {
-                return reject(OktaError.noRefreshToken)
-            }
-
-            tokens.authState.setNeedsTokenRefresh()
-            tokens.authState.performAction(freshTokens: { accessToken, idToken, error in
-                if error != nil {
-                    return reject(OktaError.errorFetchingFreshTokens(error!.localizedDescription))
-                }
-                guard let token = accessToken else {
-                    return reject(OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
-                }
-                // Re-store the authState on token refreshing
-                OktaAuthorization().storeAuthState(tokens)
-                return resolve(token)
-            })
+            // Re-store the authState on token refreshing
+            OktaAuth.tokens = tokens
+            
+            callback(token, nil)
         })
     }
 }

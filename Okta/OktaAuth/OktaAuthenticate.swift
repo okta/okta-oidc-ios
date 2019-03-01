@@ -9,40 +9,67 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
-public struct Authenticate {
+class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
 
-    let sessionToken: String
+    private let sessionToken: String
     
-    init(sessionToken: String){
+    init(config: OktaAuthConfig?, sessionToken: String) {
         self.sessionToken = sessionToken
-    }
-
-    public func start(withDictConfig dict: [String: String]) -> Promise<OktaTokenManager> {
-       return performAuthenticate(withConfig: dict)
-    }
-
-    public func start(withPListConfig plistName: String?) -> Promise<OktaTokenManager> {
-        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
-            guard let plist = plistName else {
-                return reject(OktaError.noPListGiven)
-            }
-
-            // Get client configuration from specified config
-            if let config = Utils.getPlistConfiguration(forResourceName: plist) {
-                self.performAuthenticate(withConfig: config)
-                .then { authState in resolve(authState) }
-                .catch { error in reject(error) }
-            }
-        })
-    }
-
-    public func start() -> Promise<OktaTokenManager> {
-        return self.start(withPListConfig: "Okta")
+        super.init(config: config)
     }
     
-    private func performAuthenticate(withConfig config: [String: String]) -> Promise<OktaTokenManager> {
-        return OktaAuthorization().authenticate(withSessionToken: self.sessionToken, config: config)
+    override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
+        guard let config = configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        guard let clientId = config.clientId,
+              let redirectUri = config.redirectUri,
+              let scopes = config.scopes else {
+                callback(nil, OktaError.missingConfigurationValues)
+                return
+        }
+        
+        MetadataDiscovery(config: config).run { oidConfig, error in
+            guard let oidConfig = oidConfig else {
+                callback(nil, error)
+                return
+            }
+            
+            let codeVerifier = OIDAuthorizationRequest.generateCodeVerifier()!
+            let codeChallenge = OIDAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
+            let state = OIDAuthorizationRequest.generateState()
+            
+            let request = OIDAuthorizationRequest(
+                configuration: oidConfig,
+                clientId: clientId,
+                clientSecret: nil,
+                scope: scopes,
+                redirectURL: redirectUri,
+                responseType: OIDResponseTypeCode,
+                state: state,
+                nonce: nil,
+                codeVerifier: codeVerifier,
+                codeChallenge: codeChallenge,
+                codeChallengeMethod: OIDOAuthorizationRequestCodeChallengeMethodS256,
+                additionalParameters: ["sessionToken" : self.sessionToken]
+            )
+            
+            OIDAuthState.getState(withAuthRequest: request, callback: { authState, error in
+                guard let authState = authState else {
+                    callback(nil, error)
+                    return
+                }
+                
+                let tokenManager = OktaTokenManager(authState: authState, config: config)
+                
+                // Set the local cache and write to storage
+                OktaAuth.tokens = tokenManager
+
+                callback(tokenManager, nil)
+            })
+        }
     }
 }

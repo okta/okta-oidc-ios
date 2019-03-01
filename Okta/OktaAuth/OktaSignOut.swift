@@ -9,30 +9,58 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
-public struct SignOut {
-    public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<Void> {
-        return OktaAuthorization().signOut(dict, view: view)
-    }
+class SignOutTask: OktaAuthTask<Void> {
+    private let presenter: UIViewController
     
-    public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<Void> {
-        return Promise<Void>(in: .background, { resolve, reject, _ in
-            guard let plist = plistName else {
-                    return reject(OktaError.noPListGiven)
+    init(config: OktaAuthConfig?, presenter: UIViewController) {
+        self.presenter = presenter
+        super.init(config: config)
+    }
+
+    override func run(callback: @escaping (Void?, OktaError?) -> Void) {
+        guard let config = configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+
+        guard let logoutRedirectUri = config.logoutRedirectUri,
+              let additionalParams = config.additionalParams else {
+                callback(nil, OktaError.missingConfigurationValues)
+                return
+        }
+        
+        guard let idToken = OktaAuth.tokens?.authState.lastTokenResponse?.idToken else {
+            callback(nil, OktaError.missingIdToken)
+            return
+        }
+
+        MetadataDiscovery(config: config).run { oidConfig, error in
+            guard let oidConfig = oidConfig else {
+                callback(nil, error)
+                return
             }
             
-            guard let config = Utils.getPlistConfiguration(forResourceName: plist) else {
-                return reject(OktaError.pListParseFailure)
+            let request = OIDEndSessionRequest(
+                configuration: oidConfig,
+                idTokenHint: idToken,
+                postLogoutRedirectURL: logoutRedirectUri,
+                additionalParameters: additionalParams
+            )
+
+            let agent = OIDExternalUserAgentIOS(presenting: self.presenter)
+
+            // Present the Sign Out flow
+            OktaAuth.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent) {
+                response, responseError in
+                
+                var error: OktaError? = nil
+                if let responseError = responseError {
+                    error = OktaError.APIError("Sign Out Error: \(responseError.localizedDescription)")
+                }
+                
+                callback((), error)
             }
-            
-            self.start(withDictConfig: config, view: view)
-            .then { _ in return resolve(()) }
-            .catch { error in return reject(error) }
-        })
-    }
-    
-    public func start(_ view: UIViewController) -> Promise<Void> {
-        return start(withPListConfig: "Okta", view: view)
+        }
     }
 }

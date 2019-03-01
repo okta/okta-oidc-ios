@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -9,36 +9,61 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
-public struct SignIn {
+class SignInTask: OktaAuthTask<OktaTokenManager> {
 
-    init(){}
-
-    public func start(withDictConfig dict: [String: String], view: UIViewController) -> Promise<OktaTokenManager> {
-        OktaAuth.configuration = dict
-        return OktaAuthorization().authCodeFlow(dict, view)
+    private let presenter: UIViewController
+    
+    init(config: OktaAuthConfig?, presenter: UIViewController) {
+        self.presenter = presenter
+        super.init(config: config)
     }
 
-    public func start(withPListConfig plistName: String?, view: UIViewController) -> Promise<OktaTokenManager> {
-        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
-            guard let plist = plistName else {
-                return reject(OktaError.noPListGiven)
-            }
-            
-            guard let config = Utils.getPlistConfiguration(forResourceName: plist) else {
-                return reject(OktaError.pListParseFailure)
+    override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
+        guard let config = configuration else {
+            callback(nil, OktaError.notConfigured)
+            return
+        }
+        
+        guard let clientId = config.clientId,
+              let redirectUri = config.redirectUri,
+              let scopes = config.scopes,
+              let additionalParams = config.additionalParams else {
+                callback(nil, OktaError.missingConfigurationValues)
+                return
+        }
+
+        MetadataDiscovery(config: config).run { oidConfig, error in
+            guard let oidConfig = oidConfig else {
+                callback(nil, error)
+                return
             }
 
-            // Get client configuration from Okta.plist
-            OktaAuthorization()
-            .authCodeFlow(config, view)
-            .then { response in return resolve(response) }
-            .catch { error in return reject(error) }
-        })
-    }
+            // Build the Authentication request
+            let request = OIDAuthorizationRequest(
+                       configuration: oidConfig,
+                            clientId: clientId,
+                              scopes: Utils.scrubScopes(scopes),
+                         redirectURL: redirectUri,
+                        responseType: OIDResponseTypeCode,
+                additionalParameters: additionalParams
+            )
 
-    public func start(_ view: UIViewController) -> Promise<OktaTokenManager> {
-        return self.start(withPListConfig: "Okta", view: view)
+            // Start the authorization flow
+            let externalUserAgent = OIDExternalUserAgentIOS(presenting: self.presenter)
+            OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
+                authorizationResponse, error in
+
+                guard let authResponse = authorizationResponse else {
+                    return callback(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                }
+
+                let tokenManager = OktaTokenManager(authState: authResponse, config: config)
+
+                OktaAuth.tokens = tokenManager
+
+                callback(tokenManager, nil)
+            }
+        }
     }
 }
