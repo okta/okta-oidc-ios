@@ -68,7 +68,8 @@ public struct OktaAuthConfig: Codable {
         configCopy.removeValue(forKey: "clientId")
         configCopy.removeValue(forKey: "redirectUri")
         configCopy.removeValue(forKey: "scopes")
-
+        configCopy.removeValue(forKey: "logoutRedirectUri")
+        
         return configCopy
     }
 }

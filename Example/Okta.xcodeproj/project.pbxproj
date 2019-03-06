@@ -27,6 +27,12 @@
 		2F74364522098C9B00B47967 /* OIDTokenRequestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74362C22098C9B00B47967 /* OIDTokenRequestTests.m */; };
 		2F74364622098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F74363322098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m */; };
 		2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B847221E91A14003E6F17 /* AuthViewController.swift */; };
+		2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */; };
+		2FEBB66A223005B000BF1D16 /* RevokeTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */; };
+		2FEBB66C223020FF00BF1D16 /* IntrospectTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */; };
+		2FEBB66E2231350500BF1D16 /* UserInfoTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */; };
+		2FEBB670223142E400BF1D16 /* DiscoveryTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */; };
+		2FEBB6722231596B00BF1D16 /* OktaAuthConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */; };
 		58AC1A759D36B02C27AEFF01 /* Pods_Okta_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F10D9BB02A65C1CEC3B2993 /* Pods_Okta_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -99,6 +105,12 @@
 		2F74363222098C9B00B47967 /* OIDServiceConfigurationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceConfigurationTests.h; sourceTree = "<group>"; };
 		2F74363322098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDURLQueryComponentTestsIOS7.m; sourceTree = "<group>"; };
 		2F9B847221E91A14003E6F17 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
+		2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApiMock.swift; sourceTree = "<group>"; };
+		2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeTaskTests.swift; sourceTree = "<group>"; };
+		2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrospectTaskTests.swift; sourceTree = "<group>"; };
+		2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoTaskTests.swift; sourceTree = "<group>"; };
+		2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryTaskTests.swift; sourceTree = "<group>"; };
+		2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuthConfigTests.swift; sourceTree = "<group>"; };
 		373F2D6C1A0A57F307B30B30 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* Okta_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Okta_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -257,7 +269,13 @@
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				71ED66182058BF8E00B5D800 /* TestUtils.swift */,
+				2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */,
 				FA58179D221D811B002C527E /* OktaKeychainTests.swift */,
+				2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */,
+				2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */,
+				2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */,
+				2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */,
+				2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -601,22 +619,28 @@
 			files = (
 				2F74363D22098C9B00B47967 /* OIDTokenResponseTests.m in Sources */,
 				2F74363F22098C9B00B47967 /* OIDTokenUtilitiesTests.m in Sources */,
+				2FEBB66A223005B000BF1D16 /* RevokeTaskTests.swift in Sources */,
 				2F74364522098C9B00B47967 /* OIDTokenRequestTests.m in Sources */,
 				2F74363422098C9B00B47967 /* OIDURLSessionProviderTests.m in Sources */,
 				2F74364422098C9B00B47967 /* OIDRPProfileCode.m in Sources */,
 				2F74363A22098C9B00B47967 /* OIDURLQueryComponentTests.m in Sources */,
 				71ED661A2058C24B00B5D800 /* TestUtils.swift in Sources */,
 				2F74364322098C9B00B47967 /* OIDResponseTypesTests.m in Sources */,
+				2FEBB6722231596B00BF1D16 /* OktaAuthConfigTests.swift in Sources */,
 				2F74363C22098C9B00B47967 /* OIDGrantTypesTests.m in Sources */,
 				2F74364222098C9B00B47967 /* OIDAuthStateTests.m in Sources */,
 				FA58179F221D8138002C527E /* OktaKeychainTests.swift in Sources */,
 				2F74363B22098C9B00B47967 /* OIDServiceConfigurationTests.m in Sources */,
 				2F74364622098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m in Sources */,
 				2F74363722098C9B00B47967 /* OIDRegistrationRequestTests.m in Sources */,
+				2FEBB66C223020FF00BF1D16 /* IntrospectTaskTests.swift in Sources */,
 				2F74363522098C9B00B47967 /* OIDAuthorizationRequestTests.m in Sources */,
+				2FEBB670223142E400BF1D16 /* DiscoveryTaskTests.swift in Sources */,
 				2F74363922098C9B00B47967 /* OIDRegistrationResponseTests.m in Sources */,
 				2F74364022098C9B00B47967 /* OIDSwiftTests.swift in Sources */,
 				7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */,
+				2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */,
+				2FEBB66E2231350500BF1D16 /* UserInfoTaskTests.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				2F74363E22098C9B00B47967 /* OIDEndSessionRequestTests.m in Sources */,
 				2F74363622098C9B00B47967 /* OIDAuthorizationResponseTests.m in Sources */,

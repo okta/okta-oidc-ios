@@ -47,7 +47,7 @@ class RevokeTask: OktaAuthTask<Bool> {
 
         let data = "token=\(token)&client_id=\(clientId)"
         
-        OktaApi.post(revokeEndpoint, headers: headers, postString: data,
+        authApi.post(revokeEndpoint, headers: headers, postString: data,
             onSuccess: { response in callback(response?.count == 0 ? true : false , nil)},
             onError: { error in callback(nil, error) })
     }

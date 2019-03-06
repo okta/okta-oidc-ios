@@ -7,6 +7,7 @@ class Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        OktaAuth.configuration = try? OktaAuthConfig.default()
     }
 
     override func tearDown() {
@@ -16,17 +17,6 @@ class Tests: XCTestCase {
         OktaAuth.tokens?.clear()
         OktaAuth.configuration = nil
     }
-
-// TODO: rework to OktaAuthConfigTests
-//    func testPListFailure() {
-//        // Attempt to find a plist file that does not exist
-//        XCTAssertNil(Utils.getPlistConfiguration(forResourceName: "noFile"))
-//    }
-//
-//    func testPListFound() {
-//        // Attempt to find the Okta.plist file
-//        XCTAssertNotNil(Utils.getPlistConfiguration(forResourceName: "Okta"))
-//    }
 
     func testPListFormatWithTrailingSlash() {
         // Validate the PList issuer
@@ -45,29 +35,6 @@ class Tests: XCTestCase {
         let issuer = Utils.removeTrailingSlash(dict["issuer"]!)
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
-
-// TODO: rework to OktaAuthConfigTests
-//    func testAdditionalParamParse() {
-//        // Ensure known values from the config object are removed
-//        let config = [
-//                 "issuer": "https://example.com/oauth2/default",
-//               "clientId": "clientId",
-//            "redirectUri": "com.okta.example:/callback",
-//                 "scopes": "openid profile offline_access",
-//                  "nonce": "abbbbbbbc"
-//        ]
-//
-//        let additionalParams = Utils.parseAdditionalParams(config)
-//        XCTAssertEqual(additionalParams!, ["nonce": "abbbbbbbc"])
-//    }
-//
-//    func testAdditionalParamParseWithNoChange() {
-//        // Ensure known values from the config object are removed
-//        let config = [ "nonce": "abbbbbbbc" ]
-//
-//        let additionalParams = Utils.parseAdditionalParams(config)
-//        XCTAssertEqual(additionalParams!, config)
-//    }
 
     func testValidScopesString() {
         // Validate the scopes are in the correct format
@@ -98,47 +65,6 @@ class Tests: XCTestCase {
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })
-    }
-
-// TODO: rework tests
-//    func testIntrospectionEndpointURL() {
-//        // Similar use case for revoke and userinfo endpoints
-//        OktaAuth.configuration = OktaAuthConfig(with: [
-//            "issuer": "https://example.com"
-//        ])
-//        let url = IntrospectTask().getIntrospectionEndpoint()
-//        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/v1/introspect")
-//    }
-//
-//    func testIntrospectionEndpointURLWithOAuth2() {
-//        // Similar use case for revoke and userinfo endpoints
-//        OktaAuth.configuration = OktaAuthConfig(with: [
-//            "issuer": "https://example.com/oauth2/default"
-//        ])
-//        let url = IntrospectTask().getIntrospectionEndpoint()
-//        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/default/v1/introspect")
-//    }
-
-    func testUserInfoWithoutToken() {
-        // Verify an error is returned if the accessToken is not included
-        let config = OktaAuthConfig(with: [
-            "issuer": "https://example.com/oauth2/default"
-        ])
-        
-        UserInfoTask(config: config, token: nil).run { _, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        }
-    }
-
-    func testRevokeWithoutToken() {
-        // Verify an error is returned if the accessToken is not included
-        let config = OktaAuthConfig(with: [
-            "issuer": "https://example.com/oauth2/default"
-        ])
-        
-        RevokeTask(config: config, token: nil).run { _, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        }
     }
 
     func testIdTokenDecode() {

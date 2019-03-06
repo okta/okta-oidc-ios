@@ -41,7 +41,7 @@ internal class UserInfoTask: OktaAuthTask<[String:Any]> {
             "Authorization": "Bearer \(token)"
         ]
 
-         OktaApi.post(userInfoEndpoint, headers: headers, postData: nil,
+         authApi.post(userInfoEndpoint, headers: headers, postData: nil,
             onSuccess: { response in callback(response, nil)},
             onError: { error in callback(nil, error) })
     }

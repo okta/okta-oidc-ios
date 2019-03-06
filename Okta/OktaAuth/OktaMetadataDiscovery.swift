@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -12,7 +12,7 @@
 
 class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
     override func run(callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
-        guard let config = configuration else {
+        guard let config = config else {
             callback(nil, OktaError.notConfigured)
             return
         }
@@ -23,7 +23,7 @@ class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
               return
         }
         
-        OktaApi.get(configUrl, headers: nil, onSuccess: { response in
+        authApi.get(configUrl, headers: nil, onSuccess: { response in
             guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                 callback(nil, OktaError.parseFailure)
                 return

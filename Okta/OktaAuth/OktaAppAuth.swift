@@ -22,6 +22,8 @@ public var configuration = try? OktaAuthConfig.default()
 // Cache the Discovery Metadata
 public var wellKnown: [String: Any]?
 
+internal var authApi: OktaApi = OktaApiImpl()
+
 // Token manager
 public var tokens = OktaTokenManager.readFromSecureStorage() {
     didSet {

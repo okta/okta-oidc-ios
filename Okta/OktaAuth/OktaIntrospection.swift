@@ -20,7 +20,7 @@ class IntrospectTask: OktaAuthTask<Bool> {
     }
 
     override func run(callback: @escaping (Bool?, OktaError?) -> Void) {
-        guard let config = configuration else {
+        guard let config = config else {
             callback(nil, OktaError.notConfigured)
             return
         }
@@ -41,13 +41,13 @@ class IntrospectTask: OktaAuthTask<Bool> {
         }
 
         let headers = [
-                "Accept": "application/json",
-                "Content-Type": "application/x-www-form-urlencoded"
-            ]
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+        ]
 
         let data = "token=\(token)&client_id=\(clientId)"
 
-        OktaApi.post(introspectionEndpoint, headers: headers, postString: data, onSuccess: { response in
+        authApi.post(introspectionEndpoint, headers: headers, postString: data, onSuccess: { response in
             guard let isActive = response?["active"] as? Bool else {
                 callback(nil, OktaError.parseFailure)
                 return
