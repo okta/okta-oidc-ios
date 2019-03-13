@@ -23,7 +23,7 @@ class AuthViewController : UIViewController {
     }
     
     private var testConfig: OktaAuthConfig {
-        return OktaAuthConfig(with: [
+        return try! OktaAuthConfig(with: [
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,

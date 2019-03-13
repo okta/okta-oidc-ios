@@ -19,7 +19,7 @@ class ViewController: UIViewController {
     }
     
     private var testConfig: OktaAuthConfig {
-        return OktaAuthConfig(with:[
+        return try! OktaAuthConfig(with:[
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
@@ -68,10 +68,10 @@ class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokens?.accessToken else { return }
+        guard let accessToken = tokenManager?.accessToken else { return }
 
-        OktaAuth.introspect(token: accessToken, callback: { isValid, error in
-            guard let isValid = isValid else {
+        OktaAuth.introspect(token: accessToken, callback: { payload, error in
+            guard let isValid = payload?["active"] as? Bool else {
                 self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
                 return
             }
@@ -82,7 +82,7 @@ class ViewController: UIViewController {
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokens?.accessToken else { return }
+        guard let accessToken = tokenManager?.accessToken else { return }
 
         OktaAuth.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
@@ -117,7 +117,7 @@ class ViewController: UIViewController {
     }
 
     func buildTokenTextView() {
-        guard let currentTokens = tokens else {
+        guard let currentTokens = tokenManager else {
             tokenView.text = ""
             return
         }

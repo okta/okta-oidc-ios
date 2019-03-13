@@ -14,47 +14,37 @@ class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
 
     private let sessionToken: String
     
-    init(config: OktaAuthConfig?, sessionToken: String) {
+    init(sessionToken: String, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.sessionToken = sessionToken
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
     
     override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        guard let config = configuration else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-
-        guard let clientId = config.clientId,
-              let redirectUri = config.redirectUri,
-              let scopes = config.scopes else {
-                callback(nil, OktaError.missingConfigurationValues)
-                return
-        }
-        
-        MetadataDiscovery(config: config).run { oidConfig, error in
+        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
             }
             
-            let codeVerifier = OIDAuthorizationRequest.generateCodeVerifier()!
+            let codeVerifier = OIDAuthorizationRequest.generateCodeVerifier()
             let codeChallenge = OIDAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
             let state = OIDAuthorizationRequest.generateState()
+            var additionalParameters = self.config.additionalParams ?? [String : String]()
+            additionalParameters["sessionToken"] = self.sessionToken
             
             let request = OIDAuthorizationRequest(
                 configuration: oidConfig,
-                clientId: clientId,
+                clientId: self.config.clientId,
                 clientSecret: nil,
-                scope: scopes,
-                redirectURL: redirectUri,
+                scope: self.config.scopes,
+                redirectURL: self.config.redirectUri,
                 responseType: OIDResponseTypeCode,
                 state: state,
-                nonce: nil,
+                nonce: OIDAuthorizationRequest.generateState(),
                 codeVerifier: codeVerifier,
                 codeChallenge: codeChallenge,
                 codeChallengeMethod: OIDOAuthorizationRequestCodeChallengeMethodS256,
-                additionalParameters: ["sessionToken" : self.sessionToken]
+                additionalParameters: additionalParameters
             )
             
             OIDAuthState.getState(withAuthRequest: request, callback: { authState, error in
@@ -63,10 +53,10 @@ class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
                     return
                 }
                 
-                let tokenManager = OktaTokenManager(authState: authState, config: config)
+                let tokenManager = OktaTokenManager(authState: authState, config: self.config)
                 
                 // Set the local cache and write to storage
-                OktaAuth.tokens = tokenManager
+                OktaAuth.tokenManager = tokenManager
 
                 callback(tokenManager, nil)
             })

@@ -13,9 +13,9 @@
 class SignOutTask: OktaAuthTask<Void> {
     private let presenter: UIViewController
     
-    init(config: OktaAuthConfig?, presenter: UIViewController) {
+    init(presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.presenter = presenter
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
 
     override func run(callback: @escaping (Void?, OktaError?) -> Void) {
@@ -30,12 +30,12 @@ class SignOutTask: OktaAuthTask<Void> {
                 return
         }
         
-        guard let idToken = OktaAuth.tokens?.authState.lastTokenResponse?.idToken else {
+        guard let idToken = OktaAuth.tokenManager?.authState.lastTokenResponse?.idToken else {
             callback(nil, OktaError.missingIdToken)
             return
         }
 
-        MetadataDiscovery(config: config).run { oidConfig, error in
+        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return

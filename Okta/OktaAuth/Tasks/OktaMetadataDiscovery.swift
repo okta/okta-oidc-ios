@@ -11,25 +11,20 @@
  */
 
 class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
-    override func run(callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
-        guard let config = config else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
 
-        guard let issuer = config.issuer,
-              let configUrl = URL(string: "\(issuer)/.well-known/openid-configuration") else {
+    override func run(callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
+        guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
               callback(nil, OktaError.noDiscoveryEndpoint)
               return
         }
         
-        authApi.get(configUrl, headers: nil, onSuccess: { response in
+        oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
             guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                 callback(nil, OktaError.parseFailure)
                 return
             }
             // Cache the well-known endpoint response
-            OktaAuth.wellKnown = dictResponse
+            OktaAuth.discoveredMetadata = dictResponse
 
             callback(OIDServiceConfiguration(discoveryDocument: oidConfig), nil)
         }, onError: { error in

@@ -13,19 +13,19 @@
 class RefreshTask: OktaAuthTask<String> {
 
     override func run(callback: @escaping (String?, OktaError?) -> Void) {
-        guard let tokens = tokens else {
+        guard let tokenManager = tokenManager else {
             callback(nil, OktaError.noTokens)
             return
         }
 
-        guard let _ = tokens.refreshToken else {
+        guard let _ = tokenManager.refreshToken else {
             callback(nil, OktaError.noRefreshToken)
             return
         }
         
-         tokens.authState.setNeedsTokenRefresh()
+         tokenManager.authState.setNeedsTokenRefresh()
         
-         tokens.authState.performAction(freshTokens: { accessToken, idToken, error in
+         tokenManager.authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
                 callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
                 return
@@ -36,7 +36,7 @@ class RefreshTask: OktaAuthTask<String> {
             }
 
             // Re-store the authState on token refreshing
-            OktaAuth.tokens = tokens
+            OktaAuth.tokenManager = tokenManager
             
             callback(token, nil)
         })

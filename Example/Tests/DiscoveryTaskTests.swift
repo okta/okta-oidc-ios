@@ -8,62 +8,26 @@ class DiscoveryTaskTests: XCTestCase {
     override func setUp() {
         super.setUp()
         apiMock = OktaApiMock()
-        apiMock.installMock()
     }
 
     override func tearDown() {
-        OktaApiMock.resetMock()
+        apiMock = nil
         super.tearDown()
     }
     
     func testRunSucceeded() {
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com/oauth2/default"])
-        
         apiMock.configure(response: self.validOIDConfigDictionary)
         
-        runAndWaitDiscovery(config: config) { oidConfig, error in
+        runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(error)
             XCTAssertNotNil(oidConfig)
         }
     }
-
-    func testRunNotConfigured() {
-        apiMock.configure(response: [:]) { request in
-            XCTFail("Should not make a request to API!")
-        }
-        
-        runAndWaitDiscovery(config: nil) { oidConfig, error in
-            XCTAssertNil(oidConfig)
-            XCTAssertEqual(
-                OktaError.notConfigured.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
-    
-    func testRunNoDiscoveryEndpoint() {
-        // value for "issuer" missing
-        let config = OktaAuthConfig(with: [:])
-    
-        apiMock.configure(response: [:]) { request in
-            XCTFail("Should not make a request to API!")
-        }
-    
-        runAndWaitDiscovery(config: config) { oidConfig, error in
-            XCTAssertNil(oidConfig)
-            XCTAssertEqual(
-                OktaError.noDiscoveryEndpoint.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
     
     func testRunApiError() {
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com/oauth2/default"])
-        
         apiMock.configure(error: OktaError.APIError("Test Error"))
         
-        runAndWaitDiscovery(config: config) { oidConfig, error in
+        runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
             XCTAssertEqual(
                 "Error returning discovery document: Test Error Pleasecheck your PList configuration",
@@ -73,11 +37,9 @@ class DiscoveryTaskTests: XCTestCase {
     }
     
     func testRunParseError() {
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com/oauth2/default"])
-        
         apiMock.configure(response: ["invalidKey" : ""])
         
-        runAndWaitDiscovery(config: config) { oidConfig, error in
+        runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
             XCTAssertEqual(
                 OktaError.parseFailure.localizedDescription,
@@ -87,16 +49,14 @@ class DiscoveryTaskTests: XCTestCase {
     }
     
     func testRunDiscoveryEndpointURL() {
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com"])
-        
         apiMock.configure(response: validOIDConfigDictionary) { request in
             XCTAssertEqual(
-                "http://test.issuer.com/.well-known/openid-configuration",
+                "http://test.issuer.com/oauth2/default/.well-known/openid-configuration",
                 request.url?.absoluteString
             )
         }
         
-        runAndWaitDiscovery(config: config) { oidConfig, error in
+        runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(error)
             XCTAssertNotNil(oidConfig)
         }
@@ -104,14 +64,23 @@ class DiscoveryTaskTests: XCTestCase {
     
     // MARK: - Utils
     
-    private func runAndWaitDiscovery(config: OktaAuthConfig?,
+    private func runAndWaitDiscovery(config: OktaAuthConfig,
                                       validationHandler: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
         let ex = expectation(description: "User Info should be called!")
-        MetadataDiscovery(config: config).run { oidConfig, error in
+        MetadataDiscovery(config: config, oktaAPI: apiMock).run { oidConfig, error in
             validationHandler(oidConfig, error)
             ex.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
+    }
+    
+    private var validConfig: OktaAuthConfig {
+        return try! OktaAuthConfig(with: [
+            "issuer" : "http://test.issuer.com/oauth2/default",
+            "clientId" : "test_client",
+            "scopes" : "test",
+            "redirectUri" : "test:/callback"
+        ])
     }
     
     private var validOIDConfigDictionary: [String:Any] {

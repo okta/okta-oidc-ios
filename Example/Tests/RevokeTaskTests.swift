@@ -8,68 +8,28 @@ class RevokeTaskTests: XCTestCase {
     override func setUp() {
         super.setUp()
         apiMock = OktaApiMock()
-        apiMock.installMock()
     }
 
     override func tearDown() {
-        OktaApiMock.resetMock()
+        apiMock = nil
         super.tearDown()
     }
     
     func testRunSucceeded() {
-        let config = OktaAuthConfig(with: [
-            "clientId" : "test_client_id",
-            "issuer" : "http://test.issuer.com/oauth2/default"
-        ])
-        
         apiMock.configure(response: [:])
         
-        runAndWaitRevoke(config: config, token: "test_token") { isRevoked, error in
+        runAndWaitRevoke(config: validConfig, token: "test_token") { isRevoked, error in
             XCTAssertNil(error)
             XCTAssertEqual(true, isRevoked)
         }
     }
-
-    func testRunNotConfigured() {
-        apiMock.configure(response: [:]) { request in
-            XCTFail("Should not make a request to API!")
-        }
-        
-        runAndWaitRevoke(config: nil, token: "test_token") { isRevoked, error in
-            XCTAssertNil(isRevoked)
-            XCTAssertEqual(
-                OktaError.notConfigured.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
-    
-    func testRunNoRevocationEndpoint() {
-        // value for "issuer" missing
-        let config = OktaAuthConfig(with: ["clientId" : "test_client_id"])
-        
-        apiMock.configure(response: [:]) { request in
-            XCTFail("Should not make a request to API!")
-        }
-        
-        runAndWaitRevoke(config: config, token: "test_token") { isRevoked, error in
-            XCTAssertNil(isRevoked)
-            XCTAssertEqual(
-                OktaError.noRevocationEndpoint.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
     
     func testRunNoBearerToken() {
-        // value for "clientId" missing
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com/oauth2/default"])
-        
         apiMock.configure(response: [:]) { request in
             XCTFail("Should not make a request to API!")
         }
         
-        runAndWaitRevoke(config: config, token: nil) { isRevoked, error in
+        runAndWaitRevoke(config: validConfig, token: nil) { isRevoked, error in
             XCTAssertNil(isRevoked)
             XCTAssertEqual(
                 OktaError.noBearerToken.localizedDescription,
@@ -78,32 +38,10 @@ class RevokeTaskTests: XCTestCase {
         }
     }
     
-    func testRunMissingConfigurationValues() {
-        // value for "clientId" missing
-        let config = OktaAuthConfig(with: ["issuer" : "http://test.issuer.com/oauth2/default"])
-        
-        apiMock.configure(response: [:]) { request in
-            XCTFail("Should not make a request to API!")
-        }
-        
-        runAndWaitRevoke(config: config, token: "test_token") { isRevoked, error in
-            XCTAssertNil(isRevoked)
-            XCTAssertEqual(
-                OktaError.missingConfigurationValues.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
-    
     func testRunApiError() {
-        let config = OktaAuthConfig(with: [
-            "clientId" : "test_client_id",
-            "issuer" : "http://test.issuer.com/oauth2/default"
-        ])
-        
         apiMock.configure(error: OktaError.APIError("Test Error"))
         
-        runAndWaitRevoke(config: config, token: "test_token") { isRevoked, error in
+        runAndWaitRevoke(config: validConfig, token: "test_token") { isRevoked, error in
             XCTAssertNil(isRevoked)
             XCTAssertEqual(
                 OktaError.APIError("Test Error").localizedDescription,
@@ -113,9 +51,11 @@ class RevokeTaskTests: XCTestCase {
     }
     
     func testRunRevokationEndpointURL() {
-        let config = OktaAuthConfig(with: [
+        let config = try! OktaAuthConfig(with: [
             "clientId" : "test_client_id",
-            "issuer" : "http://test.issuer.com/"
+            "issuer" : "http://test.issuer.com/",
+            "scopes" : "test",
+            "redirectUri" : "test:/callback"
         ])
         
         apiMock.configure(response: [:]) { request in
@@ -132,9 +72,11 @@ class RevokeTaskTests: XCTestCase {
     }
     
     func testRunRevokationEndpointURLWithOAth2() {
-        let config = OktaAuthConfig(with: [
+        let config = try! OktaAuthConfig(with: [
             "clientId" : "test_client_id",
-            "issuer" : "http://test.issuer.com/oauth2/default"
+            "issuer" : "http://test.issuer.com/oauth2/default",
+            "scopes" : "test",
+            "redirectUri" : "test:/callback"
         ])
         
         apiMock.configure(response: [:]) { request in
@@ -152,14 +94,23 @@ class RevokeTaskTests: XCTestCase {
     
     // MARK: - Utils
     
-    private func runAndWaitRevoke(config: OktaAuthConfig?,
+    private func runAndWaitRevoke(config: OktaAuthConfig,
                                   token: String?,
                                   validationHandler: @escaping (Bool?, OktaError?) -> Void) {
         let ex = expectation(description: "Revoke should be called!")
-        RevokeTask(config: config, token: token).run { isRevoked, error in
+        RevokeTask(token: token, config: config, oktaAPI: apiMock).run { isRevoked, error in
             validationHandler(isRevoked, error)
             ex.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
+    }
+    
+    private var validConfig: OktaAuthConfig {
+        return try! OktaAuthConfig(with: [
+            "issuer" : "http://test.issuer.com/oauth2/default",
+            "clientId" : "test_client",
+            "scopes" : "test",
+            "redirectUri" : "test:/callback"
+        ])
     }
 }

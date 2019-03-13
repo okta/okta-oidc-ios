@@ -14,17 +14,12 @@ internal class UserInfoTask: OktaAuthTask<[String:Any]> {
     
     private let token: String?
     
-    init(config: OktaAuthConfig?, token: String?) {
+    init(token: String?, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.token = token
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
     
     override func run(callback: @escaping ([String : Any]?, OktaError?) -> Void) {
-        guard let config = config else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-        
         guard let userInfoEndpoint = getUserInfoEndpoint(config) else {
             callback(nil, .noUserInfoEndpoint)
             return
@@ -41,21 +36,18 @@ internal class UserInfoTask: OktaAuthTask<[String:Any]> {
             "Authorization": "Bearer \(token)"
         ]
 
-         authApi.post(userInfoEndpoint, headers: headers, postData: nil,
+        oktaAPI.post(userInfoEndpoint, headers: headers, postData: nil,
             onSuccess: { response in callback(response, nil)},
             onError: { error in callback(nil, error) })
     }
 
     func getUserInfoEndpoint(_ config: OktaAuthConfig) -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-        if let userInfoEndpoint = OktaAuth.wellKnown?["userinfo_endpoint"] {
+        if let userInfoEndpoint = OktaAuth.discoveredMetadata?["userinfo_endpoint"] {
             return URL(string: userInfoEndpoint as! String)
         }
-        
-        guard let issuer = config.issuer else {
-            return nil
-        }
 
+        let issuer = config.issuer
         if issuer.range(of: "oauth2") != nil {
             return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/userinfo")
         }

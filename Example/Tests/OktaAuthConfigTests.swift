@@ -12,7 +12,14 @@ class OktaAuthConfigTests: XCTestCase {
             "logoutRedirectUri" : "com.test:/logout"
         ]
         
-        let config = OktaAuthConfig(with: dict)
+        let config: OktaAuthConfig
+        do {
+            config = try OktaAuthConfig(with: dict)
+        } catch let error {
+            XCTFail("Unexpected error: \(error)")
+            return
+        }
+        
         XCTAssertEqual("test_client_id", config.clientId)
         XCTAssertEqual("test_issuer", config.issuer)
         XCTAssertEqual("test_scope", config.scopes)
@@ -24,15 +31,26 @@ class OktaAuthConfigTests: XCTestCase {
     func testCreationWithAdditionalParams() {
         let dict = [
             "clientId" : "test_client_id",
+            "issuer" : "test_issuer",
+            "scopes" : "test_scope",
+            "redirectUri" : "com.test:/callback",
+            "logoutRedirectUri" : "com.test:/logout",
             "additionalParam" : "test_param",
         ]
         
-        let config = OktaAuthConfig(with: dict)
+        let config: OktaAuthConfig
+        do {
+            config = try OktaAuthConfig(with: dict)
+        } catch let error {
+            XCTFail("Unexpected error: \(error)")
+            return
+        }
+        
         XCTAssertEqual("test_client_id", config.clientId)
-        XCTAssertNil(config.issuer)
-        XCTAssertNil(config.scopes)
-        XCTAssertNil(config.redirectUri)
-        XCTAssertNil(config.logoutRedirectUri)
+        XCTAssertEqual("test_issuer", config.issuer)
+        XCTAssertEqual("test_scope", config.scopes)
+        XCTAssertEqual(URL(string: "com.test:/callback"), config.redirectUri)
+        XCTAssertEqual(URL(string: "com.test:/logout"), config.logoutRedirectUri)
 
         XCTAssertEqual(1, config.additionalParams?.count)
         XCTAssertEqual("test_param", config.additionalParams?["additionalParam"])

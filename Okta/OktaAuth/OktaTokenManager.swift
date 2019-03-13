@@ -68,13 +68,17 @@ open class OktaTokenManager: NSObject, NSCoding {
     }
 
     required public convenience init?(coder decoder: NSCoder) {
-        guard let configDict = decoder.decodeObject(forKey: "config") as? [String:String] else {
+        guard let configDict = decoder.decodeObject(forKey: "config") as? [String : String] else {
             return nil
         }
-    
+        
+        guard let config = try? OktaAuthConfig(with: configDict) else {
+            return nil
+        }
+        
         self.init(
             authState: decoder.decodeObject(forKey: "authState") as! OIDAuthState,
-            config: OktaAuthConfig(with: configDict),
+            config: config,
             accessibility: (decoder.decodeObject(forKey: "accessibility") as! CFString)
         )
     }
@@ -101,6 +105,10 @@ open class OktaTokenManager: NSObject, NSCoding {
     // Decodes the payload of a JWT
     public static func decodeJWT(_ token: String) throws -> [String: Any]? {
         let payload = token.split(separator: ".")
+        guard payload.count > 1 else {
+            return nil
+        }
+        
         var encodedPayload = "\(payload[1])"
         if encodedPayload.count % 4 != 0 {
             let padding = 4 - encodedPayload.count % 4
@@ -111,12 +119,14 @@ open class OktaTokenManager: NSObject, NSCoding {
             throw OktaError.JWTDecodeError
         }
         
-        return try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+        let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
+        
+        return jsonObject as? [String: Any]
     }
 
     public func clear() {
         OktaKeychain.clearAll()
-        OktaAuth.tokens = nil
+        OktaAuth.tokenManager = nil
     }
 }
 
@@ -162,7 +172,7 @@ private extension OktaAuthConfig {
         dict["clientId"] = self.clientId
         dict["issuer"] = self.issuer
         dict["scopes"] = self.scopes
-        dict["redirectUri"] = self.redirectUri?.absoluteString
+        dict["redirectUri"] = self.redirectUri.absoluteString
         dict["logoutRedirectUri"] = self.logoutRedirectUri?.absoluteString
         
         if let additionalParams = additionalParams {

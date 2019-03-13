@@ -14,26 +14,13 @@ class SignInTask: OktaAuthTask<OktaTokenManager> {
 
     private let presenter: UIViewController
     
-    init(config: OktaAuthConfig?, presenter: UIViewController) {
+    init(presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.presenter = presenter
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
 
     override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
-        guard let config = configuration else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-        
-        guard let clientId = config.clientId,
-              let redirectUri = config.redirectUri,
-              let scopes = config.scopes,
-              let additionalParams = config.additionalParams else {
-                callback(nil, OktaError.missingConfigurationValues)
-                return
-        }
-
-        MetadataDiscovery(config: config).run { oidConfig, error in
+        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
@@ -42,11 +29,11 @@ class SignInTask: OktaAuthTask<OktaTokenManager> {
             // Build the Authentication request
             let request = OIDAuthorizationRequest(
                        configuration: oidConfig,
-                            clientId: clientId,
-                              scopes: Utils.scrubScopes(scopes),
-                         redirectURL: redirectUri,
+                            clientId: self.config.clientId,
+                              scopes: Utils.scrubScopes(self.config.scopes),
+                         redirectURL: self.config.redirectUri,
                         responseType: OIDResponseTypeCode,
-                additionalParameters: additionalParams
+                additionalParameters: self.config.additionalParams
             )
 
             // Start the authorization flow
@@ -58,9 +45,9 @@ class SignInTask: OktaAuthTask<OktaTokenManager> {
                     return callback(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 }
 
-                let tokenManager = OktaTokenManager(authState: authResponse, config: config)
+                let tokenManager = OktaTokenManager(authState: authResponse, config: self.config)
 
-                OktaAuth.tokens = tokenManager
+                OktaAuth.tokenManager = tokenManager
 
                 callback(tokenManager, nil)
             }

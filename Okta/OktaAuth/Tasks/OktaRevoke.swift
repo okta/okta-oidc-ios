@@ -14,54 +14,41 @@ class RevokeTask: OktaAuthTask<Bool> {
 
     private let token: String?
 
-    init(config: OktaAuthConfig?, token: String?) {
+    init(token: String?, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.token = token
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
-    
+
     override func run(callback: @escaping (Bool?, OktaError?) -> Void) {
-        guard let config = config else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-        
         guard let revokeEndpoint = getRevokeEndpoint(config) else {
             callback(nil, .noRevocationEndpoint)
             return
         }
-        
+
         guard let token = token else {
             callback(nil, .noBearerToken)
             return
         }
-        
-        guard let clientId = config.clientId else {
-            callback(nil, .missingConfigurationValues)
-            return
-        }
-        
+
          let headers = [
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         ]
 
-        let data = "token=\(token)&client_id=\(clientId)"
-        
-        authApi.post(revokeEndpoint, headers: headers, postString: data,
+        let data = "token=\(token)&client_id=\(config.clientId)"
+
+        oktaAPI.post(revokeEndpoint, headers: headers, postString: data,
             onSuccess: { response in callback(response?.count == 0 ? true : false , nil)},
             onError: { error in callback(nil, error) })
     }
 
     func getRevokeEndpoint(_ config: OktaAuthConfig) -> URL? {
         // Get the revocation endpoint from the discovery URL, or build it
-        if let revokeEndpoint = OktaAuth.wellKnown?["revocation_endpoint"] {
+        if let revokeEndpoint = OktaAuth.discoveredMetadata?["revocation_endpoint"] {
             return URL(string: revokeEndpoint as! String)
         }
-        
-        guard let issuer = config.issuer else {
-            return nil
-        }
 
+        let issuer = config.issuer
         if issuer.range(of: "oauth2") != nil {
             return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/revoke")
         }

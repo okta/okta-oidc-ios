@@ -78,10 +78,11 @@ struct TestUtils {
 
         return OktaTokenManager(
             authState: tempAuthState,
-            config: OktaAuthConfig(with: [
+            config: try! OktaAuthConfig(with: [
                 "issuer": mockIssuer,
                 "clientId": mockClientId,
-                "redirectUri": mockRedirectUri
+                "redirectUri": mockRedirectUri,
+                "scopes": mockScopes
             ])
         )
     }

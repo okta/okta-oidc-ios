@@ -1,18 +1,10 @@
 @testable import OktaAuth
 
-class OktaApiMock: OktaApi {
+class OktaApiMock: OktaHttpApiProtocol {
     
     var lastRequest: URLRequest?
     
     var requestHandler: ((URLRequest, OktaApiMock.OktaApiSuccessCallback, OktaApiMock.OktaApiErrorCallback) -> Void)?
-    
-    func installMock() {
-        OktaAuth.authApi = self
-    }
-    
-    static func resetMock() {
-        OktaAuth.authApi = OktaApiImpl()
-    }
     
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiMock.OktaApiSuccessCallback,

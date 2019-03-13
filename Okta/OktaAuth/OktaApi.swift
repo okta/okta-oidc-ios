@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-protocol OktaApi {
+protocol OktaHttpApiProtocol {
     typealias OktaApiSuccessCallback = ([String: Any]?) -> Void
     typealias OktaApiErrorCallback = (OktaError) -> Void
     
@@ -42,7 +42,7 @@ protocol OktaApi {
                      onError: @escaping OktaApiErrorCallback)
 }
 
-extension OktaApi {
+extension OktaHttpApiProtocol {
     func post(_ url: URL,
               headers: [String: String]?,
               postString: String?,
@@ -99,7 +99,7 @@ extension OktaApi {
     }
 }
 
-class OktaApiImpl: OktaApi {
+class OktaRestApi: OktaHttpApiProtocol {
 
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,

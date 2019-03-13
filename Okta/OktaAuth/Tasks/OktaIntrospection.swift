@@ -10,21 +10,16 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class IntrospectTask: OktaAuthTask<Bool> {
+class IntrospectTask: OktaAuthTask<[String : Any]> {
     
     let token: String?
     
-    init(config: OktaAuthConfig?, token: String?) {
+    init(token: String?, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.token = token
-        super.init(config: config)
+        super.init(config: config, oktaAPI: oktaAPI)
     }
 
-    override func run(callback: @escaping (Bool?, OktaError?) -> Void) {
-        guard let config = config else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-        
+    override func run(callback: @escaping ([String : Any]?, OktaError?) -> Void) {        
         guard let token = token else {
             callback(nil, OktaError.noBearerToken)
             return
@@ -35,24 +30,15 @@ class IntrospectTask: OktaAuthTask<Bool> {
             return
         }
 
-        guard let clientId = config.clientId else {
-            callback(nil, OktaError.missingConfigurationValues)
-            return
-        }
-
         let headers = [
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         ]
 
-        let data = "token=\(token)&client_id=\(clientId)"
+        let data = "token=\(token)&client_id=\(config.clientId)"
 
-        authApi.post(introspectionEndpoint, headers: headers, postString: data, onSuccess: { response in
-            guard let isActive = response?["active"] as? Bool else {
-                callback(nil, OktaError.parseFailure)
-                return
-            }
-            callback(isActive, nil)
+        oktaAPI.post(introspectionEndpoint, headers: headers, postString: data, onSuccess: { response in
+            callback(response, nil)
         }, onError: { error in
             callback(nil, error)
         })
@@ -60,17 +46,14 @@ class IntrospectTask: OktaAuthTask<Bool> {
 
     func getIntrospectionEndpoint(_ config: OktaAuthConfig) -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-        if let introspectionEndpoint = OktaAuth.wellKnown?["introspection_endpoint"] {
+        if let introspectionEndpoint = OktaAuth.discoveredMetadata?["introspection_endpoint"] {
             return URL(string: introspectionEndpoint as! String)
         }
 
-        guard let issuer = config.issuer else {
-            return nil
-        }
-
+        let issuer = config.issuer
         if issuer.range(of: "oauth2") != nil {
-            return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/introspect")
+            return URL(string: Utils.removeTrailingSlash(config.issuer) + "/v1/introspect")
         }
-        return URL(string: Utils.removeTrailingSlash(issuer) + "/oauth2/v1/introspect")
+        return URL(string: Utils.removeTrailingSlash(config.issuer) + "/oauth2/v1/introspect")
     }
 }

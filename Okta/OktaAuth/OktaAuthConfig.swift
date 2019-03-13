@@ -13,10 +13,10 @@
 public struct OktaAuthConfig: Codable {
     public static let defaultPlistName = "Okta"
     
-    public let clientId: String?
-    public let issuer: String?
-    public let scopes: String?
-    public let redirectUri: URL?
+    public let clientId: String
+    public let issuer: String
+    public let scopes: String
+    public let redirectUri: URL
     public let logoutRedirectUri: URL?
     
     public let additionalParams: [String:String]?
@@ -25,24 +25,27 @@ public struct OktaAuthConfig: Codable {
         return try OktaAuthConfig(fromPlist: defaultPlistName)
     }
      
-    public init(with dict: [String: String]) {
-        clientId = dict["clientId"]
-        issuer = dict["issuer"]
-        scopes = dict["scopes"]
-        
-        if let redirectUriString = dict["redirectUri"] {
-            redirectUri = URL(string: redirectUriString)
-        } else {
-            redirectUri = nil
+    public init(with dict: [String: String]) throws {
+        guard let clientId = dict["clientId"],
+              let issuer = dict["issuer"],
+              let scopes = dict["scopes"],
+              let redirectUriString = dict["redirectUri"],
+              let redirectUri = URL(string: redirectUriString) else {
+                throw OktaError.missingConfigurationValues
         }
         
-        if let logoutRedirectUriString = dict["logoutRedirectUri"] {
+        self.clientId = clientId
+        self.issuer = issuer
+        self.scopes = scopes
+        self.redirectUri = redirectUri
+        
+        if  let logoutRedirectUriString = dict["logoutRedirectUri"] {
             logoutRedirectUri = URL(string: logoutRedirectUriString)
         } else {
             logoutRedirectUri = nil
         }
         
-        additionalParams = OktaAuthConfig.parseAdditionalParams(dict)
+        additionalParams = OktaAuthConfig.extractAdditionalParams(dict)
     }
      
     public init(fromPlist plistName: String) throws {
@@ -56,14 +59,14 @@ public struct OktaAuthConfig: Codable {
                 throw OktaError.pListParseFailure
         }
         
-        self.init(with: configDict)
+        try self.init(with: configDict)
     }
     
-    private static func parseAdditionalParams(_ config: [String: String]) -> [String: String]? {
+    private static func extractAdditionalParams(_ config: [String: String]) -> [String: String]? {
         // Parse the additional parameters to be passed to the /authorization endpoint
         var configCopy = config
         
-        // Remove "issuer", "clientId", "redirectUri", and "scopes"
+        // Remove "issuer", "clientId", "redirectUri", "scopes" and "logoutRedirectUri"
         configCopy.removeValue(forKey: "issuer")
         configCopy.removeValue(forKey: "clientId")
         configCopy.removeValue(forKey: "redirectUri")

@@ -11,10 +11,12 @@
  */
 
 class OktaAuthTask<T> {
-    private(set) var config: OktaAuthConfig?
+    let config: OktaAuthConfig
+    let oktaAPI: OktaHttpApiProtocol
  
-    init(config: OktaAuthConfig?) {
+    init(config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.config = config
+        self.oktaAPI = oktaAPI
     }
     
     // Schedules task for execution in background and invokes callback on completion.
