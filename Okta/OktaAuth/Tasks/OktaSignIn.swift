@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class SignInTask: OktaAuthTask<OktaTokenManager> {
+class SignInTask: OktaAuthTask<OIDAuthState> {
 
     private let presenter: UIViewController
     
@@ -19,7 +19,7 @@ class SignInTask: OktaAuthTask<OktaTokenManager> {
         super.init(config: config, oktaAPI: oktaAPI)
     }
 
-    override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
+    override func run(callback: @escaping (OIDAuthState?, OktaError?) -> Void) {
         MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
@@ -44,12 +44,7 @@ class SignInTask: OktaAuthTask<OktaTokenManager> {
                 guard let authResponse = authorizationResponse else {
                     return callback(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 }
-
-                let tokenManager = OktaTokenManager(authState: authResponse, config: self.config)
-
-                OktaAuth.tokenManager = tokenManager
-
-                callback(tokenManager, nil)
+                callback(authResponse, nil)
             }
         }
     }

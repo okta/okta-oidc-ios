@@ -40,7 +40,16 @@ public func signInWithBrowser(from presenter: UIViewController, callback: @escap
     }
     
     SignInTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
+    .run { authState, error in
+        guard let authState = authState else {
+            callback(nil, error)
+            return
+        }
+        
+        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        OktaAuth.tokenManager = tokenManager
+        callback(tokenManager, nil)
+    }
 }
 
 public func signOutOfOkta(from presenter: UIViewController, callback: @escaping ((OktaError?) -> Void)) {
@@ -60,7 +69,16 @@ public func authenticate(withSessionToken sessionToken: String, callback: @escap
     }
 
     AuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
+    .run { authState, error in
+        guard let authState = authState else {
+            callback(nil, error)
+            return
+        }
+        
+        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        OktaAuth.tokenManager = tokenManager
+        callback(tokenManager, nil)
+    }
 }
 
 public func clear() {

@@ -76,10 +76,14 @@ open class OktaTokenManager: NSObject, NSCoding {
             return nil
         }
         
+        guard let state = decoder.decodeObject(forKey: "authState") as? OIDAuthState else {
+            return nil
+        }
+        
         self.init(
-            authState: decoder.decodeObject(forKey: "authState") as! OIDAuthState,
+            authState: state,
             config: config,
-            accessibility: (decoder.decodeObject(forKey: "accessibility") as! CFString)
+            accessibility: decoder.decodeObject(forKey: "accessibility") as! CFString
         )
     }
 

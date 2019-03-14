@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
+class AuthenticateTask: OktaAuthTask<OIDAuthState> {
 
     private let sessionToken: String
     
@@ -19,7 +19,7 @@ class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
         super.init(config: config, oktaAPI: oktaAPI)
     }
     
-    override func run(callback: @escaping (OktaTokenManager?, OktaError?) -> Void) {
+    override func run(callback: @escaping (OIDAuthState?, OktaError?) -> Void) {
         MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
@@ -48,17 +48,7 @@ class AuthenticateTask: OktaAuthTask<OktaTokenManager> {
             )
             
             OIDAuthState.getState(withAuthRequest: request, callback: { authState, error in
-                guard let authState = authState else {
-                    callback(nil, error)
-                    return
-                }
-                
-                let tokenManager = OktaTokenManager(authState: authState, config: self.config)
-                
-                // Set the local cache and write to storage
-                OktaAuth.tokenManager = tokenManager
-
-                callback(tokenManager, nil)
+                callback(authState, error)
             })
         }
     }
