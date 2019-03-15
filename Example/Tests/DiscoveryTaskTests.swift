@@ -20,7 +20,9 @@ class DiscoveryTaskTests: XCTestCase {
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(error)
-            XCTAssertNotNil(oidConfig)
+            XCTAssertEqual("http://test.issuer.com/oauth2/authorize", oidConfig?.authorizationEndpoint.absoluteString)
+            XCTAssertEqual("http://test.issuer.com/oauth2/token", oidConfig?.tokenEndpoint.absoluteString)
+            XCTAssertEqual("http://test.issuer.com/oauth2/default", oidConfig?.issuer?.absoluteString)
         }
     }
     
@@ -30,7 +32,7 @@ class DiscoveryTaskTests: XCTestCase {
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
             XCTAssertEqual(
-                "Error returning discovery document: Test Error Pleasecheck your PList configuration",
+                "Error returning discovery document: Test Error. Please check your PList configuration",
                 error?.localizedDescription
             )
         }

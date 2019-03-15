@@ -31,7 +31,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [introspect](#introspect)
   - [refresh](#refresh)
   - [revoke](#revoke)
-  - [tokens](#tokens)
+  - [tokenManager](#tokenManager)
   - [clear](#clear)
 - [Development](#development)
   - [Running Tests](#running-tests)
@@ -74,7 +74,7 @@ Next, update your `AppDelegate` to include the following function to allow the r
 import OktaAuth
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-    return OktaAuth.resume(url: url, options: options)
+  return OktaAuth.resume(url: url, options: options)
 }
 ```
 
@@ -90,7 +90,7 @@ You can also browse the full [API reference documentation](#api-reference).
 
 ## Configuration Reference
 
-Before start using this SDK, you have to configure it. To configure SDK create `OktaAuthConfig` object and assign it to  `OktaAuth.configuration`. There are multiple ways to create configuration object: you can provide either plist file either create configuration with dictionary. 
+Before using this SDK, you'll need to configure it. Simply create an `OktaAuthConfig` object using one of the methods below.
 
 **Need a refresh token?**
 A refresh token is a special token that is used to generate additional access and ID tokens. Make sure to include the `offline_access` scope in your configuration to silently renew the user's session in your application!
@@ -132,7 +132,7 @@ OktaAuth.configuration = OktaAuthConfig(with: [
   // Custom parameters
   "login_hint": "username@email.com"
 ])
-``` 
+```
 
 ## API Reference
 
@@ -142,14 +142,14 @@ Start the authorization flow by simply calling `signIn`.
 
 ```swift
 OktaAuth.signInWithBrowser(from: self) { tokens, error in
-    if let error = error {
-        // Error
-        return
-    }
-    
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
+  if let error = error {
+    // Error
+    return
+  }
+
+  // tokens.accessToken
+  // tokens.idToken
+  // tokens.refreshToken
 }
 ```
 
@@ -162,10 +162,10 @@ You can start the sign out flow by simply calling `signOutFromOkta`. This method
 ```swift
 // Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
 OktaAuth.signOutOfOkta(from: self) { error in
-    if let error = error {
-        // Error
-        return
-    }
+  if let error = error {
+    // Error
+    return
+  }
 }
 ```
 
@@ -175,15 +175,15 @@ If you already logged in to Okta and have a valid session token, you can complet
 
 ```swift
 OktaAuth.authenticate(withSessionToken: token) { tokens, error in
-    self.hideProgress()
-    if let error = error {
-        // Error
-        return
-    }
+  self.hideProgress()
+  if let error = error {
+    // Error
+    return
+  }
 
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
+  // tokens.accessToken
+  // tokens.idToken
+  // tokens.refreshToken
 }
 ```
 
@@ -203,12 +203,12 @@ Calls the OpenID Connect UserInfo endpoint with the stored access token to retur
 
 ```swift
 OktaAuth.getUser { response, error in
-    if let error = error {
-        // Error
-        return
-    }
-    
-    // JSON response
+  if let error = error {
+    // Error
+    return
+  }
+
+  // JSON response
 }
 ```
 
@@ -217,13 +217,13 @@ OktaAuth.getUser { response, error in
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-OktaAuth.introspect(token: accessToken, callback: { isValid, error in
-    guard let isValid = isValid else {
-        // Error
-        return
-    }
-    
-    print("Is token valid? \(isValid)")
+OktaAuth.introspect(token: accessToken, callback: { payload, error in
+  guard let isValid = payload["active"] as? Bool else {
+    // Error
+    return
+  }
+
+  print("Is token valid? \(isValid)")
 })
 ```
 
@@ -233,12 +233,12 @@ Since access tokens are traditionally short-lived, you can refresh expired token
 
 ```swift
 OktaAuth.refresh { newAccessToken, error in
-    if let error = error else {
-        // Error
-        return
-    }
-    
-    // newAccessToken
+  if let error = error else {
+    // Error
+    return
+  }
+
+  // newAccessToken
 }
 ```
 
@@ -248,23 +248,23 @@ Calls the revocation endpoint to revoke the specified token.
 
 ```swift
 OktaAuth.revoke(accessToken) { response, error in
-    if let error = error else {
-        // Error
-        return
-    }
-    
-    // check response
+  if let error = error else {
+    // Error
+    return
+  }
+
+  // Token was revoked
 }
 ```
 
-### tokens
+### tokenManager
 
-Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `token` object bound to `OktaAuth`:
+Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `tokenManager` object bound to `OktaAuth`:
 
 ```swift
-OktaAuth.tokens?.accessToken
-OktaAuth.tokens?.idToken
-OktaAuth.tokens?.refreshToken
+OktaAuth.tokenManager?.accessToken
+OktaAuth.tokenManager?.idToken
+OktaAuth.tokenManager?.refreshToken
 ```
 
 ### clear

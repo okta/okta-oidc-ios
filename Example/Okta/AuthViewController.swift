@@ -22,8 +22,8 @@ class AuthViewController : UIViewController {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
     
-    private var testConfig: OktaAuthConfig {
-        return try! OktaAuthConfig(with: [
+    private var testConfig: OktaAuthConfig? {
+        return try? OktaAuthConfig(with: [
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
@@ -38,7 +38,7 @@ class AuthViewController : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        OktaAuth.configuration = isUITest ? testConfig : try! OktaAuthConfig.default()
+        OktaAuth.configuration = isUITest ? testConfig : try? OktaAuthConfig.default()
         hideProgress()
         clearMessageView()
     }

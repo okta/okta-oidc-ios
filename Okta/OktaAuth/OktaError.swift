@@ -57,7 +57,7 @@ extension OktaError: LocalizedError {
         case .pListParseFailure:
             return NSLocalizedString("Unable to read and/or parse. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .notConfigured:
-            return NSLocalizedString("You must configure OktaAuth SDK first. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
+            return NSLocalizedString("You must configure the OktaAuth SDK first. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .noRefreshToken:
             return NSLocalizedString("No refresh token stored. Make sure the 'offline_access' scope is included in your PList.", comment: "")
         case .noRevocationEndpoint:

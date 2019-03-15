@@ -7,7 +7,13 @@ class Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        OktaAuth.configuration = try? OktaAuthConfig.default()
+        OktaAuth.configuration = try? OktaAuthConfig(with:[
+            "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
+            "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
+            "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
+            "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
+            "scopes": "openid profile offline_access"
+        ])
     }
 
     override func tearDown() {
@@ -56,7 +62,7 @@ class Tests: XCTestCase {
         OktaAuth.signOutOfOkta(from: UIViewController(), callback: { error in
             XCTAssertEqual(
                 error?.localizedDescription,
-                OktaError.missingConfigurationValues.localizedDescription
+                OktaError.missingIdToken.localizedDescription
             )
             signOutExpectation.fulfill()
         })
@@ -165,9 +171,6 @@ class Tests: XCTestCase {
 
         // Wait for tokens to expire
         sleep(TOKEN_EXPIRATION_WAIT)
-
-        // Re-store the authState
-        OktaAuth.tokenManager = OktaAuth.tokenManager!
 
         self.assertAuthenticationState(OktaAuth.tokenManager!)
     }

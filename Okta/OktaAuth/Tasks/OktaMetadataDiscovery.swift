@@ -29,8 +29,8 @@ class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
             callback(OIDServiceConfiguration(discoveryDocument: oidConfig), nil)
         }, onError: { error in
             let responseError =
-                "Error returning discovery document: \(error.localizedDescription) Please" +
-                "check your PList configuration"
+                "Error returning discovery document: \(error.localizedDescription). Please" +
+                " check your PList configuration"
             callback(nil, OktaError.APIError(responseError))
         })
     }

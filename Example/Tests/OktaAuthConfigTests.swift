@@ -60,7 +60,10 @@ class OktaAuthConfigTests: XCTestCase {
         do {
             let _ = try OktaAuthConfig.default()
         } catch let error {
-            XCTFail("Unexpected error: \(error)")
+            XCTAssertEqual(
+                OktaError.missingConfigurationValues.localizedDescription,
+                error.localizedDescription
+            )
         }
     }
     
@@ -68,7 +71,10 @@ class OktaAuthConfigTests: XCTestCase {
         do {
             let _ = try OktaAuthConfig(fromPlist: "Okta")
         } catch let error {
-            XCTFail("Unexpected error: \(error)")
+            XCTAssertEqual(
+                OktaError.missingConfigurationValues.localizedDescription,
+                error.localizedDescription
+            )
         }
     }
     

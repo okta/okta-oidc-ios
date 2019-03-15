@@ -30,7 +30,7 @@ class RevokeTask: OktaAuthTask<Bool> {
             return
         }
 
-         let headers = [
+        let headers = [
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         ]
