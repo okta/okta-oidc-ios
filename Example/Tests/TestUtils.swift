@@ -32,7 +32,8 @@ struct TestUtils {
     static func setupMockAuthState(issuer: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
-        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
+        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
+        
         let mockTokenRequest = OIDTokenRequest(
                    configuration: mockServiceConfig,
                        grantType: OIDGrantTypeRefreshToken,

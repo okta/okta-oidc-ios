@@ -20,7 +20,7 @@ class Tests: XCTestCase {
         super.tearDown()
 
         // Revert stored values
-        OktaAuth.tokenManager?.clear()
+        OktaAuth.clear()
         OktaAuth.configuration = nil
     }
 

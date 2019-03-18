@@ -28,10 +28,10 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [signOutOfOkta](#signoutofokta)
   - [isAuthenticated](#isauthenticated)
   - [getUser](#getuser)
-  - [introspect](#introspect)
-  - [refresh](#refresh)
-  - [revoke](#revoke)
   - [tokenManager](#tokenManager)
+    - [introspect](#introspect)
+    - [renew](#renew)
+    - [revoke](#revoke)
   - [clear](#clear)
 - [Development](#development)
   - [Running Tests](#running-tests)
@@ -212,7 +212,19 @@ OktaAuth.getUser { response, error in
 }
 ```
 
-### introspect
+### tokenManager
+
+Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `tokenManager` object bound to `OktaAuth`:
+
+```swift
+OktaAuth.tokenManager?.accessToken
+OktaAuth.tokenManager?.idToken
+OktaAuth.tokenManager?.refreshToken
+```
+
+**Note:** Token manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaTokenManager-s returned by `signIn` operation.
+
+#### introspect
 
 Calls the introspection endpoint to inspect the validity of the specified token.
 
@@ -227,22 +239,22 @@ OktaAuth.introspect(token: accessToken, callback: { payload, error in
 })
 ```
 
-### refresh
+#### renew
 
-Since access tokens are traditionally short-lived, you can refresh expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
+Since access tokens are traditionally short-lived, you can renew expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
 
 ```swift
-OktaAuth.refresh { newAccessToken, error in
+OktaAuth.renew { newAccessToken, error in
   if let error = error else {
     // Error
     return
   }
 
-  // newAccessToken
+  // renewed TokenManager
 }
 ```
 
-### revoke
+#### revoke
 
 Calls the revocation endpoint to revoke the specified token.
 
@@ -255,16 +267,6 @@ OktaAuth.revoke(accessToken) { response, error in
 
   // Token was revoked
 }
-```
-
-### tokenManager
-
-Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `tokenManager` object bound to `OktaAuth`:
-
-```swift
-OktaAuth.tokenManager?.accessToken
-OktaAuth.tokenManager?.idToken
-OktaAuth.tokenManager?.refreshToken
 ```
 
 ### clear

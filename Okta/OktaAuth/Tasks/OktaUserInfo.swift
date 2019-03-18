@@ -20,7 +20,7 @@ internal class UserInfoTask: OktaAuthTask<[String:Any]> {
     }
     
     override func run(callback: @escaping ([String : Any]?, OktaError?) -> Void) {
-        guard let userInfoEndpoint = getUserInfoEndpoint(config) else {
+        guard let userInfoEndpoint = OktaEndpoint.userInfo.getURL(issuer: self.config.issuer) else {
             callback(nil, .noUserInfoEndpoint)
             return
         }
@@ -39,18 +39,5 @@ internal class UserInfoTask: OktaAuthTask<[String:Any]> {
         oktaAPI.post(userInfoEndpoint, headers: headers, postData: nil,
             onSuccess: { response in callback(response, nil)},
             onError: { error in callback(nil, error) })
-    }
-
-    func getUserInfoEndpoint(_ config: OktaAuthConfig) -> URL? {
-        // Get the introspection endpoint from the discovery URL, or build it
-        if let userInfoEndpoint = OktaAuth.discoveredMetadata?["userinfo_endpoint"] {
-            return URL(string: userInfoEndpoint as! String)
-        }
-
-        let issuer = config.issuer
-        if issuer.range(of: "oauth2") != nil {
-            return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/userinfo")
-        }
-        return URL(string: Utils.removeTrailingSlash(issuer) + "/oauth2/v1/userinfo")
     }
 }

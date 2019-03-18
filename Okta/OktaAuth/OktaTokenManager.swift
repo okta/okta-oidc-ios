@@ -51,6 +51,7 @@ open class OktaTokenManager: NSObject, NSCoding {
         return self.authState.refreshToken
     }
     
+    // Needed for UTs only. Entry point for mocking network calls.
     var restAPI: OktaHttpApiProtocol = OktaRestApi()
 
     public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
@@ -110,47 +111,37 @@ open class OktaTokenManager: NSObject, NSCoding {
         
         return jsonObject as? [String: Any]
     }
-    
-    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
-        guard let configuration = OktaAuth.configuration else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
 
-        IntrospectTask(token: token, config: configuration, oktaAPI: restAPI)
-        .run(callback: callback)
-    }
-
-    public func refresh(callback: @escaping ((String?, OktaError?) -> Void)) {
+    public func renew(callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
         authState.setNeedsTokenRefresh()
         authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
                 callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
                 return
             }
-
-            guard let token = accessToken else {
-                callback(nil, OktaError.errorFetchingFreshTokens("Access Token could not be refreshed."))
-                return
-            }
             
-            callback(token, nil)
+            callback(self, nil)
         })
+    }
+    
+    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+        perfromRequest(to: .introspection, token: token, callback: callback)
     }
 
     public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
-        guard let configuration = OktaAuth.configuration else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
+        perfromRequest(to: .revocation, token: token) { payload, error in
+            if let error = error {
+                callback(nil, error)
+                return
+            }
 
-        RevokeTask(token: token, config: configuration, oktaAPI: restAPI)
-        .run(callback: callback)
+            // Token is considered to be revoked if there is no payload.
+            callback(payload?.count == 0 ? true : false , nil)
+        }
     }
 
     public func clear() {
         OktaKeychain.clearAll()
-        OktaAuth.tokenManager = nil
     }
 }
 
@@ -182,4 +173,44 @@ extension OktaTokenManager {
             print("Error: \(error)")
         }
     }
+}
+
+private extension OktaTokenManager {
+    var issuer: String? {
+        return authState.lastAuthorizationResponse.request.configuration.issuer?.path
+    }
+    
+    var clientId: String {
+        return authState.lastAuthorizationResponse.request.clientID
+    }
+    
+    var discoveryDictionary: [String: Any]? {
+        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
+    }
+    
+    func perfromRequest(to endpoint: OktaEndpoint, token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+        guard let token = token else {
+            callback(nil, OktaError.noBearerToken)
+            return
+        }
+
+        guard let endpointURL = endpoint.getURL(discoveredMetadata: discoveryDictionary, issuer: issuer) else {
+            callback(nil, endpoint.noEndpointError)
+            return
+        }
+
+        let headers = [
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+        ]
+
+        let data = "token=\(token)&client_id=\(clientId)"
+
+        restAPI.post(endpointURL, headers: headers, postString: data, onSuccess: { response in
+            callback(response, nil)
+        }, onError: { error in
+            callback(nil, error)
+        })
+    }
+
 }

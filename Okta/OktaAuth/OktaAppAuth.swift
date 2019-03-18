@@ -22,8 +22,6 @@ public var configuration = try? OktaAuthConfig.default()
 // Cache the Discovery Metadata
 public var discoveredMetadata: [String: Any]?
 
-internal var authApi: OktaApi = OktaApiImpl()
-
 // Token manager
 public var tokenManager = OktaTokenManager.readFromSecureStorage() {
     didSet {
@@ -86,6 +84,7 @@ public func authenticate(withSessionToken sessionToken: String, callback: @escap
 public func clear() {
     // Clear auth state
     tokenManager?.clear()
+    tokenManager = nil
 }
 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
