@@ -9,43 +9,44 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-import Hydra
 
 // Okta Extension of OIDAuthState
 extension OIDAuthState {
 
-    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest) -> Promise<OIDAuthState> {
-        return Promise<OIDAuthState>(in: .background, { resolve, reject, _ in
-            // setup custom URL session
-            self.setupURLSession()
+    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, callback: @escaping (OIDAuthState?, OktaError?) -> Void ) {
+        // setup custom URL session
+        self.setupURLSession()
+        
+        let finalize: ((OIDAuthState?, OktaError?) -> Void) = { state, error in
+            self.restoreURLSession()
+            callback(state, error)
+        }
 
-            // Make authCode request
-            OIDAuthorizationService.perform(authRequest: authRequest, callback: { authResponse, error in
-                guard let authResponse = authResponse else {
-                    return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+        // Make authCode request
+        OIDAuthorizationService.perform(authRequest: authRequest, callback: { authResponse, error in
+            guard let authResponse = authResponse else {
+                finalize(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                return
+            }
+
+            guard let _ = authResponse.authorizationCode,
+                  let tokenRequest = authResponse.tokenExchangeRequest() else {
+                    finalize(nil, OktaError.unableToGetAuthCode)
+                    return
+            }
+
+            // Make token request
+            OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, callback:
+            { tokenResponse, error in
+                guard let tokenResponse = tokenResponse else {
+                    finalize(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                    return
                 }
 
-                guard let _ = authResponse.authorizationCode,
-                      let tokenRequest = authResponse.tokenExchangeRequest() else {
-                        return reject(OktaError.unableToGetAuthCode)
-                }
-
-                // Make token request
-                OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, callback:
-                { tokenResponse, error in
-                    guard let tokenResponse = tokenResponse else {
-                        return reject(OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
-                    }
-
-                    let authState = OIDAuthState(authorizationResponse: authResponse, tokenResponse: tokenResponse)
-                    return resolve(authState)
-                })
+                let authState = OIDAuthState(authorizationResponse: authResponse, tokenResponse: tokenResponse)
+                finalize(authState, nil)
             })
         })
-        .always {
-            // Restore default URL session
-            self.restoreURLSession()
-        }
     }
     
     private static func setupURLSession() {

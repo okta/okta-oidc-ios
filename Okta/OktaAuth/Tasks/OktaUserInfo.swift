@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -10,11 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-internal struct UserInfo {
-
-    init(token: String?, callback: @escaping ([String: Any]?, OktaError?) -> Void) {
-        // Revoke the token
-        guard let userInfoEndpoint = getUserInfoEndpoint() else {
+internal class UserInfoTask: OktaAuthTask<[String:Any]> {
+    
+    private let token: String?
+    
+    init(token: String?, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+        self.token = token
+        super.init(config: config, oktaAPI: oktaAPI)
+    }
+    
+    override func run(callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+        guard let userInfoEndpoint = getUserInfoEndpoint(config) else {
             callback(nil, .noUserInfoEndpoint)
             return
         }
@@ -30,18 +36,18 @@ internal struct UserInfo {
             "Authorization": "Bearer \(token)"
         ]
 
-        OktaApi.post(userInfoEndpoint, headers: headers, postData: nil,
+        oktaAPI.post(userInfoEndpoint, headers: headers, postData: nil,
             onSuccess: { response in callback(response, nil)},
             onError: { error in callback(nil, error) })
     }
 
-    func getUserInfoEndpoint() -> URL? {
+    func getUserInfoEndpoint(_ config: OktaAuthConfig) -> URL? {
         // Get the introspection endpoint from the discovery URL, or build it
-        if let userInfoEndpoint = OktaAuth.wellKnown?["userinfo_endpoint"] {
+        if let userInfoEndpoint = OktaAuth.discoveredMetadata?["userinfo_endpoint"] {
             return URL(string: userInfoEndpoint as! String)
         }
 
-        let issuer = OktaAuth.configuration?["issuer"] as! String
+        let issuer = config.issuer
         if issuer.range(of: "oauth2") != nil {
             return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/userinfo")
         }

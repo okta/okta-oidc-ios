@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -13,22 +13,6 @@
 import Foundation
 
 open class Utils: NSObject {
-
-    open class func getPlistConfiguration() -> [String: String]? {
-        // Parse Okta.plist to build the authorization request
-        return getPlistConfiguration(forResourceName: "Okta")
-    }
-
-    open class func getPlistConfiguration(forResourceName resourceName: String) -> [String: String]? {
-        // Parse Okta.plist to build the authorization request
-        if let path = Bundle.main.url(forResource: resourceName, withExtension: "plist"), let data = try? Data(contentsOf: path) {
-            if let result = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil) as? [String: String] {
-                OktaAuth.configuration = result
-                return result
-            }
-        }
-        return nil
-    }
 
     @objc
     open class func userAgentHeader() -> String {
@@ -71,18 +55,5 @@ open class Utils: NSObject {
     internal class func removeTrailingSlash(_ val: String) -> String {
         // Removes the URLs trailing slash if it exists
         return String(val.suffix(1)) == "/" ? String(val.dropLast()) : val
-    }
-
-    internal class func parseAdditionalParams(_ config: [String: String]) -> [String: String]? {
-        // Parse the additional parameters to be passed to the /authorization endpoint
-        var configCopy = config
-        
-        // Remove "issuer", "clientId", "redirectUri", and "scopes"
-        configCopy.removeValue(forKey: "issuer")
-        configCopy.removeValue(forKey: "clientId")
-        configCopy.removeValue(forKey: "redirectUri")
-        configCopy.removeValue(forKey: "scopes")
-
-        return configCopy
     }
 }
