@@ -18,14 +18,14 @@ class ViewController: UIViewController {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
     
-    private var testConfig: [String: String] {
-        return [
+    private var testConfig: OktaAuthConfig? {
+        return try? OktaAuthConfig(with:[
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
             "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
             "scopes": "openid profile offline_access"
-        ]
+        ])
     }
 
     override func viewDidLoad() {
@@ -34,7 +34,8 @@ class ViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if OktaAuth.isAuthenticated() {
+        OktaAuth.configuration = self.isUITest ? testConfig : try? OktaAuthConfig.default()
+        if OktaAuth.isAuthenticated {
             // If there is a valid accessToken
             // build the token view.
             self.buildTokenTextView()
@@ -67,16 +68,21 @@ class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokens?.accessToken else { return }
+        guard let accessToken = tokenManager?.accessToken else { return }
 
-        OktaAuth.introspect().validate(accessToken)
-        .then { response in self.updateUI(updateText: "Is the AccessToken valid? \(response)") }
-        .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.introspect(token: accessToken, callback: { payload, error in
+            guard let isValid = payload?["active"] as? Bool else {
+                self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
+                return
+            }
+            
+            self.updateUI(updateText: "Is the AccessToken valid? - \(isValid)")
+        })
     }
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokens?.accessToken else { return }
+        guard let accessToken = tokenManager?.accessToken else { return }
 
         OktaAuth.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
@@ -85,26 +91,24 @@ class ViewController: UIViewController {
     }
 
     func signInWithBrowser() {
-        if self.isUITest {
-            OktaAuth.signInWithBrowser().start(withDictConfig: testConfig, view: self)
-            .then { _ in self.buildTokenTextView() }
-            .catch { error in self.updateUI(updateText: "Error: \(error)") }
-        } else {
-            OktaAuth.signInWithBrowser().start(self)
-            .then { _ in self.buildTokenTextView() }
-            .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.signInWithBrowser(from: self) { tokens, error in
+            if let error = error {
+                self.updateUI(updateText: "Error: \(error)")
+                return
+            }
+            
+            self.buildTokenTextView()
         }
     }
     
     func signOutOfOkta() {
-        if self.isUITest {
-            OktaAuth.signOutOfOkta().start(withDictConfig: testConfig, view: self)
-            .then { _ in self.buildTokenTextView() }
-            .catch { error in self.updateUI(updateText: "Error: \(error)") }
-        } else {
-            OktaAuth.signOutOfOkta().start(self)
-            .then { self.buildTokenTextView() }
-            .catch { error in self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.signOutOfOkta(from: self) { error in
+            if let error = error {
+                self.updateUI(updateText: "Error: \(error)")
+                return
+            }
+            
+            self.buildTokenTextView()
         }
     }
 
@@ -113,7 +117,7 @@ class ViewController: UIViewController {
     }
 
     func buildTokenTextView() {
-        guard let currentTokens = tokens else {
+        guard let currentTokens = tokenManager else {
             tokenView.text = ""
             return
         }

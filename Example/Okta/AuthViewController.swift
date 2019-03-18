@@ -22,14 +22,14 @@ class AuthViewController : UIViewController {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
     
-    private var testConfig: [String: String] {
-        return [
+    private var testConfig: OktaAuthConfig? {
+        return try? OktaAuthConfig(with: [
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
             "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
             "scopes": "openid profile offline_access"
-        ]
+        ])
     }
     
     private var token: String? {
@@ -38,7 +38,7 @@ class AuthViewController : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        OktaAuth.configuration = isUITest ? testConfig : try? OktaAuthConfig.default()
         hideProgress()
         clearMessageView()
     }
@@ -51,29 +51,12 @@ class AuthViewController : UIViewController {
         
         clearMessageView()
         showProgress()
-        
-        if isUITest {
-            OktaAuth
-            .authenticate(withSessionToken: token)
-            .start(withDictConfig: testConfig)
-            .then { tokenManager in
-                self.hideProgress()
-                self.dismiss(animated: true, completion: nil)
-            }
-            .catch { error in
-                self.hideProgress()
+        OktaAuth.authenticate(withSessionToken: token) { tokens, error in
+            self.hideProgress()
+            if let error = error {
                 self.presentError(error)
-            }
-        } else {
-            OktaAuth.authenticate(withSessionToken: token)
-            .start()
-            .then { tokenManager in
-                self.hideProgress()
+            } else {
                 self.dismiss(animated: true, completion: nil)
-            }
-            .catch { error in
-                self.hideProgress()
-                self.presentError(error)
             }
         }
     }

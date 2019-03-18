@@ -7,24 +7,21 @@ class Tests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        OktaAuth.configuration = try? OktaAuthConfig(with:[
+            "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
+            "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
+            "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
+            "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
+            "scopes": "openid profile offline_access"
+        ])
     }
 
     override func tearDown() {
         super.tearDown()
 
         // Revert stored values
-        OktaAuth.tokens?.clear()
+        OktaAuth.tokenManager?.clear()
         OktaAuth.configuration = nil
-    }
-
-    func testPListFailure() {
-        // Attempt to find a plist file that does not exist
-        XCTAssertNil(Utils.getPlistConfiguration(forResourceName: "noFile"))
-    }
-
-    func testPListFound() {
-        // Attempt to find the Okta.plist file
-        XCTAssertNotNil(Utils.getPlistConfiguration())
     }
 
     func testPListFormatWithTrailingSlash() {
@@ -45,28 +42,6 @@ class Tests: XCTestCase {
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
-    func testAdditionalParamParse() {
-        // Ensure known values from the config object are removed
-        let config = [
-                 "issuer": "https://example.com/oauth2/default",
-               "clientId": "clientId",
-            "redirectUri": "com.okta.example:/callback",
-                 "scopes": "openid profile offline_access",
-                  "nonce": "abbbbbbbc"
-        ]
-
-        let additionalParams = Utils.parseAdditionalParams(config)
-        XCTAssertEqual(additionalParams!, ["nonce": "abbbbbbbc"])
-    }
-
-    func testAdditionalParamParseWithNoChange() {
-        // Ensure known values from the config object are removed
-        let config = [ "nonce": "abbbbbbbc" ]
-
-        let additionalParams = Utils.parseAdditionalParams(config)
-        XCTAssertEqual(additionalParams!, config)
-    }
-
     func testValidScopesString() {
         // Validate the scopes are in the correct format
         let scopes = "openid profile email"
@@ -84,61 +59,18 @@ class Tests: XCTestCase {
     func testSignOutOfOktaFailure() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally")
         
-        OktaAuth.signOutOfOkta().start(UIViewController())
-        .then {
-            XCTFail("Sign out should fail!")
-            signOutExpectation.fulfill()
-        }
-        .catch { error in
+        OktaAuth.signOutOfOkta(from: UIViewController(), callback: { error in
             XCTAssertEqual(
-                error.localizedDescription,
-                OktaError.missingConfigurationValues.localizedDescription
+                error?.localizedDescription,
+                OktaError.missingIdToken.localizedDescription
             )
             signOutExpectation.fulfill()
-        }
+        })
         
         waitForExpectations(timeout: 5, handler: { error in
             // Fail on timeout
             if error != nil { XCTFail(error!.localizedDescription) }
         })
-    }
-
-    func testIntrospectionEndpointURL() {
-        // Similar use case for revoke and userinfo endpoints
-        OktaAuth.configuration = [
-            "issuer": "https://example.com"
-        ]
-        let url = Introspect().getIntrospectionEndpoint()
-        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/v1/introspect")
-    }
-
-    func testIntrospectionEndpointURLWithOAuth2() {
-        // Similar use case for revoke and userinfo endpoints
-        OktaAuth.configuration = [
-            "issuer": "https://example.com/oauth2/default"
-        ]
-        let url = Introspect().getIntrospectionEndpoint()
-        XCTAssertEqual(url?.absoluteString, "https://example.com/oauth2/default/v1/introspect")
-    }
-
-    func testUserInfoWithoutToken() {
-        // Verify an error is returned if the accessToken is not included
-        OktaAuth.configuration = [
-            "issuer": "https://example.com/oauth2/default"
-        ]
-        let _ = UserInfo(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        }
-    }
-
-    func testRevokeWithoutToken() {
-        // Verify an error is returned if the accessToken is not included
-        OktaAuth.configuration = [
-            "issuer": "https://example.com/oauth2/default"
-        ]
-        let _ = Revoke(token: nil) { response, error in
-            XCTAssertEqual(error?.localizedDescription, OktaError.noBearerToken.localizedDescription)
-        }
     }
 
     func testIdTokenDecode() {
@@ -150,121 +82,69 @@ class Tests: XCTestCase {
             "iZXhwIjoxNTE5OTcyNTA4LCJjaWQiOiJ7Y2xpZW50SWR9IiwidWlkIjoie3VpZH0iLCJzY3AiOlsib3Blb" +
             "mlkIiwib2ZmbGluZV9hY2Nlc3MiLCJwcm9maWxlIl0sInN1YiI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ." +
             "fakeSignature"
-
-        Introspect().decode(idToken)
-        .then { response in
+        
+        do {
+            let response = try OktaTokenManager.decodeJWT(idToken)
             XCTAssertNotNil(response)
+        } catch let error {
+            XCTFail("Unexpected error: \(error)")
         }
-    }
-
-    func testTokenManagerStorageNoValidation() {
-        // Validate that the tokenManager object can be created
-        let validTokenExpectation = expectation(description: "Will return a tokenManager object without error")
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
-            validTokenExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
     }
 
     func testExpiredIdToken() {
         // Verify an expired token will be caught when validating
-        let expiredExpectation = expectation(description: "Will return an undefined idToken because JWT is expired")
-        TestUtils.tokenManager
-        .then { tokenManager in
-            XCTAssertEqual(tokenManager.idToken, nil)
-            expiredExpectation.fulfill()
-        }
-
-        waitForIt()
+        let tokenManager = TestUtils.tokenManager()
+        XCTAssertNil(tokenManager.idToken)
     }
 
     func testReturningTokensFromTokenManager() {
         // Validate that mock token manager returns a null token
-        let validTokensExpectation = expectation(description: "Will return tokens without errors")
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
-            validTokensExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
+        let tokenManager = TestUtils.tokenManager()
+        self.assertTokenManagerContents(tokenManager)
     }
 
     func testReturningExpiredTokensFromTokenManager() {
         // Validate that mock token manager returns a null token
-        let validTokensExpectation = expectation(description: "Will return tokens without errors")
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            self.assertTokenManagerContents(tokenManager)
-            validTokensExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt(10)
+        let tokenManager = TestUtils.tokenManagerWithExpiration()
+        self.assertTokenManagerContents(tokenManager)
 
         // Wait for tokens to expire and update validation options to check for expiration
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        XCTAssertEqual(OktaAuth.tokens?.accessToken, nil)
-        XCTAssertEqual(OktaAuth.tokens?.idToken, nil)
+        XCTAssertEqual(OktaAuth.tokenManager?.accessToken, nil)
+        XCTAssertEqual(OktaAuth.tokenManager?.idToken, nil)
     }
 
     func testStoreAndDeleteOfAuthState() {
-        // Validate the authState is properly stored and can be removed
-        let validTokensExpectation = expectation(description: "Will return tokens without errors")
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            OktaAuthorization().storeAuthState(tokenManager)
-            validTokensExpectation.fulfill()
-        }
+        let tokenManager = TestUtils.tokenManager()
+        OktaAuth.tokenManager = tokenManager
 
-        waitForIt()
-
-        self.assertAuthenticationState(OktaAuth.tokens!)
+        self.assertAuthenticationState(OktaAuth.tokenManager!)
 
         // Clear the authState
-        OktaAuth.tokens?.clear()
+        OktaAuth.tokenManager?.clear()
 
         XCTAssertNil(OktaTokenManager.readFromSecureStorage())
     }
 
     func testIsAuthenticated() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
-        TestUtils.tokenManagerNoValidation
-        .then { tokenManager in
-            OktaAuthorization().storeAuthState(tokenManager)
-            isAuthExpectation.fulfill()
-        }
-        .catch { error in XCTFail(error.localizedDescription) }
+        let tokenManager = TestUtils.tokenManager()
+        OktaAuth.tokenManager = tokenManager
 
-        waitForIt()
-
-        let isAuth = OktaAuth.isAuthenticated()
+        let isAuth = OktaAuth.isAuthenticated
         XCTAssertTrue(isAuth)
     }
 
     func testIsNotAuthenticated() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
-        TestUtils.tokenManagerNoValidationWithExpiration
-            .then { tokenManager in
-                OktaAuth.tokens = tokenManager
-                isAuthExpectation.fulfill()
-            }
-            .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
+        let tokenManager = TestUtils.tokenManagerWithExpiration()
+        OktaAuth.tokenManager = tokenManager
 
         // Wait for tokens to expire
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        let isAuth = OktaAuth.isAuthenticated()
+        let isAuth = OktaAuth.isAuthenticated
         XCTAssertFalse(isAuth)
     }
 
@@ -272,9 +152,8 @@ class Tests: XCTestCase {
         // Expect that no refresh token stored will result in an error
         let refreshExpectation = expectation(description: "Will fail attempting to refresh tokens")
 
-        OktaAuth.refresh()
-        .catch { error in
-            XCTAssertEqual(error.localizedDescription, OktaError.noTokens.localizedDescription)
+        OktaAuth.refresh { _, error in
+            XCTAssertEqual(error?.localizedDescription, OktaError.noTokens.localizedDescription)
             refreshExpectation.fulfill()
         }
 
@@ -287,23 +166,13 @@ class Tests: XCTestCase {
 
     func testResumeAuthenticationStateFromExpiredState() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        let isAuthExpectation = expectation(description: "Will correctly return authenticated state")
-        TestUtils.tokenManagerNoValidationWithExpiration
-            .then { tokenManager in
-                OktaAuthorization().storeAuthState(tokenManager)
-                isAuthExpectation.fulfill()
-            }
-            .catch { error in XCTFail(error.localizedDescription) }
-
-        waitForIt()
+        let tokenManager = TestUtils.tokenManagerWithExpiration()
+        OktaAuth.tokenManager = tokenManager
 
         // Wait for tokens to expire
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        // Re-store the authState
-        OktaAuthorization().storeAuthState(OktaAuth.tokens!)
-
-        self.assertAuthenticationState(OktaAuth.tokens!)
+        self.assertAuthenticationState(OktaAuth.tokenManager!)
     }
 
     // Helpers for asserting unit tests
