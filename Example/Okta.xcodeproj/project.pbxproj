@@ -30,8 +30,6 @@
 		2FA6431B223BDF220008DC97 /* OktaAuthTokenManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA6431A223BDF220008DC97 /* OktaAuthTokenManagerTests.swift */; };
 		2FA6431D223FDE250008DC97 /* OktaEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA6431C223FDE250008DC97 /* OktaEndpointTests.swift */; };
 		2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */; };
-		2FEBB66A223005B000BF1D16 /* RevokeTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */; };
-		2FEBB66C223020FF00BF1D16 /* IntrospectTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */; };
 		2FEBB66E2231350500BF1D16 /* UserInfoTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */; };
 		2FEBB670223142E400BF1D16 /* DiscoveryTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */; };
 		2FEBB6722231596B00BF1D16 /* OktaAuthConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */; };
@@ -111,8 +109,6 @@
 		2FA6431A223BDF220008DC97 /* OktaAuthTokenManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuthTokenManagerTests.swift; sourceTree = "<group>"; };
 		2FA6431C223FDE250008DC97 /* OktaEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaEndpointTests.swift; sourceTree = "<group>"; };
 		2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApiMock.swift; sourceTree = "<group>"; };
-		2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeTaskTests.swift; sourceTree = "<group>"; };
-		2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrospectTaskTests.swift; sourceTree = "<group>"; };
 		2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoTaskTests.swift; sourceTree = "<group>"; };
 		2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryTaskTests.swift; sourceTree = "<group>"; };
 		2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuthConfigTests.swift; sourceTree = "<group>"; };
@@ -276,8 +272,6 @@
 				71ED66182058BF8E00B5D800 /* TestUtils.swift */,
 				2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */,
 				FA58179D221D811B002C527E /* OktaKeychainTests.swift */,
-				2FEBB669223005B000BF1D16 /* RevokeTaskTests.swift */,
-				2FEBB66B223020FF00BF1D16 /* IntrospectTaskTests.swift */,
 				2FEBB66D2231350500BF1D16 /* UserInfoTaskTests.swift */,
 				2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */,
 				2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */,
@@ -627,7 +621,6 @@
 			files = (
 				2F74363D22098C9B00B47967 /* OIDTokenResponseTests.m in Sources */,
 				2F74363F22098C9B00B47967 /* OIDTokenUtilitiesTests.m in Sources */,
-				2FEBB66A223005B000BF1D16 /* RevokeTaskTests.swift in Sources */,
 				2F74364522098C9B00B47967 /* OIDTokenRequestTests.m in Sources */,
 				2F74363422098C9B00B47967 /* OIDURLSessionProviderTests.m in Sources */,
 				2F74364422098C9B00B47967 /* OIDRPProfileCode.m in Sources */,
@@ -641,7 +634,6 @@
 				2F74363B22098C9B00B47967 /* OIDServiceConfigurationTests.m in Sources */,
 				2F74364622098C9B00B47967 /* OIDURLQueryComponentTestsIOS7.m in Sources */,
 				2F74363722098C9B00B47967 /* OIDRegistrationRequestTests.m in Sources */,
-				2FEBB66C223020FF00BF1D16 /* IntrospectTaskTests.swift in Sources */,
 				2F74363522098C9B00B47967 /* OIDAuthorizationRequestTests.m in Sources */,
 				2FEBB670223142E400BF1D16 /* DiscoveryTaskTests.swift in Sources */,
 				2FA6431D223FDE250008DC97 /* OktaEndpointTests.swift in Sources */,

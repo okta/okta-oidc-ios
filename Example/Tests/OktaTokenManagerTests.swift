@@ -30,24 +30,6 @@ class OktaTokenManagerTests: XCTestCase {
         super.tearDown()
     }
     
-    func testIntrospectNotConfigured() {
-        OktaAuth.configuration = nil
-        
-        let introspectExpectation = expectation(description: "Will fail attempting to introspect tokens")
-        
-        tokensManager.introspect(token: tokensManager.accessToken) { payload, error in
-            XCTAssertNil(payload)
-            XCTAssertEqual(
-                OktaError.notConfigured.localizedDescription,
-                error?.localizedDescription
-            )
-            
-            introspectExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 5.0)
-    }
-    
     func testIntrospectSucceeded() {
         // Mock REST API calls
         apiMock.configure(response: ["active" : true])
@@ -57,6 +39,24 @@ class OktaTokenManagerTests: XCTestCase {
         tokensManager.introspect(token: tokensManager.accessToken) { payload, error in
             XCTAssertNil(error)
             XCTAssertEqual(true, payload?["active"] as? Bool)
+            introspectExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5.0)
+    }
+    
+    func testIntrospectNoBearerToken() {
+        // Mock REST API calls
+        apiMock.configure(response: ["active" : true])
+        
+        let introspectExpectation = expectation(description: "Will succeed with payload.")
+        
+        tokensManager.introspect(token: nil) { payload, error in
+            XCTAssertNil(payload)
+            XCTAssertEqual(
+                OktaError.noBearerToken.localizedDescription,
+                error?.localizedDescription
+            )
             introspectExpectation.fulfill()
         }
         
@@ -81,24 +81,6 @@ class OktaTokenManagerTests: XCTestCase {
         waitForExpectations(timeout: 5.0)
     }
     
-    func testRevokeNotConfigured() {
-        OktaAuth.configuration = nil
-
-        let revokeExpectation = expectation(description: "Will fail attempting to revoke tokens")
-        
-        tokensManager.revoke(tokensManager.accessToken){ isRevoked, error in
-            XCTAssertNil(isRevoked)
-            XCTAssertEqual(
-                OktaError.notConfigured.localizedDescription,
-                error?.localizedDescription
-            )
-            
-            revokeExpectation.fulfill()
-        }
-        
-        waitForExpectations(timeout: 5.0)
-    }
-    
     func testRevokeSucceeded() {
         // Mock REST API calls
         apiMock.configure(response: [:])
@@ -108,6 +90,25 @@ class OktaTokenManagerTests: XCTestCase {
         tokensManager.revoke(tokensManager.accessToken){ isRevoked, error in
             XCTAssertEqual(true, isRevoked)
             XCTAssertNil(error)
+            
+            revokeExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5.0)
+    }
+
+    func testRevokeNoBearerToken() {
+        // Mock REST API calls
+        apiMock.configure(error: .APIError("Test Error"))
+        
+        let revokeExpectation = expectation(description: "Will fail with error.")
+        
+        tokensManager.revoke(nil){ isRevoked, error in
+            XCTAssertNil(isRevoked)
+            XCTAssertEqual(
+                OktaError.noBearerToken.localizedDescription,
+                error?.localizedDescription
+            )
             
             revokeExpectation.fulfill()
         }
