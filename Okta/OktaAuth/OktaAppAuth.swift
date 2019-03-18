@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -10,8 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import Hydra
-
 // Current version of the SDK
 let VERSION = "2.1.0"
 
@@ -19,58 +17,115 @@ let VERSION = "2.1.0"
 public var currentAuthorizationFlow: OIDExternalUserAgentSession?
 
 // Cache Okta.plist for reference
-public var configuration: [String: Any]?
+public var configuration = try? OktaAuthConfig.default()
 
 // Cache the Discovery Metadata
-public var wellKnown: [String: Any]?
+public var discoveredMetadata: [String: Any]?
 
 // Token manager
-public var tokens = OktaTokenManager.readFromSecureStorage()
-
-public func signInWithBrowser() -> SignIn {
-    // Authenticate via authorization code flow
-    return SignIn()
-}
-
-public func signOutOfOkta() -> SignOut {
-    // End the Okta session
-    return SignOut()
-}
-
-public func authenticate(withSessionToken sessionToken: String) -> Authenticate {
-    return Authenticate(sessionToken: sessionToken)
-}
-
-public func isAuthenticated() -> Bool {
-    if tokens?.accessToken != nil {
-        return true
+public var tokenManager = OktaTokenManager.readFromSecureStorage() {
+    didSet {
+        tokenManager?.writeToSecureStorage()
     }
-    return false
+}
+
+public var isAuthenticated: Bool {
+    return tokenManager?.accessToken != nil
+}
+
+public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+    
+    SignInTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
+    .run { authState, error in
+        guard let authState = authState else {
+            callback(nil, error)
+            return
+        }
+        
+        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        OktaAuth.tokenManager = tokenManager
+        callback(tokenManager, nil)
+    }
+}
+
+public func signOutOfOkta(from presenter: UIViewController, callback: @escaping ((OktaError?) -> Void)) {
+    guard let configuration = configuration else {
+        callback(OktaError.notConfigured)
+        return
+    }
+
+    SignOutTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
+    .run { _, error in callback(error) }
+}
+
+public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+
+    AuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaRestApi())
+    .run { authState, error in
+        guard let authState = authState else {
+            callback(nil, error)
+            return
+        }
+        
+        let tokenManager = OktaTokenManager(authState: authState, config: configuration)
+        OktaAuth.tokenManager = tokenManager
+        callback(tokenManager, nil)
+    }
 }
 
 public func clear() {
     // Clear auth state
-    tokens?.clear()
+    tokenManager?.clear()
 }
 
-public func introspect() -> Introspect {
+public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+    
     // Check the validity of the tokens
-    return Introspect()
+    IntrospectTask(token: token, config: configuration, oktaAPI: OktaRestApi())
+    .run(callback: callback)
 }
 
-public func refresh() -> Promise<String> {
-    // Refreshes the access token if a refresh token is present
-    return Refresh().refresh()
+public func refresh(callback: @escaping ((String?, OktaError?) -> Void)) {
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+    
+    RefreshTask(config: configuration, oktaAPI: OktaRestApi())
+    .run(callback: callback)
 }
 
 public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
-    // Revokes the given token
-    _ = Revoke(token: token) { response, error in callback( response?.count == 0 ? true : false, error) }
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+
+    RevokeTask(token: token, config: configuration, oktaAPI: OktaRestApi())
+    .run(callback: callback)
 }
 
 public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
+    guard let configuration = configuration else {
+        callback(nil, OktaError.notConfigured)
+        return
+    }
+
     // Return user information from the /userinfo endpoint
-    _ = UserInfo(token: tokens?.accessToken) { response, error in callback(response, error) }
+    UserInfoTask(token: tokenManager?.accessToken, config: configuration, oktaAPI: OktaRestApi())
+    .run(callback: callback)
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {

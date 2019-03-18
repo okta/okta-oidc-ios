@@ -31,7 +31,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [introspect](#introspect)
   - [refresh](#refresh)
   - [revoke](#revoke)
-  - [tokens](#tokens)
+  - [tokenManager](#tokenManager)
   - [clear](#clear)
 - [Development](#development)
   - [Running Tests](#running-tests)
@@ -74,7 +74,7 @@ Next, update your `AppDelegate` to include the following function to allow the r
 import OktaAuth
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-    return OktaAuth.resume(url: url, options: options)
+  return OktaAuth.resume(url: url, options: options)
 }
 ```
 
@@ -90,14 +90,14 @@ You can also browse the full [API reference documentation](#api-reference).
 
 ## Configuration Reference
 
-There are multiple ways you can configure this library to perform authentication into your application. You can create a new `plist` file with shared values or directly pass your configuration into the sign in method directly.
+Before using this SDK, you'll need to configure it. Simply create an `OktaAuthConfig` object using one of the methods below.
 
 **Need a refresh token?**
 A refresh token is a special token that is used to generate additional access and ID tokens. Make sure to include the `offline_access` scope in your configuration to silently renew the user's session in your application!
 
 ### Property list
 
-The easiest way is to create a proptery list in your application's bundle. By default, this library checks for the existance of the file `Okta.plist`, however any property list file will suffice. Ensure one is created with the following fields:
+The easiest way is to create a proptery list in your application's bundle. By default, this library checks for the existance of the file `Okta.plist`. However any property list file can be used to create configuration object. Ensure one is created with the following fields:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -120,10 +120,10 @@ The easiest way is to create a proptery list in your application's bundle. By de
 
 ### Configuration object
 
-Alternatively, you can create a dictionary with the required values:
+Alternatively, you can create a configuration object ( `OktaAuthConfig`) from dictionary with the required values:
 
 ```swift
-let config = [
+OktaAuth.configuration = OktaAuthConfig(with: [
   "issuer": "https://{yourOktaDomain}/oauth2/default",
   "clientId": "{clientID}",
   "redirectUri": "{redirectUri}",
@@ -131,63 +131,26 @@ let config = [
   "scopes": "openid profile offline_access",
   // Custom parameters
   "login_hint": "username@email.com"
-]
+])
 ```
 
 ## API Reference
 
 ### signInWithBrowser
 
-Start the authorization flow by simply calling `signIn`. By default, this method uses the values specified in the `Okta.plist` file:
+Start the authorization flow by simply calling `signIn`. 
 
 ```swift
-OktaAuth
-  .signInWithBrowser()
-  .start(view: self)
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
+OktaAuth.signInWithBrowser(from: self) { tokens, error in
+  if let error = error {
     // Error
+    return
   }
-```
 
-Alternatively, use a custom `plist` file using the `withPListConfig` argument:
-
-```swift
-OktaAuth
-  .signInWithBrowser()
-  .start(withPListConfig: "CustomPlist", view: self)
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
-    // Error
-  }
-```
-
-Finally, use a dictionary instead of a `plist`:
-
-```swift
-let config: [String: String] = [
-  // Your configuation
-]
-
-OktaAuth
-  .signInWithBrowser()
-  .start(withDictConfig: config, view: self)
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
-    // Error
-  }
+  // tokens.accessToken
+  // tokens.idToken
+  // tokens.refreshToken
+}
 ```
 
 ### signOutOfOkta
@@ -198,97 +161,30 @@ You can start the sign out flow by simply calling `signOutFromOkta`. This method
 
 ```swift
 // Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
-OktaAuth
-  .signOutFromOkta()
-  .start(view: self)
-  .then {
-    // Additional signout logic
-  }
-  .catch { error in
+OktaAuth.signOutOfOkta(from: self) { error in
+  if let error = error {
     // Error
+    return
   }
-```
-
-Similar to the [`signIn`](#signin) method, `signOutOfOkta` can accept a custom `plist` or dictionary configuration:
-
-```swift
-// Use a custom plist file
-OktaAuth
-  .signOutFromOkta()
-  .start(withPListConfig: "CustomPlist", view: self)
-  .then {
-    // Additional signout logic
-  }
-  .catch { error in
-    // Error
-  }
-
-// Use a dictionary object for configuration
-let config: [String: String] = [
-  // Your configuation
-]
-
-OktaAuth
-  .signOutFromOkta()
-  .start(withDictConfig: config, view: self)
-  .then {
-    // Additional signout logic
-  }
-  .catch { error in
-    // Error
-  }
+}
 ```
 
 ### authenticate
 
-If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. By default, this method uses the values specified in the `Okta.plist` file:
+If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`.
 
 ```swift
-OktaAuth
-  .authenticate(withSessionToken: sessionToken)
-  .start()
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
+OktaAuth.authenticate(withSessionToken: token) { tokens, error in
+  self.hideProgress()
+  if let error = error {
     // Error
-  }
-```
-
-Similar to the [`login`](#login) method, `authenticate(withSessionToken:)` can accept a custom `plist` or dictionary configuration:
-
-```swift
-// Use a custom plist file
-OktaAuth
-  .authenticate(withSessionToken: sessionToken)
-  .start(withPListConfig: "CustomPlist")
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
-    // Error
+    return
   }
 
-// Use a dictionary object for configuration
-let config: [String: String] = [
-  // Your configuation
-]
-
-OktaAuth
-  .authenticate(withSessionToken: sessionToken)
-  .start(withDictConfig: config)
-  .then { tokens in
-    // tokens.accessToken
-    // tokens.idToken
-    // tokens.refreshToken
-  }
-  .catch { error in
-    // Error
-  }
+  // tokens.accessToken
+  // tokens.idToken
+  // tokens.refreshToken
+}
 ```
 
 ### isAuthenticated
@@ -296,7 +192,7 @@ OktaAuth
 Returns `true` if there is a valid access token stored in the TokenManager. This is the best way to determine if a user has successfully authenticated into your app.
 
 ```swift
-if !OktaAuth.isAuthenticated() {
+if !OktaAuth.isAuthenticated {
   // Prompt for sign in
 }
 ```
@@ -306,14 +202,13 @@ if !OktaAuth.isAuthenticated() {
 Calls the OpenID Connect UserInfo endpoint with the stored access token to return user claim information.
 
 ```swift
-OktaAuth.getUser() { response, error in
-  if error != nil {
-    print("Error: \(error!)")
+OktaAuth.getUser { response, error in
+  if let error = error {
+    // Error
+    return
   }
 
-  if let userinfo = response {
-    // JSON response
-  }
+  // JSON response
 }
 ```
 
@@ -322,15 +217,14 @@ OktaAuth.getUser() { response, error in
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-OktaAuth
-  .introspect()
-  .validate(token: token)
-  .then { isActive in
-    print("Is token valid? \(isActive)")
-  }
-  .catch { error in
+OktaAuth.introspect(token: accessToken, callback: { payload, error in
+  guard let isValid = payload["active"] as? Bool else {
     // Error
+    return
   }
+
+  print("Is token valid? \(isValid)")
+})
 ```
 
 ### refresh
@@ -338,14 +232,14 @@ OktaAuth
 Since access tokens are traditionally short-lived, you can refresh expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
 
 ```swift
-OktaAuth
-  .refresh()
-  .then { newAccessToken in
-    print(newAccessToken)
-  }
-  .catch { error in
+OktaAuth.refresh { newAccessToken, error in
+  if let error = error else {
     // Error
+    return
   }
+
+  // newAccessToken
+}
 ```
 
 ### revoke
@@ -353,25 +247,24 @@ OktaAuth
 Calls the revocation endpoint to revoke the specified token.
 
 ```swift
-OktaAuth
-  .revoke(token: token) { response, error in
-    if error != nil {
-      print("Error: \(error!)")
-    }
-    if let _ = response {
-      print("Token was revoked")
-    }
+OktaAuth.revoke(accessToken) { response, error in
+  if let error = error else {
+    // Error
+    return
+  }
+
+  // Token was revoked
 }
 ```
 
-### tokens
+### tokenManager
 
-Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `token` object bound to `OktaAuth`:
+Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `tokenManager` object bound to `OktaAuth`:
 
 ```swift
-OktaAuth.tokens?.accessToken
-OktaAuth.tokens?.idToken
-OktaAuth.tokens?.refreshToken
+OktaAuth.tokenManager?.accessToken
+OktaAuth.tokenManager?.idToken
+OktaAuth.tokenManager?.refreshToken
 ```
 
 ### clear

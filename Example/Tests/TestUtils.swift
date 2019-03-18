@@ -6,8 +6,6 @@
 //  Copyright © 2018 Okta. All rights reserved.
 //
 
-import Hydra
-
 @testable import OktaAuth
 
 struct TestUtils {
@@ -28,12 +26,11 @@ struct TestUtils {
         "pu1WrZzuBHoQXuDkuYH6xKbKU2bopZGnA8PwrsIbr6PmmTaeH5ww0Q"
     static let mockRefreshToken = "mockRefreshToken"
 
-    static let tokenManager = TestUtils.setupMockTokenManager(issuer: mockIssuer)
-    static let tokenManagerNoValidation = TestUtils.setupMockTokenManager(issuer: mockIssuer)
-    static let tokenManagerNoValidationWithExpiration = TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5)
+    static var tokenManager = { return TestUtils.setupMockTokenManager(issuer: mockIssuer) }
+    static var tokenManagerWithExpiration = { return TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5) }
 
 
-    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> Promise<OktaTokenManager> {
+    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaTokenManager {
         // Creates a mock Okta Token Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
@@ -79,20 +76,14 @@ struct TestUtils {
 
         let tempAuthState = OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
 
-        return Promise<OktaTokenManager>(in: .background, { resolve, reject, _ in
-            do {
-                let tm = try OktaTokenManager(
-                    authState: tempAuthState,
-                    config: [
-                        "issuer": mockIssuer,
-                        "clientId": mockClientId,
-                        "redirectUri": mockRedirectUri
-                    ]
-                )
-                return resolve(tm)
-            } catch let error {
-                return reject(error)
-            }
-        })
+        return OktaTokenManager(
+            authState: tempAuthState,
+            config: try! OktaAuthConfig(with: [
+                "issuer": mockIssuer,
+                "clientId": mockClientId,
+                "redirectUri": mockRedirectUri,
+                "scopes": mockScopes
+            ])
+        )
     }
 }
