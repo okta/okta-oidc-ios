@@ -214,6 +214,12 @@ extension OktaAuthStateManager {
     }
 }
 
+internal extension OktaAuthStateManager {
+    var discoveryDictionary: [String: Any]? {
+        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
+    }
+}
+
 private extension OktaAuthStateManager {
     var issuer: String? {
         return authState.lastAuthorizationResponse.request.configuration.issuer?.path
@@ -222,10 +228,7 @@ private extension OktaAuthStateManager {
     var clientId: String {
         return authState.lastAuthorizationResponse.request.clientID
     }
-    
-    var discoveryDictionary: [String: Any]? {
-        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
-    }
+
     
     func perfromRequest(to endpoint: OktaEndpoint,
                         token: String?,

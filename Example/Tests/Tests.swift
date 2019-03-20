@@ -4,24 +4,27 @@ import XCTest
 
 class Tests: XCTestCase {
     let TOKEN_EXPIRATION_WAIT: UInt32 = 5
+    
+    var oktaAppAuth: OktaAppAuth?
 
     override func setUp() {
         super.setUp()
-        OktaAuth.configuration = try? OktaAuthConfig(with:[
+        let config = try? OktaAuthConfig(with:[
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
             "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
             "scopes": "openid profile offline_access"
         ])
+        oktaAppAuth = OktaAppAuth(configuration: config)
     }
 
     override func tearDown() {
         super.tearDown()
 
         // Revert stored values
-        OktaAuth.clear()
-        OktaAuth.configuration = nil
+        oktaAppAuth?.clear()
+        oktaAppAuth = nil
     }
 
     func testPListFormatWithTrailingSlash() {
@@ -59,7 +62,7 @@ class Tests: XCTestCase {
     func testSignOutOfOktaFailure() {
         let signOutExpectation = expectation(description: "Will error attempting sign out locally")
         
-        OktaAuth.signOutOfOkta(from: UIViewController(), callback: { error in
+        oktaAppAuth?.signOutOfOkta(from: UIViewController(), callback: { error in
             XCTAssertEqual(
                 error?.localizedDescription,
                 OktaError.missingIdToken.localizedDescription
@@ -111,49 +114,50 @@ class Tests: XCTestCase {
         // Wait for tokens to expire and update validation options to check for expiration
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        XCTAssertEqual(OktaAuth.authStateManager?.accessToken, nil)
-        XCTAssertEqual(OktaAuth.authStateManager?.idToken, nil)
+        XCTAssertEqual(oktaAppAuth?.authStateManager?.accessToken, nil)
+        XCTAssertEqual(oktaAppAuth?.authStateManager?.idToken, nil)
     }
 
     func testStoreAndDeleteOfAuthState() {
         let authStateManager = TestUtils.authStateManager()
-        OktaAuth.authStateManager = authStateManager
+        oktaAppAuth?.authStateManager = authStateManager
 
-        self.assertAuthenticationState(OktaAuth.authStateManager!)
+        self.assertAuthenticationState(oktaAppAuth?.authStateManager)
 
         // Clear the authState
-        OktaAuth.authStateManager?.clear()
+        oktaAppAuth?.authStateManager?.clear()
 
         XCTAssertNil(OktaAuthStateManager.readFromSecureStorage())
     }
 
     func testIsAuthenticated() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        OktaAuth.authStateManager = TestUtils.authStateManager()
+        let authStateManager = TestUtils.authStateManager()
+        oktaAppAuth?.authStateManager = authStateManager
 
-        let isAuth = OktaAuth.isAuthenticated
-        XCTAssertTrue(isAuth)
+        XCTAssertEqual(true, oktaAppAuth?.isAuthenticated)
     }
 
     func testIsNotAuthenticated() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        OktaAuth.authStateManager = TestUtils.authStateManagerWithExpiration()
+        let authStateManager = TestUtils.authStateManagerWithExpiration()
+        oktaAppAuth?.authStateManager = authStateManager
 
         // Wait for tokens to expire
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        let isAuth = OktaAuth.isAuthenticated
-        XCTAssertFalse(isAuth)
+        XCTAssertEqual(false, oktaAppAuth?.isAuthenticated)
     }
 
     func testResumeAuthenticationStateFromExpiredState() {
         // Validate that if there is an existing accessToken, we return an "authenticated" state
-        OktaAuth.authStateManager = TestUtils.authStateManagerWithExpiration()
+        let authStateManager = TestUtils.authStateManagerWithExpiration()
+        oktaAppAuth?.authStateManager = authStateManager
 
         // Wait for tokens to expire
         sleep(TOKEN_EXPIRATION_WAIT)
 
-        self.assertAuthenticationState(OktaAuth.authStateManager!)
+        self.assertAuthenticationState(oktaAppAuth?.authStateManager)
     }
 
     // Helpers for asserting unit tests
@@ -170,14 +174,14 @@ class Tests: XCTestCase {
         XCTAssertEqual(tm.refreshToken, TestUtils.mockRefreshToken)
     }
 
-    func assertAuthenticationState(_ tm: OktaAuthStateManager) {
+    func assertAuthenticationState(_ tm: OktaAuthStateManager?) {
         guard let prevState = OktaAuthStateManager.readFromSecureStorage() else {
             return XCTFail("Previous authentication state does not exist")
         }
 
-        XCTAssertEqual(prevState.accessibility, tm.accessibility)
-        XCTAssertEqual(prevState.accessToken, tm.accessToken)
-        XCTAssertEqual(prevState.idToken, tm.idToken)
-        XCTAssertEqual(prevState.refreshToken, tm.refreshToken)
+        XCTAssertEqual(prevState.accessibility, tm?.accessibility)
+        XCTAssertEqual(prevState.accessToken, tm?.accessToken)
+        XCTAssertEqual(prevState.idToken, tm?.idToken)
+        XCTAssertEqual(prevState.refreshToken, tm?.refreshToken)
     }
 }

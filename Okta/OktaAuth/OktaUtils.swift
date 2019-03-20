@@ -16,7 +16,7 @@ open class Utils: NSObject {
 
     @objc
     open class func userAgentHeader() -> String {
-        return "okta-sdk-appauth-ios/\(VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(deviceModel())"
+        return "okta-sdk-appauth-ios/\(OktaAppAuth.VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(deviceModel())"
     }
 
     internal class func scrubScopes(_ scopes: String?) -> [String]{

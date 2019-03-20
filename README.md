@@ -207,7 +207,7 @@ OktaAuth.authStateManager?.idToken
 OktaAuth.authStateManager?.refreshToken
 ```
 
-**Note:** Token manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaTokenManager-s returned by `signIn` operation.
+**Note:** Token manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaAuthStateManager-s returned by `signIn` operation.
 
 #### introspect
 

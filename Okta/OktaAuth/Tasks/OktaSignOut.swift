@@ -10,29 +10,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class SignOutTask: OktaAuthTask<Void> {
+class SignOutTask: OktaAuthTask<Void>, UserSessionTask {
+    private let idToken: String
     private let presenter: UIViewController
+    private(set) var userAgentSession: OIDExternalUserAgentSession?
     
-    init(presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+    init(idToken: String, presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+        self.idToken = idToken
         self.presenter = presenter
         super.init(config: config, oktaAPI: oktaAPI)
     }
 
     override func run(callback: @escaping (Void?, OktaError?) -> Void) {
-        guard let config = configuration else {
-            callback(nil, OktaError.notConfigured)
-            return
-        }
-
         guard let logoutRedirectUri = config.logoutRedirectUri,
               let additionalParams = config.additionalParams else {
                 callback(nil, OktaError.missingConfigurationValues)
                 return
-        }
-        
-        guard let idToken = OktaAuth.authStateManager?.authState.lastTokenResponse?.idToken else {
-            callback(nil, OktaError.missingIdToken)
-            return
         }
 
         MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
@@ -43,7 +36,7 @@ class SignOutTask: OktaAuthTask<Void> {
             
             let request = OIDEndSessionRequest(
                 configuration: oidConfig,
-                idTokenHint: idToken,
+                idTokenHint: self.idToken,
                 postLogoutRedirectURL: logoutRedirectUri,
                 additionalParameters: additionalParams
             )
@@ -51,8 +44,10 @@ class SignOutTask: OktaAuthTask<Void> {
             let agent = OIDExternalUserAgentIOS(presenting: self.presenter)
 
             // Present the Sign Out flow
-            OktaAuth.currentAuthorizationFlow = OIDAuthorizationService.present(request, externalUserAgent: agent) {
+             self.userAgentSession = OIDAuthorizationService.present(request, externalUserAgent: agent) {
                 response, responseError in
+                
+                defer { self.userAgentSession = nil }
                 
                 var error: OktaError? = nil
                 if let responseError = responseError {

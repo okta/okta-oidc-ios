@@ -18,19 +18,7 @@ class AuthViewController : UIViewController {
     @IBOutlet var progessOverlay: UIView!
     @IBOutlet var progessIndicator: UIActivityIndicatorView!
     
-    private var isUITest: Bool {
-        return ProcessInfo.processInfo.environment["UITEST"] == "1"
-    }
-    
-    private var testConfig: OktaAuthConfig? {
-        return try? OktaAuthConfig(with: [
-            "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
-            "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
-            "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
-            "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
-            "scopes": "openid profile offline_access"
-        ])
-    }
+    var oktaAppAuth: OktaAppAuth?
     
     private var token: String? {
         return tokenTextView.text
@@ -38,7 +26,6 @@ class AuthViewController : UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        OktaAuth.configuration = isUITest ? testConfig : try? OktaAuthConfig.default()
         hideProgress()
         clearMessageView()
     }
@@ -51,7 +38,7 @@ class AuthViewController : UIViewController {
         
         clearMessageView()
         showProgress()
-        OktaAuth.authenticate(withSessionToken: token) { tokens, error in
+        oktaAppAuth?.authenticate(withSessionToken: token) { tokens, error in
             self.hideProgress()
             if let error = error {
                 self.presentError(error)

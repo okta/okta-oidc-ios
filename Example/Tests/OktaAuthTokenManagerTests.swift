@@ -8,13 +8,6 @@ class OktaAuthTokenManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        OktaAuth.configuration = try? OktaAuthConfig(with:[
-            "issuer" : "http://test.issuer.com/oauth2/default",
-            "clientId" : "test_client",
-            "scopes" : "test",
-            "redirectUri" : "test:/callback"
-        ])
-        
         apiMock = OktaApiMock()
         authStateManager = OktaAuthStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer)
@@ -24,7 +17,6 @@ class OktaAuthTokenManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        OktaAuth.configuration = try? OktaAuthConfig.default()
         apiMock = nil
         authStateManager = nil
         super.tearDown()
