@@ -34,9 +34,9 @@ public class OktaAppAuth {
     // Holds the browser session
     var currentUserSessionTask: UserSessionTask?
     
-    public init?(configuration: OktaAuthConfig? = nil) {
+    public init(configuration: OktaAuthConfig? = nil) throws {
         guard let config = configuration ?? (try? OktaAuthConfig.default()) else {
-            return nil
+            throw OktaError.notConfigured
         }
         
         self.configuration = config
@@ -61,6 +61,8 @@ public class OktaAppAuth {
     }
 
     public func signOutOfOkta(from presenter: UIViewController, callback: @escaping ((OktaError?) -> Void)) {
+        // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
+        // Validation is not needed for SignOut operation.
         guard let idToken = authStateManager?.authState.lastTokenResponse?.idToken else {
             callback(OktaError.missingIdToken)
             return

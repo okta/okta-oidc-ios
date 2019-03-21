@@ -63,7 +63,7 @@ pod install
 
 ### Handle the redirect
 
-**Important**: This is needed if you want to support iOS 10 and older. Starting from iOS 11 Okta uses modern API which does not implies redirects to/from browser.
+**Important**: This is needed if you want to support iOS 10 and older. Starting from iOS 11 Okta uses SFAuthenticationSession API (replaced with ASWebAuthenticationSession in iOS 12) that handle redirects from browser by its own. Therefore `application(,open:, options:)` won't be called during SignIn/SignOut operations.
 
 In order to redirect back to your application from a web browser, you must specify a unique URI to your app. To do this, open `Info.plist` in your application bundle and set a **URL Scheme** to the scheme of the redirect URI.
 
@@ -75,6 +75,8 @@ Next, update your `AppDelegate` to include the following function to allow the r
 // AppDelegate.swift
 import OktaAuth
 
+var oktaAuth: OktaAppAuth?
+
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
   // oktaAuth - Configured OktaAppAuth instance used to start SignIn/SignOut flow. 
   return oktaAuth.resume(url: url, options: options)
@@ -83,25 +85,32 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 
 ## Usage Guide
 
-To start using our SDK you have to create a new object of  `OktaAppAuth`. You can instantiate  `OktaAppAuth` w/o parameters that means that SDK will use `Okta.plist` for configuration values. Alternatively you can create `OktaAppAuth` with custom configuration. For details about ways to configure `OktaAppAuth` see the [Configuration Reference](#configuration-reference)
+For an overview of this library's features and authentication flows, check out [our developer docs](https://developer.okta.com/code/ios).
 
-```swift
-import OktaAuth
-
-// OktaAppAuth object with default configuration
-let defaultOktaAuth = OktaAppAuth()
-
-// OktaAppAuth object with custom configuration 
-let customConfig = OktaAuthConfig(...)
-let customOktaAuth = OktaAppAuth(configuration: customConfig)
-
-```
+<!--
+TODO: Once the developer site provides code walkthroughs, update this with a bulleted list of possible flows.
+-->
 
 You can also browse the full [API reference documentation](#api-reference).
 
 ## Configuration Reference
 
-Before using this SDK, you'll need to configure it. Simply create an `OktaAuthConfig` object using one of the methods below.
+Before using this SDK you have to create a new object of  `OktaAppAuth`. You can instantiate  `OktaAppAuth` w/o parameters that means that SDK will use `Okta.plist` for configuration values. Alternatively you can create `OktaAppAuth` with custom configuration. 
+
+```swift
+import OktaAuth
+
+// Use the default Okta.plist configuration
+let oktaAppAuth = OktaAppAuth()
+
+// Use configuration from another resource
+let config = OktaAuthConfig(/* plist */)
+let config = OktaAuthConfig(/* dictionary */)
+
+// Instantiate OktaAuth with custom configuration object
+let oktaAuth = OktaAppAuth(configuration: config)
+
+```
 
 **Need a refresh token?**
 A refresh token is a special token that is used to generate additional access and ID tokens. Make sure to include the `offline_access` scope in your configuration to silently renew the user's session in your application!

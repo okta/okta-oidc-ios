@@ -16,7 +16,7 @@ class Tests: XCTestCase {
             "logoutRedirectUri": ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!,
             "scopes": "openid profile offline_access"
         ])
-        oktaAppAuth = OktaAppAuth(configuration: config)
+        oktaAppAuth = try? OktaAppAuth(configuration: config)
     }
 
     override func tearDown() {

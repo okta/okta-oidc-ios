@@ -32,8 +32,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        oktaAppAuth = isUITest ? OktaAppAuth(configuration: testConfig) : OktaAppAuth()
+        oktaAppAuth = try? OktaAppAuth(configuration: isUITest ? testConfig : nil)
         AppDelegate.shared.oktaAuth = oktaAppAuth
     }
 
