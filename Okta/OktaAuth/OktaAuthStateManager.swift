@@ -112,7 +112,7 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         return jsonObject as? [String: Any]
     }
 
-    public func renew(callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+    public func renew(callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
         authState.setNeedsTokenRefresh()
         authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
