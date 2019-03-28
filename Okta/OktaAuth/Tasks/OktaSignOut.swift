@@ -30,7 +30,7 @@ class SignOutTask: OktaAuthTask<Void> {
                 return
         }
         
-        guard let idToken = OktaAuth.tokenManager?.authState.lastTokenResponse?.idToken else {
+        guard let idToken = OktaAuth.authStateManager?.authState.lastTokenResponse?.idToken else {
             callback(nil, OktaError.missingIdToken)
             return
         }

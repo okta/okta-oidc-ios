@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-open class OktaTokenManager: NSObject, NSCoding {
+open class OktaAuthStateManager: NSObject, NSCoding {
 
     open var authState: OIDAuthState
     open var accessibility: CFString
@@ -112,7 +112,7 @@ open class OktaTokenManager: NSObject, NSCoding {
         return jsonObject as? [String: Any]
     }
 
-    public func renew(callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+    public func renew(callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
         authState.setNeedsTokenRefresh()
         authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
@@ -143,18 +143,29 @@ open class OktaTokenManager: NSObject, NSCoding {
     public func clear() {
         OktaKeychain.clearAll()
     }
+    
+    public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
+        guard let token = accessToken else {
+            callback(nil, .noBearerToken)
+            return
+        }
+
+        let headers = ["Authorization": "Bearer \(token)"]
+        
+        perfromRequest(to: .userInfo, headers: headers, callback: callback)
+    }
 }
 
-extension OktaTokenManager {
+extension OktaAuthStateManager {
     
-    static let secureStorageKey = "OktaAuthStateTokenManager"
+    static let secureStorageKey = "OktaAuthStateManager"
 
-    class func readFromSecureStorage() -> OktaTokenManager? {
+    class func readFromSecureStorage() -> OktaAuthStateManager? {
         guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
             return nil
         }
 
-        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaTokenManager else {
+        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaAuthStateManager else {
             return nil
         }
 
@@ -165,7 +176,7 @@ extension OktaTokenManager {
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
         do {
             try OktaKeychain.set(
-                key: OktaTokenManager.secureStorageKey,
+                key: OktaAuthStateManager.secureStorageKey,
                 data: authStateData,
                 accessibility: self.accessibility
             )
@@ -175,7 +186,7 @@ extension OktaTokenManager {
     }
 }
 
-private extension OktaTokenManager {
+private extension OktaAuthStateManager {
     var issuer: String? {
         return authState.lastAuthorizationResponse.request.configuration.issuer?.path
     }
@@ -188,29 +199,41 @@ private extension OktaTokenManager {
         return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
     }
     
-    func perfromRequest(to endpoint: OktaEndpoint, token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+    func perfromRequest(to endpoint: OktaEndpoint,
+                        token: String?,
+                        callback: @escaping ([String : Any]?, OktaError?) -> Void) {
         guard let token = token else {
             callback(nil, OktaError.noBearerToken)
             return
         }
-
+        
+        let postString = "token=\(token)&client_id=\(clientId)"
+        
+        perfromRequest(to: endpoint, postString: postString, callback: callback)
+    }
+    
+    func perfromRequest(to endpoint: OktaEndpoint,
+                        headers: [String: String]? = nil,
+                        postString: String? = nil,
+                        callback: @escaping ([String : Any]?, OktaError?) -> Void) {
         guard let endpointURL = endpoint.getURL(discoveredMetadata: discoveryDictionary, issuer: issuer) else {
             callback(nil, endpoint.noEndpointError)
             return
         }
-
-        let headers = [
+        
+        var requestHeaders = [
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         ]
+        
+        if let headers = headers {
+            requestHeaders.merge(headers) { (_, new) in new }
+        }
 
-        let data = "token=\(token)&client_id=\(clientId)"
-
-        restAPI.post(endpointURL, headers: headers, postString: data, onSuccess: { response in
+        restAPI.post(endpointURL, headers: requestHeaders, postString: postString, onSuccess: { response in
             callback(response, nil)
         }, onError: { error in
             callback(nil, error)
         })
     }
-
 }

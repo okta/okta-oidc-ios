@@ -63,7 +63,7 @@ extension OktaError: LocalizedError {
         case .noRevocationEndpoint:
             return NSLocalizedString("Error finding the revocation endpoint.", comment: "")
         case .noTokens:
-            return NSLocalizedString("No tokens stored in the token manager.", comment: "")
+            return NSLocalizedString("No tokens stored in the auth state manager.", comment: "")
         case .noUserInfoEndpoint:
             return NSLocalizedString("Error finding the user info endpoint.", comment: "")
         case .parseFailure:

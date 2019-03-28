@@ -1,10 +1,10 @@
 import XCTest
 @testable import OktaAuth
 
-class OktaTokenManagerTests: XCTestCase {
+class OktaAuthTokenManagerTests: XCTestCase {
     
     var apiMock: OktaApiMock!
-    var tokensManager: OktaTokenManager!
+    var authStateManager: OktaAuthStateManager!
 
     override func setUp() {
         super.setUp()
@@ -16,17 +16,17 @@ class OktaTokenManagerTests: XCTestCase {
         ])
         
         apiMock = OktaApiMock()
-        tokensManager = OktaTokenManager(
+        authStateManager = OktaAuthStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer)
         )
         
-        tokensManager.restAPI = apiMock
+        authStateManager.restAPI = apiMock
     }
 
     override func tearDown() {
         OktaAuth.configuration = try? OktaAuthConfig.default()
         apiMock = nil
-        tokensManager = nil
+        authStateManager = nil
         super.tearDown()
     }
     
@@ -36,7 +36,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let introspectExpectation = expectation(description: "Will succeed with payload.")
         
-        tokensManager.introspect(token: tokensManager.accessToken) { payload, error in
+        authStateManager.introspect(token: authStateManager.accessToken) { payload, error in
             XCTAssertNil(error)
             XCTAssertEqual(true, payload?["active"] as? Bool)
             introspectExpectation.fulfill()
@@ -51,7 +51,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let introspectExpectation = expectation(description: "Will succeed with payload.")
         
-        tokensManager.introspect(token: nil) { payload, error in
+        authStateManager.introspect(token: nil) { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
                 OktaError.noBearerToken.localizedDescription,
@@ -69,7 +69,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let introspectExpectation = expectation(description: "Will fail with error.")
         
-        tokensManager.introspect(token: tokensManager.accessToken) { payload, error in
+        authStateManager.introspect(token: authStateManager.accessToken) { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
                 OktaError.APIError("Test Error").localizedDescription,
@@ -87,7 +87,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will succeed with payload.")
         
-        tokensManager.revoke(tokensManager.accessToken){ isRevoked, error in
+        authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
             XCTAssertEqual(true, isRevoked)
             XCTAssertNil(error)
             
@@ -103,7 +103,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
-        tokensManager.revoke(nil){ isRevoked, error in
+        authStateManager.revoke(nil){ isRevoked, error in
             XCTAssertNil(isRevoked)
             XCTAssertEqual(
                 OktaError.noBearerToken.localizedDescription,
@@ -122,7 +122,7 @@ class OktaTokenManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
-        tokensManager.revoke(tokensManager.accessToken){ isRevoked, error in
+        authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
             XCTAssertNil(isRevoked)
             XCTAssertEqual(
                 OktaError.APIError("Test Error").localizedDescription,
@@ -130,6 +130,41 @@ class OktaTokenManagerTests: XCTestCase {
             )
             
             revokeExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5.0)
+    }
+    
+    func testGetUserSucceeded() {
+        // Mock REST API calls
+        apiMock.configure(response: ["username" : "test"])
+    
+        let userInfoExpectation = expectation(description: "Will succeed with payload.")
+    
+        authStateManager.getUser() { payload, error in
+            XCTAssertEqual("test", payload?["username"] as? String)
+            XCTAssertNil(error)
+            
+            userInfoExpectation.fulfill()
+        }
+    
+        waitForExpectations(timeout: 5.0)
+    }
+    
+    func testGetUserFailed() {
+        // Mock REST API calls
+        apiMock.configure(error: .APIError("Test Error"))
+        
+        let userInfoExpectation = expectation(description: "Will fail with error.")
+        
+        authStateManager.getUser(){ payload, error in
+            XCTAssertNil(payload)
+            XCTAssertEqual(
+                OktaError.APIError("Test Error").localizedDescription,
+                error?.localizedDescription
+            )
+            
+            userInfoExpectation.fulfill()
         }
         
         waitForExpectations(timeout: 5.0)

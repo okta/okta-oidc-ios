@@ -22,18 +22,17 @@ public var configuration = try? OktaAuthConfig.default()
 // Cache the Discovery Metadata
 public var discoveredMetadata: [String: Any]?
 
-// Token manager
-public var tokenManager = OktaTokenManager.readFromSecureStorage() {
+public var authStateManager = OktaAuthStateManager.readFromSecureStorage() {
     didSet {
-        tokenManager?.writeToSecureStorage()
+        authStateManager?.writeToSecureStorage()
     }
 }
 
 public var isAuthenticated: Bool {
-    return tokenManager?.accessToken != nil
+    return authStateManager?.accessToken != nil
 }
 
-public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
     guard let configuration = configuration else {
         callback(nil, OktaError.notConfigured)
         return
@@ -46,9 +45,9 @@ public func signInWithBrowser(from presenter: UIViewController, callback: @escap
             return
         }
         
-        let tokenManager = OktaTokenManager(authState: authState)
-        OktaAuth.tokenManager = tokenManager
-        callback(tokenManager, nil)
+        let authStateManager = OktaAuthStateManager(authState: authState)
+        OktaAuth.authStateManager = authStateManager
+        callback(authStateManager, nil)
     }
 }
 
@@ -62,7 +61,7 @@ public func signOutOfOkta(from presenter: UIViewController, callback: @escaping 
     .run { _, error in callback(error) }
 }
 
-public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaTokenManager?, OktaError?) -> Void)) {
+public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
     guard let configuration = configuration else {
         callback(nil, OktaError.notConfigured)
         return
@@ -75,27 +74,16 @@ public func authenticate(withSessionToken sessionToken: String, callback: @escap
             return
         }
         
-        let tokenManager = OktaTokenManager(authState: authState)
-        OktaAuth.tokenManager = tokenManager
-        callback(tokenManager, nil)
+        let authStateManager = OktaAuthStateManager(authState: authState)
+        OktaAuth.authStateManager = authStateManager
+        callback(authStateManager, nil)
     }
 }
 
 public func clear() {
     // Clear auth state
-    tokenManager?.clear()
-    tokenManager = nil
-}
-
-public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
-    }
-
-    // Return user information from the /userinfo endpoint
-    UserInfoTask(token: tokenManager?.accessToken, config: configuration, oktaAPI: OktaRestApi())
-    .run(callback: callback)
+    authStateManager?.clear()
+    authStateManager = nil
 }
 
 public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
