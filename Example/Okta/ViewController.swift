@@ -56,8 +56,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
-        OktaAuth.getUser { response, error in
-            if let error = error { self.updateUI(updateText: "Error: \(error)") }
+        OktaAuth.authStateManager?.getUser() { response, error in
+            if let error = error {
+                self.updateUI(updateText: "Error: \(error)")
+                return
+            }
+
             if response != nil {
                 var userInfoText = ""
                 response?.forEach { userInfoText += ("\($0): \($1) \n") }
@@ -68,9 +72,9 @@ class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokenManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else { return }
 
-        OktaAuth.introspect(token: accessToken, callback: { payload, error in
+        authStateManager?.introspect(token: accessToken, callback: { payload, error in
             guard let isValid = payload?["active"] as? Bool else {
                 self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
                 return
@@ -82,9 +86,9 @@ class ViewController: UIViewController {
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = tokenManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else { return }
 
-        OktaAuth.revoke(accessToken) { response, error in
+        authStateManager?.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }
@@ -117,21 +121,21 @@ class ViewController: UIViewController {
     }
 
     func buildTokenTextView() {
-        guard let currentTokens = tokenManager else {
+        guard let currentManager = authStateManager else {
             tokenView.text = ""
             return
         }
 
         var tokenString = ""
-        if let accessToken = currentTokens.accessToken {
+        if let accessToken = currentManager.accessToken {
             tokenString += ("\nAccess Token: \(accessToken)\n")
         }
 
-        if let idToken = currentTokens.idToken {
+        if let idToken = currentManager.idToken {
             tokenString += "\nID Token: \(idToken)\n"
         }
 
-        if let refreshToken = currentTokens.refreshToken {
+        if let refreshToken = currentManager.refreshToken {
             tokenString += "\nRefresh Token: \(refreshToken)\n"
         }
 
