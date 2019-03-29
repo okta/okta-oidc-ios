@@ -26,14 +26,14 @@ struct TestUtils {
         "pu1WrZzuBHoQXuDkuYH6xKbKU2bopZGnA8PwrsIbr6PmmTaeH5ww0Q"
     static let mockRefreshToken = "mockRefreshToken"
 
-    static var tokenManager = { return TestUtils.setupMockTokenManager(issuer: mockIssuer) }
-    static var tokenManagerWithExpiration = { return TestUtils.setupMockTokenManager(issuer: mockIssuer, expiresIn: 5) }
-
-
-    static func setupMockTokenManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaTokenManager {
-        // Creates a mock Okta Token Manager object
+    static var authStateManager = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer) }
+    static var authStateManagerWithExpiration = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, expiresIn: 5) }
+    
+    static func setupMockAuthState(issuer: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
+        // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
-        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL)
+        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
+        
         let mockTokenRequest = OIDTokenRequest(
                    configuration: mockServiceConfig,
                        grantType: OIDGrantTypeRefreshToken,
@@ -74,16 +74,12 @@ struct TestUtils {
             ]
         )
 
-        let tempAuthState = OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+        return OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+    }
 
-        return OktaTokenManager(
-            authState: tempAuthState,
-            config: try! OktaAuthConfig(with: [
-                "issuer": mockIssuer,
-                "clientId": mockClientId,
-                "redirectUri": mockRedirectUri,
-                "scopes": mockScopes
-            ])
-        )
+
+    static func setupMockAuthStateManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaAuthStateManager {
+        let tempAuthState = setupMockAuthState(issuer: issuer, expiresIn: expiresIn)
+        return OktaAuthStateManager(authState: tempAuthState)
     }
 }

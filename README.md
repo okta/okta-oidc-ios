@@ -27,11 +27,11 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
   - [signInWithBrowser](#signInWithBrowser)
   - [signOutOfOkta](#signoutofokta)
   - [isAuthenticated](#isauthenticated)
-  - [getUser](#getuser)
-  - [introspect](#introspect)
-  - [refresh](#refresh)
-  - [revoke](#revoke)
-  - [tokenManager](#tokenManager)
+  - [authStateManager](#authStateManager)
+    - [introspect](#introspect)
+    - [renew](#renew)
+    - [revoke](#revoke)
+    - [getUser](#getuser)
   - [clear](#clear)
 - [Development](#development)
   - [Running Tests](#running-tests)
@@ -197,27 +197,24 @@ if !OktaAuth.isAuthenticated {
 }
 ```
 
-### getUser
+### authStateManager
 
-Calls the OpenID Connect UserInfo endpoint with the stored access token to return user claim information.
+Tokens are securely stored in the Keychain and can be retrieved by accessing the OktaAuthStateManager. You can request them at any time by calling on the `authStateManager` object bound to `OktaAuth`:
 
 ```swift
-OktaAuth.getUser { response, error in
-  if let error = error {
-    // Error
-    return
-  }
-
-  // JSON response
-}
+OktaAuth.authStateManager?.accessToken
+OktaAuth.authStateManager?.idToken
+OktaAuth.authStateManager?.refreshToken
 ```
 
-### introspect
+**Note:** Token manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaTokenManager-s returned by `signIn` operation.
+
+#### introspect
 
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-OktaAuth.introspect(token: accessToken, callback: { payload, error in
+OktaAuth.authStateManager?.introspect(token: accessToken, callback: { payload, error in
   guard let isValid = payload["active"] as? Bool else {
     // Error
     return
@@ -227,27 +224,27 @@ OktaAuth.introspect(token: accessToken, callback: { payload, error in
 })
 ```
 
-### refresh
+#### renew
 
-Since access tokens are traditionally short-lived, you can refresh expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
+Since access tokens are traditionally short-lived, you can renew expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
 
 ```swift
-OktaAuth.refresh { newAccessToken, error in
+OktaAuth.authStateManager?.renew { newAccessToken, error in
   if let error = error else {
     // Error
     return
   }
 
-  // newAccessToken
+  // renewed TokenManager
 }
 ```
 
-### revoke
+#### revoke
 
 Calls the revocation endpoint to revoke the specified token.
 
 ```swift
-OktaAuth.revoke(accessToken) { response, error in
+OktaAuth.authStateManager?.revoke(accessToken) { response, error in
   if let error = error else {
     // Error
     return
@@ -257,14 +254,19 @@ OktaAuth.revoke(accessToken) { response, error in
 }
 ```
 
-### tokenManager
+#### getUser
 
-Tokens are securely stored in the Keychain and can be retrieved by accessing the TokenManager. You can request them at any time by calling on the `tokenManager` object bound to `OktaAuth`:
+Calls the OpenID Connect UserInfo endpoint with the stored access token to return user claim information.
 
 ```swift
-OktaAuth.tokenManager?.accessToken
-OktaAuth.tokenManager?.idToken
-OktaAuth.tokenManager?.refreshToken
+OktaAuth.authStateManager?.getUser { response, error in
+  if let error = error {
+    // Error
+    return
+  }
+
+  // JSON response
+}
 ```
 
 ### clear
