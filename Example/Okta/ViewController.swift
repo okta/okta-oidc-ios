@@ -15,6 +15,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var signInButton: UIButton!
     
     private var oktaAppAuth: OktaAppAuth?
+    private var authStateManager: OktaAuthStateManager? = OktaAuthStateManager.readFromSecureStorage() {
+        didSet {
+            oldValue?.clear()
+            authStateManager?.writeToSecureStorage()
+        }
+    }
     
     private var isUITest: Bool {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
@@ -38,16 +44,12 @@ class ViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let oktaAppAuth = oktaAppAuth else {
+        guard let _ = oktaAppAuth else {
             self.updateUI(updateText: "SDK is not configured!")
             return
         }
         
-        if oktaAppAuth.isAuthenticated {
-            // If there is a valid accessToken
-            // build the token view.
-            self.buildTokenTextView()
-        }
+        self.buildTokenTextView()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -57,6 +59,9 @@ class ViewController: UIViewController {
         }
         
         authViewController.oktaAppAuth = oktaAppAuth
+        authViewController.onAuthenticated = { [weak self] authStateManager in
+            self?.authStateManager = authStateManager
+        }
     }
 
     @IBAction func signInButton(_ sender: Any) {
@@ -68,12 +73,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func clearTokens(_ sender: Any) {
-        oktaAppAuth?.clear()
+        authStateManager?.clear()
         self.buildTokenTextView()
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
-        oktaAppAuth?.authStateManager?.getUser() { response, error in
+        authStateManager?.getUser() { response, error in
             if let error = error {
                 self.updateUI(updateText: "Error: \(error)")
                 return
@@ -89,9 +94,9 @@ class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = oktaAppAuth?.authStateManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else { return }
 
-        oktaAppAuth?.authStateManager?.introspect(token: accessToken, callback: { payload, error in
+        authStateManager?.introspect(token: accessToken, callback: { payload, error in
             guard let isValid = payload?["active"] as? Bool else {
                 self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
                 return
@@ -103,32 +108,37 @@ class ViewController: UIViewController {
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = oktaAppAuth?.authStateManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else { return }
 
-        oktaAppAuth?.authStateManager?.revoke(accessToken) { response, error in
+        authStateManager?.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
         }
     }
 
     func signInWithBrowser() {
-        oktaAppAuth?.signInWithBrowser(from: self) { tokens, error in
+        oktaAppAuth?.signInWithBrowser(from: self) { authStateManager, error in
             if let error = error {
+                self.authStateManager = nil
                 self.updateUI(updateText: "Error: \(error)")
                 return
             }
             
+            self.authStateManager = authStateManager
             self.buildTokenTextView()
         }
     }
     
     func signOutOfOkta() {
-        oktaAppAuth?.signOutOfOkta(from: self) { error in
+        guard let authStateManager = authStateManager else { return }
+
+        oktaAppAuth?.signOutOfOkta(authStateManager, from: self) { error in
             if let error = error {
                 self.updateUI(updateText: "Error: \(error)")
                 return
             }
             
+            self.authStateManager = nil
             self.buildTokenTextView()
         }
     }
@@ -138,7 +148,7 @@ class ViewController: UIViewController {
     }
 
     func buildTokenTextView() {
-        guard let currentManager = oktaAppAuth?.authStateManager else {
+        guard let currentManager = authStateManager else {
             tokenView.text = ""
             return
         }

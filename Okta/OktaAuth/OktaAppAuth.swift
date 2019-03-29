@@ -19,20 +19,9 @@ public class OktaAppAuth {
 
     // Cache Okta.plist for reference
     public let configuration: OktaAuthConfig
-
-    // Token manager
-    public internal(set) var authStateManager = OktaAuthStateManager.readFromSecureStorage() {
-        didSet {
-            authStateManager?.writeToSecureStorage()
-        }
-    }
-
-    public var isAuthenticated: Bool {
-        return authStateManager?.accessToken != nil
-    }
     
     // Holds the browser session
-    var currentUserSessionTask: UserSessionTask?
+    private var currentUserSessionTask: UserSessionTask?
     
     public init(configuration: OktaAuthConfig? = nil) throws {
         guard let config = configuration ?? (try? OktaAuthConfig.default()) else {
@@ -55,15 +44,16 @@ public class OktaAppAuth {
             }
             
             let authStateManager = OktaAuthStateManager(authState: authState)
-            self?.authStateManager = authStateManager
             callback(authStateManager, nil)
         }
     }
 
-    public func signOutOfOkta(from presenter: UIViewController, callback: @escaping ((OktaError?) -> Void)) {
+    public func signOutOfOkta(_ authStateManager: OktaAuthStateManager,
+                              from presenter: UIViewController,
+                              callback: @escaping ((OktaError?) -> Void)) {
         // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
         // Validation is not needed for SignOut operation.
-        guard let idToken = authStateManager?.authState.lastTokenResponse?.idToken else {
+        guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
             callback(OktaError.missingIdToken)
             return
         }
@@ -86,15 +76,8 @@ public class OktaAppAuth {
             }
             
             let authStateManager = OktaAuthStateManager(authState: authState)
-            self.authStateManager = authStateManager
             callback(authStateManager, nil)
         }
-    }
-
-    public func clear() {
-        // Clear auth state
-        authStateManager?.clear()
-        authStateManager = nil
     }
 
     @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")

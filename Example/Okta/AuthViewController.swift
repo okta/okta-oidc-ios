@@ -19,6 +19,7 @@ class AuthViewController : UIViewController {
     @IBOutlet var progessIndicator: UIActivityIndicatorView!
     
     var oktaAppAuth: OktaAppAuth?
+    var onAuthenticated: ((OktaAuthStateManager?) -> Void)?
     
     private var token: String? {
         return tokenTextView.text
@@ -38,13 +39,15 @@ class AuthViewController : UIViewController {
         
         clearMessageView()
         showProgress()
-        oktaAppAuth?.authenticate(withSessionToken: token) { tokens, error in
+        oktaAppAuth?.authenticate(withSessionToken: token) { authStateManager, error in
             self.hideProgress()
             if let error = error {
                 self.presentError(error)
-            } else {
-                self.dismiss(animated: true, completion: nil)
+                return
             }
+            
+            self.onAuthenticated?(authStateManager)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

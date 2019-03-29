@@ -140,34 +140,6 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         }
     }
 
-    public func renew(callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
-        authState.setNeedsTokenRefresh()
-        authState.performAction(freshTokens: { accessToken, idToken, error in
-            if error != nil {
-                callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
-                return
-            }
-            
-            callback(self, nil)
-        })
-    }
-    
-    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
-        perfromRequest(to: .introspection, token: token, callback: callback)
-    }
-
-    public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
-        perfromRequest(to: .revocation, token: token) { payload, error in
-            if let error = error {
-                callback(nil, error)
-                return
-            }
-
-            // Token is considered to be revoked if there is no payload.
-            callback(payload?.count == 0 ? true : false , nil)
-        }
-    }
-
     public func clear() {
         OktaKeychain.clearAll()
     }
@@ -184,9 +156,9 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     }
 }
 
-extension OktaAuthStateManager {
+public extension OktaAuthStateManager {
     
-    static let secureStorageKey = "OktaAuthStateManager"
+    private static let secureStorageKey = "OktaAuthStateManager"
 
     class func readFromSecureStorage() -> OktaAuthStateManager? {
         guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {

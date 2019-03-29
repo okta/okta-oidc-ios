@@ -26,13 +26,11 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
 - [API Reference](#api-reference)
   - [signInWithBrowser](#signInWithBrowser)
   - [signOutOfOkta](#signoutofokta)
-  - [isAuthenticated](#isauthenticated)
   - [authStateManager](#authStateManager)
     - [introspect](#introspect)
     - [renew](#renew)
     - [revoke](#revoke)
     - [getUser](#getuser)
-  - [clear](#clear)
 - [Development](#development)
   - [Running Tests](#running-tests)
 
@@ -158,30 +156,30 @@ let configuration = OktaAuthConfig(with: [
 
 ### signInWithBrowser
 
-Start the authorization flow by simply calling `signIn`. 
+Start the authorization flow by simply calling `signIn`. In case of successful authorization, this operation will return valid `OktaAuthStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
 
 ```swift
-oktaAuth.signInWithBrowser(from: self) { tokens, error in
+oktaAuth.signInWithBrowser(from: self) { authStateManager, error in
   if let error = error {
     // Error
     return
   }
 
-  // tokens.accessToken
-  // tokens.idToken
-  // tokens.refreshToken
+  // authStateManager.accessToken
+  // authStateManager.idToken
+  // authStateManager.refreshToken
 }
 ```
 
 ### signOutOfOkta
 
-You can start the sign out flow by simply calling `signOutFromOkta`. This method will end the user's Okta session in the browser.
+You can start the sign out flow by simply calling `signOutFromOkta` with the appropriate `OktaAuthStateManager` . This method will end the user's Okta session in the browser.
 
-**Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods to terminate the user's local session in your application.
+**Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaAuthStateManager` to terminate the user's local session in your application.
 
 ```swift
 // Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
-oktaAuth.signOutOfOkta(from: self) { error in
+oktaAuth.signOutOfOkta(authStateManager, from: self) { error in
   if let error = error {
     // Error
     return
@@ -191,43 +189,33 @@ oktaAuth.signOutOfOkta(from: self) { error in
 
 ### authenticate
 
-If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`.
+If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. In case of successful authorization, this operation will return valid `OktaAuthStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
 
 ```swift
-oktaAuth.authenticate(withSessionToken: token) { tokens, error in
+oktaAuth.authenticate(withSessionToken: token) { authStateManager, error in
   self.hideProgress()
   if let error = error {
     // Error
     return
   }
 
-  // tokens.accessToken
-  // tokens.idToken
-  // tokens.refreshToken
-}
-```
-
-### isAuthenticated
-
-Returns `true` if there is a valid access token stored in the TokenManager. This is the best way to determine if a user has successfully authenticated into your app.
-
-```swift
-if !oktaAuth.isAuthenticated {
-  // Prompt for sign in
+  // authStateManager.accessToken
+  // authStateManager.idToken
+  // authStateManager.refreshToken
 }
 ```
 
 ### authStateManager
 
-Tokens are securely stored in the Keychain and can be retrieved by accessing the OktaAuthStateManager. You can request them at any time by calling on the `authStateManager` object bound to `oktaAuth`:
+Tokens are securely stored in the Keychain and can be retrieved by accessing the OktaAuthStateManager. 
 
 ```swift
-oktaAuth.authStateManager?.accessToken
-oktaAuth.authStateManager?.idToken
-oktaAuth.authStateManager?.refreshToken
+authStateManager?.accessToken
+authStateManager?.idToken
+authStateManager?.refreshToken
 ```
 
-**Note:** Token manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaAuthStateManager-s returned by `signIn` operation.
+**Note:** Auth state manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaAuthStateManager-s returned by `signInWithBrowser` or `authenticate` operation.
 
 #### introspect
 
