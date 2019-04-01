@@ -14,6 +14,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var tokenView: UITextView!
     @IBOutlet weak var signInButton: UIButton!
     
+    private var oktaAppAuth: OktaAppAuth?
+    private var authStateManager: OktaAuthStateManager? = OktaAuthStateManager.readFromSecureStorage() {
+        didSet {
+            oldValue?.clear()
+            authStateManager?.writeToSecureStorage()
+        }
+    }
+    
     private var isUITest: Bool {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
@@ -30,15 +38,29 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        oktaAppAuth = try? OktaAppAuth(configuration: isUITest ? testConfig : nil)
+        AppDelegate.shared.oktaAuth = oktaAppAuth
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        OktaAuth.configuration = self.isUITest ? testConfig : try? OktaAuthConfig.default()
-        if OktaAuth.isAuthenticated {
-            // If there is a valid accessToken
-            // build the token view.
-            self.buildTokenTextView()
+        guard let _ = oktaAppAuth else {
+            self.updateUI(updateText: "SDK is not configured!")
+            return
+        }
+        
+        self.buildTokenTextView()
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        guard let authViewController = segue.destination as? AuthViewController else {
+            return
+        }
+        
+        authViewController.oktaAppAuth = oktaAppAuth
+        authViewController.onAuthenticated = { [weak self] authStateManager in
+            self?.authStateManager = authStateManager
         }
     }
 
@@ -51,12 +73,12 @@ class ViewController: UIViewController {
     }
 
     @IBAction func clearTokens(_ sender: Any) {
-        OktaAuth.clear()
+        authStateManager?.clear()
         self.buildTokenTextView()
     }
 
     @IBAction func userInfoButton(_ sender: Any) {
-        OktaAuth.authStateManager?.getUser() { response, error in
+        authStateManager?.getUser() { response, error in
             if let error = error {
                 self.updateUI(updateText: "Error: \(error)")
                 return
@@ -95,23 +117,28 @@ class ViewController: UIViewController {
     }
 
     func signInWithBrowser() {
-        OktaAuth.signInWithBrowser(from: self) { tokens, error in
+        oktaAppAuth?.signInWithBrowser(from: self) { authStateManager, error in
             if let error = error {
+                self.authStateManager = nil
                 self.updateUI(updateText: "Error: \(error)")
                 return
             }
             
+            self.authStateManager = authStateManager
             self.buildTokenTextView()
         }
     }
     
     func signOutOfOkta() {
-        OktaAuth.signOutOfOkta(from: self) { error in
+        guard let authStateManager = authStateManager else { return }
+
+        oktaAppAuth?.signOutOfOkta(authStateManager, from: self) { error in
             if let error = error {
                 self.updateUI(updateText: "Error: \(error)")
                 return
             }
             
+            self.authStateManager = nil
             self.buildTokenTextView()
         }
     }

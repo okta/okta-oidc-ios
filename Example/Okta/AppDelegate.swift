@@ -12,7 +12,13 @@ import OktaAuth
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    static var shared: AppDelegate {
+        return UIApplication.shared.delegate as! AppDelegate
+    }
+
     var window: UIWindow?
+
+    var oktaAuth: OktaAppAuth?
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -21,6 +27,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        return OktaAuth.resume(url, options: options)
+        guard #available(iOS 11, *) else {
+            return oktaAuth?.resume(url, options: options) ?? false
+        }
+        
+        return false
     }
 }

@@ -10,86 +10,82 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-// Current version of the SDK
-let VERSION = "2.1.0"
+import UIKit
 
-// Holds the browser session
-public var currentAuthorizationFlow: OIDExternalUserAgentSession?
+public class OktaAppAuth {
 
-// Cache Okta.plist for reference
-public var configuration = try? OktaAuthConfig.default()
+    // Current version of the SDK
+    static let VERSION = "2.1.0"
 
-// Cache the Discovery Metadata
-public var discoveredMetadata: [String: Any]?
-
-public var authStateManager = OktaAuthStateManager.readFromSecureStorage() {
-    didSet {
-        authStateManager?.writeToSecureStorage()
-    }
-}
-
-public var isAuthenticated: Bool {
-    return authStateManager?.accessToken != nil
-}
-
-public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
-    }
+    // Cache Okta.plist for reference
+    public let configuration: OktaAuthConfig
     
-    SignInTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
-    .run { authState, error in
-        guard let authState = authState else {
-            callback(nil, error)
+    // Holds the browser session
+    private var currentUserSessionTask: UserSessionTask?
+    
+    public init(configuration: OktaAuthConfig? = nil) throws {
+        guard let config = configuration ?? (try? OktaAuthConfig.default()) else {
+            throw OktaError.notConfigured
+        }
+        
+        self.configuration = config
+    }
+
+    public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
+        let signInTask = SignInTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
+        currentUserSessionTask = signInTask
+
+        signInTask.run { [weak self] authState, error in
+            defer { self?.currentUserSessionTask = nil }
+        
+            guard let authState = authState else {
+                callback(nil, error)
+                return
+            }
+            
+            let authStateManager = OktaAuthStateManager(authState: authState)
+            callback(authStateManager, nil)
+        }
+    }
+
+    public func signOutOfOkta(_ authStateManager: OktaAuthStateManager,
+                              from presenter: UIViewController,
+                              callback: @escaping ((OktaError?) -> Void)) {
+        // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
+        // Validation is not needed for SignOut operation.
+        guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
+            callback(OktaError.missingIdToken)
             return
         }
         
-        let authStateManager = OktaAuthStateManager(authState: authState)
-        OktaAuth.authStateManager = authStateManager
-        callback(authStateManager, nil)
-    }
-}
-
-public func signOutOfOkta(from presenter: UIViewController, callback: @escaping ((OktaError?) -> Void)) {
-    guard let configuration = configuration else {
-        callback(OktaError.notConfigured)
-        return
+        let signOutTask = SignOutTask(idToken: idToken, presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
+        currentUserSessionTask = signOutTask
+        
+        signOutTask.run { [weak self] _, error in
+            self?.currentUserSessionTask = nil
+            callback(error)
+        }
     }
 
-    SignOutTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
-    .run { _, error in callback(error) }
-}
-
-public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
-    guard let configuration = configuration else {
-        callback(nil, OktaError.notConfigured)
-        return
+    public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
+        AuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaRestApi())
+        .run { authState, error in
+            guard let authState = authState else {
+                callback(nil, error)
+                return
+            }
+            
+            let authStateManager = OktaAuthStateManager(authState: authState)
+            callback(authStateManager, nil)
+        }
     }
 
-    AuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaRestApi())
-    .run { authState, error in
-        guard let authState = authState else {
-            callback(nil, error)
-            return
+    @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
+    public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        guard let currentUserSessionTask = currentUserSessionTask else {
+            return false
         }
         
-        let authStateManager = OktaAuthStateManager(authState: authState)
-        OktaAuth.authStateManager = authStateManager
-        callback(authStateManager, nil)
+        return currentUserSessionTask.resume(with: url)
     }
-}
-
-public func clear() {
-    // Clear auth state
-    authStateManager?.clear()
-    authStateManager = nil
-}
-
-public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-    if let authorizationFlow = currentAuthorizationFlow, authorizationFlow.resumeExternalUserAgentFlow(with: url){
-        currentAuthorizationFlow = nil
-        return true
-    }
-    return false
 }
