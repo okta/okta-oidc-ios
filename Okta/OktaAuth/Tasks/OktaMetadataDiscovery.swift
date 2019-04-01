@@ -23,8 +23,6 @@ class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
                 callback(nil, OktaError.parseFailure)
                 return
             }
-            // Cache the well-known endpoint response
-            OktaAuth.discoveredMetadata = dictResponse
 
             callback(OIDServiceConfiguration(discoveryDocument: oidConfig), nil)
         }, onError: { error in

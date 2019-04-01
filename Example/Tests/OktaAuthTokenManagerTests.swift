@@ -8,13 +8,6 @@ class OktaAuthTokenManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
-        OktaAuth.configuration = try? OktaAuthConfig(with:[
-            "issuer" : "http://test.issuer.com/oauth2/default",
-            "clientId" : "test_client",
-            "scopes" : "test",
-            "redirectUri" : "test:/callback"
-        ])
-        
         apiMock = OktaApiMock()
         authStateManager = OktaAuthStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer)
@@ -24,7 +17,6 @@ class OktaAuthTokenManagerTests: XCTestCase {
     }
 
     override func tearDown() {
-        OktaAuth.configuration = try? OktaAuthConfig.default()
         apiMock = nil
         authStateManager = nil
         super.tearDown()
@@ -168,5 +160,23 @@ class OktaAuthTokenManagerTests: XCTestCase {
         }
         
         waitForExpectations(timeout: 5.0)
+    }
+    
+    func testIdTokenDecode() {
+        // Expect that a provided token is parseable
+        let idToken =
+            "fakeHeader.eyJ2ZXIiOjEsImp0aSI6IkFULkNyNW55SFMtdTZwTjNaaDQ2cURJNTJBYmtCMkdoS3FzUEN" +
+            "CN3NsdVplR2MuN1NwTms3Wk9HQ3pnL04zdlhuRXcybTdGNjdwMm5CTktoUnF0VEVpc0UxTT0iLCJpc3MiO" +
+            "iJodHRwczovL2V4YW1wbGUuY29tIiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUxOTk2MDcxOSw" +
+            "iZXhwIjoxNTE5OTcyNTA4LCJjaWQiOiJ7Y2xpZW50SWR9IiwidWlkIjoie3VpZH0iLCJzY3AiOlsib3Blb" +
+            "mlkIiwib2ZmbGluZV9hY2Nlc3MiLCJwcm9maWxlIl0sInN1YiI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ." +
+            "fakeSignature"
+        
+        do {
+            let response = try OktaAuthStateManager.decodeJWT(idToken)
+            XCTAssertNotNil(response)
+        } catch let error {
+            XCTFail("Unexpected error: \(error)")
+        }
     }
 }

@@ -10,9 +10,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class SignInTask: OktaAuthTask<OIDAuthState> {
+class SignInTask: OktaAuthTask<OIDAuthState>, UserSessionTask {
 
     private let presenter: UIViewController
+    private(set) var userAgentSession: OIDExternalUserAgentSession?
     
     init(presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
         self.presenter = presenter
@@ -38,8 +39,10 @@ class SignInTask: OktaAuthTask<OIDAuthState> {
 
             // Start the authorization flow
             let externalUserAgent = OIDExternalUserAgentIOS(presenting: self.presenter)
-            OktaAuth.currentAuthorizationFlow = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
+            self.userAgentSession = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
                 authorizationResponse, error in
+                
+                defer { self.userAgentSession = nil }
 
                 guard let authResponse = authorizationResponse else {
                     return callback(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
