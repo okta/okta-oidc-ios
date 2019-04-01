@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var signInButton: UIButton!
     
     private var oktaAppAuth: OktaAppAuth?
-    private var authStateManager: OktaAuthStateManager? = OktaAuthStateManager.readFromSecureStorage() {
+    private var authStateManager: OktaAuthStateManager? {
         didSet {
             oldValue?.clear()
             authStateManager?.writeToSecureStorage()
@@ -40,6 +40,10 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         oktaAppAuth = try? OktaAppAuth(configuration: isUITest ? testConfig : nil)
         AppDelegate.shared.oktaAuth = oktaAppAuth
+        
+        if let config = oktaAppAuth?.configuration {
+            authStateManager = OktaAuthStateManager.readFromSecureStorage(for: config)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
