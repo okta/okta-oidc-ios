@@ -29,6 +29,8 @@
 		2F9B847321E91A14003E6F17 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F9B847221E91A14003E6F17 /* AuthViewController.swift */; };
 		2FA6431B223BDF220008DC97 /* OktaAuthTokenManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA6431A223BDF220008DC97 /* OktaAuthTokenManagerTests.swift */; };
 		2FA6431D223FDE250008DC97 /* OktaEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA6431C223FDE250008DC97 /* OktaEndpointTests.swift */; };
+		2FA943A3224E4746000C5E01 /* OktaUtilsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA943A2224E4746000C5E01 /* OktaUtilsTests.swift */; };
+		2FA943A5224E47E9000C5E01 /* OktaAppAuthTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA943A4224E47E9000C5E01 /* OktaAppAuthTests.swift */; };
 		2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */; };
 		2FEBB670223142E400BF1D16 /* DiscoveryTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */; };
 		2FEBB6722231596B00BF1D16 /* OktaAuthConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */; };
@@ -38,7 +40,6 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		7116BC591EF9FFDC004A4E1C /* OktaAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC561EF9FFDC004A4E1C /* OktaAuth.framework */; };
 		7116BC5A1EF9FFDC004A4E1C /* Pods_Okta_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7116BC571EF9FFDC004A4E1C /* Pods_Okta_Tests.framework */; };
 		7137EDFB1EFDBFB40082C30F /* Okta_UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712745EC1EFB0B3F00E820FC /* Okta_UITests.swift */; };
@@ -106,6 +107,8 @@
 		2F9B847221E91A14003E6F17 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		2FA6431A223BDF220008DC97 /* OktaAuthTokenManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuthTokenManagerTests.swift; sourceTree = "<group>"; };
 		2FA6431C223FDE250008DC97 /* OktaEndpointTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaEndpointTests.swift; sourceTree = "<group>"; };
+		2FA943A2224E4746000C5E01 /* OktaUtilsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaUtilsTests.swift; sourceTree = "<group>"; };
+		2FA943A4224E47E9000C5E01 /* OktaAppAuthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAppAuthTests.swift; sourceTree = "<group>"; };
 		2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaApiMock.swift; sourceTree = "<group>"; };
 		2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoveryTaskTests.swift; sourceTree = "<group>"; };
 		2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaAuthConfigTests.swift; sourceTree = "<group>"; };
@@ -119,7 +122,6 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* Okta_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Okta_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		6F10D9BB02A65C1CEC3B2993 /* Pods_Okta_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Okta_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7116BC551EF9FFDC004A4E1C /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppAuth.framework; path = "Pods/../build/Debug-iphoneos/AppAuth/AppAuth.framework"; sourceTree = "<group>"; };
 		7116BC561EF9FFDC004A4E1C /* OktaAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OktaAuth.framework; path = "../../Library/Developer/Xcode/DerivedData/Okta-auwqmzndabniaoghxgdrvwhlmgvr/Build/Products/Debug-iphoneos/OktaAuth/OktaAuth.framework"; sourceTree = "<group>"; };
@@ -264,15 +266,16 @@
 			isa = PBXGroup;
 			children = (
 				2F74361322098C9B00B47967 /* AppAuthTests */,
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				71ED66182058BF8E00B5D800 /* TestUtils.swift */,
 				2FEBB667222FE0B300BF1D16 /* OktaApiMock.swift */,
+				2FA943A4224E47E9000C5E01 /* OktaAppAuthTests.swift */,
 				FA58179D221D811B002C527E /* OktaKeychainTests.swift */,
 				2FEBB66F223142E400BF1D16 /* DiscoveryTaskTests.swift */,
 				2FEBB6712231596B00BF1D16 /* OktaAuthConfigTests.swift */,
 				2FA6431A223BDF220008DC97 /* OktaAuthTokenManagerTests.swift */,
 				2FA6431C223FDE250008DC97 /* OktaEndpointTests.swift */,
+				2FA943A2224E4746000C5E01 /* OktaUtilsTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -622,8 +625,10 @@
 				2F74363A22098C9B00B47967 /* OIDURLQueryComponentTests.m in Sources */,
 				71ED661A2058C24B00B5D800 /* TestUtils.swift in Sources */,
 				2F74364322098C9B00B47967 /* OIDResponseTypesTests.m in Sources */,
+				2FA943A5224E47E9000C5E01 /* OktaAppAuthTests.swift in Sources */,
 				2FEBB6722231596B00BF1D16 /* OktaAuthConfigTests.swift in Sources */,
 				2F74363C22098C9B00B47967 /* OIDGrantTypesTests.m in Sources */,
+				2FA943A3224E4746000C5E01 /* OktaUtilsTests.swift in Sources */,
 				2F74364222098C9B00B47967 /* OIDAuthStateTests.m in Sources */,
 				FA58179F221D8138002C527E /* OktaKeychainTests.swift in Sources */,
 				2F74363B22098C9B00B47967 /* OIDServiceConfigurationTests.m in Sources */,
@@ -637,7 +642,6 @@
 				7169AE1E1EF5F27200313EB8 /* AppDelegate.swift in Sources */,
 				2FEBB668222FE0B300BF1D16 /* OktaApiMock.swift in Sources */,
 				2FA6431B223BDF220008DC97 /* OktaAuthTokenManagerTests.swift in Sources */,
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 				2F74363E22098C9B00B47967 /* OIDEndSessionRequestTests.m in Sources */,
 				2F74363622098C9B00B47967 /* OIDAuthorizationResponseTests.m in Sources */,
 				2F74364122098C9B00B47967 /* OIDServiceDiscoveryTests.m in Sources */,

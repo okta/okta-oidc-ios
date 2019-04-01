@@ -156,9 +156,9 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     }
 }
 
-extension OktaAuthStateManager {
+public extension OktaAuthStateManager {
     
-    static let secureStorageKey = "OktaAuthStateManager"
+    private static let secureStorageKey = "OktaAuthStateManager"
 
     class func readFromSecureStorage() -> OktaAuthStateManager? {
         guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
@@ -186,6 +186,12 @@ extension OktaAuthStateManager {
     }
 }
 
+internal extension OktaAuthStateManager {
+    var discoveryDictionary: [String: Any]? {
+        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
+    }
+}
+
 private extension OktaAuthStateManager {
     var issuer: String? {
         return authState.lastAuthorizationResponse.request.configuration.issuer?.path
@@ -194,10 +200,7 @@ private extension OktaAuthStateManager {
     var clientId: String {
         return authState.lastAuthorizationResponse.request.clientID
     }
-    
-    var discoveryDictionary: [String: Any]? {
-        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
-    }
+
     
     func perfromRequest(to endpoint: OktaEndpoint,
                         token: String?,

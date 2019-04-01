@@ -15,8 +15,7 @@ enum OktaEndpoint {
     case revocation
     case userInfo
     
-    func getURL(discoveredMetadata: [String: Any]? = OktaAuth.discoveredMetadata,
-                issuer: String? = OktaAuth.configuration?.issuer) -> URL? {
+    func getURL(discoveredMetadata: [String: Any]? = nil, issuer: String? = nil) -> URL? {
         if let discoveredEndpoint = discoveredMetadata?[discoveryMetadataKey] as? String {
             return URL(string: discoveredEndpoint)
         }
