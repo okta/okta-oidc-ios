@@ -157,6 +157,8 @@ open class OktaAuthStateManager: NSObject, NSCoding {
 }
 
 public extension OktaAuthStateManager {
+
+    private static let legacySecureStorageKey = "OktaAuthStateManager"
     
     class func storageKey(clientId: String, issuer: String?) -> String {
         guard let issuer = issuer else {
@@ -165,18 +167,14 @@ public extension OktaAuthStateManager {
         
         return issuer + "_" + clientId
     }
+    
+    class func readFromSecureStorage() -> OktaAuthStateManager? {
+        return readFromSecureStorage(forKey: legacySecureStorageKey)
+    }
 
     class func readFromSecureStorage(for config: OktaAuthConfig) -> OktaAuthStateManager? {
         let secureStorageKey = storageKey(clientId: config.clientId, issuer: config.issuer)
-        guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
-            return nil
-        }
-
-        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaAuthStateManager else {
-            return nil
-        }
-
-        return state
+        return readFromSecureStorage(forKey: secureStorageKey)
     }
     
     func writeToSecureStorage() {
@@ -191,6 +189,18 @@ public extension OktaAuthStateManager {
         } catch let error {
             print("Error: \(error)")
         }
+    }
+    
+    private class func readFromSecureStorage(forKey secureStorageKey: String) -> OktaAuthStateManager? {
+        guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
+            return nil
+        }
+
+        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaAuthStateManager else {
+            return nil
+        }
+
+        return state
     }
 }
 
