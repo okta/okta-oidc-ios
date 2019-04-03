@@ -157,8 +157,6 @@ open class OktaAuthStateManager: NSObject, NSCoding {
 }
 
 public extension OktaAuthStateManager {
-
-    private static let legacySecureStorageKey = "OktaAuthStateManager"
     
     class func storageKey(clientId: String, issuer: String?) -> String {
         guard let issuer = issuer else {
@@ -169,7 +167,7 @@ public extension OktaAuthStateManager {
     }
     
     class func readFromSecureStorage() -> OktaAuthStateManager? {
-        return readFromSecureStorage(forKey: legacySecureStorageKey)
+        return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
 
     class func readFromSecureStorage(for config: OktaAuthConfig) -> OktaAuthStateManager? {
