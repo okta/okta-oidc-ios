@@ -158,9 +158,38 @@ open class OktaAuthStateManager: NSObject, NSCoding {
 
 public extension OktaAuthStateManager {
     
-    private static let secureStorageKey = "OktaAuthStateManager"
-
+    class func storageKey(clientId: String, issuer: String?) -> String {
+        guard let issuer = issuer else {
+            return clientId
+        }
+        
+        return issuer + "_" + clientId
+    }
+    
     class func readFromSecureStorage() -> OktaAuthStateManager? {
+        return readFromSecureStorage(forKey: "OktaAuthStateManager")
+    }
+
+    class func readFromSecureStorage(for config: OktaAuthConfig) -> OktaAuthStateManager? {
+        let secureStorageKey = storageKey(clientId: config.clientId, issuer: config.issuer)
+        return readFromSecureStorage(forKey: secureStorageKey)
+    }
+    
+    func writeToSecureStorage() {
+        let secureStorageKey = OktaAuthStateManager.storageKey(clientId: self.clientId, issuer: self.issuer)
+        let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
+        do {
+            try OktaKeychain.set(
+                key: secureStorageKey,
+                data: authStateData,
+                accessibility: self.accessibility
+            )
+        } catch let error {
+            print("Error: \(error)")
+        }
+    }
+    
+    private class func readFromSecureStorage(forKey secureStorageKey: String) -> OktaAuthStateManager? {
         guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
             return nil
         }
@@ -170,19 +199,6 @@ public extension OktaAuthStateManager {
         }
 
         return state
-    }
-    
-    func writeToSecureStorage() {
-        let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
-        do {
-            try OktaKeychain.set(
-                key: OktaAuthStateManager.secureStorageKey,
-                data: authStateData,
-                accessibility: self.accessibility
-            )
-        } catch let error {
-            print("Error: \(error)")
-        }
     }
 }
 
@@ -194,7 +210,7 @@ internal extension OktaAuthStateManager {
 
 private extension OktaAuthStateManager {
     var issuer: String? {
-        return authState.lastAuthorizationResponse.request.configuration.issuer?.path
+        return authState.lastAuthorizationResponse.request.configuration.issuer?.absoluteString
     }
     
     var clientId: String {

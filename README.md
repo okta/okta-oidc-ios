@@ -215,7 +215,29 @@ authStateManager?.idToken
 authStateManager?.refreshToken
 ```
 
-**Note:** Auth state manager stores tokens of the last logged in user. If you need to use OktaAuth SDK to support several clients you should manage OktaAuthStateManager-s returned by `signInWithBrowser` or `authenticate` operation.
+User is responsible for storing OktaAuthStateManager returned by `signInWithBrowser` or `authenticate` operation. To store manager call the `writeToSecureStorage` method:
+
+```swift
+oktaAuth.signInWithBrowser(from: self) { authStateManager, error in
+  authStateManager.writeToSecureStorage()
+}
+```
+
+To retrieve stored manager call `readFromSecureStorage(for: )` and pass here Okta configuration that corresponds to a manager you are interested in.
+
+```swift
+guard let authStateManager = OktaAuthStateManager.readFromSecureStorage(for: oktaConfig) else {
+    // unauthenticated
+}
+
+//authenticated 
+// authStateManager.accessToken
+// authStateManager.idToken
+// authStateManager.refreshToken
+
+```
+
+**Note:** In OktaAppAuth SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaAuthStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaAuthStateManager` stored on a legacy way, so user could retrieve previously stored `OktaAuthStateManager` after switching to a newer version of SDK. 
 
 #### introspect
 

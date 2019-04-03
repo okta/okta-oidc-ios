@@ -179,4 +179,36 @@ class OktaAuthTokenManagerTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
+    
+    func testReadWriteToSecureStorage() {
+        guard let testConfig = try? OktaAuthConfig(with: [
+            "clientId" : TestUtils.mockClientId,
+            "issuer" : TestUtils.mockIssuer,
+            "scopes" : "test",
+            "redirectUri" : "http://test"
+        ]) else {
+            XCTFail("Unable to create test config")
+            return
+        }
+        
+        let manager = TestUtils.authStateManager()
+        
+        XCTAssertNil(OktaAuthStateManager.readFromSecureStorage(for: testConfig))
+        
+        manager.writeToSecureStorage()
+        
+        let storedManager = OktaAuthStateManager.readFromSecureStorage(for: testConfig)
+        XCTAssertNotNil(storedManager)
+        XCTAssertEqual(
+            storedManager?.authState.lastAuthorizationResponse.accessToken,
+            manager.authState.lastAuthorizationResponse.accessToken
+        )
+        XCTAssertEqual(
+            storedManager?.authState.lastAuthorizationResponse.idToken,
+            manager.authState.lastAuthorizationResponse.idToken
+        )
+        
+        manager.clear()
+        XCTAssertNil(OktaAuthStateManager.readFromSecureStorage(for: testConfig))
+    }
 }
