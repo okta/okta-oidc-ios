@@ -12,10 +12,10 @@
 
 open class OktaAuthStateManager: NSObject, NSCoding {
 
-    open var authState: OIDAuthState
-    open var accessibility: CFString
+    @objc open var authState: OIDAuthState
+    @objc open var accessibility: CFString
 
-    open var accessToken: String? {
+    @objc open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
         get {
             guard let tokenResponse = self.authState.lastTokenResponse,
@@ -28,40 +28,37 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         }
     }
 
-    open var idToken: String? {
+    @objc open var idToken: String? {
         // Return the known idToken if it is valid
         get {
             guard let tokenResponse = self.authState.lastTokenResponse,
                 let token = tokenResponse.idToken else {
                     return nil
             }
-            do {
-                // Attempt to validate the token
-                let valid = try isValidToken(idToken: token)
-                return valid ? token : nil
-            } catch let error {
-                // Capture the error here since we aren't throwing
-                print(error)
+
+            if let _ = validateToken(idToken: token) {
                 return nil
             }
+
+            return token
         }
     }
 
-    open var refreshToken: String? {
+    @objc open var refreshToken: String? {
         return self.authState.refreshToken
     }
     
     // Needed for UTs only. Entry point for mocking network calls.
     var restAPI: OktaHttpApiProtocol = OktaRestApi()
 
-    public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
+    @objc public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
         self.accessibility = accessibility
 
         super.init()
     }
 
-    required public convenience init?(coder decoder: NSCoder) {
+    @objc required public convenience init?(coder decoder: NSCoder) {
         guard let state = decoder.decodeObject(forKey: "authState") as? OIDAuthState else {
             return nil
         }
@@ -72,29 +69,29 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         )
     }
 
-    public func encode(with coder: NSCoder) {
+    @objc public func encode(with coder: NSCoder) {
         coder.encode(self.authState, forKey: "authState")
         coder.encode(self.accessibility, forKey: "accessibility")
     }
 
-    public func isValidToken(idToken: String?) throws -> Bool {
+    @objc public func validateToken(idToken: String?) -> Error? {
         guard let idToken = idToken,
             let tokenObject = OIDIDToken(idTokenString: idToken) else {
-                throw OktaError.JWTDecodeError
+                return OktaError.JWTDecodeError
         }
         
         if tokenObject.expiresAt.timeIntervalSinceNow < 0 {
-            throw OktaError.JWTValidationError("ID Token expired")
+            return OktaError.JWTValidationError("ID Token expired")
         }
         
-        return true
+        return nil
     }
     
     // Decodes the payload of a JWT
-    public static func decodeJWT(_ token: String) throws -> [String: Any]? {
+    @objc public static func decodeJWT(_ token: String) throws -> [String: Any] {
         let payload = token.split(separator: ".")
         guard payload.count > 1 else {
-            return nil
+            return [:]
         }
         
         var encodedPayload = "\(payload[1])"
@@ -109,10 +106,14 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         
         let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
         
-        return jsonObject as? [String: Any]
+        guard let result = jsonObject as? [String: Any] else {
+            throw OktaError.JWTDecodeError
+        }
+        
+        return result
     }
 
-    public func renew(callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
+    @objc public func renew(callback: @escaping ((OktaAuthStateManager?, Error?) -> Void)) {
         authState.setNeedsTokenRefresh()
         authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
@@ -124,29 +125,29 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         })
     }
     
-    public func introspect(token: String?, callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+    @objc public func introspect(token: String?, callback: @escaping ([String : Any]?, Error?) -> Void) {
         perfromRequest(to: .introspection, token: token, callback: callback)
     }
 
-    public func revoke(_ token: String?, callback: @escaping (Bool?, OktaError?) -> Void) {
+    @objc public func revoke(_ token: String?, callback: @escaping (Bool, Error?) -> Void) {
         perfromRequest(to: .revocation, token: token) { payload, error in
             if let error = error {
-                callback(nil, error)
+                callback(false, error)
                 return
-            }
+            }            
 
             // Token is considered to be revoked if there is no payload.
-            callback(payload?.count == 0 ? true : false , nil)
+            callback(payload?.isEmpty ?? true , nil)
         }
     }
 
-    public func clear() {
+    @objc public func clear() {
         OktaKeychain.clearAll()
     }
     
-    public func getUser(_ callback: @escaping ([String:Any]?, OktaError?) -> Void) {
+    @objc public func getUser(_ callback: @escaping ([String:Any]?, Error?) -> Void) {
         guard let token = accessToken else {
-            callback(nil, .noBearerToken)
+            callback(nil, OktaError.noBearerToken)
             return
         }
 
