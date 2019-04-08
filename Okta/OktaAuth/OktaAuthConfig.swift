@@ -10,22 +10,22 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-public struct OktaAuthConfig: Codable {
-    public static let defaultPlistName = "Okta"
+public class OktaAuthConfig: NSObject, Codable {
+    @objc public static let defaultPlistName = "Okta"
     
-    public let clientId: String
-    public let issuer: String
-    public let scopes: String
-    public let redirectUri: URL
-    public let logoutRedirectUri: URL?
+    @objc public let clientId: String
+    @objc public let issuer: String
+    @objc public let scopes: String
+    @objc public let redirectUri: URL
+    @objc public let logoutRedirectUri: URL?
     
-    public let additionalParams: [String:String]?
-     
-    public static func `default`() throws -> OktaAuthConfig {
+    @objc public let additionalParams: [String:String]?
+
+    @objc public static func `default`() throws -> OktaAuthConfig {
         return try OktaAuthConfig(fromPlist: defaultPlistName)
     }
-     
-    public init(with dict: [String: String]) throws {
+
+    @objc public init(with dict: [String: String]) throws {
         guard let clientId = dict["clientId"],
               let issuer = dict["issuer"],
               let scopes = dict["scopes"],
@@ -47,8 +47,8 @@ public struct OktaAuthConfig: Codable {
         
         additionalParams = OktaAuthConfig.extractAdditionalParams(dict)
     }
-     
-    public init(fromPlist plistName: String) throws {
+
+    @objc public convenience init(fromPlist plistName: String) throws {
         guard let path = Bundle.main.url(forResource: plistName, withExtension: "plist") else {
             throw OktaError.noPListGiven
         }
@@ -75,15 +75,16 @@ public struct OktaAuthConfig: Codable {
         
         return configCopy
     }
-}
-
-extension OktaAuthConfig: Equatable {
-    public static func == (lhs: OktaAuthConfig, rhs: OktaAuthConfig) -> Bool {
-        return lhs.clientId == rhs.clientId &&
-               lhs.issuer == rhs.issuer &&
-               lhs.scopes == rhs.scopes &&
-               lhs.redirectUri == rhs.redirectUri &&
-               lhs.logoutRedirectUri == rhs.logoutRedirectUri &&
-               lhs.additionalParams == rhs.additionalParams
+    
+    override public func isEqual(_ object: Any?) -> Bool {
+        guard let config = object as? OktaAuthConfig else {
+            return false
+        }
+        return self.clientId == config.clientId &&
+               self.issuer == config.issuer &&
+               self.scopes == config.scopes &&
+               self.redirectUri == config.redirectUri &&
+               self.logoutRedirectUri == config.logoutRedirectUri &&
+               self.additionalParams == config.additionalParams
     }
 }

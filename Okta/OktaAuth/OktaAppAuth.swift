@@ -12,18 +12,18 @@
 
 import UIKit
 
-public class OktaAppAuth {
+public class OktaAppAuth: NSObject {
 
     // Current version of the SDK
-    static let VERSION = "2.1.0"
+    @objc public static let VERSION = "2.1.0"
 
     // Cache Okta.plist for reference
-    public let configuration: OktaAuthConfig
+    @objc public let configuration: OktaAuthConfig
     
     // Holds the browser session
     private var currentUserSessionTask: UserSessionTask?
     
-    public init(configuration: OktaAuthConfig? = nil) throws {
+    @objc public init(configuration: OktaAuthConfig? = nil) throws {
         guard let config = configuration ?? (try? OktaAuthConfig.default()) else {
             throw OktaError.notConfigured
         }
@@ -31,7 +31,8 @@ public class OktaAppAuth {
         self.configuration = config
     }
 
-    public func signInWithBrowser(from presenter: UIViewController, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
+    @objc public func signInWithBrowser(from presenter: UIViewController,
+                                        callback: @escaping ((OktaAuthStateManager?, Error?) -> Void)) {
         let signInTask = SignInTask(presenter: presenter, config: configuration, oktaAPI: OktaRestApi())
         currentUserSessionTask = signInTask
 
@@ -48,9 +49,9 @@ public class OktaAppAuth {
         }
     }
 
-    public func signOutOfOkta(_ authStateManager: OktaAuthStateManager,
-                              from presenter: UIViewController,
-                              callback: @escaping ((OktaError?) -> Void)) {
+    @objc public func signOutOfOkta(_ authStateManager: OktaAuthStateManager,
+                                    from presenter: UIViewController,
+                                    callback: @escaping ((Error?) -> Void)) {
         // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
         // Validation is not needed for SignOut operation.
         guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
@@ -67,7 +68,8 @@ public class OktaAppAuth {
         }
     }
 
-    public func authenticate(withSessionToken sessionToken: String, callback: @escaping ((OktaAuthStateManager?, OktaError?) -> Void)) {
+    @objc public func authenticate(withSessionToken sessionToken: String,
+                                   callback: @escaping ((OktaAuthStateManager?, Error?) -> Void)) {
         AuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaRestApi())
         .run { authState, error in
             guard let authState = authState else {
@@ -81,7 +83,7 @@ public class OktaAppAuth {
     }
 
     @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
-    public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+    @objc public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         guard let currentUserSessionTask = currentUserSessionTask else {
             return false
         }

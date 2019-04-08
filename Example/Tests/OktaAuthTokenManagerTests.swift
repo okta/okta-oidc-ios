@@ -96,7 +96,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         let revokeExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.revoke(nil){ isRevoked, error in
-            XCTAssertNil(isRevoked)
+            XCTAssertFalse(isRevoked)
             XCTAssertEqual(
                 OktaError.noBearerToken.localizedDescription,
                 error?.localizedDescription
@@ -115,7 +115,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         let revokeExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
-            XCTAssertNil(isRevoked)
+            XCTAssertFalse(isRevoked)
             XCTAssertEqual(
                 OktaError.APIError("Test Error").localizedDescription,
                 error?.localizedDescription
