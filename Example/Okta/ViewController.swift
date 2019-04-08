@@ -116,7 +116,7 @@ class ViewController: UIViewController {
 
         authStateManager?.revoke(accessToken) { response, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
-            if response != nil { self.updateUI(updateText: "AccessToken was revoked") }
+            self.updateUI(updateText: "AccessToken was revoked")
         }
     }
 
