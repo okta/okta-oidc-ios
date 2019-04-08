@@ -20,7 +20,7 @@
 
 #import "OIDServiceDiscoveryTests.h"
 
-@import OktaAuth;
+@import OktaOidc;
 
 /*! @brief Test value for the @c redirectURL property.
  */

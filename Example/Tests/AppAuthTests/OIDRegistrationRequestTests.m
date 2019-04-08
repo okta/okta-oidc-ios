@@ -20,7 +20,7 @@
 
 #import "OIDServiceConfigurationTests.h"
 
-@import OktaAuth;
+@import OktaOidc;
 
 /*! @brief Test key for the @c additionalParameters property.
  */

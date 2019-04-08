@@ -13,11 +13,11 @@
 // Okta Extension of OIDAuthState
 extension OIDAuthState {
 
-    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, callback: @escaping (OIDAuthState?, OktaError?) -> Void ) {
+    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
         // setup custom URL session
         self.setupURLSession()
         
-        let finalize: ((OIDAuthState?, OktaError?) -> Void) = { state, error in
+        let finalize: ((OIDAuthState?, OktaOidcError?) -> Void) = { state, error in
             self.restoreURLSession()
             callback(state, error)
         }
@@ -25,13 +25,13 @@ extension OIDAuthState {
         // Make authCode request
         OIDAuthorizationService.perform(authRequest: authRequest, callback: { authResponse, error in
             guard let authResponse = authResponse else {
-                finalize(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
             }
 
             guard let _ = authResponse.authorizationCode,
                   let tokenRequest = authResponse.tokenExchangeRequest() else {
-                    finalize(nil, OktaError.unableToGetAuthCode)
+                    finalize(nil, OktaOidcError.unableToGetAuthCode)
                     return
             }
 
@@ -39,7 +39,7 @@ extension OIDAuthState {
             OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, callback:
             { tokenResponse, error in
                 guard let tokenResponse = tokenResponse else {
-                    finalize(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                    finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     return
                 }
 

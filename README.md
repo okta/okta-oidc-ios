@@ -4,11 +4,11 @@
 [![License](https://img.shields.io/cocoapods/l/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 [![Platform](https://img.shields.io/cocoapods/p/OktaAuth.svg?style=flat)](http://cocoapods.org/pods/OktaAuth)
 
-# Okta AppAuth-iOS Wrapper Library
+# Okta Open ID Connect Library
 
-This library is a wrapper around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS)* SDK for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
+> This is a new version of refactored AppAuth SDK. The old AppAuth package is now deprecated. 
 
-> *Okta is using a forked version of [AppAuth-iOS](https://github.com/okta/AppAuth-iOS) with logout functionality. See [#259](https://github.com/openid/AppAuth-iOS/pull/259) for more details on this pending addition.
+This library is a wrapper around the AppAuth-iOS SDK for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
 You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation.
 
@@ -26,7 +26,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
 - [API Reference](#api-reference)
   - [signInWithBrowser](#signInWithBrowser)
   - [signOutOfOkta](#signoutofokta)
-  - [authStateManager](#authStateManager)
+  - [stateManager](#stateManager)
     - [introspect](#introspect)
     - [renew](#renew)
     - [revoke](#revoke)
@@ -38,19 +38,19 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
 
 ## Getting Started
 
-Installing the Okta AppAuth wrapper into your project is simple. The easiest way to include this library into your project is through [CocoaPods](http://cocoapods.org).
+Installing the OktaOidc SDK into your project is simple. The easiest way to include this library into your project is through [CocoaPods](http://cocoapods.org).
 
 You'll also need:
 
 - An Okta account, called an _organization_ (sign up for a free [developer organization](https://developer.okta.com/signup/) if you need one).
-- An Okta Application, configured as a Native App. This is done from the Okta Developer Console and you can find instructions [here](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce). When following the wizard, use the default properties. They are are designed to work with our sample applications.
+- An Okta Application, configured as a Native App. This is done from the Okta Developer Console and you can find instructions [here](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce). When following the wizard, use the default properties. They are designed to work with our sample applications.
 
 ### Using Cocoapods
 
 Simply add the following line to your `Podfile`:
 
 ```ruby
-pod 'OktaAuth'
+pod 'OktaOidc'
 ```
 
 Then install it into your project:
@@ -71,13 +71,13 @@ Next, update your `AppDelegate` to include the following function to allow the r
 
 ```swift
 // AppDelegate.swift
-import OktaAuth
+import OktaOidc
 
-var oktaAuth: OktaAppAuth?
+var oktaOidc: OktaOidc?
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
   // oktaAuth - Configured OktaAppAuth instance used to start SignIn/SignOut flow. 
-  return oktaAuth.resume(url: url, options: options)
+  return oktaOidc.resume(url: url, options: options)
 }
 ```
 
@@ -93,20 +93,20 @@ You can also browse the full [API reference documentation](#api-reference).
 
 ## Configuration Reference
 
-Before using this SDK you have to create a new object of  `OktaAppAuth`. You can instantiate  `OktaAppAuth` w/o parameters that means that SDK will use `Okta.plist` for configuration values. Alternatively you can create `OktaAppAuth` with custom configuration. 
+Before using this SDK you have to create a new object of  `OktaOidc`. You can instantiate  `OktaOidc` w/o parameters that means that SDK will use `Okta.plist` for configuration values. Alternatively you can create `OktaOidc` with custom configuration. 
 
 ```swift
-import OktaAuth
+import OktaOidc
 
 // Use the default Okta.plist configuration
-let oktaAppAuth = OktaAppAuth()
+let oktaOidc = OktaOidc()
 
 // Use configuration from another resource
-let config = OktaAuthConfig(/* plist */)
-let config = OktaAuthConfig(/* dictionary */)
+let config = OktaOidcConfig(/* plist */)
+let config = OktaOidcConfig(/* dictionary */)
 
-// Instantiate OktaAuth with custom configuration object
-let oktaAuth = OktaAppAuth(configuration: config)
+// Instantiate OktaOidc with custom configuration object
+let oktaOidc = OktaOidc(configuration: config)
 
 ```
 
@@ -138,10 +138,10 @@ The easiest way is to create a property list in your application's bundle. By de
 
 ### Configuration object
 
-Alternatively, you can create a configuration object ( `OktaAuthConfig`) from dictionary with the required values:
+Alternatively, you can create a configuration object ( `OktaOidcConfig`) from dictionary with the required values:
 
 ```swift
-let configuration = OktaAuthConfig(with: [
+let configuration = OktaOidcConfig(with: [
   "issuer": "https://{yourOktaDomain}/oauth2/default",
   "clientId": "{clientID}",
   "redirectUri": "{redirectUri}",
@@ -156,30 +156,30 @@ let configuration = OktaAuthConfig(with: [
 
 ### signInWithBrowser
 
-Start the authorization flow by simply calling `signIn`. In case of successful authorization, this operation will return valid `OktaAuthStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
+Start the authorization flow by simply calling `signIn`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
 
 ```swift
-oktaAuth.signInWithBrowser(from: self) { authStateManager, error in
+oktaOidc.signInWithBrowser(from: self) { stateManager, error in
   if let error = error {
     // Error
     return
   }
 
-  // authStateManager.accessToken
-  // authStateManager.idToken
-  // authStateManager.refreshToken
+  // stateManager.accessToken
+  // stateManager.idToken
+  // stateManager.refreshToken
 }
 ```
 
 ### signOutOfOkta
 
-You can start the sign out flow by simply calling `signOutFromOkta` with the appropriate `OktaAuthStateManager` . This method will end the user's Okta session in the browser.
+You can start the sign out flow by simply calling `signOutFromOkta` with the appropriate `OktaOidcStateManager` . This method will end the user's Okta session in the browser.
 
-**Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaAuthStateManager` to terminate the user's local session in your application.
+**Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaOidcStateManager` to terminate the user's local session in your application.
 
 ```swift
 // Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
-oktaAuth.signOutOfOkta(authStateManager, from: self) { error in
+oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
   if let error = error {
     // Error
     return
@@ -189,62 +189,62 @@ oktaAuth.signOutOfOkta(authStateManager, from: self) { error in
 
 ### authenticate
 
-If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. In case of successful authorization, this operation will return valid `OktaAuthStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
+If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
 
 ```swift
-oktaAuth.authenticate(withSessionToken: token) { authStateManager, error in
+oktaOidc.authenticate(withSessionToken: token) { stateManager, error in
   self.hideProgress()
   if let error = error {
     // Error
     return
   }
 
-  // authStateManager.accessToken
-  // authStateManager.idToken
-  // authStateManager.refreshToken
+  // stateManager.accessToken
+  // stateManager.idToken
+  // stateManager.refreshToken
 }
 ```
 
-### authStateManager
+### stateManager
 
-Tokens are securely stored in the Keychain and can be retrieved by accessing the OktaAuthStateManager. 
+Tokens are securely stored in the Keychain and can be retrieved by accessing the OktaOidcStateManager. 
 
 ```swift
-authStateManager?.accessToken
-authStateManager?.idToken
-authStateManager?.refreshToken
+stateManager?.accessToken
+stateManager?.idToken
+stateManager?.refreshToken
 ```
 
 User is responsible for storing OktaAuthStateManager returned by `signInWithBrowser` or `authenticate` operation. To store manager call the `writeToSecureStorage` method:
 
 ```swift
-oktaAuth.signInWithBrowser(from: self) { authStateManager, error in
-  authStateManager.writeToSecureStorage()
+oktaOidc.signInWithBrowser(from: self) { stateManager, error in
+  stateManager.writeToSecureStorage()
 }
 ```
 
 To retrieve stored manager call `readFromSecureStorage(for: )` and pass here Okta configuration that corresponds to a manager you are interested in.
 
 ```swift
-guard let authStateManager = OktaAuthStateManager.readFromSecureStorage(for: oktaConfig) else {
+guard let stateManager = OktaOidcStateManager.readFromSecureStorage(for: oktaConfig) else {
     // unauthenticated
 }
 
 //authenticated 
-// authStateManager.accessToken
-// authStateManager.idToken
-// authStateManager.refreshToken
+// stateManager.accessToken
+// stateManager.idToken
+// stateManager.refreshToken
 
 ```
 
-**Note:** In OktaAppAuth SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaAuthStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaAuthStateManager` stored on a legacy way, so user could retrieve previously stored `OktaAuthStateManager` after switching to a newer version of SDK. 
+**Note:** In OktaAppAuth SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaOidcStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaOidcStateManager` stored on a legacy way, so user could retrieve previously stored `OktaOidcStateManager` after switching to a newer version of SDK. 
 
 #### introspect
 
 Calls the introspection endpoint to inspect the validity of the specified token.
 
 ```swift
-oktaAuth.authStateManager?.introspect(token: accessToken, callback: { payload, error in
+stateManager?.introspect(token: accessToken, callback: { payload, error in
   guard let isValid = payload["active"] as? Bool else {
     // Error
     return
@@ -259,7 +259,7 @@ oktaAuth.authStateManager?.introspect(token: accessToken, callback: { payload, e
 Since access tokens are traditionally short-lived, you can renew expired tokens by exchanging a refresh token for new ones. See the [configuration reference](#configuration-reference) to ensure your app is configured properly for this flow.
 
 ```swift
-oktaAuth.authStateManager?.renew { newAccessToken, error in
+stateManager?.renew { newAccessToken, error in
   if let error = error else {
     // Error
     return
@@ -274,7 +274,7 @@ oktaAuth.authStateManager?.renew { newAccessToken, error in
 Calls the revocation endpoint to revoke the specified token.
 
 ```swift
-oktaAuth.authStateManager?.revoke(accessToken) { response, error in
+stateManager?.revoke(accessToken) { response, error in
   if let error = error else {
     // Error
     return
@@ -289,7 +289,7 @@ oktaAuth.authStateManager?.revoke(accessToken) { response, error in
 Calls the OpenID Connect UserInfo endpoint with the stored access token to return user claim information.
 
 ```swift
-oktaAuth.authStateManager?.getUser { response, error in
+stateManager?.getUser { response, error in
   if let error = error {
     // Error
     return
@@ -299,12 +299,12 @@ oktaAuth.authStateManager?.getUser { response, error in
 }
 ```
 
-### clear
+#### clear
 
 Removes the local authentication state by removing cached tokens in the keychain.
 
 ```swift
-OktaAuth.clear()
+stateManager.clear()
 ```
 
 ## Development

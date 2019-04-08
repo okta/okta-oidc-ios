@@ -1,7 +1,7 @@
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
-class OktaAuthConfigTests: XCTestCase {
+class OktaOidcConfigTests: XCTestCase {
     
     func testCreation() {
         let dict = [
@@ -12,9 +12,9 @@ class OktaAuthConfigTests: XCTestCase {
             "logoutRedirectUri" : "com.test:/logout"
         ]
         
-        let config: OktaAuthConfig
+        let config: OktaOidcConfig
         do {
-            config = try OktaAuthConfig(with: dict)
+            config = try OktaOidcConfig(with: dict)
         } catch let error {
             XCTFail("Unexpected error: \(error)")
             return
@@ -38,9 +38,9 @@ class OktaAuthConfigTests: XCTestCase {
             "additionalParam" : "test_param",
         ]
         
-        let config: OktaAuthConfig
+        let config: OktaOidcConfig
         do {
-            config = try OktaAuthConfig(with: dict)
+            config = try OktaOidcConfig(with: dict)
         } catch let error {
             XCTFail("Unexpected error: \(error)")
             return
@@ -58,10 +58,10 @@ class OktaAuthConfigTests: XCTestCase {
     
     func testDefaultConfig() {
         do {
-            let _ = try OktaAuthConfig.default()
+            let _ = try OktaOidcConfig.default()
         } catch let error {
             XCTAssertEqual(
-                OktaError.missingConfigurationValues.localizedDescription,
+                OktaOidcError.missingConfigurationValues.localizedDescription,
                 error.localizedDescription
             )
         }
@@ -69,10 +69,10 @@ class OktaAuthConfigTests: XCTestCase {
     
     func testOktaPlist() {
         do {
-            let _ = try OktaAuthConfig(fromPlist: "Okta")
+            let _ = try OktaOidcConfig(fromPlist: "Okta")
         } catch let error {
             XCTAssertEqual(
-                OktaError.missingConfigurationValues.localizedDescription,
+                OktaOidcError.missingConfigurationValues.localizedDescription,
                 error.localizedDescription
             )
         }
@@ -81,13 +81,13 @@ class OktaAuthConfigTests: XCTestCase {
     func testNoPListGiven() {
         // name of file which does not exists
         let plistName = UUID().uuidString
-        var config: OktaAuthConfig? = nil
+        var config: OktaOidcConfig? = nil
         do {
-           config = try OktaAuthConfig(fromPlist: plistName)
+           config = try OktaOidcConfig(fromPlist: plistName)
         } catch let error {
             XCTAssertEqual(
                 error.localizedDescription,
-                OktaError.noPListGiven.localizedDescription
+                OktaOidcError.noPListGiven.localizedDescription
             )
         }
         
@@ -97,13 +97,13 @@ class OktaAuthConfigTests: XCTestCase {
     func testPListParseFailure() {
         // Info.plist does not correspond to expected structure of Okta file
         let plistName = "Info"
-        var config: OktaAuthConfig? = nil
+        var config: OktaOidcConfig? = nil
         do {
-            config = try OktaAuthConfig(fromPlist: plistName)
+            config = try OktaOidcConfig(fromPlist: plistName)
         } catch let error {
             XCTAssertEqual(
                 error.localizedDescription,
-                OktaError.pListParseFailure.localizedDescription
+                OktaOidcError.pListParseFailure.localizedDescription
             )
         }
         

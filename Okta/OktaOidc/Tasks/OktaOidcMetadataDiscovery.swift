@@ -10,17 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
+class OktaOidcMetadataDiscovery: OktaOidcTask<OIDServiceConfiguration> {
 
-    override func run(callback: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
+    override func run(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
         guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
-              callback(nil, OktaError.noDiscoveryEndpoint)
+              callback(nil, OktaOidcError.noDiscoveryEndpoint)
               return
         }
         
         oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
             guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
-                callback(nil, OktaError.parseFailure)
+                callback(nil, OktaOidcError.parseFailure)
                 return
             }
 
@@ -29,7 +29,7 @@ class MetadataDiscovery: OktaAuthTask<OIDServiceConfiguration> {
             let responseError =
                 "Error returning discovery document: \(error.localizedDescription). Please" +
                 " check your PList configuration"
-            callback(nil, OktaError.APIError(responseError))
+            callback(nil, OktaOidcError.APIError(responseError))
         })
     }
 }

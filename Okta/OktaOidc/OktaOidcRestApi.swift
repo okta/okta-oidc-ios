@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-protocol OktaHttpApiProtocol {
+protocol OktaOidcHttpApiProtocol {
     typealias OktaApiSuccessCallback = ([String: Any]?) -> Void
-    typealias OktaApiErrorCallback = (OktaError) -> Void
+    typealias OktaApiErrorCallback = (OktaOidcError) -> Void
     
     func post(_ url: URL,
               headers: [String: String]?,
@@ -42,7 +42,7 @@ protocol OktaHttpApiProtocol {
                      onError: @escaping OktaApiErrorCallback)
 }
 
-extension OktaHttpApiProtocol {
+extension OktaOidcHttpApiProtocol {
     func post(_ url: URL,
               headers: [String: String]?,
               postString: String?,
@@ -89,7 +89,7 @@ extension OktaHttpApiProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-        request.addValue(Utils.userAgentHeader(), forHTTPHeaderField: "User-Agent")
+        request.addValue(OktaOidcUtils.userAgentHeader(), forHTTPHeaderField: "User-Agent")
 
         if let data = body {
             request.httpBody = data
@@ -99,7 +99,7 @@ extension OktaHttpApiProtocol {
     }
 }
 
-class OktaRestApi: OktaHttpApiProtocol {
+class OktaOidcRestApi: OktaOidcHttpApiProtocol {
 
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,
@@ -107,7 +107,7 @@ class OktaRestApi: OktaHttpApiProtocol {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             guard let data = data, error == nil else {
                 let errorMessage = error != nil ? error!.localizedDescription : "No response data"
-                    onError(OktaError.APIError(errorMessage))
+                    onError(OktaOidcError.APIError(errorMessage))
                     return
             }
             

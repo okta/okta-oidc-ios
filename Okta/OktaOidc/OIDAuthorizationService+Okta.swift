@@ -32,7 +32,7 @@ extension OIDAuthorizationService {
                   let locationHeader = response.allHeaderFields["Location"] as? String,
                   let urlComonents = URLComponents(string: locationHeader),
                   let queryItems = urlComonents.queryItems else {
-                    callback(nil, OktaError.unexpectedAuthCodeResponse)
+                    callback(nil, OktaOidcError.unexpectedAuthCodeResponse)
                     return
             }
         

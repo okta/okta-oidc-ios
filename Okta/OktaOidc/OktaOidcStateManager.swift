@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-open class OktaAuthStateManager: NSObject, NSCoding {
+open class OktaOidcStateManager: NSObject, NSCoding {
 
     @objc open var authState: OIDAuthState
     @objc open var accessibility: CFString
@@ -49,7 +49,7 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     }
     
     // Needed for UTs only. Entry point for mocking network calls.
-    var restAPI: OktaHttpApiProtocol = OktaRestApi()
+    var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
 
     @objc public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
@@ -77,11 +77,11 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     @objc public func validateToken(idToken: String?) -> Error? {
         guard let idToken = idToken,
             let tokenObject = OIDIDToken(idTokenString: idToken) else {
-                return OktaError.JWTDecodeError
+                return OktaOidcError.JWTDecodeError
         }
         
         if tokenObject.expiresAt.timeIntervalSinceNow < 0 {
-            return OktaError.JWTValidationError("ID Token expired")
+            return OktaOidcError.JWTValidationError("ID Token expired")
         }
         
         return nil
@@ -101,23 +101,23 @@ open class OktaAuthStateManager: NSObject, NSCoding {
         }
 
         guard let data = Data(base64Encoded: encodedPayload, options: []) else {
-            throw OktaError.JWTDecodeError
+            throw OktaOidcError.JWTDecodeError
         }
         
         let jsonObject = try JSONSerialization.jsonObject(with: data, options: .mutableContainers)
         
         guard let result = jsonObject as? [String: Any] else {
-            throw OktaError.JWTDecodeError
+            throw OktaOidcError.JWTDecodeError
         }
         
         return result
     }
 
-    @objc public func renew(callback: @escaping ((OktaAuthStateManager?, Error?) -> Void)) {
+    @objc public func renew(callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         authState.setNeedsTokenRefresh()
         authState.performAction(freshTokens: { accessToken, idToken, error in
             if error != nil {
-                callback(nil, OktaError.errorFetchingFreshTokens(error!.localizedDescription))
+                callback(nil, OktaOidcError.errorFetchingFreshTokens(error!.localizedDescription))
                 return
             }
             
@@ -142,12 +142,12 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     }
 
     @objc public func clear() {
-        OktaKeychain.clearAll()
+        OktaOidcKeychain.clearAll()
     }
     
     @objc public func getUser(_ callback: @escaping ([String:Any]?, Error?) -> Void) {
         guard let token = accessToken else {
-            callback(nil, OktaError.noBearerToken)
+            callback(nil, OktaOidcError.noBearerToken)
             return
         }
 
@@ -157,7 +157,7 @@ open class OktaAuthStateManager: NSObject, NSCoding {
     }
 }
 
-public extension OktaAuthStateManager {
+public extension OktaOidcStateManager {
     
     class func storageKey(clientId: String, issuer: String?) -> String {
         guard let issuer = issuer else {
@@ -167,20 +167,20 @@ public extension OktaAuthStateManager {
         return issuer + "_" + clientId
     }
     
-    class func readFromSecureStorage() -> OktaAuthStateManager? {
+    class func readFromSecureStorage() -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
 
-    class func readFromSecureStorage(for config: OktaAuthConfig) -> OktaAuthStateManager? {
+    class func readFromSecureStorage(for config: OktaOidcConfig) -> OktaOidcStateManager? {
         let secureStorageKey = storageKey(clientId: config.clientId, issuer: config.issuer)
         return readFromSecureStorage(forKey: secureStorageKey)
     }
     
     func writeToSecureStorage() {
-        let secureStorageKey = OktaAuthStateManager.storageKey(clientId: self.clientId, issuer: self.issuer)
+        let secureStorageKey = OktaOidcStateManager.storageKey(clientId: self.clientId, issuer: self.issuer)
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
         do {
-            try OktaKeychain.set(
+            try OktaOidcKeychain.set(
                 key: secureStorageKey,
                 data: authStateData,
                 accessibility: self.accessibility
@@ -190,12 +190,12 @@ public extension OktaAuthStateManager {
         }
     }
     
-    private class func readFromSecureStorage(forKey secureStorageKey: String) -> OktaAuthStateManager? {
-        guard let encodedAuthState: Data = try? OktaKeychain.get(key: secureStorageKey) else {
+    private class func readFromSecureStorage(forKey secureStorageKey: String) -> OktaOidcStateManager? {
+        guard let encodedAuthState: Data = try? OktaOidcKeychain.get(key: secureStorageKey) else {
             return nil
         }
 
-        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaAuthStateManager else {
+        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager else {
             return nil
         }
 
@@ -203,13 +203,13 @@ public extension OktaAuthStateManager {
     }
 }
 
-internal extension OktaAuthStateManager {
+internal extension OktaOidcStateManager {
     var discoveryDictionary: [String: Any]? {
         return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
     }
 }
 
-private extension OktaAuthStateManager {
+private extension OktaOidcStateManager {
     var issuer: String? {
         return authState.lastAuthorizationResponse.request.configuration.issuer?.absoluteString
     }
@@ -219,11 +219,11 @@ private extension OktaAuthStateManager {
     }
 
     
-    func perfromRequest(to endpoint: OktaEndpoint,
+    func perfromRequest(to endpoint: OktaOidcEndpoint,
                         token: String?,
-                        callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+                        callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
         guard let token = token else {
-            callback(nil, OktaError.noBearerToken)
+            callback(nil, OktaOidcError.noBearerToken)
             return
         }
         
@@ -232,10 +232,10 @@ private extension OktaAuthStateManager {
         perfromRequest(to: endpoint, postString: postString, callback: callback)
     }
     
-    func perfromRequest(to endpoint: OktaEndpoint,
+    func perfromRequest(to endpoint: OktaOidcEndpoint,
                         headers: [String: String]? = nil,
                         postString: String? = nil,
-                        callback: @escaping ([String : Any]?, OktaError?) -> Void) {
+                        callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
         guard let endpointURL = endpoint.getURL(discoveredMetadata: discoveryDictionary, issuer: issuer) else {
             callback(nil, endpoint.noEndpointError)
             return

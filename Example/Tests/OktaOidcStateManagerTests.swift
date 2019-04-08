@@ -1,15 +1,15 @@
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
-class OktaAuthTokenManagerTests: XCTestCase {
+class OktaOidcStateManagerTests: XCTestCase {
     
-    var apiMock: OktaApiMock!
-    var authStateManager: OktaAuthStateManager!
+    var apiMock: OktaOidcApiMock!
+    var authStateManager: OktaOidcStateManager!
 
     override func setUp() {
         super.setUp()
-        apiMock = OktaApiMock()
-        authStateManager = OktaAuthStateManager(
+        apiMock = OktaOidcApiMock()
+        authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer)
         )
         
@@ -46,7 +46,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         authStateManager.introspect(token: nil) { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
-                OktaError.noBearerToken.localizedDescription,
+                OktaOidcError.noBearerToken.localizedDescription,
                 error?.localizedDescription
             )
             introspectExpectation.fulfill()
@@ -64,7 +64,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         authStateManager.introspect(token: authStateManager.accessToken) { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
-                OktaError.APIError("Test Error").localizedDescription,
+                OktaOidcError.APIError("Test Error").localizedDescription,
                 error?.localizedDescription
             )
             introspectExpectation.fulfill()
@@ -98,7 +98,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         authStateManager.revoke(nil){ isRevoked, error in
             XCTAssertFalse(isRevoked)
             XCTAssertEqual(
-                OktaError.noBearerToken.localizedDescription,
+                OktaOidcError.noBearerToken.localizedDescription,
                 error?.localizedDescription
             )
             
@@ -117,7 +117,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
             XCTAssertFalse(isRevoked)
             XCTAssertEqual(
-                OktaError.APIError("Test Error").localizedDescription,
+                OktaOidcError.APIError("Test Error").localizedDescription,
                 error?.localizedDescription
             )
             
@@ -152,7 +152,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
         authStateManager.getUser(){ payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
-                OktaError.APIError("Test Error").localizedDescription,
+                OktaOidcError.APIError("Test Error").localizedDescription,
                 error?.localizedDescription
             )
             
@@ -173,7 +173,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
             "fakeSignature"
         
         do {
-            let response = try OktaAuthStateManager.decodeJWT(idToken)
+            let response = try OktaOidcStateManager.decodeJWT(idToken)
             XCTAssertNotNil(response)
         } catch let error {
             XCTFail("Unexpected error: \(error)")
@@ -181,7 +181,7 @@ class OktaAuthTokenManagerTests: XCTestCase {
     }
     
     func testReadWriteToSecureStorage() {
-        guard let testConfig = try? OktaAuthConfig(with: [
+        guard let testConfig = try? OktaOidcConfig(with: [
             "clientId" : TestUtils.mockClientId,
             "issuer" : TestUtils.mockIssuer,
             "scopes" : "test",
@@ -193,11 +193,11 @@ class OktaAuthTokenManagerTests: XCTestCase {
         
         let manager = TestUtils.authStateManager()
         
-        XCTAssertNil(OktaAuthStateManager.readFromSecureStorage(for: testConfig))
+        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: testConfig))
         
         manager.writeToSecureStorage()
         
-        let storedManager = OktaAuthStateManager.readFromSecureStorage(for: testConfig)
+        let storedManager = OktaOidcStateManager.readFromSecureStorage(for: testConfig)
         XCTAssertNotNil(storedManager)
         XCTAssertEqual(
             storedManager?.authState.lastAuthorizationResponse.accessToken,
@@ -209,6 +209,6 @@ class OktaAuthTokenManagerTests: XCTestCase {
         )
         
         manager.clear()
-        XCTAssertNil(OktaAuthStateManager.readFromSecureStorage(for: testConfig))
+        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: testConfig))
     }
 }
