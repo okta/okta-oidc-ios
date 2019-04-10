@@ -10,19 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-protocol UserSessionTask {
-
-    var userAgentSession: OIDExternalUserAgentSession? { get }
+class OktaOidcTask<T> {
+    let config: OktaOidcConfig
+    let oktaAPI: OktaOidcHttpApiProtocol
+ 
+    init(config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
+        self.config = config
+        self.oktaAPI = oktaAPI
+    }
     
-    func resume(with url: URL) -> Bool
-}
-
-extension UserSessionTask {
-    func resume(with url: URL) -> Bool {
-        guard let userAgentSession = userAgentSession else {
-            return false
-        }
-        
-        return userAgentSession.resumeExternalUserAgentFlow(with: url)
+    // Schedules task for execution in background and invokes callback on completion.
+    internal func run(callback: @escaping (T?, OktaOidcError?) -> Void) {
+        // no op.
     }
 }

@@ -10,25 +10,25 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class SignOutTask: OktaAuthTask<Void>, UserSessionTask {
+class OktaOidcSignOutTask: OktaOidcTask<Void>, OktaOidcUserSessionTask {
     private let idToken: String
     private let presenter: UIViewController
     private(set) var userAgentSession: OIDExternalUserAgentSession?
     
-    init(idToken: String, presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+    init(idToken: String, presenter: UIViewController, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
         self.idToken = idToken
         self.presenter = presenter
         super.init(config: config, oktaAPI: oktaAPI)
     }
 
-    override func run(callback: @escaping (Void?, OktaError?) -> Void) {
+    override func run(callback: @escaping (Void?, OktaOidcError?) -> Void) {
         guard let logoutRedirectUri = config.logoutRedirectUri,
               let additionalParams = config.additionalParams else {
-                callback(nil, OktaError.missingConfigurationValues)
+                callback(nil, OktaOidcError.missingConfigurationValues)
                 return
         }
 
-        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
+        OktaOidcMetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
@@ -49,9 +49,9 @@ class SignOutTask: OktaAuthTask<Void>, UserSessionTask {
                 
                 defer { self.userAgentSession = nil }
                 
-                var error: OktaError? = nil
+                var error: OktaOidcError? = nil
                 if let responseError = responseError {
-                    error = OktaError.APIError("Sign Out Error: \(responseError.localizedDescription)")
+                    error = OktaOidcError.APIError("Sign Out Error: \(responseError.localizedDescription)")
                 }
                 
                 callback((), error)

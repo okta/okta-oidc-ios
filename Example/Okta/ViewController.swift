@@ -7,15 +7,15 @@
 //
 
 import UIKit
-import OktaAuth
+import OktaOidc
 
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!
     @IBOutlet weak var signInButton: UIButton!
     
-    private var oktaAppAuth: OktaAppAuth?
-    private var authStateManager: OktaAuthStateManager? {
+    private var oktaAppAuth: OktaOidc?
+    private var authStateManager: OktaOidcStateManager? {
         didSet {
             oldValue?.clear()
             authStateManager?.writeToSecureStorage()
@@ -26,8 +26,8 @@ class ViewController: UIViewController {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
     
-    private var testConfig: OktaAuthConfig? {
-        return try? OktaAuthConfig(with:[
+    private var testConfig: OktaOidcConfig? {
+        return try? OktaOidcConfig(with:[
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,
@@ -38,11 +38,11 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        oktaAppAuth = try? OktaAppAuth(configuration: isUITest ? testConfig : nil)
-        AppDelegate.shared.oktaAuth = oktaAppAuth
+        oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : nil)
+        AppDelegate.shared.oktaOidc = oktaAppAuth
         
         if let config = oktaAppAuth?.configuration {
-            authStateManager = OktaAuthStateManager.readFromSecureStorage(for: config)
+            authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
         }
     }
 

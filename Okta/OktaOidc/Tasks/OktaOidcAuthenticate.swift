@@ -10,17 +10,17 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class AuthenticateTask: OktaAuthTask<OIDAuthState> {
+class OktaOidcAuthenticateTask: OktaOidcTask<OIDAuthState> {
 
     private let sessionToken: String
     
-    init(sessionToken: String, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+    init(sessionToken: String, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
         self.sessionToken = sessionToken
         super.init(config: config, oktaAPI: oktaAPI)
     }
     
-    override func run(callback: @escaping (OIDAuthState?, OktaError?) -> Void) {
-        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
+    override func run(callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
+        OktaOidcMetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return

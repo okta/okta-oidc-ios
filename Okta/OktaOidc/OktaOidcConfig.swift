@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-public class OktaAuthConfig: NSObject, Codable {
+public class OktaOidcConfig: NSObject, Codable {
     @objc public static let defaultPlistName = "Okta"
     
     @objc public let clientId: String
@@ -21,8 +21,8 @@ public class OktaAuthConfig: NSObject, Codable {
     
     @objc public let additionalParams: [String:String]?
 
-    @objc public static func `default`() throws -> OktaAuthConfig {
-        return try OktaAuthConfig(fromPlist: defaultPlistName)
+    @objc public static func `default`() throws -> OktaOidcConfig {
+        return try OktaOidcConfig(fromPlist: defaultPlistName)
     }
 
     @objc public init(with dict: [String: String]) throws {
@@ -31,7 +31,7 @@ public class OktaAuthConfig: NSObject, Codable {
               let scopes = dict["scopes"],
               let redirectUriString = dict["redirectUri"],
               let redirectUri = URL(string: redirectUriString) else {
-                throw OktaError.missingConfigurationValues
+                throw OktaOidcError.missingConfigurationValues
         }
         
         self.clientId = clientId
@@ -45,18 +45,18 @@ public class OktaAuthConfig: NSObject, Codable {
             logoutRedirectUri = nil
         }
         
-        additionalParams = OktaAuthConfig.extractAdditionalParams(dict)
+        additionalParams = OktaOidcConfig.extractAdditionalParams(dict)
     }
 
     @objc public convenience init(fromPlist plistName: String) throws {
         guard let path = Bundle.main.url(forResource: plistName, withExtension: "plist") else {
-            throw OktaError.noPListGiven
+            throw OktaOidcError.noPListGiven
         }
         
         guard let data = try? Data(contentsOf: path),
             let plistContent = try? PropertyListSerialization.propertyList(from: data, options: [], format: nil),
             let configDict = plistContent as? [String: String] else {
-                throw OktaError.pListParseFailure
+                throw OktaOidcError.pListParseFailure
         }
         
         try self.init(with: configDict)
@@ -77,7 +77,7 @@ public class OktaAuthConfig: NSObject, Codable {
     }
     
     override public func isEqual(_ object: Any?) -> Bool {
-        guard let config = object as? OktaAuthConfig else {
+        guard let config = object as? OktaOidcConfig else {
             return false
         }
         return self.clientId == config.clientId &&

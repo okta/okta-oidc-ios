@@ -10,13 +10,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-enum OktaKeychainError: Error {
+enum OktaOidcKeychainError: Error {
     case codingError
     case failed(String)
     case notFound
 }
 
-class OktaKeychain: NSObject {
+class OktaOidcKeychain: NSObject {
 
     /**
      Stores an item securely in the Keychain.
@@ -26,7 +26,7 @@ class OktaKeychain: NSObject {
      */
     class func set(key: String, string: String, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
         guard let objectData = string.data(using: .utf8) else {
-            throw OktaKeychainError.codingError
+            throw OktaOidcKeychainError.codingError
         }
         try set(key: key, data: objectData, accessGroup: accessGroup, accessibility: accessibility)
     }
@@ -55,7 +55,7 @@ class OktaKeychain: NSObject {
         
         let sanityCheck = SecItemAdd(cfDictionary, nil)
         if sanityCheck != noErr {
-            throw OktaKeychainError.failed(sanityCheck.description)
+            throw OktaOidcKeychainError.failed(sanityCheck.description)
         }        
     }
     
@@ -67,7 +67,7 @@ class OktaKeychain: NSObject {
     class func get(key: String) throws -> String {
         let data: Data = try get(key: key)
         guard let string = String(data: data, encoding: .utf8) else {
-            throw OktaKeychainError.codingError
+            throw OktaOidcKeychainError.codingError
         }
         return string
     }
@@ -90,13 +90,13 @@ class OktaKeychain: NSObject {
         let sanityCheck = SecItemCopyMatching(q, &ref)
         guard sanityCheck == noErr else {
             if sanityCheck == errSecItemNotFound {
-                throw OktaKeychainError.notFound
+                throw OktaOidcKeychainError.notFound
             } else {
-                throw OktaKeychainError.failed(sanityCheck.description)
+                throw OktaOidcKeychainError.failed(sanityCheck.description)
             }
         }
         guard let data = ref as? Data else {
-            throw OktaKeychainError.failed("No data for \(key)")
+            throw OktaOidcKeychainError.failed("No data for \(key)")
         }
         return data
     }
@@ -117,7 +117,7 @@ class OktaKeychain: NSObject {
         // Delete existing (if applicable)
         let sanityCheck = SecItemDelete(q)
         guard sanityCheck == noErr else {
-            throw OktaKeychainError.failed(sanityCheck.description)
+            throw OktaOidcKeychainError.failed(sanityCheck.description)
         }
     }
     
@@ -139,4 +139,3 @@ class OktaKeychain: NSObject {
         }
     }
 }
-

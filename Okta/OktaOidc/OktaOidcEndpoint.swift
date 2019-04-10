@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-enum OktaEndpoint {
+enum OktaOidcEndpoint {
     case introspection
     case revocation
     case userInfo
@@ -25,20 +25,20 @@ enum OktaEndpoint {
         }
 
         if issuer.range(of: "oauth2") != nil {
-            return URL(string: Utils.removeTrailingSlash(issuer) + "/v1/" + self.defaultPath)
+            return URL(string: OktaOidcUtils.removeTrailingSlash(issuer) + "/v1/" + self.defaultPath)
         }
 
-        return URL(string: Utils.removeTrailingSlash(issuer) + "/oauth2/v1/" + self.defaultPath)
+        return URL(string: OktaOidcUtils.removeTrailingSlash(issuer) + "/oauth2/v1/" + self.defaultPath)
     }
     
-    var noEndpointError: OktaError {
+    var noEndpointError: OktaOidcError {
         switch self {
         case .introspection:
-            return OktaError.noIntrospectionEndpoint
+            return OktaOidcError.noIntrospectionEndpoint
         case .revocation:
-            return OktaError.noRevocationEndpoint
+            return OktaOidcError.noRevocationEndpoint
         case .userInfo:
-            return OktaError.noUserInfoEndpoint
+            return OktaOidcError.noUserInfoEndpoint
         }
     }
     

@@ -1,13 +1,13 @@
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
-class DiscoveryTaskTests: XCTestCase {
+class OktaOidcDiscoveryTaskTests: XCTestCase {
 
-    var apiMock: OktaApiMock!
+    var apiMock: OktaOidcApiMock!
     
     override func setUp() {
         super.setUp()
-        apiMock = OktaApiMock()
+        apiMock = OktaOidcApiMock()
     }
 
     override func tearDown() {
@@ -27,7 +27,7 @@ class DiscoveryTaskTests: XCTestCase {
     }
     
     func testRunApiError() {
-        apiMock.configure(error: OktaError.APIError("Test Error"))
+        apiMock.configure(error: OktaOidcError.APIError("Test Error"))
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
@@ -44,7 +44,7 @@ class DiscoveryTaskTests: XCTestCase {
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
             XCTAssertEqual(
-                OktaError.parseFailure.localizedDescription,
+                OktaOidcError.parseFailure.localizedDescription,
                 error?.localizedDescription
             )
         }
@@ -66,18 +66,18 @@ class DiscoveryTaskTests: XCTestCase {
     
     // MARK: - Utils
     
-    private func runAndWaitDiscovery(config: OktaAuthConfig,
-                                      validationHandler: @escaping (OIDServiceConfiguration?, OktaError?) -> Void) {
+    private func runAndWaitDiscovery(config: OktaOidcConfig,
+                                      validationHandler: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
         let ex = expectation(description: "User Info should be called!")
-        MetadataDiscovery(config: config, oktaAPI: apiMock).run { oidConfig, error in
+        OktaOidcMetadataDiscovery(config: config, oktaAPI: apiMock).run { oidConfig, error in
             validationHandler(oidConfig, error)
             ex.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
     }
     
-    private var validConfig: OktaAuthConfig {
-        return try! OktaAuthConfig(with: [
+    private var validConfig: OktaOidcConfig {
+        return try! OktaOidcConfig(with: [
             "issuer" : "http://test.issuer.com/oauth2/default",
             "clientId" : "test_client",
             "scopes" : "test",

@@ -1,5 +1,5 @@
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
 class OktaUtilsTests: XCTestCase {
     func testPListFormatWithTrailingSlash() {
@@ -7,7 +7,7 @@ class OktaUtilsTests: XCTestCase {
         let dict = [
             "issuer": "https://example.com/oauth2/authServerId/"
         ]
-        let issuer = Utils.removeTrailingSlash(dict["issuer"]!)
+        let issuer = OktaOidcUtils.removeTrailingSlash(dict["issuer"]!)
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
@@ -16,7 +16,7 @@ class OktaUtilsTests: XCTestCase {
         let dict = [
             "issuer": "https://example.com/oauth2/authServerId"
         ]
-        let issuer = Utils.removeTrailingSlash(dict["issuer"]!)
+        let issuer = OktaOidcUtils.removeTrailingSlash(dict["issuer"]!)
         XCTAssertEqual(issuer, "https://example.com/oauth2/authServerId")
     }
 
@@ -24,13 +24,13 @@ class OktaUtilsTests: XCTestCase {
         // Validate the scopes are in the correct format
         let scopes = "openid profile email"
         let validScopes = ["openid", "profile", "email"]
-        let scrubbedScopes = Utils.scrubScopes(scopes)
+        let scrubbedScopes = OktaOidcUtils.scrubScopes(scopes)
         XCTAssertEqual(scrubbedScopes, validScopes)
     }
 
     func testAddingOpenIDScopes() {
         // Validate that scopes not including "openid" get appended
         let scopes = "profile email"
-        XCTAssertEqual(Utils.scrubScopes(scopes), ["profile", "email", "openid"])
+        XCTAssertEqual(OktaOidcUtils.scrubScopes(scopes), ["profile", "email", "openid"])
     }
 }

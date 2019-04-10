@@ -20,7 +20,7 @@
 
 #import "OIDAuthorizationRequestTests.h"
 
-@import OktaAuth;
+@import OktaOidc;
 
 // Ignore warnings about "Use of GNU statement expression extension" which is raised by our use of
 // the XCTAssert___ macros.
