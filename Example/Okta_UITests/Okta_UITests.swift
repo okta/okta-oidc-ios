@@ -11,7 +11,7 @@
  */
 
 import XCTest
-import OktaAuth
+import OktaOidc
 
 class OktaUITests: XCTestCase {
     // Update these values along with your Plist config
@@ -177,6 +177,6 @@ class OktaUITests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(errorDescription.contains(OktaError.unableToGetAuthCode.localizedDescription))
+        XCTAssertTrue(errorDescription.contains(OktaOidcError.unableToGetAuthCode.localizedDescription))
     }
 }

@@ -2,7 +2,7 @@ platform :ios, '9.0'
 use_frameworks!
 
 def shared_pods
-    pod 'OktaAuth', :path => '../'
+    pod 'OktaOidc', :path => '../'
 end
 
 target 'Okta_Example' do

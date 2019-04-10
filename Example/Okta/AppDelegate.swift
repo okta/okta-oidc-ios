@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import OktaAuth
+import OktaOidc
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    var oktaAuth: OktaAppAuth?
+    var oktaOidc: OktaOidc?
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -28,7 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         guard #available(iOS 11, *) else {
-            return oktaAuth?.resume(url, options: options) ?? false
+            return oktaOidc?.resume(url, options: options) ?? false
         }
         
         return false

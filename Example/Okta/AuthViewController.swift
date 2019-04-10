@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import OktaAuth
+import OktaOidc
 
 class AuthViewController : UIViewController {
     
@@ -18,8 +18,8 @@ class AuthViewController : UIViewController {
     @IBOutlet var progessOverlay: UIView!
     @IBOutlet var progessIndicator: UIActivityIndicatorView!
     
-    var oktaAppAuth: OktaAppAuth?
-    var onAuthenticated: ((OktaAuthStateManager?) -> Void)?
+    var oktaAppAuth: OktaOidc?
+    var onAuthenticated: ((OktaOidcStateManager?) -> Void)?
     
     private var token: String? {
         return tokenTextView.text

@@ -19,7 +19,7 @@
 import Foundation
 import XCTest
 
-import OktaAuth
+import OktaOidc
 
 /*! @brief Unit tests to verify Swift compatability.
  */

@@ -18,7 +18,7 @@
 
 #import <XCTest/XCTest.h>
 
-@import OktaAuth;
+@import OktaOidc;
 
 @interface OIDTokenUtilitiesTests : XCTestCase
 @end

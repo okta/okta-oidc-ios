@@ -1,15 +1,15 @@
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
-class OktaAppAuthTests: XCTestCase {
+class OktaOidcTests: XCTestCase {
 
     private let issuer = ProcessInfo.processInfo.environment["ISSUER"]!
     private let clientId = ProcessInfo.processInfo.environment["CLIENT_ID"]!
     private let redirectUri = ProcessInfo.processInfo.environment["REDIRECT_URI"]!
     private let logoutRedirectUri = ProcessInfo.processInfo.environment["LOGOUT_REDIRECT_URI"]!
     
-    private var envConfig: OktaAuthConfig? {
-        return try? OktaAuthConfig(with:[
+    private var envConfig: OktaOidcConfig? {
+        return try? OktaOidcConfig(with:[
             "issuer": issuer,
             "clientId": clientId,
             "redirectUri": redirectUri,
@@ -20,14 +20,14 @@ class OktaAppAuthTests: XCTestCase {
     
     func testCreationWithNil() {
         // Depends on whether Okta.plist is configured or not
-        if let defaultConfig = try? OktaAuthConfig.default() {
-            let oktaAuth = try? OktaAppAuth()
-            XCTAssertNotNil(oktaAuth)
-            XCTAssertEqual(defaultConfig, oktaAuth?.configuration)
+        if let defaultConfig = try? OktaOidcConfig.default() {
+            let oktaOidc = try? OktaOidc()
+            XCTAssertNotNil(oktaOidc)
+            XCTAssertEqual(defaultConfig, oktaOidc?.configuration)
         } else {
-            XCTAssertThrowsError(try OktaAppAuth()) { error in
+            XCTAssertThrowsError(try OktaOidc()) { error in
                 XCTAssertEqual(
-                    OktaError.notConfigured.localizedDescription,
+                    OktaOidcError.notConfigured.localizedDescription,
                     error.localizedDescription
                 )
             }
@@ -40,7 +40,7 @@ class OktaAppAuthTests: XCTestCase {
             return
         }
 
-        let oktaAuth = try? OktaAppAuth(configuration: envConfig)
-        XCTAssertNotNil(oktaAuth)
+        let oktaOidc = try? OktaOidc(configuration: envConfig)
+        XCTAssertNotNil(oktaOidc)
     }
 }

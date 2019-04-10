@@ -1,14 +1,14 @@
-@testable import OktaAuth
+@testable import OktaOidc
 
-class OktaApiMock: OktaHttpApiProtocol {
+class OktaOidcApiMock: OktaOidcHttpApiProtocol {
     
     var lastRequest: URLRequest?
     
-    var requestHandler: ((URLRequest, OktaApiMock.OktaApiSuccessCallback, OktaApiMock.OktaApiErrorCallback) -> Void)?
+    var requestHandler: ((URLRequest, OktaOidcApiMock.OktaApiSuccessCallback, OktaOidcApiMock.OktaApiErrorCallback) -> Void)?
     
     func fireRequest(_ request: URLRequest,
-                     onSuccess: @escaping OktaApiMock.OktaApiSuccessCallback,
-                     onError: @escaping OktaApiMock.OktaApiErrorCallback) {
+                     onSuccess: @escaping OktaOidcApiMock.OktaApiSuccessCallback,
+                     onError: @escaping OktaOidcApiMock.OktaApiErrorCallback) {
         lastRequest = request
         
         DispatchQueue.main.async { [weak self] in
@@ -16,7 +16,7 @@ class OktaApiMock: OktaHttpApiProtocol {
         }
     }
     
-    func configure(error: OktaError, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
+    func configure(error: OktaOidcError, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
         requestHandler = { request, onSuccess, onError in
             requestValidationBlock?(request)
             onError(error)

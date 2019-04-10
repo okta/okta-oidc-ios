@@ -6,7 +6,7 @@
 //  Copyright © 2018 Okta. All rights reserved.
 //
 
-@testable import OktaAuth
+@testable import OktaOidc
 
 struct TestUtils {
     static let mockIssuer = "https://demo-org.oktapreview.com/oauth2/default"
@@ -78,8 +78,8 @@ struct TestUtils {
     }
 
 
-    static func setupMockAuthStateManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaAuthStateManager {
+    static func setupMockAuthStateManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaOidcStateManager {
         let tempAuthState = setupMockAuthState(issuer: issuer, expiresIn: expiresIn)
-        return OktaAuthStateManager(authState: tempAuthState)
+        return OktaOidcStateManager(authState: tempAuthState)
     }
 }

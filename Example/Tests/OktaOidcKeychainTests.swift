@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import OktaAuth
+@testable import OktaOidc
 
 class OktaKeychainTests : XCTestCase {
 
@@ -17,7 +17,7 @@ class OktaKeychainTests : XCTestCase {
 
     override func tearDown() {
         super.tearDown()
-        OktaKeychain.clearAll()
+        OktaOidcKeychain.clearAll()
     }
 
     func testStringStorage() {
@@ -25,9 +25,9 @@ class OktaKeychainTests : XCTestCase {
         let value = "test_value"
 
         do {
-            try OktaKeychain.set(key: key, string: value);
+            try OktaOidcKeychain.set(key: key, string: value);
 
-            let readValue: String = try OktaKeychain.get(key: key)
+            let readValue: String = try OktaOidcKeychain.get(key: key)
 
             XCTAssertEqual(value, readValue);
         } catch let e {
@@ -40,9 +40,9 @@ class OktaKeychainTests : XCTestCase {
         let value = "test_value".data(using: .utf8)!
 
         do {
-            try OktaKeychain.set(key: key, data: value)
+            try OktaOidcKeychain.set(key: key, data: value)
 
-            let readValue: Data = try OktaKeychain.get(key: key)
+            let readValue: Data = try OktaOidcKeychain.get(key: key)
 
             XCTAssertEqual(value, readValue)
         } catch let e {
@@ -54,9 +54,9 @@ class OktaKeychainTests : XCTestCase {
         let key = "unknown_key"
         
         do {
-            let _: String = try OktaKeychain.get(key: key)
+            let _: String = try OktaOidcKeychain.get(key: key)
             
-        } catch OktaKeychainError.notFound {
+        } catch OktaOidcKeychainError.notFound {
             XCTAssertTrue(true)
             
         } catch let e {
@@ -69,13 +69,13 @@ class OktaKeychainTests : XCTestCase {
         let value = "test_value"
 
         do {
-            try OktaKeychain.set(key: key, string: value)
+            try OktaOidcKeychain.set(key: key, string: value)
 
-            try OktaKeychain.remove(key: key)
+            try OktaOidcKeychain.remove(key: key)
 
-            let _: String = try OktaKeychain.get(key: key)
+            let _: String = try OktaOidcKeychain.get(key: key)
 
-        } catch OktaKeychainError.notFound {
+        } catch OktaOidcKeychainError.notFound {
             XCTAssertTrue(true)
 
         } catch let e {
@@ -87,9 +87,9 @@ class OktaKeychainTests : XCTestCase {
         let key = "unknown_key"
         
         do {
-            try OktaKeychain.remove(key: key)
+            try OktaOidcKeychain.remove(key: key)
             
-        } catch OktaKeychainError.notFound {
+        } catch OktaOidcKeychainError.notFound {
             XCTAssertTrue(true)
             
         } catch let e {
@@ -103,15 +103,15 @@ class OktaKeychainTests : XCTestCase {
         let value = "test_value"
 
         do {
-            try OktaKeychain.set(key: key1, string: value)
-            try OktaKeychain.set(key: key2, string: value)
+            try OktaOidcKeychain.set(key: key1, string: value)
+            try OktaOidcKeychain.set(key: key2, string: value)
 
-            OktaKeychain.clearAll()
+            OktaOidcKeychain.clearAll()
 
-            let _: String = try OktaKeychain.get(key: key1)
-            let _: String = try OktaKeychain.get(key: key2)
+            let _: String = try OktaOidcKeychain.get(key: key1)
+            let _: String = try OktaOidcKeychain.get(key: key2)
 
-        } catch OktaKeychainError.notFound {
+        } catch OktaOidcKeychainError.notFound {
             XCTAssertTrue(true)
 
         } catch let e {

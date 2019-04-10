@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-public enum OktaError: Error {
+public enum OktaOidcError: Error {
     case APIError(String)
     case errorFetchingFreshTokens(String)
     case JWTDecodeError
@@ -32,7 +32,7 @@ public enum OktaError: Error {
     case unableToGetAuthCode
 }
 
-extension OktaError: LocalizedError {
+extension OktaOidcError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .APIError(error: let error):
@@ -57,7 +57,7 @@ extension OktaError: LocalizedError {
         case .pListParseFailure:
             return NSLocalizedString("Unable to read and/or parse. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .notConfigured:
-            return NSLocalizedString("You must configure the OktaAuth SDK first. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
+            return NSLocalizedString("You must configure the OktaOidc SDK first. See https://github.com/okta/okta-sdk-appauth-ios/#configuration for more information.", comment: "")
         case .noRefreshToken:
             return NSLocalizedString("No refresh token stored. Make sure the 'offline_access' scope is included in your PList.", comment: "")
         case .noRevocationEndpoint:

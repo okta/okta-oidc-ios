@@ -10,18 +10,18 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class SignInTask: OktaAuthTask<OIDAuthState>, UserSessionTask {
+class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
 
     private let presenter: UIViewController
     private(set) var userAgentSession: OIDExternalUserAgentSession?
     
-    init(presenter: UIViewController, config: OktaAuthConfig, oktaAPI: OktaHttpApiProtocol) {
+    init(presenter: UIViewController, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
         self.presenter = presenter
         super.init(config: config, oktaAPI: oktaAPI)
     }
 
-    override func run(callback: @escaping (OIDAuthState?, OktaError?) -> Void) {
-        MetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
+    override func run(callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
+        OktaOidcMetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
@@ -31,7 +31,7 @@ class SignInTask: OktaAuthTask<OIDAuthState>, UserSessionTask {
             let request = OIDAuthorizationRequest(
                        configuration: oidConfig,
                             clientId: self.config.clientId,
-                              scopes: Utils.scrubScopes(self.config.scopes),
+                              scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
                          redirectURL: self.config.redirectUri,
                         responseType: OIDResponseTypeCode,
                 additionalParameters: self.config.additionalParams
@@ -45,7 +45,7 @@ class SignInTask: OktaAuthTask<OIDAuthState>, UserSessionTask {
                 defer { self.userAgentSession = nil }
 
                 guard let authResponse = authorizationResponse else {
-                    return callback(nil, OktaError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                    return callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 }
                 callback(authResponse, nil)
             }
