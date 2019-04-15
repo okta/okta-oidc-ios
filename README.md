@@ -6,7 +6,7 @@
 
 # Okta Open ID Connect Library
 
-> This is a new version of refactored AppAuth SDK. The old AppAuth package is now deprecated. 
+> This is a new version of this SDK, the new pod name is [OktaOidc](https://cocoapods.org/pods/OktaOidc). The old [OktaAuth](https://cocoapods.org/pods/OktaAuth) pod is now deprecated. 
 
 This library is a wrapper around the AppAuth-iOS SDK for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
