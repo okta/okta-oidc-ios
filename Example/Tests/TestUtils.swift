@@ -1,10 +1,14 @@
-//
-//  TestUtils.swift
-//  Okta_Example
-//
-//  Created by Jordan Melberg on 3/13/18.
-//  Copyright © 2018 Okta. All rights reserved.
-//
+/*
+ * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ *
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
 
 @testable import OktaOidc
 
@@ -26,10 +30,10 @@ struct TestUtils {
         "pu1WrZzuBHoQXuDkuYH6xKbKU2bopZGnA8PwrsIbr6PmmTaeH5ww0Q"
     static let mockRefreshToken = "mockRefreshToken"
 
-    static var authStateManager = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer) }
-    static var authStateManagerWithExpiration = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, expiresIn: 5) }
+    static var authStateManager = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId) }
+    static var authStateManagerWithExpiration = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId, expiresIn: 5) }
     
-    static func setupMockAuthState(issuer: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
+    static func setupMockAuthState(issuer: String, clientId: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
         // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
@@ -49,7 +53,7 @@ struct TestUtils {
 
         let mockAuthRequest = OIDAuthorizationRequest(
                    configuration: mockServiceConfig,
-                        clientId: mockClientId,
+                        clientId: clientId,
                     clientSecret: nil,
                           scopes: ["openid", "email"],
                      redirectURL: fooURL,
@@ -78,8 +82,8 @@ struct TestUtils {
     }
 
 
-    static func setupMockAuthStateManager(issuer: String, expiresIn: TimeInterval = 300) -> OktaOidcStateManager {
-        let tempAuthState = setupMockAuthState(issuer: issuer, expiresIn: expiresIn)
+    static func setupMockAuthStateManager(issuer: String, clientId: String, expiresIn: TimeInterval = 300) -> OktaOidcStateManager {
+        let tempAuthState = setupMockAuthState(issuer: issuer, clientId: clientId, expiresIn: expiresIn)
         return OktaOidcStateManager(authState: tempAuthState)
     }
 }

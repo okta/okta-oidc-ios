@@ -177,6 +177,6 @@ class OktaUITests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(errorDescription.contains(OktaOidcError.unableToGetAuthCode.localizedDescription))
+        XCTAssertTrue(errorDescription.contains("Authorization Error"))
     }
 }

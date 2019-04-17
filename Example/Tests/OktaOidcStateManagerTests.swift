@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ *
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
+
 import XCTest
 @testable import OktaOidc
 
@@ -10,7 +22,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         super.setUp()
         apiMock = OktaOidcApiMock()
         authStateManager = OktaOidcStateManager(
-            authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer)
+            authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
         )
         
         authStateManager.restAPI = apiMock
@@ -181,7 +193,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     }
     
     func testReadWriteToSecureStorage() {
-        guard let testConfig = try? OktaOidcConfig(with: [
+        guard let testConfig1 = try? OktaOidcConfig(with: [
             "clientId" : TestUtils.mockClientId,
             "issuer" : TestUtils.mockIssuer,
             "scopes" : "test",
@@ -191,13 +203,29 @@ class OktaOidcStateManagerTests: XCTestCase {
             return
         }
         
-        let manager = TestUtils.authStateManager()
+        self.runTestReadWriteToSecureStorage(with: testConfig1)
+
+        guard let testConfig2 = try? OktaOidcConfig(with: [
+            "clientId" : "0oa2p7eq7uDmZY4sJ0g70oa2p7eq7uDmZY4sJ0g7",
+            "issuer" : "https://long-long-long-long-long-long-url.trexcloud.com/oauth2/default",
+            "scopes" : "test",
+            "redirectUri" : "http://test"
+            ]) else {
+                XCTFail("Unable to create test config")
+                return
+        }
+
+        self.runTestReadWriteToSecureStorage(with: testConfig2)
+    }
+
+    func runTestReadWriteToSecureStorage(with config: OktaOidcConfig) {
+        let manager = TestUtils.setupMockAuthStateManager(issuer: config.issuer, clientId: config.clientId,  expiresIn: 5)
         
-        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: testConfig))
+        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
         
         manager.writeToSecureStorage()
         
-        let storedManager = OktaOidcStateManager.readFromSecureStorage(for: testConfig)
+        let storedManager = OktaOidcStateManager.readFromSecureStorage(for: config)
         XCTAssertNotNil(storedManager)
         XCTAssertEqual(
             storedManager?.authState.lastAuthorizationResponse.accessToken,
@@ -209,6 +237,6 @@ class OktaOidcStateManagerTests: XCTestCase {
         )
         
         manager.clear()
-        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: testConfig))
+        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
     }
 }

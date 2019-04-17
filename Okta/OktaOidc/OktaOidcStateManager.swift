@@ -164,7 +164,12 @@ public extension OktaOidcStateManager {
             return clientId
         }
         
-        return issuer + "_" + clientId
+        var key = issuer + "_" + clientId
+        key = Data(key.utf8).base64EncodedString()
+        if key.lengthOfBytes(using: .utf8) > 40 {
+            key = String(key.prefix(20)) + String(key.suffix(20))
+        }
+        return key
     }
     
     class func readFromSecureStorage() -> OktaOidcStateManager? {
