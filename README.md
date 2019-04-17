@@ -8,7 +8,7 @@
 
 > This is a new version of this SDK, the new pod name is [OktaOidc](https://cocoapods.org/pods/OktaOidc). The old [OktaAuth](https://cocoapods.org/pods/OktaAuth) pod is now deprecated. 
 
-This library is a wrapper around the AppAuth-iOS SDK for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
+This library is a swift wrapper around the AppAuth-iOS objective-c code for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
 You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation.
 
@@ -76,7 +76,7 @@ import OktaOidc
 var oktaOidc: OktaOidc?
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-  // oktaAuth - Configured OktaAppAuth instance used to start SignIn/SignOut flow. 
+  // oktaOidc - Configured OktaOidc instance used to start SignIn/SignOut flow. 
   return oktaOidc.resume(url: url, options: options)
 }
 ```
@@ -237,7 +237,7 @@ guard let stateManager = OktaOidcStateManager.readFromSecureStorage(for: oktaCon
 
 ```
 
-**Note:** In OktaAppAuth SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaOidcStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaOidcStateManager` stored on a legacy way, so user could retrieve previously stored `OktaOidcStateManager` after switching to a newer version of SDK. 
+**Note:** In OktaOidc SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaOidcStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaOidcStateManager` stored on a legacy way, so user could retrieve previously stored `OktaOidcStateManager` after switching to a newer version of SDK. 
 
 #### introspect
 
