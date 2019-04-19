@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaOidc'
-  s.version          = '3.0.0'
+  s.version          = '3.1.0'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
   s.description      = <<-DESC
 Integrate your native app with Okta using the AppAuth library.
@@ -13,4 +13,5 @@ Integrate your native app with Okta using the AppAuth library.
 
   s.ios.deployment_target = '9.0'
   s.source_files = 'Okta/**/*'
+  s.swift_version = '4.2'
 end

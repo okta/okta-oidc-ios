@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/OktaOidc.svg?style=flat)](http://cocoapods.org/pods/OktaOidc)
 [![License](https://img.shields.io/cocoapods/l/OktaOidc.svg?style=flat)](http://cocoapods.org/pods/OktaOidc)
 [![Platform](https://img.shields.io/cocoapods/p/OktaOidc.svg?style=flat)](http://cocoapods.org/pods/OktaOidc)
+[![Swift](https://img.shields.io/badge/swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 
 # Okta Open ID Connect Library
 
