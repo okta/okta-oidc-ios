@@ -16,7 +16,7 @@ open class OktaOidcUtils: NSObject {
 
     @objc
     open class func userAgentHeader() -> String {
-        return "okta-sdk-appauth-ios/\(OktaOidc.VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(deviceModel())"
+        return "okta-oidc-ios/\(OktaOidc.VERSION) iOS/\(UIDevice.current.systemVersion) Device/\(deviceModel())"
     }
 
     internal class func scrubScopes(_ scopes: String?) -> [String]{
