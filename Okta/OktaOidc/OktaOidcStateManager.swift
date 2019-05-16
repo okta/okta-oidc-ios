@@ -158,30 +158,20 @@ open class OktaOidcStateManager: NSObject, NSCoding {
 }
 
 public extension OktaOidcStateManager {
-    
-    class func storageKey(clientId: String, issuer: String?) -> String {
-        guard let issuer = issuer else {
-            return clientId
-        }
-        
-        return issuer + "_" + clientId
-    }
-    
+
     class func readFromSecureStorage() -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
 
     class func readFromSecureStorage(for config: OktaOidcConfig) -> OktaOidcStateManager? {
-        let secureStorageKey = storageKey(clientId: config.clientId, issuer: config.issuer)
-        return readFromSecureStorage(forKey: secureStorageKey)
+        return readFromSecureStorage(forKey: config.clientId)
     }
     
     func writeToSecureStorage() {
-        let secureStorageKey = OktaOidcStateManager.storageKey(clientId: self.clientId, issuer: self.issuer)
         let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
         do {
             try OktaOidcKeychain.set(
-                key: secureStorageKey,
+                key: self.clientId,
                 data: authStateData,
                 accessibility: self.accessibility
             )
