@@ -15,7 +15,7 @@ import UIKit
 public class OktaOidc: NSObject {
 
     // Current version of the SDK
-    @objc public static let VERSION = "3.1.0"
+    @objc public static let VERSION = "3.2.0"
 
     // Cache Okta.plist for reference
     @objc public let configuration: OktaOidcConfig
