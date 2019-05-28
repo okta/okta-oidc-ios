@@ -177,6 +177,6 @@ class OktaUITests: XCTestCase {
             return
         }
         
-        XCTAssertTrue(errorDescription.contains("Authorization Error"))
+        XCTAssertTrue(errorDescription.contains("Unable to get authorization code."))
     }
 }
