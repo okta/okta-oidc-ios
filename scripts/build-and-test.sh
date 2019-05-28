@@ -3,13 +3,6 @@ source "${0%/*}/helpers.sh"
 
 set -e
 
-# Go to correct path for install
-cd Example
-
-if ! pod_dependencies; then
-    exit 1
-fi
-
 echo "- Starting tests..."
 
 if ! build_and_run_ui_tests "$USERNAME" "$PASSWORD" "$ISSUER" "$REDIRECT_URI" "$CLIENT_ID" "$LOGOUT_REDIRECT_URI"; then

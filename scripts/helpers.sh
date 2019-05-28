@@ -9,12 +9,6 @@ SCHEME="okta-oidc"
 # Set test devices
 IPHONE_X_DESTINATION="OS=12.1,name=iPhone X"
 
-pod_dependencies () {
-    echo "- Installing dependencies"
-    echo "└─  Installing pods"
-    pod install --repo-update --silent
-}
-
 build_and_run_unit_tests () {
     remove_simulator_data
 
@@ -22,7 +16,7 @@ build_and_run_unit_tests () {
 
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
     -destination "$IPHONE_X_DESTINATION" \
-    -only-testing:Okta_Tests test | xcpretty;
+    -only-testing:OktaOidcTests test | xcpretty;
 }
 
 build_and_run_ui_tests () {
@@ -32,7 +26,7 @@ build_and_run_ui_tests () {
 
     set -o pipefail && xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" \
     -destination "$IPHONE_X_DESTINATION" \
-    -only-testing:Okta_UITests \
+    -only-testing:OktaOidcUITests \
     USERNAME="$1" PASSWORD="$2" ISSUER="$3" REDIRECT_URI="$4" CLIENT_ID="$5" test | xcpretty;
 }
 
