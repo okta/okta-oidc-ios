@@ -50,7 +50,7 @@ class OktaUITests: XCTestCase {
     func signInAndWait() {
         guard let testUtils = testUtils else { return }
 
-        guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 15.0) else {
+        guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
             XCTFail("Cannot start the app!")
             return
         }
@@ -61,7 +61,7 @@ class OktaUITests: XCTestCase {
         testUtils.signIn(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
-        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 15) else {
+        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
             XCTFail("Unable to redirect back from browser")
             return
         }
@@ -70,14 +70,14 @@ class OktaUITests: XCTestCase {
     func testAuthCodeFlow() {
         signInAndWait()
         
-        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        var tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertNotNil(tokenValues)
         XCTAssertNotEqual(tokenValues, "")
 
         app.terminate()
         app.launch()
         
-        tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        tokenValues = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 1)
         XCTAssertNotNil(tokenValues)
         XCTAssertNotEqual(tokenValues, "")
     }
@@ -88,7 +88,7 @@ class OktaUITests: XCTestCase {
         // Get User info
         app.buttons["GetUser"].tap()
 
-        let userInfoValue = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        let userInfoValue = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(userInfoValue!.contains(username))
     }
 
@@ -98,7 +98,7 @@ class OktaUITests: XCTestCase {
         // Introspect Valid Token
         app.buttons["Introspect"].tap()
 
-        let valid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        let valid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(valid!.contains("true"))
     }
 
@@ -108,13 +108,13 @@ class OktaUITests: XCTestCase {
         // Revoke Token
         app.buttons["Revoke"].tap()
 
-        let revoked = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        let revoked = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(revoked!.contains("AccessToken was revoked"))
 
         // Introspect invalid Token
         app.buttons["Introspect"].tap()
 
-        let isNotValid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15)
+        let isNotValid = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5)
         XCTAssertTrue(isNotValid!.contains("false"))
 
         // Clear all tokens
@@ -135,7 +135,7 @@ class OktaUITests: XCTestCase {
         app.tap()
 		
         // Wait for browser to dismiss
-        guard let _ = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 15) else {
+        guard let _ = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
             XCTFail("Should return to main screen!")
             return
         }
@@ -151,7 +151,7 @@ class OktaUITests: XCTestCase {
         app.tap()
         
         // Broweser should appear for user who is not signed in
-        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 15.0) else {
+        guard testUtils.waitForElement(app.webViews.firstMatch, timeout: 5.0) else {
             XCTFail("Broweser should be loaded!")
             return
         }
@@ -160,7 +160,7 @@ class OktaUITests: XCTestCase {
     func testAuthenticateWithSessionToken() {
         app.buttons["Authenticate"].tap()
         
-        guard testUtils.waitForElement(app.textViews["TokenTextView"], timeout: 15) else {
+        guard testUtils.waitForElement(app.textViews["TokenTextView"], timeout: 5) else {
             XCTFail("Should redirect to authentication screen.")
             return
         }
@@ -172,7 +172,7 @@ class OktaUITests: XCTestCase {
         
         app.buttons["Authenticate"].tap()
         
-        guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 15) else {
+        guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 5) else {
             XCTFail("Authentication with invalid token should fail.")
             return
         }
