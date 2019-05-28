@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import UIKit
+
 class OktaOidcSignOutTask: OktaOidcTask<Void>, OktaOidcUserSessionTask {
     private let idToken: String
     private let presenter: UIViewController

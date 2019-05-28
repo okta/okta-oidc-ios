@@ -16,6 +16,7 @@
         limitations under the License.
  */
 
+#import "AppAuthCore.h"
 #import "OIDAuthState.h"
 #import "OIDAuthStateChangeDelegate.h"
 #import "OIDAuthStateErrorDelegate.h"
@@ -42,6 +43,11 @@
 #import "OIDURLSessionProvider.h"
 #import "OIDEndSessionRequest.h"
 #import "OIDEndSessionResponse.h"
+#import "OIDExternalUserAgentIOS.h"
+#import "OIDClientMetadataParameters.h"
+#import "OIDDefines.h"
+#import "OIDFieldMapping.h"
+#import "OIDURLQueryComponent.h"
 
 /*! @mainpage AppAuth for iOS and macOS
 

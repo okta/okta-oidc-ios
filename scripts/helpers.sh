@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Set workspace
-WORKSPACE="Okta.xcworkspace/"
+WORKSPACE="okta-oidc.xcworkspace/"
 
 # Set scheme
-SCHEME="Okta-Example"
+SCHEME="okta-oidc"
 
 # Set test devices
 IPHONE_X_DESTINATION="OS=12.1,name=iPhone X"
