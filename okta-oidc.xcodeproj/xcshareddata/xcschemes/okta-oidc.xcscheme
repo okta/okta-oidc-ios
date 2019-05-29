@@ -104,32 +104,32 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "USERNAME"
-            value = "{username}"
+            value = "${USERNAME}"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "PASSWORD"
-            value = "{password}"
+            value = "${PASSWORD}"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ISSUER"
-            value = "{issuer}"
+            value = "${ISSUER}"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "CLIENT_ID"
-            value = "{clientId}"
+            value = "${CLIENT_ID}"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "REDIRECT_URI"
-            value = "{redirectUri}"
+            value = "$(REDIRECT_URI)"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "LOGOUT_REDIRECT_URI"
-            value = "{logoutRedirectUri}"
+            value = "$(LOGOUT_REDIRECT_URI)"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
