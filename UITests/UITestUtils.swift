@@ -37,7 +37,12 @@ public struct UITestUtils {
 
         usernameField.tap()
         usernameField.typeText(username)
-        passwordField.tap()
+        if webViewsQuery.buttons["Next"].exists {
+            webViewsQuery.buttons["Next"].tap()
+            XCTAssertTrue(webViewsQuery.secureTextFields["Password"].waitForExistence(timeout: 10))
+        }
+        webViewsQuery.secureTextFields["Password"].tap()
+        sleep(1)
         passwordField.typeText(password)
         webViewsQuery.buttons["Sign In"].tap()
     }
