@@ -103,23 +103,13 @@
       </BuildableProductRunnable>
       <EnvironmentVariables>
          <EnvironmentVariable
-            key = "USERNAME"
-            value = "${USERNAME}"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "PASSWORD"
-            value = "${PASSWORD}"
+            key = "CLIENT_ID"
+            value = "$(CLIENT_ID)"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "ISSUER"
-            value = "${ISSUER}"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "CLIENT_ID"
-            value = "${CLIENT_ID}"
+            value = "$(ISSUER)"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
@@ -130,6 +120,16 @@
          <EnvironmentVariable
             key = "LOGOUT_REDIRECT_URI"
             value = "$(LOGOUT_REDIRECT_URI)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "USERNAME"
+            value = "$(USERNAME)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "PASSWORD"
+            value = "$(PASSWORD)"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
