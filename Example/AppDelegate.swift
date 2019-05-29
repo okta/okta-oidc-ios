@@ -31,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+        guard #available(iOS 11, *) else {
+            return oktaOidc?.resume(url, options: options) ?? false
+        }
+        
         return false
     }
 }
