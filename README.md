@@ -76,6 +76,7 @@ github "okta/okta-oidc-ios"
 In order to redirect back to your application from a web browser, you must specify a unique URI to your app. To do this, open `Info.plist` in your application bundle and set a **URL Scheme** to the scheme of the redirect URI.
 
 For example, if your **Redirect URI** is `com.okta.example:/callback`, the **URL Scheme** will be `com.okta.example`.
+**Note:** Don't make redirect uri in format x.x.x.x, for example `com.okta.another.example`. Safari engine will fail to redirect to your application
 
 Next, update your `AppDelegate` to include the following function to allow the redirect to occur:
 
@@ -319,6 +320,7 @@ stateManager?.getUser { response, error in
 #### clear
 
 Removes the local authentication state by removing cached tokens in the keychain.
+**Note:** SDK deletes all keychain items accessible to an application.
 
 ```swift
 stateManager.clear()
