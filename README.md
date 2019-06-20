@@ -21,7 +21,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
 - [Getting Started](#getting-started)
   - [Using Cocoapods](#using-cocoapods)
   - [Handle the redirect](#handle-the-redirect)
-  - [How to use in Objective-C project](#objective-c-howto)
+  - [How to use in Objective-C project](#how-to-use-in-objective-c-project)
 - [Usage Guide](#usage-guide)
 - [Configuration Reference](#configuration-reference)
   - [Property list](#property-list)
