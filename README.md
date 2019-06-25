@@ -204,7 +204,7 @@ oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
   }
 }
 ```
-Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SingInViewController.swift#L62-L74)
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L62-L74)
 
 ### authenticate
 
@@ -322,7 +322,7 @@ stateManager?.getUser { response, error in
   // JSON response
 }
 ```
-Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SingInViewController.swift#L28-L38)
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L28-L38)
 
 #### clear
 
@@ -332,7 +332,7 @@ Removes the local authentication state by removing cached tokens in the keychain
 ```swift
 stateManager.clear()
 ```
-Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SingInViewController.swift#L70)
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L70)
 
 ## Development
 
