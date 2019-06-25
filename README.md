@@ -12,7 +12,7 @@
 
 This library is a swift wrapper around the AppAuth-iOS objective-c code for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
-You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation.
+You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation. You can also download our [sample application](https://github.com/okta/samples-ios/tree/master/browser-sign-in) 
 
 **Table of Contents**
 
