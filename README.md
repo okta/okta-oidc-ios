@@ -12,7 +12,7 @@
 
 This library is a swift wrapper around the AppAuth-iOS objective-c code for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
-You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation.
+You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation. You can also download our [sample application](https://github.com/okta/samples-ios/tree/master/browser-sign-in) 
 
 **Table of Contents**
 
@@ -125,7 +125,6 @@ let config = OktaOidcConfig(/* dictionary */)
 
 // Instantiate OktaOidc with custom configuration object
 let oktaOidc = OktaOidc(configuration: config)
-
 ```
 
 **Need a refresh token?**
@@ -188,6 +187,7 @@ oktaOidc.signInWithBrowser(from: self) { stateManager, error in
   // stateManager.refreshToken
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/WelcomeViewController.swift#L35-L46)
 
 ### signOutOfOkta
 
@@ -204,6 +204,7 @@ oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
   }
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L62-L74)
 
 ### authenticate
 
@@ -222,6 +223,7 @@ oktaOidc.authenticate(withSessionToken: token) { stateManager, error in
   // stateManager.refreshToken
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/custom-sign-in/OktaNativeLogin/UserProfile/UserProfileViewController.swift#L39-L50)
 
 ### stateManager
 
@@ -240,6 +242,7 @@ oktaOidc.signInWithBrowser(from: self) { stateManager, error in
   stateManager.writeToSecureStorage()
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/WelcomeViewController.swift#L44)
 
 To retrieve stored manager call `readFromSecureStorage(for: )` and pass here Okta configuration that corresponds to a manager you are interested in.
 
@@ -252,8 +255,8 @@ guard let stateManager = OktaOidcStateManager.readFromSecureStorage(for: oktaCon
 // stateManager.accessToken
 // stateManager.idToken
 // stateManager.refreshToken
-
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/AppDelegate.swift#L32)
 
 **Note:** In OktaOidc SDK 3.0 we added support for multiple Oauth 2.0 accounts. So developer can use Okta endpoint, social endpoint and others in one application. Therefore `OktaOidcStateManager` is stored in keychain using composite key constructed based on configuration. For backward compatibility there is a method `readFromSecureStorage()` that tries to read `OktaOidcStateManager` stored on a legacy way, so user could retrieve previously stored `OktaOidcStateManager` after switching to a newer version of SDK. 
 
@@ -271,6 +274,7 @@ stateManager?.introspect(token: accessToken, callback: { payload, error in
   print("Is token valid? \(isValid)")
 })
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/TokensViewController.swift#L38-L47)
 
 #### renew
 
@@ -286,6 +290,7 @@ stateManager?.renew { newAccessToken, error in
   // renewed TokenManager
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/TokensViewController.swift#L51-L59)
 
 #### revoke
 
@@ -301,6 +306,7 @@ stateManager?.revoke(accessToken) { response, error in
   // Token was revoked
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/TokensViewController.swift#L65-L75)
 
 #### getUser
 
@@ -316,6 +322,7 @@ stateManager?.getUser { response, error in
   // JSON response
 }
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L28-L38)
 
 #### clear
 
@@ -325,6 +332,7 @@ Removes the local authentication state by removing cached tokens in the keychain
 ```swift
 stateManager.clear()
 ```
+Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L70)
 
 ## Development
 
