@@ -1,7 +1,7 @@
-/*! @file OIDAuthStateChangeDelegate.h
+/*! @file OIDAuthorizationService+IOS.m
     @brief AppAuth iOS SDK
     @copyright
-        Copyright 2015 Google Inc. All Rights Reserved.
+        Copyright 2016 Google Inc. All Rights Reserved.
     @copydetails
         Licensed under the Apache License, Version 2.0 (the "License");
         you may not use this file except in compliance with the License.
@@ -16,23 +16,21 @@
         limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
+#import "OIDAuthorizationService+IOS.h"
 
-@class OIDAuthState;
+#import "OIDExternalUserAgentIOS.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-/*! @protocol OIDAuthStateChangeDelegate
-    @brief Delegate of the OIDAuthState used to monitor various changes in state.
- */
-@protocol OIDAuthStateChangeDelegate <NSObject>
+@implementation OIDAuthorizationService (IOS)
 
-/*! @brief Called when the authorization state changes and any backing storage needs to be updated.
-    @param state The @c OIDAuthState that changed.
-    @discussion If you are storing the authorization state, you should update the storage when the
-        state changes.
- */
-- (void)didChangeState:(OIDAuthState *)state;
++ (id<OIDExternalUserAgentSession>) presentAuthorizationRequest:(OIDAuthorizationRequest *)request
+    presentingViewController:(UIViewController *)presentingViewController
+                    callback:(OIDAuthorizationCallback)callback {
+  OIDExternalUserAgentIOS *externalUserAgent = [[OIDExternalUserAgentIOS alloc]
+      initWithPresentingViewController:presentingViewController];
+  return [self presentAuthorizationRequest:request externalUserAgent:externalUserAgent callback:callback];
+}
 
 @end
 

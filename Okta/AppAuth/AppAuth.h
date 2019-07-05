@@ -1,4 +1,4 @@
-/*! @file OktaOidc.h
+/*! @file AppAuth.h
     @brief AppAuth iOS SDK
     @copyright
         Copyright 2015 Google Inc. All Rights Reserved.
@@ -16,7 +16,6 @@
         limitations under the License.
  */
 
-#import "AppAuthCore.h"
 #import "OIDAuthState.h"
 #import "OIDAuthStateChangeDelegate.h"
 #import "OIDAuthStateErrorDelegate.h"
@@ -41,14 +40,22 @@
 #import "OIDTokenResponse.h"
 #import "OIDTokenUtilities.h"
 #import "OIDURLSessionProvider.h"
-#import "OIDEndSessionRequest.h"
-#import "OIDEndSessionResponse.h"
+
+#if TARGET_OS_TV
+#elif TARGET_OS_WATCH
+#elif TARGET_OS_IOS
+#import "OIDAuthState+IOS.h"
+#import "OIDAuthorizationService+IOS.h"
 #import "OIDExternalUserAgentIOS.h"
-#import "OIDClientMetadataParameters.h"
-#import "OIDDefines.h"
-#import "OIDFieldMapping.h"
-#import "OIDURLQueryComponent.h"
-#import "OIDAuthorizationService+EndSession.h"
+#import "OIDExternalUserAgentIOSCustomBrowser.h"
+#elif TARGET_OS_MAC
+#import "OIDAuthState+Mac.h"
+#import "OIDAuthorizationService+Mac.h"
+#import "OIDExternalUserAgentMac.h"
+#import "OIDRedirectHTTPHandler.h"
+#else
+#error "Platform Undefined"
+#endif
 
 /*! @mainpage AppAuth for iOS and macOS
 

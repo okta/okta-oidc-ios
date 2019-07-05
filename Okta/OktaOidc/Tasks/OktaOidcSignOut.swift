@@ -46,7 +46,7 @@ class OktaOidcSignOutTask: OktaOidcTask<Void>, OktaOidcUserSessionTask {
             let agent = OIDExternalUserAgentIOS(presenting: self.presenter)
 
             // Present the Sign Out flow
-            self.userAgentSession = OIDAuthorizationService.present(request, externalUserAgent: agent) {
+            self.userAgentSession = OIDAuthorizationService.present(request, externalUserAgent: agent!) {
                 response, responseError in
                 
                 defer { self.userAgentSession = nil }
