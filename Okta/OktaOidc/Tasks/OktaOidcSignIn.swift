@@ -41,7 +41,7 @@ class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
 
             // Start the authorization flow
             let externalUserAgent = OIDExternalUserAgentIOS(presenting: self.presenter)
-            self.userAgentSession = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent) {
+            self.userAgentSession = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent!) {
                 authorizationResponse, error in
                 
                 defer { self.userAgentSession = nil }
