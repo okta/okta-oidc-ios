@@ -89,7 +89,7 @@ extension OktaOidcHttpApiProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.allHTTPHeaderFields = headers != nil ? headers : request.allHTTPHeaderFields
-        request.addValue(OktaOidcUtils.userAgentHeader(), forHTTPHeaderField: "User-Agent")
+        request.addValue(OktaUserAgent.userAgentHeaderValue(), forHTTPHeaderField: OktaUserAgent.userAgentHeaderKey())
 
         if let data = body {
             request.httpBody = data

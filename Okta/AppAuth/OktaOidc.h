@@ -49,6 +49,7 @@
 #import "OIDFieldMapping.h"
 #import "OIDURLQueryComponent.h"
 #import "OIDAuthorizationService+EndSession.h"
+#import "OktaUserAgent.h"
 
 /*! @mainpage AppAuth for iOS and macOS
 

@@ -121,6 +121,8 @@
 		2F32CCA3229D6801003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA4229D6A4E003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A1A5FC1522D01216008F9511 /* OktaUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A5FC1622D01216008F9511 /* OktaUserAgent.m */; };
 		A1ED40C822CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ED40C122CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h */; };
 		A1ED40C922CFC3C200588343 /* OIDAuthorizationService+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ED40C222CFC3C200588343 /* OIDAuthorizationService+IOS.m */; };
 		A1ED40CA22CFC3C200588343 /* OIDAuthorizationService+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = A1ED40C222CFC3C200588343 /* OIDAuthorizationService+IOS.m */; };
@@ -311,6 +313,8 @@
 		2F32CC8A229D4FCD003A6768 /* Okta_UITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Okta_UITests.swift; sourceTree = "<group>"; };
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CC8C229D4FCD003A6768 /* UITestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestUtils.swift; sourceTree = "<group>"; };
+		A1A5FC1522D01216008F9511 /* OktaUserAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaUserAgent.h; sourceTree = "<group>"; };
+		A1A5FC1622D01216008F9511 /* OktaUserAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OktaUserAgent.m; sourceTree = "<group>"; };
 		A1ED40C122CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDExternalUserAgentIOSCustomBrowser.h; sourceTree = "<group>"; };
 		A1ED40C222CFC3C200588343 /* OIDAuthorizationService+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OIDAuthorizationService+IOS.m"; sourceTree = "<group>"; };
 		A1ED40C322CFC3C200588343 /* OIDAuthState+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OIDAuthState+IOS.m"; sourceTree = "<group>"; };
@@ -485,6 +489,8 @@
 				2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */,
 				2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */,
 				2F32CB10229D3A16003A6768 /* OIDAuthState+Okta.swift */,
+				A1A5FC1522D01216008F9511 /* OktaUserAgent.h */,
+				A1A5FC1622D01216008F9511 /* OktaUserAgent.m */,
 				A1ED40D522CFC8BE00588343 /* OIDAuthorizationService+EndSession.h */,
 				A1ED40D622CFC8BE00588343 /* OIDAuthorizationService+EndSession.m */,
 			);
@@ -643,6 +649,7 @@
 				2F32CB65229D3C3C003A6768 /* OIDAuthStateChangeDelegate.h in Headers */,
 				A1ED40D722CFC8BE00588343 /* OIDAuthorizationService+EndSession.h in Headers */,
 				2F32CB8B229D3C3C003A6768 /* OIDGrantTypes.h in Headers */,
+				A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */,
 				2F32CB66229D3C3C003A6768 /* OIDResponseTypes.h in Headers */,
 				2F32CB7C229D3C3C003A6768 /* OIDRegistrationRequest.h in Headers */,
 				2F32CB60229D3C3C003A6768 /* OIDExternalUserAgentIOS.h in Headers */,
@@ -837,6 +844,7 @@
 				2F32CB96229D3C3C003A6768 /* OIDServiceConfiguration.m in Sources */,
 				2F32CB8A229D3C3C003A6768 /* OIDTokenUtilities.m in Sources */,
 				2F32CB69229D3C3C003A6768 /* OIDError.m in Sources */,
+				A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */,
 				A1ED40CC22CFC3C200588343 /* OIDAuthState+IOS.m in Sources */,
 				2F32CB56229D3A16003A6768 /* OktaOidcRestApi.swift in Sources */,
 				A1ED40D822CFC8BE00588343 /* OIDAuthorizationService+EndSession.m in Sources */,
