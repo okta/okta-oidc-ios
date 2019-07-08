@@ -28,22 +28,18 @@ public struct UITestUtils {
 
         // Sign In via username and password inside of the Safari WebView
         let webViewsQuery = testApp.webViews
-        let usernameField = webViewsQuery.textFields["Username"]
-        let passwordField = webViewsQuery.secureTextFields["Password"]
-
-        if !waitForElement(usernameField, timeout: 5) && !waitForElement(passwordField, timeout: 5) {
-            return
-        }
-
-        usernameField.tap()
-        usernameField.typeText(username)
+        let uiElementUsername = webViewsQuery.textFields.element(boundBy: 0)
+        XCTAssertTrue(uiElementUsername.waitForExistence(timeout: 60))
+        uiElementUsername.tap()
+        uiElementUsername.typeText(username)
+        let uiElementPassword: XCUIElement = webViewsQuery.secureTextFields.element(boundBy: 0)
         if webViewsQuery.buttons["Next"].exists {
             webViewsQuery.buttons["Next"].tap()
-            XCTAssertTrue(webViewsQuery.secureTextFields["Password"].waitForExistence(timeout: 10))
+            XCTAssertTrue(uiElementPassword.waitForExistence(timeout: 60))
         }
-        webViewsQuery.secureTextFields["Password"].tap()
+        uiElementPassword.tap()
         sleep(1)
-        passwordField.typeText(password)
+        uiElementPassword.typeText(password)
         webViewsQuery.buttons["Sign In"].tap()
     }
 
