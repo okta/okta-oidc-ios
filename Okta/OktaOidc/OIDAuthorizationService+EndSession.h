@@ -1,4 +1,4 @@
-/*! @file OIDAuthorizationService+IOS.h
+/*! @file OIDAuthorizationService+EndSession.h
  @brief AppAuth iOS SDK
  @copyright
  Copyright 2016 Google Inc. All Rights Reserved.
@@ -17,7 +17,6 @@
  
  @modifications
  Copyright (C) 2019 Okta Inc.
-
  */
 
 #import <Foundation/Foundation.h>
