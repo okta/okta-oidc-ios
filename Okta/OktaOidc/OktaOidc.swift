@@ -21,11 +21,11 @@ public class OktaOidc: NSObject {
     private var currentUserSessionTask: OktaOidcUserSessionTask?
     
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
-        guard let config = configuration ?? (try? OktaOidcConfig.default()) else {
-            throw OktaOidcError.notConfigured
+        if let config = configuration {
+            self.configuration = config
+        } else {
+            self.configuration = try OktaOidcConfig.default()
         }
-        
-        self.configuration = config
     }
 
     @objc public func signInWithBrowser(from presenter: UIViewController,
