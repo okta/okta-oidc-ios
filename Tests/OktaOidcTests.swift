@@ -39,7 +39,7 @@ class OktaOidcTests: XCTestCase {
         } else {
             XCTAssertThrowsError(try OktaOidc()) { error in
                 XCTAssertEqual(
-                    OktaOidcError.notConfigured.localizedDescription,
+                    OktaOidcError.missingConfigurationValues.localizedDescription,
                     error.localizedDescription
                 )
             }
