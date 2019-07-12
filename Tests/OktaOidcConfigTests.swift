@@ -67,6 +67,50 @@ class OktaOidcConfigTests: XCTestCase {
         XCTAssertEqual(1, config.additionalParams?.count)
         XCTAssertEqual("test_param", config.additionalParams?["additionalParam"])
     }
+
+    func testCreationWithInvalidConfig() {
+        var dict = [
+            "clientId" : "test_client_id",
+            "issuer" : "",
+            "scopes" : "test_scope",
+            "redirectUri" : "com.test:/callback"
+        ]
+
+        do {
+            let _ = try OktaOidcConfig(with: dict)
+        } catch let error {
+            XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
+            return
+        }
+
+        dict = [
+            "clientId" : "",
+            "issuer" : "http://www.test.com",
+            "scopes" : "test_scope",
+            "redirectUri" : "com.test:/callback"
+        ]
+        
+        do {
+            let _ = try OktaOidcConfig(with: dict)
+        } catch let error {
+            XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
+            return
+        }
+
+        dict = [
+            "clientId" : "test_client_id",
+            "issuer" : "http://www.test.com",
+            "scopes" : "test_scope",
+            "redirectUri" : ""
+        ]
+        
+        do {
+            let _ = try OktaOidcConfig(with: dict)
+        } catch let error {
+            XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
+            return
+        }
+    }
     
     func testDefaultConfig() {
         do {

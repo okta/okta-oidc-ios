@@ -61,17 +61,6 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
             )
         }
     }
-
-    func testRunInvalidUrl() {
-        self.runAndWaitDiscovery(config: self.invalidConfig) { oidConfig, error in
-            XCTAssert(Thread.current.isMainThread)
-            XCTAssertNil(oidConfig)
-            XCTAssertEqual(
-                OktaOidcError.noDiscoveryEndpoint.localizedDescription,
-                error?.localizedDescription
-            )
-        }
-    }
     
     func testRunDiscoveryEndpointURL() {
         apiMock.configure(response: validOIDConfigDictionary) { request in
@@ -105,15 +94,6 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     private var validConfig: OktaOidcConfig {
         return try! OktaOidcConfig(with: [
             "issuer" : "http://test.issuer.com/oauth2/default",
-            "clientId" : "test_client",
-            "scopes" : "test",
-            "redirectUri" : "test:/callback"
-        ])
-    }
-
-    private var invalidConfig: OktaOidcConfig {
-        return try! OktaOidcConfig(with: [
-            "issuer" : "     ",
             "clientId" : "test_client",
             "scopes" : "test",
             "redirectUri" : "test:/callback"
