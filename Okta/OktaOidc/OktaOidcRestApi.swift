@@ -107,12 +107,16 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
         let task = URLSession.shared.dataTask(with: request){ data, response, error in
             guard let data = data, error == nil else {
                 let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                DispatchQueue.main.async {
                     onError(OktaOidcError.APIError(errorMessage))
-                    return
+                }
+                return
             }
             
             let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
-            onSuccess(responseJson)
+            DispatchQueue.main.async {
+                onSuccess(responseJson)
+            }
         }
         task.resume()
     }

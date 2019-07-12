@@ -147,7 +147,9 @@ open class OktaOidcStateManager: NSObject, NSCoding {
     
     @objc public func getUser(_ callback: @escaping ([String:Any]?, Error?) -> Void) {
         guard let token = accessToken else {
-            callback(nil, OktaOidcError.noBearerToken)
+            DispatchQueue.main.async {
+                callback(nil, OktaOidcError.noBearerToken)
+            }
             return
         }
 
@@ -213,7 +215,9 @@ private extension OktaOidcStateManager {
                         token: String?,
                         callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
         guard let token = token else {
-            callback(nil, OktaOidcError.noBearerToken)
+            DispatchQueue.main.async {
+                callback(nil, OktaOidcError.noBearerToken)
+            }
             return
         }
         
@@ -227,7 +231,9 @@ private extension OktaOidcStateManager {
                         postString: String? = nil,
                         callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
         guard let endpointURL = endpoint.getURL(discoveredMetadata: discoveryDictionary, issuer: issuer) else {
-            callback(nil, endpoint.noEndpointError)
+            DispatchQueue.main.async {
+                callback(nil, endpoint.noEndpointError)
+            }
             return
         }
         

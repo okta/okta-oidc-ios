@@ -14,10 +14,12 @@ class OktaOidcMetadataDiscovery: OktaOidcTask<OIDServiceConfiguration> {
 
     override func run(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
         guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
-              callback(nil, OktaOidcError.noDiscoveryEndpoint)
-              return
+            DispatchQueue.main.async {
+                callback(nil, OktaOidcError.noDiscoveryEndpoint)
+            }
+            return
         }
-        
+
         oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
             guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
                 callback(nil, OktaOidcError.parseFailure)
