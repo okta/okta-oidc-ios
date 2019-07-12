@@ -26,9 +26,9 @@ public class OktaOidcConfig: NSObject, Codable {
     }
 
     @objc public init(with dict: [String: String]) throws {
-        guard let clientId = dict["clientId"],
-              let issuer = dict["issuer"],
-              let scopes = dict["scopes"],
+        guard let clientId = dict["clientId"], clientId.count > 0,
+              let issuer = dict["issuer"], let _ = URL(string: issuer),
+              let scopes = dict["scopes"], scopes.count > 0,
               let redirectUriString = dict["redirectUri"],
               let redirectUri = URL(string: redirectUriString) else {
                 throw OktaOidcError.missingConfigurationValues
