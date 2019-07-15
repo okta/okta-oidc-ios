@@ -16,7 +16,7 @@
 @implementation OktaUserAgent
 
 +(NSString*)userAgentVersion {
-    return @"3.4.0";
+    return @"3.5.0";
 }
 
 +(NSString*)userAgentHeaderKey {
