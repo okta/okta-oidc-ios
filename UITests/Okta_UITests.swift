@@ -170,7 +170,7 @@ class OktaUITests: XCTestCase {
         tokenView.tap()
         tokenView.typeText("Some_Invalid_Token")
         
-        app.buttons["Authenticate"].tap()
+        app.buttons.allElementsBoundByIndex.first?.tap()
         
         guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 5) else {
             XCTFail("Authentication with invalid token should fail.")
