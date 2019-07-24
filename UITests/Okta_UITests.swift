@@ -169,8 +169,14 @@ class OktaUITests: XCTestCase {
         
         tokenView.tap()
         tokenView.typeText("Some_Invalid_Token")
-        
-        app.buttons.allElementsBoundByIndex.first?.tap()
+
+        let button = app.buttons.element(matching: .button, identifier: "AuthenticateWithSessionToken")
+        guard button.exists else {
+            XCTFail("Can't find authenticate button")
+            return
+        }
+
+        button.tap()
         
         guard let errorDescription = testUtils.getTextViewValueWithDelay(label: "MessageView", delay: 5) else {
             XCTFail("Authentication with invalid token should fail.")

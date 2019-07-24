@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14835.7" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14790.5"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Okta_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -190,7 +188,7 @@
         <!--Auth View Controller-->
         <scene sceneID="zNv-bR-Tlh">
             <objects>
-                <viewController id="Q0H-n6-O4s" customClass="AuthViewController" customModule="Okta_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Q0H-n6-O4s" customClass="AuthViewController" customModule="Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zHL-c1-dbf"/>
                         <viewControllerLayoutGuide type="bottom" id="8A8-uz-Zh3"/>
@@ -226,7 +224,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eu1-db-qaa">
                                         <rect key="frame" x="0.0" y="143" width="303" height="30"/>
                                         <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <accessibility key="accessibilityConfiguration" hint="Authenticate" identifier="Authenticate" label="Authenticate"/>
+                                        <accessibility key="accessibilityConfiguration" hint="Authenticate" identifier="AuthenticateWithSessionToken" label="Authenticate"/>
                                         <state key="normal" title="Authenticate">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -285,6 +283,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Icon" width="48.25" height="48.25"/>
+        <image name="Icon" width="96.5" height="96.5"/>
     </resources>
 </document>
