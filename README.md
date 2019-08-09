@@ -1,4 +1,4 @@
-[![iOS_13 ready](https://img.shields.io/badge/iOS_13-ready-brightgreen.svg?style=for-the-badge)](https://github.com/okta/okta-oidc-ios/releases/tag/3.5.0)
+[![iOS_13 ready](https://img.shields.io/badge/iOS%2013-RELEASE--3.5.0-green?style=for-the-badge&logo=apple)](https://github.com/okta/okta-oidc-ios/releases/tag/3.5.0)
 
 [<img src="https://aws1.discourse-cdn.com/standard14/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>](https://devforum.okta.com/)
 [![CI Status](http://img.shields.io/travis/okta/okta-oidc-ios.svg?style=flat)](https://travis-ci.org/okta/okta-oidc-ios)
