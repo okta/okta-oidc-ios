@@ -40,7 +40,15 @@ extension OIDAuthorizationService {
             queryItems.forEach({ item in
                 parameters[item.name] = item.value as NSString?
             })
-            
+
+            if let allHeaderFields = response.allHeaderFields as? [String : String],
+               let url = response.url {
+                let httpCookies = HTTPCookie.cookies(withResponseHeaderFields: allHeaderFields, for: url)
+                for cookie in httpCookies {
+                    HTTPCookieStorage.shared.setCookie(cookie)
+                }
+            }
+
             let authResponse = OIDAuthorizationResponse(request: authRequest, parameters: parameters)
             callback(authResponse, error)
         }.resume()
