@@ -223,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - ASWebAuthenticationPresentationContextProviding
 
 - (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(13.0)){
-    return UIApplication.sharedApplication.keyWindow;
+    return _presentingViewController.view.window;
 }
 #endif
 
