@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func signOutOfOktaButton(_ sender: Any) {
-        self.signOutOfOkta()
+        self.signOut()
     }
 
     @IBAction func clearTokens(_ sender: Any) {
@@ -137,18 +137,20 @@ class ViewController: UIViewController {
         }
     }
     
-    func signOutOfOkta() {
+    func signOut() {
         guard let authStateManager = authStateManager else { return }
 
-        oktaAppAuth?.signOutOfOkta(authStateManager, from: self) { error in
-            if let error = error {
-                self.updateUI(updateText: "Error: \(error)")
+        oktaAppAuth?.signOut(with: .all, authStateManager: authStateManager, from: self, callback: { success, notFinishedOptions, error in
+            if success {
+                self.authStateManager = nil
+                self.buildTokenTextView()
+            } else {
+                if let error = error {
+                    self.updateUI(updateText: "Error: \(error)")
+                }
                 return
             }
-            
-            self.authStateManager = nil
-            self.buildTokenTextView()
-        }
+        })
     }
 
     func updateUI(updateText: String) {

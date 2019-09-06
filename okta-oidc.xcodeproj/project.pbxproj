@@ -121,6 +121,9 @@
 		2F32CCA3229D6801003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA4229D6A4E003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
+		A10798972322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
+		A10798982322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
 		A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A1A5FC1522D01216008F9511 /* OktaUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A5FC1622D01216008F9511 /* OktaUserAgent.m */; };
 		A1ED40C822CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ED40C122CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h */; };
@@ -313,6 +316,7 @@
 		2F32CC8A229D4FCD003A6768 /* Okta_UITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Okta_UITests.swift; sourceTree = "<group>"; };
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CC8C229D4FCD003A6768 /* UITestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestUtils.swift; sourceTree = "<group>"; };
+		A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaSignOutOptions.swift; sourceTree = "<group>"; };
 		A1A5FC1522D01216008F9511 /* OktaUserAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaUserAgent.h; sourceTree = "<group>"; };
 		A1A5FC1622D01216008F9511 /* OktaUserAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OktaUserAgent.m; sourceTree = "<group>"; };
 		A1ED40C122CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDExternalUserAgentIOSCustomBrowser.h; sourceTree = "<group>"; };
@@ -493,6 +497,7 @@
 				A1A5FC1622D01216008F9511 /* OktaUserAgent.m */,
 				A1ED40D522CFC8BE00588343 /* OIDAuthorizationService+EndSession.h */,
 				A1ED40D622CFC8BE00588343 /* OIDAuthorizationService+EndSession.m */,
+				A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */,
 			);
 			path = OktaOidc;
 			sourceTree = "<group>";
@@ -853,6 +858,7 @@
 				2F32CB8F229D3C3C003A6768 /* OIDErrorUtilities.m in Sources */,
 				2F32CB88229D3C3C003A6768 /* OIDEndSessionRequest.m in Sources */,
 				2F32CB4F229D3A16003A6768 /* OktaOidcUserSessionTask.swift in Sources */,
+				A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 				2F32CB7D229D3C3C003A6768 /* OIDTokenRequest.m in Sources */,
 				2F32CB63229D3C3C003A6768 /* OIDRegistrationRequest.m in Sources */,
 				2F32CB67229D3C3C003A6768 /* OIDAuthorizationRequest.m in Sources */,
@@ -877,6 +883,7 @@
 				2F32CBC9229D4289003A6768 /* AppDelegate.swift in Sources */,
 				2F32CBC8229D4285003A6768 /* ViewController.swift in Sources */,
 				2F32CBC7229D4281003A6768 /* AuthViewController.swift in Sources */,
+				A10798972322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -907,6 +914,7 @@
 				2F32CC71229D4E76003A6768 /* OIDTokenResponseTests.m in Sources */,
 				2F32CC72229D4E76003A6768 /* OIDEndSessionRequestTests.m in Sources */,
 				2F32CC6B229D4E76003A6768 /* OIDRegistrationRequestTests.m in Sources */,
+				A10798982322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 				A1ED40CA22CFC3C200588343 /* OIDAuthorizationService+IOS.m in Sources */,
 				2F32CC3B229D4D11003A6768 /* OktaOidcEndpointTests.swift in Sources */,
 				2F32CC3E229D4D11003A6768 /* OktaOidcStateManagerTests.swift in Sources */,
