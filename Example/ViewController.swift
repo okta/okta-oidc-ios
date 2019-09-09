@@ -76,7 +76,7 @@ class ViewController: UIViewController {
         self.signInWithBrowser()
     }
     
-    @IBAction func signOutOfOktaButton(_ sender: Any) {
+    @IBAction func signOutButton(_ sender: Any) {
         self.signOut()
     }
 

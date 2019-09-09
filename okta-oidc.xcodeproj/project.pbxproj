@@ -123,7 +123,6 @@
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
 		A10798972322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
-		A10798982322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
 		A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A1A5FC1522D01216008F9511 /* OktaUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A5FC1622D01216008F9511 /* OktaUserAgent.m */; };
 		A1ED40C822CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */ = {isa = PBXBuildFile; fileRef = A1ED40C122CFC3C200588343 /* OIDExternalUserAgentIOSCustomBrowser.h */; };
@@ -914,7 +913,6 @@
 				2F32CC71229D4E76003A6768 /* OIDTokenResponseTests.m in Sources */,
 				2F32CC72229D4E76003A6768 /* OIDEndSessionRequestTests.m in Sources */,
 				2F32CC6B229D4E76003A6768 /* OIDRegistrationRequestTests.m in Sources */,
-				A10798982322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 				A1ED40CA22CFC3C200588343 /* OIDAuthorizationService+IOS.m in Sources */,
 				2F32CC3B229D4D11003A6768 /* OktaOidcEndpointTests.swift in Sources */,
 				2F32CC3E229D4D11003A6768 /* OktaOidcStateManagerTests.swift in Sources */,

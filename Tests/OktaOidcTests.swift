@@ -29,6 +29,19 @@ class OktaOidcTests: XCTestCase {
             "scopes": "openid profile offline_access"
         ])
     }
+
+    var apiMock: OktaOidcApiMock!
+    var authStateManager: OktaOidcStateManager!
+    
+    override func setUp() {
+        super.setUp()
+        apiMock = OktaOidcApiMock()
+        authStateManager = OktaOidcStateManager(
+            authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
+        )
+        
+        authStateManager.restAPI = apiMock
+    }
     
     func testCreationWithNil() {
         // Depends on whether Okta.plist is configured or not
@@ -54,5 +67,152 @@ class OktaOidcTests: XCTestCase {
 
         let oktaOidc = try? OktaOidc(configuration: envConfig)
         XCTAssertNotNil(oktaOidc)
+    }
+
+    func testSignOutOptions() {
+        var options: OktaSignOutOptions = []
+        options.insert(.all)
+        XCTAssertTrue(options.contains(.revokeAccessToken))
+        XCTAssertTrue(options.contains(.revokeRefreshToken))
+        XCTAssertTrue(options.contains(.signOutFromOkta))
+        XCTAssertTrue(options.contains(.removeTokensFromStorage))
+
+        options.remove(.all)
+        options.insert(.revokeTokens)
+        XCTAssertTrue(options.contains(.revokeAccessToken))
+        XCTAssertTrue(options.contains(.revokeRefreshToken))
+        XCTAssertFalse(options.contains(.signOutFromOkta))
+        XCTAssertFalse(options.contains(.removeTokensFromStorage))
+    }
+
+    func testSignOutWithEmptyOptions() {
+        let oktaOidc = createDymmyOidcObject()
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        oktaOidc?.signOut(with: [], authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+            XCTAssertTrue(result)
+            XCTAssertTrue(returnedOptions.isEmpty)
+            XCTAssertNil(error)
+        })
+    }
+
+    func testSignOutWithTokensOptions() {
+        let oktaOidc = createDymmyOidcObject()
+        var numberOfRevokes = 0
+        apiMock.configure(response: [:]) { urlRequest in
+            if let url = urlRequest.url, url.absoluteString.contains("/oauth2/default/v1/revoke") {
+                numberOfRevokes = numberOfRevokes + 1
+            } else {
+                XCTFail("Wrong endpoint has been called")
+            }
+        }
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        let options: OktaSignOutOptions = .revokeTokens
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+            XCTAssertEqual(numberOfRevokes, 2)
+            XCTAssertTrue(result)
+            XCTAssertTrue(returnedOptions.isEmpty)
+            XCTAssertNil(error)
+        })
+    }
+
+    func testSignOutWithTokensAndRemoveFromStorageOptions() {
+        let oktaOidc = createDymmyOidcObject()
+        var numberOfRevokes = 0
+        apiMock.configure(response: [:]) { urlRequest in
+            if let url = urlRequest.url, url.absoluteString.contains("/oauth2/default/v1/revoke") {
+                numberOfRevokes = numberOfRevokes + 1
+            } else {
+                XCTFail("Wrong endpoint has been called")
+            }
+        }
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
+        authStateManager.writeToSecureStorage()
+        guard let _ = OktaOidcStateManager.readFromSecureStorage(for: createDummyConfig()!) else {
+            XCTFail("Failed to read from secure storage")
+            return
+        }
+        
+        let expectation = self.expectation(description: "SignOut callback should be called")
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+            XCTAssertEqual(numberOfRevokes, 2)
+            XCTAssertTrue(result)
+            XCTAssertTrue(returnedOptions.isEmpty)
+            XCTAssertNil(error)
+            if OktaOidcStateManager.readFromSecureStorage(for: self.createDummyConfig()!) != nil {
+                XCTFail("Data has not been deleted from the secure storage")
+            }
+            expectation.fulfill()
+        })
+        
+        self.wait(for: [expectation], timeout: 1)
+    }
+
+    func testSignOutWithTokensOptions_failRevokeAccessToken() {
+        let oktaOidc = createDymmyOidcObject()
+        var numberOfRevokes = 0
+        apiMock.configure(error: .noRefreshToken) { urlRequest in
+            if let url = urlRequest.url, url.absoluteString.contains("/oauth2/default/v1/revoke") {
+                numberOfRevokes = numberOfRevokes + 1
+            } else {
+                XCTFail("Wrong endpoint has been called")
+            }
+        }
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
+        let expectation = self.expectation(description: "SignOut callback should be called")
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+            XCTAssertEqual(numberOfRevokes, 1)
+            XCTAssertFalse(result)
+            XCTAssertTrue(returnedOptions.contains(options))
+            XCTAssertEqual(error?.localizedDescription, OktaOidcError.noRefreshToken.localizedDescription)
+            expectation.fulfill()
+        })
+        
+        self.wait(for: [expectation], timeout: 1)
+    }
+
+    func testSignOutWithTokensOptions_failRevokeRefreshToken() {
+        let oktaOidc = createDymmyOidcObject()
+        var numberOfRevokes = 0
+        apiMock.configure(response: [:]) { urlRequest in
+            if let url = urlRequest.url, url.absoluteString.contains("/oauth2/default/v1/revoke") {
+                numberOfRevokes = numberOfRevokes + 1
+                self.apiMock.configure(error: .noRefreshToken) { urlRequest in
+                    if let url = urlRequest.url, url.absoluteString.contains("/oauth2/default/v1/revoke") {
+                        numberOfRevokes = numberOfRevokes + 1
+                    } else {
+                        XCTFail("Wrong endpoint has been called")
+                    }
+                }
+            } else {
+                XCTFail("Wrong endpoint has been called")
+            }
+        }
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
+        let expectation = self.expectation(description: "SignOut callback should be called")
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+            XCTAssertEqual(numberOfRevokes, 2)
+            XCTAssertFalse(result)
+            XCTAssertTrue(returnedOptions.contains(.revokeRefreshToken))
+            XCTAssertTrue(returnedOptions.contains(.removeTokensFromStorage))
+            XCTAssertFalse(returnedOptions.contains(.revokeAccessToken))
+            XCTAssertEqual(error?.localizedDescription, OktaOidcError.noRefreshToken.localizedDescription)
+            expectation.fulfill()
+        })
+        
+        self.wait(for: [expectation], timeout: 1)
+    }
+
+    func createDummyConfig() -> OktaOidcConfig? {
+        return try? OktaOidcConfig(with: ["issuer" : TestUtils.mockIssuer, "clientId" : TestUtils.mockClientId, "scopes" : "id_token", "redirectUri" : "com.example:/callback"])
+    }
+
+    func createDymmyOidcObject() -> OktaOidc? {
+        let dummyConfig = createDummyConfig()
+        let oktaOidc = try? OktaOidc(configuration: dummyConfig)
+        XCTAssertNotNil(oktaOidc)
+        return oktaOidc
     }
 }
