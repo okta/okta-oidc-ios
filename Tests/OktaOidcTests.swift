@@ -71,14 +71,14 @@ class OktaOidcTests: XCTestCase {
 
     func testSignOutOptions() {
         var options: OktaSignOutOptions = []
-        options.insert(.all)
+        options.insert(.allOptions)
         XCTAssertTrue(options.contains(.revokeAccessToken))
         XCTAssertTrue(options.contains(.revokeRefreshToken))
         XCTAssertTrue(options.contains(.signOutFromOkta))
         XCTAssertTrue(options.contains(.removeTokensFromStorage))
 
-        options.remove(.all)
-        options.insert(.revokeTokens)
+        options.remove(.allOptions)
+        options.insert(.revokeTokensOptions)
         XCTAssertTrue(options.contains(.revokeAccessToken))
         XCTAssertTrue(options.contains(.revokeRefreshToken))
         XCTAssertFalse(options.contains(.signOutFromOkta))
@@ -106,7 +106,7 @@ class OktaOidcTests: XCTestCase {
             }
         }
         let viewController = UIViewController(nibName: nil, bundle: nil)
-        let options: OktaSignOutOptions = .revokeTokens
+        let options: OktaSignOutOptions = .revokeTokensOptions
         oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
             XCTAssertEqual(numberOfRevokes, 2)
             XCTAssertTrue(result)

@@ -24,6 +24,6 @@ public struct OktaSignOutOptions: OptionSet {
     public static let signOutFromOkta          = OktaSignOutOptions(rawValue: 1 << 2)
     public static let removeTokensFromStorage  = OktaSignOutOptions(rawValue: 1 << 3)
     
-    public static let revokeTokens: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken]
-    public static let all: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .signOutFromOkta, .removeTokensFromStorage]
+    public static let revokeTokensOptions: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken]
+    public static let allOptions: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .signOutFromOkta, .removeTokensFromStorage]
 }

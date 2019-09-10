@@ -140,7 +140,7 @@ class ViewController: UIViewController {
     func signOut() {
         guard let authStateManager = authStateManager else { return }
 
-        oktaAppAuth?.signOut(with: .all, authStateManager: authStateManager, from: self, callback: { success, notFinishedOptions, error in
+        oktaAppAuth?.signOut(with: .allOptions, authStateManager: authStateManager, from: self, callback: { success, notFinishedOptions, error in
             if success {
                 self.authStateManager = nil
                 self.buildTokenTextView()
