@@ -193,7 +193,7 @@ Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sig
 
 ### signOutOfOkta
 
-You can start the sign out flow by simply calling `signOutFromOkta` with the appropriate `OktaOidcStateManager` . This method will end the user's Okta session in the browser.
+This method will end the user's Okta session in the browser. Method deletes Okta's persistent cookie and disables SSO capabilties 
 
 **Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaOidcStateManager` to terminate the user's local session in your application.
 
@@ -207,6 +207,33 @@ oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
 }
 ```
 Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L62-L74)
+
+### signOut
+
+This method helps to perform mutli-step sign out flow. Provide options that you want to perform and sdk will run them as a batch. Available options are:
+- revokeAccessToken - sdk revokes access token
+- revokeRefreshToken - sdk revokes refresh token
+- signOutFromOkta - sdk calls [`signOutOfOkta`](#signoutofokta)
+- removeTokensFromStorage - sdk removes tokens from the secure storage
+- revokeTokensOptions - revokes access and refresh tokens
+- allOptions - revokes tokens, signs out from Okta and removes tokens from the secure storage
+
+The order of operations performed by the sdk:
+1. Revoke access token, if option is set
+2. Revoke refresh token, if option is set
+3. Browser sign out, if option is set
+4. Remove tokens from the secure storage, if option is set
+
+```swift
+let options: OktaSignOutOptions = .revokeTokensOptions
+options.insert(.signOutFromOkta)
+oktaOidc.signOut(with: options, authStateManager: authStateManager, from: self, callback: { success, notFinishedOptions, error in
+    if !success {
+        // Error
+        return
+    }
+})
+```
 
 ### authenticate
 
