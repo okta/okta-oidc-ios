@@ -214,24 +214,31 @@ This method helps to perform a multi-step sign-out flow. The method provides opt
 The available options are:
 - revokeAccessToken - SDK revokes access token
 - revokeRefreshToken - SDK revokes refresh token
-- signOutFromOkta - SDK calls [`signOutOfOkta`](#signoutofokta)
 - removeTokensFromStorage - SDK removes tokens from the secure storage
+- signOutFromOkta - SDK calls [`signOutOfOkta`](#signoutofokta)
 - revokeTokensOptions - revokes access and refresh tokens
 - allOptions - revokes tokens, signs out from Okta, and removes tokens from the secure storage
 
 The order of operations performed by the SDK:
-1. Revoke the access token, if the option is set
-2. Revoke the refresh token, if the option is set
-3. Browser sign out, if the option is set
-4. Remove tokens from the secure storage, if the option is set
+1. Revoke the access token, if the option is set. If this step fails step 3 will be omitted.
+2. Revoke the refresh token, if the option is set. If this step fails step 3 will be omitted.
+3. Remove tokens from the secure storage, if the option is set.
+4. Browser sign out, if the option is set.
 
 ```swift
 let options: OktaSignOutOptions = .revokeTokensOptions
 options.insert(.signOutFromOkta)
-oktaOidc.signOut(with: options, authStateManager: authStateManager, from: self, callback: { success, notFinishedOptions, error in
+oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
+    if currentOption.contains(.revokeAccessToken) {
+        // update progress
+    } else if currentOption.contains(.revokeRefreshToken) {
+        // update progress
+    } else if currentOption.contains(.signOutFromOkta) {
+        // update progress
+    }
+}, completionHandler: { success, failedOptions in
     if !success {
-        // Error
-        return
+        // handle error
     }
 })
 ```

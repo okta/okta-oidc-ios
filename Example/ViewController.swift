@@ -141,7 +141,9 @@ class ViewController: UIViewController {
         guard let authStateManager = authStateManager else { return }
         
         oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
-            if currentOption.contains(.revokeTokensOptions) {
+            if currentOption.contains(.revokeAccessToken) {
+                self.updateUI(updateText: "Revoking tokens...")
+            } else if currentOption.contains(.revokeRefreshToken) {
                 self.updateUI(updateText: "Revoking tokens...")
             } else if currentOption.contains(.signOutFromOkta) {
                 self.updateUI(updateText: "Signing out from Okta...")
