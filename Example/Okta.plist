@@ -5,12 +5,12 @@
 	<key>scopes</key>
 	<string>openid profile offline_access</string>
 	<key>redirectUri</key>
-	<string>com.okta.example:/callback</string>
+	<string>{scheme}:/callback</string>
 	<key>clientId</key>
-	<string>0oa2p7eq7uDmZY4sJ0g7</string>
+	<string>{clientId}</string>
 	<key>issuer</key>
-	<string>https://sdk-test.trexcloud.com</string>
+	<string>https://{yourOktaDomain}/oauth2/default</string>
 	<key>logoutRedirectUri</key>
-	<string>com.okta.example:/logout</string>
+	<string>{scheme}:/logout</string>
 </dict>
 </plist>
