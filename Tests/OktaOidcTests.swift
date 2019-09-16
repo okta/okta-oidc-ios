@@ -88,10 +88,12 @@ class OktaOidcTests: XCTestCase {
     func testSignOutWithEmptyOptions() {
         let oktaOidc = createDymmyOidcObject()
         let viewController = UIViewController(nibName: nil, bundle: nil)
-        oktaOidc?.signOut(with: [], authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+        oktaOidc?.signOut(with: [], authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            XCTFail("Unexpected progress step")
+        },
+        completionHandler: { result, failedOptions in
             XCTAssertTrue(result)
-            XCTAssertTrue(returnedOptions.isEmpty)
-            XCTAssertNil(error)
+            XCTAssertTrue(failedOptions.isEmpty)
         })
     }
 
@@ -107,11 +109,21 @@ class OktaOidcTests: XCTestCase {
         }
         let viewController = UIViewController(nibName: nil, bundle: nil)
         let options: OktaSignOutOptions = .revokeTokensOptions
-        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+        var currentStep = 1
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            if currentStep == 1 && !currentOption.contains(.revokeAccessToken) {
+                XCTFail("Expected revoke acces token step")
+            } else if currentStep == 2 && !currentOption.contains(.revokeRefreshToken) {
+                XCTFail("Expected revoke refresh token step")
+            } else if currentOption.contains(.removeTokensFromStorage) || currentOption.contains(.signOutFromOkta) {
+                XCTFail("Unexpected progress step")
+            }
+            currentStep = currentStep + 1
+        },
+        completionHandler: { result, failedOptions in
             XCTAssertEqual(numberOfRevokes, 2)
             XCTAssertTrue(result)
-            XCTAssertTrue(returnedOptions.isEmpty)
-            XCTAssertNil(error)
+            XCTAssertTrue(failedOptions.isEmpty)
         })
     }
 
@@ -133,12 +145,24 @@ class OktaOidcTests: XCTestCase {
             return
         }
         
-        let expectation = self.expectation(description: "SignOut callback should be called")
-        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+        let expectation = self.expectation(description: "Revoke and remove tokens should be called")
+        var currentStep = 1
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            if currentStep == 1 && !currentOption.contains(.revokeAccessToken) {
+                XCTFail("Expected revoke acces token step")
+            } else if currentStep == 2 && !currentOption.contains(.revokeRefreshToken) {
+                XCTFail("Expected revoke refresh token step")
+            } else if currentStep == 3 && !currentOption.contains(.removeTokensFromStorage) {
+                XCTFail("Expected remove tokens step")
+            } else if currentOption.contains(.signOutFromOkta) {
+                XCTFail("Unexpected progress step")
+            }
+            currentStep = currentStep + 1
+        },
+        completionHandler: { result, failedOptions in
             XCTAssertEqual(numberOfRevokes, 2)
             XCTAssertTrue(result)
-            XCTAssertTrue(returnedOptions.isEmpty)
-            XCTAssertNil(error)
+            XCTAssertTrue(failedOptions.isEmpty)
             if OktaOidcStateManager.readFromSecureStorage(for: self.createDummyConfig()!) != nil {
                 XCTFail("Data has not been deleted from the secure storage")
             }
@@ -159,13 +183,23 @@ class OktaOidcTests: XCTestCase {
             }
         }
         let viewController = UIViewController(nibName: nil, bundle: nil)
-        let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
-        let expectation = self.expectation(description: "SignOut callback should be called")
-        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+        let options: OktaSignOutOptions = [.revokeAccessToken]
+        let expectation = self.expectation(description: "Revoke should be called only for access token")
+        var currentStep = 1
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            if currentStep == 1 && !currentOption.contains(.revokeAccessToken) {
+                XCTFail("Expected revoke acces token step")
+            } else if currentOption.contains(.revokeRefreshToken)       ||
+                      currentOption.contains(.removeTokensFromStorage)  ||
+                      currentOption.contains(.signOutFromOkta) {
+                XCTFail("Unexpected progress step")
+            }
+            currentStep = currentStep + 1
+        },
+        completionHandler: { result, failedOptions in
             XCTAssertEqual(numberOfRevokes, 1)
             XCTAssertFalse(result)
-            XCTAssertTrue(returnedOptions.contains(options))
-            XCTAssertEqual(error?.localizedDescription, OktaOidcError.noRefreshToken.localizedDescription)
+            XCTAssertTrue(failedOptions.contains(.revokeAccessToken))
             expectation.fulfill()
         })
         
@@ -191,18 +225,27 @@ class OktaOidcTests: XCTestCase {
         }
         let viewController = UIViewController(nibName: nil, bundle: nil)
         let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
-        let expectation = self.expectation(description: "SignOut callback should be called")
-        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, callback: { result, returnedOptions, error in
+        let expectation = self.expectation(description: "Revoke should be called for both tokens")
+        var currentStep = 1
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            if currentStep == 1 && !currentOption.contains(.revokeAccessToken) {
+                XCTFail("Expected revoke acces token step")
+            } else if currentStep == 2 && !currentOption.contains(.revokeRefreshToken) {
+                XCTFail("Expected revoke refresh token step")
+            } else if currentOption.contains(.removeTokensFromStorage) || currentOption.contains(.signOutFromOkta) {
+                XCTFail("Unexpected progress step")
+            }
+            currentStep = currentStep + 1
+        },
+        completionHandler: { result, failedOptions in
             XCTAssertEqual(numberOfRevokes, 2)
             XCTAssertFalse(result)
-            XCTAssertTrue(returnedOptions.contains(.revokeRefreshToken))
-            XCTAssertTrue(returnedOptions.contains(.removeTokensFromStorage))
-            XCTAssertFalse(returnedOptions.contains(.revokeAccessToken))
-            XCTAssertEqual(error?.localizedDescription, OktaOidcError.noRefreshToken.localizedDescription)
+            XCTAssertTrue(failedOptions.contains(.revokeRefreshToken))
+            XCTAssertFalse(failedOptions.contains(.revokeAccessToken))
             expectation.fulfill()
         })
         
-        self.wait(for: [expectation], timeout: 1)
+        self.wait(for: [expectation], timeout: 5)
     }
 
     func createDummyConfig() -> OktaOidcConfig? {

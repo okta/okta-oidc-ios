@@ -64,71 +64,29 @@ public class OktaOidc: NSObject {
             callback(error)
         }
     }
+    
+    public func signOut(authStateManager: OktaOidcStateManager,
+                        from presenter: UIViewController,
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        self.signOut(with: .allOptions,
+                     authStateManager: authStateManager,
+                     from: presenter,
+                     progressHandler: progressHandler,
+                     completionHandler: completionHandler)
+    }
 
     public func signOut(with options: OktaSignOutOptions,
                         authStateManager: OktaOidcStateManager,
                         from presenter: UIViewController,
-                        callback: @escaping ((Bool, OktaSignOutOptions, Error?) -> Void)) {
-        if options.isEmpty {
-            callback(true, [], nil)
-            return
-        }
-        
-        var notFinishedOptions: OktaSignOutOptions = options
-        if options.contains(.revokeAccessToken) {
-            authStateManager.revoke(authStateManager.accessToken) { (success, error) in
-                if success {
-                    notFinishedOptions.remove(.revokeAccessToken)
-                    self.signOut(with: notFinishedOptions,
-                                 authStateManager: authStateManager,
-                                 from: presenter,
-                                 callback: callback)
-                } else {
-                    callback(false, notFinishedOptions, error)
-                }
-            }
-            return
-        }
-        
-        if options.contains(.revokeRefreshToken) {
-            authStateManager.revoke(authStateManager.refreshToken) { (success, error) in
-                if success {
-                    notFinishedOptions.remove(.revokeRefreshToken)
-                    self.signOut(with: notFinishedOptions,
-                                 authStateManager: authStateManager,
-                                 from: presenter,
-                                 callback: callback)
-                } else {
-                    callback(false, notFinishedOptions, error)
-                }
-            }
-            return
-        }
-
-        if options.contains(.signOutFromOkta) {
-            self.signOutOfOkta(authStateManager, from: presenter) { error in
-                if let error = error {
-                    callback(false, notFinishedOptions, error)
-                } else {
-                    notFinishedOptions.remove(.signOutFromOkta)
-                    self.signOut(with: notFinishedOptions,
-                                 authStateManager: authStateManager,
-                                 from: presenter,
-                                 callback: callback)
-                }
-            }
-            return
-        }
-
-        if options.contains(.removeTokensFromStorage) {
-            try? authStateManager.removeFromSecureStorage()
-            notFinishedOptions.remove(.removeTokensFromStorage)
-            self.signOut(with: notFinishedOptions,
-                         authStateManager: authStateManager,
-                         from: presenter,
-                         callback: callback)
-            return
-        }
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        self.signOut(with: options,
+                     authStateManager: authStateManager,
+                     from: presenter,
+                     failedOptions: [],
+                     progressHandler: progressHandler,
+                     completionHandler: completionHandler)
     }
 
     @objc public func authenticate(withSessionToken sessionToken: String,
