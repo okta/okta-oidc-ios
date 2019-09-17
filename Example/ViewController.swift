@@ -76,8 +76,8 @@ class ViewController: UIViewController {
         self.signInWithBrowser()
     }
     
-    @IBAction func signOutOfOktaButton(_ sender: Any) {
-        self.signOutOfOkta()
+    @IBAction func signOutButton(_ sender: Any) {
+        self.signOut()
     }
 
     @IBAction func clearTokens(_ sender: Any) {
@@ -137,18 +137,25 @@ class ViewController: UIViewController {
         }
     }
     
-    func signOutOfOkta() {
+    func signOut() {
         guard let authStateManager = authStateManager else { return }
-
-        oktaAppAuth?.signOutOfOkta(authStateManager, from: self) { error in
-            if let error = error {
-                self.updateUI(updateText: "Error: \(error)")
-                return
+        
+        oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
+            if currentOption.contains(.revokeAccessToken) {
+                self.updateUI(updateText: "Revoking tokens...")
+            } else if currentOption.contains(.revokeRefreshToken) {
+                self.updateUI(updateText: "Revoking tokens...")
+            } else if currentOption.contains(.signOutFromOkta) {
+                self.updateUI(updateText: "Signing out from Okta...")
             }
-            
-            self.authStateManager = nil
-            self.buildTokenTextView()
-        }
+        }, completionHandler: { success, failedOptions in
+            if success {
+                self.authStateManager = nil
+                self.buildTokenTextView()
+            } else {
+                self.updateUI(updateText: "Error: failed to logout")
+            }
+        })
     }
 
     func updateUI(updateText: String) {

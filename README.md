@@ -193,7 +193,7 @@ Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sig
 
 ### signOutOfOkta
 
-You can start the sign out flow by simply calling `signOutFromOkta` with the appropriate `OktaOidcStateManager` . This method will end the user's Okta session in the browser.
+This method ends the user's Okta session in the browser. The method deletes Okta's persistent cookie and disables SSO capabilities.
 
 **Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaOidcStateManager` to terminate the user's local session in your application.
 
@@ -208,9 +208,44 @@ oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
 ```
 Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L62-L74)
 
+### signOut
+
+This method helps to perform a multi-step sign-out flow. The method provides options that you want to perform and the SDK runs the options as a batch.
+The available options are:
+- revokeAccessToken - SDK revokes access token
+- revokeRefreshToken - SDK revokes refresh token
+- removeTokensFromStorage - SDK removes tokens from the secure storage
+- signOutFromOkta - SDK calls [`signOutOfOkta`](#signoutofokta)
+- revokeTokensOptions - revokes access and refresh tokens
+- allOptions - revokes tokens, signs out from Okta, and removes tokens from the secure storage
+
+The order of operations performed by the SDK:
+1. Revoke the access token, if the option is set. If this step fails step 3 will be omitted.
+2. Revoke the refresh token, if the option is set. If this step fails step 3 will be omitted.
+3. Remove tokens from the secure storage, if the option is set.
+4. Browser sign out, if the option is set.
+
+```swift
+let options: OktaSignOutOptions = .revokeTokensOptions
+options.insert(.signOutFromOkta)
+oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
+    if currentOption.contains(.revokeAccessToken) {
+        // update progress
+    } else if currentOption.contains(.revokeRefreshToken) {
+        // update progress
+    } else if currentOption.contains(.signOutFromOkta) {
+        // update progress
+    }
+}, completionHandler: { success, failedOptions in
+    if !success {
+        // handle error
+    }
+})
+```
+
 ### authenticate
 
-If you already logged in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
+If you already signed in to Okta and have a valid session token, you can complete authorization by calling `authenticate(withSessionToken:)`. Upon successful authorization, this operation returns a valid `OktaOidcStateManager` in the callback. Clients are responsible for further storage and maintenance of the manager.
 
 ```swift
 oktaOidc.authenticate(withSessionToken: token) { stateManager, error in

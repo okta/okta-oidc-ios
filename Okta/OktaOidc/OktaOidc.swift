@@ -64,6 +64,30 @@ public class OktaOidc: NSObject {
             callback(error)
         }
     }
+    
+    public func signOut(authStateManager: OktaOidcStateManager,
+                        from presenter: UIViewController,
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        self.signOut(with: .allOptions,
+                     authStateManager: authStateManager,
+                     from: presenter,
+                     progressHandler: progressHandler,
+                     completionHandler: completionHandler)
+    }
+
+    public func signOut(with options: OktaSignOutOptions,
+                        authStateManager: OktaOidcStateManager,
+                        from presenter: UIViewController,
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        self.signOut(with: options,
+                     authStateManager: authStateManager,
+                     from: presenter,
+                     failedOptions: [],
+                     progressHandler: progressHandler,
+                     completionHandler: completionHandler)
+    }
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {

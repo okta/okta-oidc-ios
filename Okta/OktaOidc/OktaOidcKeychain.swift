@@ -10,13 +10,13 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-enum OktaOidcKeychainError: Error {
+public enum OktaOidcKeychainError: Error {
     case codingError
     case failed(String)
     case notFound
 }
 
-class OktaOidcKeychain: NSObject {
+public class OktaOidcKeychain: NSObject {
 
     /**
      Stores an item securely in the Keychain.
@@ -24,7 +24,7 @@ class OktaOidcKeychain: NSObject {
      - key: Hash to reference the stored Keychain item
      - string: String to store inside of the keychain
      */
-    class func set(key: String, string: String, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
+    public class func set(key: String, string: String, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
         guard let objectData = string.data(using: .utf8) else {
             throw OktaOidcKeychainError.codingError
         }
@@ -37,7 +37,7 @@ class OktaOidcKeychain: NSObject {
      - key: Hash to reference the stored Keychain item
      - data: Data to store inside of the keychain
      */
-    class func set(key: String, data: Data, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
+    public class func set(key: String, data: Data, accessGroup: String? = nil, accessibility: CFString? = nil) throws {
         var q = [
             kSecClass as String: kSecClassGenericPassword as String,
             kSecValueData as String: data,
@@ -64,7 +64,7 @@ class OktaOidcKeychain: NSObject {
      - parameters:
      - key: Hash to reference the stored Keychain item
      */
-    class func get(key: String) throws -> String {
+    public class func get(key: String) throws -> String {
         let data: Data = try get(key: key)
         guard let string = String(data: data, encoding: .utf8) else {
             throw OktaOidcKeychainError.codingError
@@ -77,7 +77,7 @@ class OktaOidcKeychain: NSObject {
      - parameters:
      - key: Hash to reference the stored Keychain item
      */
-    class func get(key: String) throws -> Data {
+    public class func get(key: String) throws -> Data {
         let q = [
             kSecClass as String: kSecClassGenericPassword,
             kSecReturnData as String: kCFBooleanTrue,
@@ -106,7 +106,7 @@ class OktaOidcKeychain: NSObject {
      - parameters:
      - key: Hash to reference the stored Keychain item
      */
-    class func remove(key: String) throws {
+    public class func remove(key: String) throws {
         let data: Data = try get(key: key)
         let q = [
             kSecClass as String: kSecClassGenericPassword as String,
@@ -124,7 +124,7 @@ class OktaOidcKeychain: NSObject {
     /**
      Removes all entities from the Keychain.
      */
-    class func clearAll() {
+    public class func clearAll() {
         let secItemClasses = [
             kSecClassGenericPassword,
             kSecClassInternetPassword,
