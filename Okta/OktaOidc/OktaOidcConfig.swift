@@ -46,6 +46,7 @@ public class OktaOidcConfig: NSObject, Codable {
         }
         
         additionalParams = OktaOidcConfig.extractAdditionalParams(dict)
+        OktaOidcConfig.setupURLSession()
     }
 
     @objc public convenience init(fromPlist plistName: String) throws {
@@ -86,5 +87,33 @@ public class OktaOidcConfig: NSObject, Codable {
                self.redirectUri == config.redirectUri &&
                self.logoutRedirectUri == config.logoutRedirectUri &&
                self.additionalParams == config.additionalParams
+    }
+
+    class func setupURLSession() {
+        /*
+         Setup auth session to block redirection because authorization request
+         implies redirection and passing authCode as a query parameter.
+        */
+        let config = URLSessionConfiguration.default
+        config.httpShouldSetCookies = false
+
+        let session = URLSession(
+            configuration: config,
+            delegate: RedirectBlockingURLSessionDelegate.shared,
+            delegateQueue: .main)
+        
+        OIDURLSessionProvider.setSession(session)
+    }
+
+    class RedirectBlockingURLSessionDelegate: NSObject, URLSessionTaskDelegate {
+        
+        static let shared = RedirectBlockingURLSessionDelegate()
+        
+        private override init() { super.init() }
+    
+        public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
+            // prevent redirect
+            completionHandler(nil)
+        }
     }
 }
