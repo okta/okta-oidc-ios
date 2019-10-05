@@ -14,11 +14,8 @@
 extension OIDAuthState {
 
     static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
-        // setup custom URL session
-        self.setupURLSession()
         
         let finalize: ((OIDAuthState?, OktaOidcError?) -> Void) = { state, error in
-            self.restoreURLSession()
             callback(state, error)
         }
 
@@ -47,37 +44,5 @@ extension OIDAuthState {
                 finalize(authState, nil)
             })
         })
-    }
-    
-    private static func setupURLSession() {
-        /*
-         Setup auth session to block redirection because authorization request
-         implies redirection and passing authCode as a query parameter.
-        */
-        let config = URLSessionConfiguration.default
-        config.httpShouldSetCookies = false
-
-        let session = URLSession(
-            configuration: config,
-            delegate: RedirectBlockingURLSessionDelegate.shared,
-            delegateQueue: .main)
-        
-        OIDURLSessionProvider.setSession(session)
-    }
-    
-    private static func restoreURLSession() {
-        OIDURLSessionProvider.setSession(URLSession.shared)
-    }
-    
-    private class RedirectBlockingURLSessionDelegate: NSObject, URLSessionTaskDelegate {
-        
-        static let shared = RedirectBlockingURLSessionDelegate()
-        
-        private override init() { super.init() }
-    
-        public func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
-            // prevent redirect
-            completionHandler(nil)
-        }
     }
 }

@@ -104,7 +104,7 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,
                      onError: @escaping OktaApiErrorCallback) {
-        let task = URLSession.shared.dataTask(with: request){ data, response, error in
+        let task = OIDURLSessionProvider.session().dataTask(with: request){ data, response, error in
             guard let data = data, error == nil else {
                 let errorMessage = error != nil ? error!.localizedDescription : "No response data"
                 DispatchQueue.main.async {
@@ -112,8 +112,16 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
                 }
                 return
             }
-            
-            let responseJson = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) as! [String: Any]
+
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode / 100 != 2 {
+                    DispatchQueue.main.async {
+                        onError(OktaOidcError.APIError(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode)))
+                    }
+                    return
+                }
+            }
+            let responseJson = (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)) as? [String: Any]
             DispatchQueue.main.async {
                 onSuccess(responseJson)
             }

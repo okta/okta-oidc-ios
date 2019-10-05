@@ -54,7 +54,8 @@ open class OktaOidcStateManager: NSObject, NSCoding {
     @objc public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
         self.accessibility = accessibility
-
+        OktaOidcConfig.setupURLSession()
+        
         super.init()
     }
 
