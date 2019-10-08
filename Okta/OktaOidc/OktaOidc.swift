@@ -10,7 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+#if !os(macOS)
 import UIKit
+#endif
 
 public class OktaOidc: NSObject {
 
@@ -28,6 +30,7 @@ public class OktaOidc: NSObject {
         }
     }
 
+    @available(macOS, unavailable)
     @objc public func signInWithBrowser(from presenter: UIViewController,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let signInTask = OktaOidcSignInTask(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())

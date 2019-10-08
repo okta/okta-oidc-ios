@@ -40,6 +40,9 @@
 #import "OIDTokenResponse.h"
 #import "OIDTokenUtilities.h"
 #import "OIDURLSessionProvider.h"
+#import "OIDEndSessionRequest.h"
+#import "OIDEndSessionResponse.h"
+#import "OktaUserAgent.h"
 
 #if TARGET_OS_TV
 #elif TARGET_OS_WATCH

@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import Foundation
+
 class OktaOidcMetadataDiscovery: OktaOidcTask<OIDServiceConfiguration> {
 
     override func run(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
