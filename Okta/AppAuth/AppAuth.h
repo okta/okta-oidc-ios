@@ -1,4 +1,4 @@
-/*! @file AppAuth.h
+﻿/*! @file AppAuth.h
     @brief AppAuth iOS SDK
     @copyright
         Copyright 2015 Google Inc. All Rights Reserved.
@@ -42,7 +42,6 @@
 #import "OIDURLSessionProvider.h"
 #import "OIDEndSessionRequest.h"
 #import "OIDEndSessionResponse.h"
-#import "OktaUserAgent.h"
 
 #if TARGET_OS_TV
 #elif TARGET_OS_WATCH
