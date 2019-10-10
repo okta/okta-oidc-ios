@@ -20,7 +20,7 @@ public class OktaOidc: NSObject {
     @objc public let configuration: OktaOidcConfig
     
     // Holds the browser session
-    private var currentUserSessionTask: OktaOidcUserSessionTask?
+    internal var currentUserSessionTask: OktaOidcUserSessionTask?
     
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
         if let config = configuration {
@@ -28,68 +28,6 @@ public class OktaOidc: NSObject {
         } else {
             self.configuration = try OktaOidcConfig.default()
         }
-    }
-
-    @available(macOS, unavailable)
-    @objc public func signInWithBrowser(from presenter: UIViewController,
-                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcSignInTask(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signInTask
-
-        signInTask.run { [weak self] authState, error in
-            defer { self?.currentUserSessionTask = nil }
-        
-            guard let authState = authState else {
-                callback(nil, error)
-                return
-            }
-            
-            let authStateManager = OktaOidcStateManager(authState: authState)
-            callback(authStateManager, nil)
-        }
-    }
-
-    @objc public func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
-                                    from presenter: UIViewController,
-                                    callback: @escaping ((Error?) -> Void)) {
-        // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
-        // Validation is not needed for SignOut operation.
-        guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
-            callback(OktaOidcError.missingIdToken)
-            return
-        }
-        
-        let signOutTask = OktaOidcSignOutTask(idToken: idToken, presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signOutTask
-        
-        signOutTask.run { [weak self] _, error in
-            self?.currentUserSessionTask = nil
-            callback(error)
-        }
-    }
-    
-    public func signOut(authStateManager: OktaOidcStateManager,
-                        from presenter: UIViewController,
-                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        self.signOut(with: .allOptions,
-                     authStateManager: authStateManager,
-                     from: presenter,
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)
-    }
-
-    public func signOut(with options: OktaSignOutOptions,
-                        authStateManager: OktaOidcStateManager,
-                        from presenter: UIViewController,
-                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        self.signOut(with: options,
-                     authStateManager: authStateManager,
-                     from: presenter,
-                     failedOptions: [],
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)
     }
 
     @objc public func authenticate(withSessionToken sessionToken: String,
@@ -104,14 +42,5 @@ public class OktaOidc: NSObject {
             let authStateManager = OktaOidcStateManager(authState: authState)
             callback(authStateManager, nil)
         }
-    }
-
-    @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
-    @objc public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        guard let currentUserSessionTask = currentUserSessionTask else {
-            return false
-        }
-        
-        return currentUserSessionTask.resume(with: url)
     }
 }

@@ -10,18 +10,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-#if !os(macOS)
-import UIKit
-#endif
-
 class OktaOidcSignOutTask: OktaOidcTask<Void>, OktaOidcUserSessionTask {
     private let idToken: String
-    private let presenter: UIViewController
-    private(set) var userAgentSession: OIDExternalUserAgentSession?
-    
-    init(idToken: String, presenter: UIViewController, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
+    var userAgentSession: OIDExternalUserAgentSession?
+
+    init(idToken: String, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
         self.idToken = idToken
-        self.presenter = presenter
         super.init(config: config, oktaAPI: oktaAPI)
     }
 
@@ -45,21 +39,13 @@ class OktaOidcSignOutTask: OktaOidcTask<Void>, OktaOidcUserSessionTask {
                 additionalParameters: additionalParams
             )
 
-            let agent = OIDExternalUserAgentIOS(presenting: self.presenter)
-
             // Present the Sign Out flow
-            self.userAgentSession = OIDAuthorizationService.present(request, externalUserAgent: agent!) {
-                response, responseError in
-                
-                defer { self.userAgentSession = nil }
-                
-                var error: OktaOidcError? = nil
-                if let responseError = responseError {
-                    error = OktaOidcError.APIError("Sign Out Error: \(responseError.localizedDescription)")
-                }
-                
-                callback((), error)
-            }
+            self.userAgentSession = self.authStateWith(request: request, callback: callback)
         }
+    }
+    
+    func authStateWith(request: OIDEndSessionRequest,
+                       callback: @escaping (Void?, OktaOidcError?) -> Void) -> OIDExternalUserAgentSession? {
+        return nil
     }
 }

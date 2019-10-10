@@ -12,6 +12,13 @@
 
 import Foundation
 
-internal extension OktaOidc {
-    
+public extension OktaOidc {
+    @objc func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
+                             callback: @escaping ((Error?) -> Void)) {
+    }
+
+    func signOut(authStateManager: OktaOidcStateManager,
+                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+    }
 }

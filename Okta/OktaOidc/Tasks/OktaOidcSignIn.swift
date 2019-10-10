@@ -16,13 +16,7 @@ import UIKit
 
 class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
 
-    private let presenter: UIViewController
-    private(set) var userAgentSession: OIDExternalUserAgentSession?
-    
-    init(presenter: UIViewController, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
-        self.presenter = presenter
-        super.init(config: config, oktaAPI: oktaAPI)
-    }
+    var userAgentSession: OIDExternalUserAgentSession?
 
     override func run(callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
         OktaOidcMetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
@@ -42,17 +36,28 @@ class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
             )
 
             // Start the authorization flow
-            let externalUserAgent = OIDExternalUserAgentIOS(presenting: self.presenter)
-            self.userAgentSession = OIDAuthState.authState(byPresenting: request, externalUserAgent: externalUserAgent!) {
-                authorizationResponse, error in
-                
-                defer { self.userAgentSession = nil }
-
-                guard let authResponse = authorizationResponse else {
-                    return callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
-                }
-                callback(authResponse, nil)
-            }
+            self.userAgentSession = self.authStateWith(request: request, callback: callback)
         }
+    }
+
+    func authStateWith(request: OIDAuthorizationRequest,
+                       callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) -> OIDExternalUserAgentSession? {
+        #if os(macOS)
+        let userAgentSession = OIDAuthState.authState(byPresenting: request) {
+            authorizationResponse, error in
+            
+            defer { self.userAgentSession = nil }
+
+            guard let authResponse = authorizationResponse else {
+                return callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
+            }
+            callback(authResponse, nil)
+        }
+
+        return userAgentSession
+        #else
+        // override for iOS
+        return nil
+        #endif
     }
 }

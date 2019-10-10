@@ -1,20 +1,19 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaOidc'
-  s.version          = '3.5.2'
+  s.version          = '3.6.0'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
   s.description      = <<-DESC
 Integrate your native app with Okta using the AppAuth library.
                        DESC
-  #s.platforms    = { :ios => "9.0", :osx => "10.9"}
-  s.platforms    = { :ios => "9.0" }
+  s.platforms    = { :ios => "9.0", :osx => "10.10"}
   s.homepage         = 'https://github.com/okta/okta-oidc-ios'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com"}
   s.source           = { :git => 'https://github.com/okta/okta-oidc-ios.git', :tag => s.version.to_s }
   s.swift_version = '4.2'
-  s.ios.source_files      = 'Okta/AppAuth/iOS/*.{h,m}'
+  s.ios.source_files      = 'Okta/AppAuth/iOS/*.{h,m}','Okta/OktaOidc/iOS/*.{swift}','Okta/OktaOidc/Tasks/iOS/*.{swift}'
   s.ios.deployment_target = '9.0'
-  #s.osx.source_files = "Okta/AppAuth/macOS/**/*.{h,m}"
-  #s.osx.deployment_target = '10.9'
-  s.source_files = 'Okta/AppAuth/*.{h,m}','Okta/OktaOidc/**/*.{h,m,swift}'
+  s.osx.source_files = 'Okta/AppAuth/macOS/**/*.{h,m}','Okta/OktaOidc/macOS/*.{swift}','Okta/OktaOidc/Tasks/macOS/*.{swift}'
+  s.osx.deployment_target = '10.10'
+  s.source_files = 'Okta/AppAuth/*.{h,m}','Okta/OktaOidc/Tasks/*.{h,m,swift}','Okta/OktaOidc/*.{h,m,swift}'
 end
