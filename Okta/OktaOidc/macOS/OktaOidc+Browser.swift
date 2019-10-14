@@ -11,14 +11,86 @@
 */
 
 import Foundation
+import AppKit
 
 public extension OktaOidc {
-    @objc func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
-                             callback: @escaping ((Error?) -> Void)) {
+
+    @objc func signInWithBrowser(callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        let signInTask = OktaOidcSignInTaskMAC(config: configuration, oktaAPI: OktaOidcRestApi())
+        currentUserSessionTask = signInTask
+
+        signInTask.run { [weak self] authState, error in
+            defer { self?.currentUserSessionTask = nil }
+        
+            self?.handleSignInRedirect(authState: authState, error: error, callback: callback)
+        }
     }
 
+    @objc func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration = OktaRedirectServerConfiguration.default,
+                                 callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        let signInTask = OktaOidcSignInTaskMAC(config: configuration,
+                                               oktaAPI: OktaOidcRestApi(),
+                                               redirectServerConfiguration: redirectServerConfiguration)
+        currentUserSessionTask = signInTask
+
+        signInTask.run { [weak self] authState, error in
+            defer { self?.currentUserSessionTask = nil }
+
+            NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
+
+            self?.handleSignInRedirect(authState: authState, error: error, callback: callback)
+        }
+    }
+
+    @objc func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
+                             callback: @escaping ((Error?) -> Void)) {
+        // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
+        // Validation is not needed for SignOut operation.
+        guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
+            callback(OktaOidcError.missingIdToken)
+            return
+        }
+        let signOutTask = OktaOidcSignOutTaskMAC(idToken: idToken, config: configuration, oktaAPI: OktaOidcRestApi())
+        currentUserSessionTask = signOutTask
+        
+        signOutTask.run { [weak self] _, error in
+            self?.currentUserSessionTask = nil
+            callback(error)
+        }
+    }
+    
     func signOut(authStateManager: OktaOidcStateManager,
                  progressHandler: @escaping ((OktaSignOutOptions) -> Void),
                  completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        self.signOut(with: .allOptions,
+                     authStateManager: authStateManager,
+                     progressHandler: progressHandler,
+                     completionHandler: completionHandler)
+    }
+
+    func signOut(with options: OktaSignOutOptions,
+                 authStateManager: OktaOidcStateManager,
+                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        let  signOutHandler: OktaOidcSignOutHandlerMAC = OktaOidcSignOutHandlerMAC(options: options,
+                                                                                   oidcClient: self,
+                                                                                   authStateManager: authStateManager)
+        signOutHandler.signOut(with: options,
+                               failedOptions: [],
+                               progressHandler: progressHandler,
+                               completionHandler: completionHandler)
+    }
+
+    func handleSignInRedirect(authState: OIDAuthState?,
+                              error: Error?,
+                              callback: @escaping ((OktaOidcStateManager?, Error?) -> Void))
+    {
+        guard let authState = authState else {
+            callback(nil, error)
+            return
+        }
+        
+        let authStateManager = OktaOidcStateManager(authState: authState)
+        callback(authStateManager, nil)
     }
 }

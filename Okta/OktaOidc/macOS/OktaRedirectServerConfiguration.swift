@@ -12,6 +12,18 @@
 
 import Foundation
 
-internal extension OktaOidc {
-    
+public class OktaRedirectServerConfiguration: NSObject {
+    let port: UInt16?
+    let successRedirectURL: URL?
+
+    init(successRedirectURL: URL?, port: UInt16?) {
+        self.successRedirectURL = successRedirectURL
+        self.port = port
+    }
+
+    public static var `default`: OktaRedirectServerConfiguration {
+        let configuration = OktaRedirectServerConfiguration(successRedirectURL: URL(string: "http://openid.github.io/AppAuth-iOS/redirect/"),
+                                                            port: nil)
+        return configuration
+    }
 }

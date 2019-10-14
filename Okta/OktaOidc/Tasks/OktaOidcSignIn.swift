@@ -10,10 +10,6 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-#if !os(macOS)
-import UIKit
-#endif
-
 class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
 
     var userAgentSession: OIDExternalUserAgentSession?
@@ -25,12 +21,20 @@ class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
                 return
             }
 
+            var successRedirectURL: URL
+            do {
+                successRedirectURL = try self.redirectUri()
+            } catch(let error) {
+                //callback
+                return
+            }
+
             // Build the Authentication request
             let request = OIDAuthorizationRequest(
                        configuration: oidConfig,
                             clientId: self.config.clientId,
                               scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
-                         redirectURL: self.config.redirectUri,
+                              redirectURL: successRedirectURL,
                         responseType: OIDResponseTypeCode,
                 additionalParameters: self.config.additionalParams
             )
@@ -40,24 +44,13 @@ class OktaOidcSignInTask: OktaOidcTask<OIDAuthState>, OktaOidcUserSessionTask {
         }
     }
 
+    func redirectUri() throws -> URL {
+        return config.redirectUri
+    }
+
     func authStateWith(request: OIDAuthorizationRequest,
                        callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) -> OIDExternalUserAgentSession? {
-        #if os(macOS)
-        let userAgentSession = OIDAuthState.authState(byPresenting: request) {
-            authorizationResponse, error in
-            
-            defer { self.userAgentSession = nil }
-
-            guard let authResponse = authorizationResponse else {
-                return callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
-            }
-            callback(authResponse, nil)
-        }
-
-        return userAgentSession
-        #else
-        // override for iOS
+        // override
         return nil
-        #endif
     }
 }

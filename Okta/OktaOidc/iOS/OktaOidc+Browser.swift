@@ -13,9 +13,9 @@
 import Foundation
 
 public extension OktaOidc {
-    @available(macOS, unavailable)
+
     @objc func signInWithBrowser(from presenter: UIViewController,
-                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+                                 callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let signInTask = OktaOidcSignInTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
         currentUserSessionTask = signInTask
 
@@ -74,13 +74,6 @@ public extension OktaOidc {
                                failedOptions: [],
                                progressHandler: progressHandler,
                                completionHandler: completionHandler)
-        
-        /*self.signOut(with: options,
-                     authStateManager: authStateManager,
-                     from: presenter,
-                     failedOptions: [],
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)*/
     }
 
     @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")

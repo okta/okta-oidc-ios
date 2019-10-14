@@ -12,7 +12,7 @@
 
 import Foundation
 
-class OktaOidcSignInTaskMAC: OktaOidcSignOutTask {
+class OktaOidcSignOutTaskMAC: OktaOidcSignOutTask {
 
     override func authStateWith(request: OIDEndSessionRequest,
                                 callback: @escaping (Void?, OktaOidcError?) -> Void) -> OIDExternalUserAgentSession? {
