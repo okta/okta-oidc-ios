@@ -30,7 +30,16 @@
     struct utsname deviceInfo;
     uname(&deviceInfo);
     NSString *deviceModel = [NSString stringWithUTF8String:deviceInfo.machine];
-    NSString *formattedString = [NSString stringWithFormat:@"okta-oidc-ios/%@ iOS/%@ Device/%@", bundleVersion.length > 0 ? bundleVersion : @"", systemVersion, deviceModel];
+    NSString *osName = @"iOS";
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+    osName = @"macOS";
+#endif
+
+    NSString *formattedString = [NSString stringWithFormat:@"okta-oidc-ios/%@ %@/%@ Device/%@",
+                                 bundleVersion.length > 0 ? bundleVersion : @"",
+                                 osName,
+                                 systemVersion,
+                                 deviceModel];
     return formattedString;
 }
 

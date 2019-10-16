@@ -15,34 +15,22 @@ import AppKit
 
 public extension OktaOidc {
 
-    @objc func signInWithBrowser(callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcSignInTaskMAC(config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signInTask
-
-        signInTask.run { [weak self] authState, error in
-            defer { self?.currentUserSessionTask = nil }
-        
-            self?.handleSignInRedirect(authState: authState, error: error, callback: callback)
-        }
-    }
-
-    @objc func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration = OktaRedirectServerConfiguration.default,
+    @objc func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                                  callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcSignInTaskMAC(config: configuration,
-                                               oktaAPI: OktaOidcRestApi(),
-                                               redirectServerConfiguration: redirectServerConfiguration)
+        let signInTask = OktaOidcBrowserTaskMAC(config: configuration,
+                                                oktaAPI: OktaOidcRestApi(),
+                                                redirectServerConfiguration: redirectServerConfiguration)
         currentUserSessionTask = signInTask
 
-        signInTask.run { [weak self] authState, error in
+        signInTask.signIn { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
-
             NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
-
             self?.handleSignInRedirect(authState: authState, error: error, callback: callback)
         }
     }
 
-    @objc func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
+    @objc func signOutOfOkta(authStateManager: OktaOidcStateManager,
+                             redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                              callback: @escaping ((Error?) -> Void)) {
         // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
         // Validation is not needed for SignOut operation.
@@ -50,16 +38,20 @@ public extension OktaOidc {
             callback(OktaOidcError.missingIdToken)
             return
         }
-        let signOutTask = OktaOidcSignOutTaskMAC(idToken: idToken, config: configuration, oktaAPI: OktaOidcRestApi())
+        let signOutTask = OktaOidcBrowserTaskMAC(config: configuration,
+                                                 oktaAPI: OktaOidcRestApi(),
+                                                 redirectServerConfiguration: redirectServerConfiguration)
         currentUserSessionTask = signOutTask
         
-        signOutTask.run { [weak self] _, error in
-            self?.currentUserSessionTask = nil
+        signOutTask.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
+            defer { self?.currentUserSessionTask = nil }
+            NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
             callback(error)
         }
     }
-    
+
     func signOut(authStateManager: OktaOidcStateManager,
+                 redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                  progressHandler: @escaping ((OktaSignOutOptions) -> Void),
                  completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
         self.signOut(with: .allOptions,
@@ -70,6 +62,7 @@ public extension OktaOidc {
 
     func signOut(with options: OktaSignOutOptions,
                  authStateManager: OktaOidcStateManager,
+                 redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                  progressHandler: @escaping ((OktaSignOutOptions) -> Void),
                  completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
         let  signOutHandler: OktaOidcSignOutHandlerMAC = OktaOidcSignOutHandlerMAC(options: options,
@@ -81,10 +74,17 @@ public extension OktaOidc {
                                completionHandler: completionHandler)
     }
 
+    @objc func cancelBrowserSession(completion: (()-> Void)? = nil) {
+        guard let userAgentSession = currentUserSessionTask?.userAgentSession else {
+            completion?()
+            return
+        }
+        userAgentSession.cancel(completion: completion)
+    }
+
     func handleSignInRedirect(authState: OIDAuthState?,
                               error: Error?,
-                              callback: @escaping ((OktaOidcStateManager?, Error?) -> Void))
-    {
+                              callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         guard let authState = authState else {
             callback(nil, error)
             return

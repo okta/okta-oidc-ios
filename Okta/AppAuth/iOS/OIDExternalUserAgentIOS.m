@@ -14,6 +14,8 @@
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
+    @modifications
+        Copyright (C) 2019 Okta Inc.
  */
 
 #import "OIDExternalUserAgentIOS.h"
@@ -48,14 +50,14 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic pop
 }
 
-- (nullable instancetype)init {
+- (nonnull instancetype)init {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnonnull"
   return [self initWithPresentingViewController:nil];
 #pragma clang diagnostic pop
 }
 
-- (nullable instancetype)initWithPresentingViewController:
+- (nonnull instancetype)initWithPresentingViewController:
     (UIViewController *)presentingViewController {
   self = [super init];
   if (self) {

@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class OktaOidcTask<T> {
+class OktaOidcTask {
     let config: OktaOidcConfig
     let oktaAPI: OktaOidcHttpApiProtocol
  
@@ -18,9 +18,27 @@ class OktaOidcTask<T> {
         self.config = config
         self.oktaAPI = oktaAPI
     }
-    
-    // Schedules task for execution in background and invokes callback on completion.
-    internal func run(callback: @escaping (T?, OktaOidcError?) -> Void) {
-        // no op.
+
+    func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+        guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
+            DispatchQueue.main.async {
+                callback(nil, OktaOidcError.noDiscoveryEndpoint)
+            }
+            return
+        }
+
+        oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
+            guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
+                callback(nil, OktaOidcError.parseFailure)
+                return
+            }
+
+            callback(OIDServiceConfiguration(discoveryDocument: oidConfig), nil)
+        }, onError: { error in
+            let responseError =
+                "Error returning discovery document: \(error.localizedDescription). Please" +
+                " check your PList configuration"
+            callback(nil, OktaOidcError.APIError(responseError))
+        })
     }
 }

@@ -13,10 +13,10 @@
 import Foundation
 
 public class OktaRedirectServerConfiguration: NSObject {
-    let port: UInt16?
-    let successRedirectURL: URL?
+    public var port: UInt16?
+    public var successRedirectURL: URL?
 
-    init(successRedirectURL: URL?, port: UInt16?) {
+    public init(successRedirectURL: URL?, port: UInt16?) {
         self.successRedirectURL = successRedirectURL
         self.port = port
     }

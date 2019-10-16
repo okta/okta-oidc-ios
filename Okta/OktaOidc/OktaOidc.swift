@@ -10,18 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-#if !os(macOS)
-import UIKit
-#endif
-
 public class OktaOidc: NSObject {
 
     // Cache Okta.plist for reference
     @objc public let configuration: OktaOidcConfig
-    
-    // Holds the browser session
-    internal var currentUserSessionTask: OktaOidcUserSessionTask?
-    
+
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
         if let config = configuration {
             self.configuration = config
@@ -32,8 +25,8 @@ public class OktaOidc: NSObject {
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaOidcRestApi())
-        .run { authState, error in
+        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi())
+        .authenticateWithSessionToken(sessionToken: sessionToken) { authState, error in
             guard let authState = authState else {
                 callback(nil, error)
                 return
@@ -43,4 +36,11 @@ public class OktaOidc: NSObject {
             callback(authStateManager, nil)
         }
     }
+
+    @objc public func hasActiveBrowserSession() -> Bool {
+        return currentUserSessionTask != nil
+    }
+
+    // Holds the browser session
+    var currentUserSessionTask: OktaOidcBrowserTask?
 }

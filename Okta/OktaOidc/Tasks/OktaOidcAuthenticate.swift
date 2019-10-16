@@ -10,17 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-class OktaOidcAuthenticateTask: OktaOidcTask<OIDAuthState> {
-
-    private let sessionToken: String
+class OktaOidcAuthenticateTask: OktaOidcTask {
     
-    init(sessionToken: String, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
-        self.sessionToken = sessionToken
-        super.init(config: config, oktaAPI: oktaAPI)
-    }
-    
-    override func run(callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
-        OktaOidcMetadataDiscovery(config: config, oktaAPI: oktaAPI).run { oidConfig, error in
+    func authenticateWithSessionToken(sessionToken: String,
+                                      callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
+        self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
@@ -30,7 +24,7 @@ class OktaOidcAuthenticateTask: OktaOidcTask<OIDAuthState> {
             let codeChallenge = OIDAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
             let state = OIDAuthorizationRequest.generateState()
             var additionalParameters = self.config.additionalParams ?? [String : String]()
-            additionalParameters["sessionToken"] = self.sessionToken
+            additionalParameters["sessionToken"] = sessionToken
             
             let request = OIDAuthorizationRequest(
                 configuration: oidConfig,

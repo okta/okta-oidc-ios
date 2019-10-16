@@ -12,12 +12,12 @@
 
 import Foundation
 
-public class OktaRedirectServer: NSObject {
+public class OktaRedirectServer {
 
-    var redirectHandler: OIDRedirectHTTPHandler!
+    var redirectHandler: OIDRedirectHTTPHandler
     let port: UInt16
 
-    public init(successURL: URL?, port: UInt16) {
+    public init(successURL: URL?, port: UInt16 = 0) {
         redirectHandler = OIDRedirectHTTPHandler(successURL: successURL)
         self.port = port
     }

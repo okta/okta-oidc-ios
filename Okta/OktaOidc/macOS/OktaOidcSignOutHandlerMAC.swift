@@ -14,6 +14,16 @@ import Foundation
 
 public class OktaOidcSignOutHandlerMAC: OktaOidcSignOutHandler {
 
+    var redirectServerConfiguration: OktaRedirectServerConfiguration?
+
+    init(options: OktaSignOutOptions,
+         oidcClient: OktaOidc,
+         authStateManager: OktaOidcStateManager,
+         redirectServerConfiguration: OktaRedirectServerConfiguration? = nil) {
+        self.redirectServerConfiguration = redirectServerConfiguration
+        super.init(options: options, oidcClient: oidcClient, authStateManager: authStateManager)
+    }
+
     override func signOut(with options: OktaSignOutOptions,
                           failedOptions: OktaSignOutOptions,
                           progressHandler: @escaping ((OktaSignOutOptions) -> Void),
@@ -22,7 +32,8 @@ public class OktaOidcSignOutHandlerMAC: OktaOidcSignOutHandler {
             var notFinishedOptions: OktaSignOutOptions = options
             var failedOptions: OktaSignOutOptions = failedOptions
             progressHandler(.signOutFromOkta)
-            oidcClient.signOutOfOkta(authStateManager) { error in
+            oidcClient.signOutOfOkta(authStateManager: authStateManager,
+                                     redirectServerConfiguration: redirectServerConfiguration) { error in
                 notFinishedOptions.remove(.signOutFromOkta)
                 if let _ = error {
                     failedOptions.insert(.signOutFromOkta)

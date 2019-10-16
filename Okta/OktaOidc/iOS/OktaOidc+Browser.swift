@@ -16,10 +16,10 @@ public extension OktaOidc {
 
     @objc func signInWithBrowser(from presenter: UIViewController,
                                  callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcSignInTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
+        let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
         currentUserSessionTask = signInTask
 
-        signInTask.run { [weak self] authState, error in
+        signInTask.signIn { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
         
             guard let authState = authState else {
@@ -41,10 +41,10 @@ public extension OktaOidc {
             callback(OktaOidcError.missingIdToken)
             return
         }
-        let signOutTask = OktaOidcSignOutTaskIOS(idToken: idToken, presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
+        let signOutTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
         currentUserSessionTask = signOutTask
-        
-        signOutTask.run { [weak self] _, error in
+
+        signOutTask.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
             self?.currentUserSessionTask = nil
             callback(error)
         }
@@ -74,6 +74,14 @@ public extension OktaOidc {
                                failedOptions: [],
                                progressHandler: progressHandler,
                                completionHandler: completionHandler)
+    }
+
+    @objc func cancelBrowserSession(completion: (()-> Void)? = nil) {
+        guard let userAgentSession = currentUserSessionTask?.userAgentSession else {
+            completion?()
+            return
+        }
+        userAgentSession.cancel(completion: completion)
     }
 
     @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
