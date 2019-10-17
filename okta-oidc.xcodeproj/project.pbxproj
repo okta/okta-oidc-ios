@@ -255,6 +255,13 @@
 			remoteGlobalIDString = 2F32CA1D229D38D4003A6768;
 			remoteInfo = "okta-oidc";
 		};
+		A17E3A27235931E100837873 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2F32CA15229D38D4003A6768 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F32CB9C229D422F003A6768;
+			remoteInfo = Example;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -986,6 +993,7 @@
 			);
 			dependencies = (
 				A17E39F02358C85F00837873 /* PBXTargetDependency */,
+				A17E3A28235931E100837873 /* PBXTargetDependency */,
 			);
 			name = OktaOidcTests;
 			productName = OktaOidcTests;
@@ -1064,6 +1072,7 @@
 					};
 					2F32CBD9229D4CE9003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
+						TestTargetID = 2F32CB9C229D422F003A6768;
 					};
 					2F32CC7E229D4FC0003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -1350,6 +1359,11 @@
 			target = 2F32CA1D229D38D4003A6768 /* okta-oidc */;
 			targetProxy = A17E39EF2358C85F00837873 /* PBXContainerItemProxy */;
 		};
+		A17E3A28235931E100837873 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F32CB9C229D422F003A6768 /* Example */;
+			targetProxy = A17E3A27235931E100837873 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1604,6 +1618,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = Okta/OktaOidc/OktaOidc.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Debug;
 		};
@@ -1623,6 +1638,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = Okta/OktaOidc/OktaOidc.h;
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
 			name = Release;
 		};
