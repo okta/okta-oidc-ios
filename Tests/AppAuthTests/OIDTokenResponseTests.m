@@ -19,8 +19,8 @@
 
 #import "OIDAuthorizationResponseTests.h"
 #import "OIDTokenRequestTests.h"
-
-@import OktaOidc;
+#import "OIDTokenRequest.h"
+#import "OIDTokenResponse.h"
 
 // Ignore warnings about "Use of GNU statement expression extension" which is raised by our use of
 // the XCTAssert___ macros.

@@ -19,8 +19,6 @@
 import Foundation
 import XCTest
 
-import OktaOidc
-
 /*! @brief Unit tests to verify Swift compatability.
  */
 class OIDSwiftTests: XCTestCase {

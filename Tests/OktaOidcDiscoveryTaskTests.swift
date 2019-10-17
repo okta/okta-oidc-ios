@@ -82,7 +82,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
                                       validationHandler: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
         let ex = expectation(description: "User Info should be called!")
         DispatchQueue.global().async {
-            OktaOidcMetadataDiscovery(config: config, oktaAPI: self.apiMock).run { oidConfig, error in
+            OktaOidcTask(config: config, oktaAPI: self.apiMock).downloadOidcConfiguration() { oidConfig, error in
                 XCTAssert(Thread.current.isMainThread)
                 validationHandler(oidConfig, error)
                 ex.fulfill()

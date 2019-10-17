@@ -20,8 +20,11 @@
 
 #import "OIDAuthorizationResponseTests.h"
 #import "OIDServiceConfigurationTests.h"
-
-@import OktaOidc;
+#import "OIDAuthorizationRequest.h"
+#import "OIDAuthorizationResponse.h"
+#import "OIDScopeUtilities.h"
+#import "OIDServiceConfiguration.h"
+#import "OIDTokenRequest.h"
 
 // Ignore warnings about "Use of GNU statement expression extension" which is raised by our use of
 // the XCTAssert___ macros.
@@ -250,14 +253,6 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                                     refreshToken:kRefreshTokenTestValue
                                                     codeVerifier:authResponse.request.codeVerifier
                                             additionalParameters:additionalParameters], @"");
-}
-
-- (void)testUserAgentHeader {
-  OIDTokenRequest *request = [[self class] testInstanceCodeExchangeClientAuth];
-  NSURLRequest* urlRequest = [request URLRequest];
-
-  id userAgent = [urlRequest.allHTTPHeaderFields objectForKey:@"User-Agent"];
-  XCTAssertNotNil(userAgent);
 }
 
 @end

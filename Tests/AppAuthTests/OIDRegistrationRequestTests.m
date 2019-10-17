@@ -19,8 +19,9 @@
 #import "OIDRegistrationRequestTests.h"
 
 #import "OIDServiceConfigurationTests.h"
-
-@import OktaOidc;
+#import "OIDClientMetadataParameters.h"
+#import "OIDRegistrationRequest.h"
+#import "OIDServiceConfiguration.h"
 
 /*! @brief Test key for the @c additionalParameters property.
  */

@@ -18,7 +18,7 @@
 
 #import <XCTest/XCTest.h>
 
-@import OktaOidc;
+#import "OIDResponseTypes.h"
 
 // Ignore warnings about "Use of GNU statement expression extension" which is raised by our use of
 // the XCTAssert___ macros.
