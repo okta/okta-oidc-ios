@@ -12,10 +12,10 @@
 
 import Foundation
 
-public extension OktaOidc {
+extension OktaOidc: OktaOidcBrowserProtocolIOS {
 
-    @objc func signInWithBrowser(from presenter: UIViewController,
-                                 callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+    @objc public func signInWithBrowser(from presenter: UIViewController,
+                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
         currentUserSessionTask = signInTask
 
@@ -32,9 +32,9 @@ public extension OktaOidc {
         }
     }
 
-    @objc func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
-                             from presenter: UIViewController,
-                             callback: @escaping ((Error?) -> Void)) {
+    @objc public func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
+                                    from presenter: UIViewController,
+                                    callback: @escaping ((Error?) -> Void)) {
         // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
         // Validation is not needed for SignOut operation.
         guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
@@ -50,10 +50,10 @@ public extension OktaOidc {
         }
     }
     
-    func signOut(authStateManager: OktaOidcStateManager,
-                 from presenter: UIViewController,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+    public func signOut(authStateManager: OktaOidcStateManager,
+                        from presenter: UIViewController,
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
         self.signOut(with: .allOptions,
                      authStateManager: authStateManager,
                      from: presenter,
@@ -61,11 +61,11 @@ public extension OktaOidc {
                      completionHandler: completionHandler)
     }
 
-    func signOut(with options: OktaSignOutOptions,
-                 authStateManager: OktaOidcStateManager,
-                 from presenter: UIViewController,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+    public func signOut(with options: OktaSignOutOptions,
+                        authStateManager: OktaOidcStateManager,
+                        from presenter: UIViewController,
+                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
         let  signOutHandler: OktaOidcSignOutHandlerIOS = OktaOidcSignOutHandlerIOS(presenter: presenter,
                                                                                    options: options,
                                                                                    oidcClient: self,
@@ -76,7 +76,7 @@ public extension OktaOidc {
                                completionHandler: completionHandler)
     }
 
-    @objc func cancelBrowserSession(completion: (()-> Void)? = nil) {
+    @objc public func cancelBrowserSession(completion: (()-> Void)? = nil) {
         guard let userAgentSession = currentUserSessionTask?.userAgentSession else {
             completion?()
             return
@@ -85,7 +85,7 @@ public extension OktaOidc {
     }
 
     @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
-    @objc func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
+    @objc public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
         guard let currentUserSessionTask = currentUserSessionTask else {
             return false
         }

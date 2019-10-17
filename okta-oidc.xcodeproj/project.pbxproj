@@ -7,18 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2F32CB4D229D3A16003A6768 /* OktaOidcAuthenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB03229D3A16003A6768 /* OktaOidcAuthenticate.swift */; };
-		2F32CB4E229D3A16003A6768 /* OktaOidcTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB04229D3A16003A6768 /* OktaOidcTask.swift */; };
 		2F32CB51229D3A16003A6768 /* OktaOidcStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB07229D3A16003A6768 /* OktaOidcStateManager.swift */; };
-		2F32CB52229D3A16003A6768 /* OktaOidcEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB08229D3A16003A6768 /* OktaOidcEndpoint.swift */; };
 		2F32CB53229D3A16003A6768 /* OktaOidcUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB09229D3A16003A6768 /* OktaOidcUtils.swift */; };
 		2F32CB54229D3A16003A6768 /* OktaOidcKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0A229D3A16003A6768 /* OktaOidcKeychain.swift */; };
 		2F32CB55229D3A16003A6768 /* OktaOidc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0B229D3A16003A6768 /* OktaOidc.swift */; };
-		2F32CB56229D3A16003A6768 /* OktaOidcRestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0C229D3A16003A6768 /* OktaOidcRestApi.swift */; };
-		2F32CB57229D3A16003A6768 /* OIDAuthorizationService+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0D229D3A16003A6768 /* OIDAuthorizationService+Okta.swift */; };
 		2F32CB58229D3A16003A6768 /* OktaOidcConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */; };
 		2F32CB59229D3A16003A6768 /* OktaOidcError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */; };
-		2F32CB5A229D3A16003A6768 /* OIDAuthState+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB10229D3A16003A6768 /* OIDAuthState+Okta.swift */; };
 		2F32CBC7229D4281003A6768 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CBB0229D427A003A6768 /* AuthViewController.swift */; };
 		2F32CBC8229D4285003A6768 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CBB1229D427A003A6768 /* ViewController.swift */; };
 		2F32CBC9229D4289003A6768 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CBBB229D427A003A6768 /* AppDelegate.swift */; };
@@ -126,8 +120,6 @@
 		A17E38C0234CFF1E00837873 /* OIDExternalUserAgentIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E38B8234CFF1E00837873 /* OIDExternalUserAgentIOS.m */; };
 		A17E38C1234CFF1E00837873 /* OIDAuthState+IOS.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E38B9234CFF1E00837873 /* OIDAuthState+IOS.m */; };
 		A17E38E5234D2DF800837873 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A17E38DC234D2DF800837873 /* OktaOidc.framework */; };
-		A17E38EA234D2DF800837873 /* okta_oidc_macTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E38E9234D2DF800837873 /* okta_oidc_macTests.swift */; };
-		A17E38EC234D2DF800837873 /* okta_oidc_mac.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E38DE234D2DF800837873 /* okta_oidc_mac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A17E392B234D2E7100837873 /* OIDAuthorizationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3863234CFEEA00837873 /* OIDAuthorizationRequest.m */; };
 		A17E392C234D2E7100837873 /* OIDAuthorizationResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3868234CFEEB00837873 /* OIDAuthorizationResponse.m */; };
 		A17E392D234D2E7100837873 /* OIDAuthorizationService.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3866234CFEEB00837873 /* OIDAuthorizationService.m */; };
@@ -151,19 +143,12 @@
 		A17E393F234D2E7100837873 /* OIDTokenUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3845234CFEE700837873 /* OIDTokenUtilities.m */; };
 		A17E3940234D2E7100837873 /* OIDURLQueryComponent.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3846234CFEE700837873 /* OIDURLQueryComponent.m */; };
 		A17E3941234D2E7100837873 /* OIDURLSessionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3856234CFEE900837873 /* OIDURLSessionProvider.m */; };
-		A17E3944234D2E8100837873 /* OktaOidcAuthenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB03229D3A16003A6768 /* OktaOidcAuthenticate.swift */; };
-		A17E3945234D2E8100837873 /* OktaOidcTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB04229D3A16003A6768 /* OktaOidcTask.swift */; };
 		A17E3948234D2E8100837873 /* OktaOidcStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB07229D3A16003A6768 /* OktaOidcStateManager.swift */; };
-		A17E3949234D2E8100837873 /* OktaOidcEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB08229D3A16003A6768 /* OktaOidcEndpoint.swift */; };
 		A17E394A234D2E8100837873 /* OktaOidcUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB09229D3A16003A6768 /* OktaOidcUtils.swift */; };
 		A17E394B234D2E8100837873 /* OktaOidcKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0A229D3A16003A6768 /* OktaOidcKeychain.swift */; };
 		A17E394C234D2E8100837873 /* OktaOidc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0B229D3A16003A6768 /* OktaOidc.swift */; };
-		A17E394D234D2E8100837873 /* OktaOidcRestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0C229D3A16003A6768 /* OktaOidcRestApi.swift */; };
-		A17E394E234D2E8100837873 /* OIDAuthorizationService+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0D229D3A16003A6768 /* OIDAuthorizationService+Okta.swift */; };
 		A17E394F234D2E8100837873 /* OktaOidcConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */; };
 		A17E3950234D2E8100837873 /* OktaOidcError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */; };
-		A17E3951234D2E8100837873 /* OIDAuthState+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB10229D3A16003A6768 /* OIDAuthState+Okta.swift */; };
-		A17E3952234D2E8100837873 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A5FC1622D01216008F9511 /* OktaUserAgent.m */; };
 		A17E3953234D2E8100837873 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
 		A17E3955234D2EAA00837873 /* AppAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E3854234CFEE800837873 /* AppAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A17E3956234D2EAA00837873 /* AppAuthCore.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E3842234CFEE700837873 /* AppAuthCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -208,20 +193,37 @@
 		A17E397D234D2ECA00837873 /* OIDExternalUserAgentMac.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E38C2234D2CB000837873 /* OIDExternalUserAgentMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A17E397E234D2ECA00837873 /* OIDRedirectHTTPHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E38C6234D2CB100837873 /* OIDRedirectHTTPHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A17E3994234E60A800837873 /* OktaOidc+Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E3993234E60A800837873 /* OktaOidc+Browser.swift */; };
-		A17E3996234E636200837873 /* OktaOidcSignOutHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E3995234E636200837873 /* OktaOidcSignOutHandler.swift */; };
-		A17E3997234E636200837873 /* OktaOidcSignOutHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E3995234E636200837873 /* OktaOidcSignOutHandler.swift */; };
-		A17E3999234E645C00837873 /* OktaOidcSignOutHandlerIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E3998234E645C00837873 /* OktaOidcSignOutHandlerIOS.swift */; };
 		A17E399B234E65B800837873 /* OktaOidc+Browser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E399A234E65B800837873 /* OktaOidc+Browser.swift */; };
 		A17E399C234E665D00837873 /* OIDIDToken.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E384A234CFEE800837873 /* OIDIDToken.m */; };
-		A17E399E234EA71000837873 /* OktaOidcSignOutHandlerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E399D234EA71000837873 /* OktaOidcSignOutHandlerMAC.swift */; };
 		A17E39A0235135FE00837873 /* OktaRedirectServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E399F235135FE00837873 /* OktaRedirectServer.swift */; };
 		A17E39A22351540000837873 /* OktaRedirectServerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39A12351540000837873 /* OktaRedirectServerConfiguration.swift */; };
-		A17E39B523553E5200837873 /* OktaOidcBrowserTaskIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39B423553E5200837873 /* OktaOidcBrowserTaskIOS.swift */; };
-		A17E39BA2356336800837873 /* OktaOidcBrowserTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39B92356336800837873 /* OktaOidcBrowserTask.swift */; };
-		A17E39BB2356336800837873 /* OktaOidcBrowserTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39B92356336800837873 /* OktaOidcBrowserTask.swift */; };
-		A17E39BD23563B2700837873 /* OktaOidcBrowserTaskMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39BC23563B2700837873 /* OktaOidcBrowserTaskMAC.swift */; };
-		A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A1A5FC1522D01216008F9511 /* OktaUserAgent.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A1A5FC1622D01216008F9511 /* OktaUserAgent.m */; };
+		A17E39C42357C99100837873 /* okta_oidc_macTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C32357C99100837873 /* okta_oidc_macTests.swift */; };
+		A17E39CC2357DB0F00837873 /* OktaOidcRestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C52357DB0F00837873 /* OktaOidcRestApi.swift */; };
+		A17E39CD2357DB0F00837873 /* OktaOidcRestApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C52357DB0F00837873 /* OktaOidcRestApi.swift */; };
+		A17E39CE2357DB0F00837873 /* OIDAuthorizationService+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C62357DB0F00837873 /* OIDAuthorizationService+Okta.swift */; };
+		A17E39CF2357DB0F00837873 /* OIDAuthorizationService+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C62357DB0F00837873 /* OIDAuthorizationService+Okta.swift */; };
+		A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E39C72357DB0F00837873 /* OktaUserAgent.h */; };
+		A17E39D12357DB0F00837873 /* OktaUserAgent.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E39C72357DB0F00837873 /* OktaUserAgent.h */; };
+		A17E39D22357DB1000837873 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C82357DB0F00837873 /* OktaUserAgent.m */; };
+		A17E39D32357DB1000837873 /* OktaUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C82357DB0F00837873 /* OktaUserAgent.m */; };
+		A17E39D42357DB1000837873 /* OktaOidcEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C92357DB0F00837873 /* OktaOidcEndpoint.swift */; };
+		A17E39D52357DB1000837873 /* OktaOidcEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39C92357DB0F00837873 /* OktaOidcEndpoint.swift */; };
+		A17E39D62357DB1000837873 /* OktaOidcSignOutHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39CA2357DB0F00837873 /* OktaOidcSignOutHandler.swift */; };
+		A17E39D72357DB1000837873 /* OktaOidcSignOutHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39CA2357DB0F00837873 /* OktaOidcSignOutHandler.swift */; };
+		A17E39D82357DB1000837873 /* OIDAuthState+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39CB2357DB0F00837873 /* OIDAuthState+Okta.swift */; };
+		A17E39D92357DB1000837873 /* OIDAuthState+Okta.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39CB2357DB0F00837873 /* OIDAuthState+Okta.swift */; };
+		A17E39DB2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DA2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift */; };
+		A17E39DD2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DC2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift */; };
+		A17E39E12357DB6800837873 /* OktaOidcTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DE2357DB6800837873 /* OktaOidcTask.swift */; };
+		A17E39E22357DB6800837873 /* OktaOidcTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DE2357DB6800837873 /* OktaOidcTask.swift */; };
+		A17E39E32357DB6800837873 /* OktaOidcAuthenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DF2357DB6800837873 /* OktaOidcAuthenticate.swift */; };
+		A17E39E42357DB6800837873 /* OktaOidcAuthenticate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39DF2357DB6800837873 /* OktaOidcAuthenticate.swift */; };
+		A17E39E52357DB6800837873 /* OktaOidcBrowserTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39E02357DB6800837873 /* OktaOidcBrowserTask.swift */; };
+		A17E39E62357DB6800837873 /* OktaOidcBrowserTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39E02357DB6800837873 /* OktaOidcBrowserTask.swift */; };
+		A17E39E82357DB7700837873 /* OktaOidcBrowserTaskMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39E72357DB7700837873 /* OktaOidcBrowserTaskMAC.swift */; };
+		A17E39EA2357DB8C00837873 /* OktaOidcBrowserTaskIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39E92357DB8C00837873 /* OktaOidcBrowserTaskIOS.swift */; };
+		A17E39EC235835F800837873 /* OktaOidcBrowserProtocolMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39EB235835F800837873 /* OktaOidcBrowserProtocolMAC.swift */; };
+		A17E39EE23583BBA00837873 /* OktaOidcBrowserProtocolIOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17E39ED23583BBA00837873 /* OktaOidcBrowserProtocolIOS.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -273,18 +275,12 @@
 		2F32CA1E229D38D4003A6768 /* OktaOidc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaOidc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F32CAC1229D39DC003A6768 /* OktaOidc.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = OktaOidc.podspec; sourceTree = "<group>"; };
 		2F32CAC2229D39E3003A6768 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		2F32CB03229D3A16003A6768 /* OktaOidcAuthenticate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcAuthenticate.swift; sourceTree = "<group>"; };
-		2F32CB04229D3A16003A6768 /* OktaOidcTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcTask.swift; sourceTree = "<group>"; };
 		2F32CB07229D3A16003A6768 /* OktaOidcStateManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcStateManager.swift; sourceTree = "<group>"; };
-		2F32CB08229D3A16003A6768 /* OktaOidcEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcEndpoint.swift; sourceTree = "<group>"; };
 		2F32CB09229D3A16003A6768 /* OktaOidcUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcUtils.swift; sourceTree = "<group>"; };
 		2F32CB0A229D3A16003A6768 /* OktaOidcKeychain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcKeychain.swift; sourceTree = "<group>"; };
 		2F32CB0B229D3A16003A6768 /* OktaOidc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidc.swift; sourceTree = "<group>"; };
-		2F32CB0C229D3A16003A6768 /* OktaOidcRestApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcRestApi.swift; sourceTree = "<group>"; };
-		2F32CB0D229D3A16003A6768 /* OIDAuthorizationService+Okta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OIDAuthorizationService+Okta.swift"; sourceTree = "<group>"; };
 		2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcConfig.swift; sourceTree = "<group>"; };
 		2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcError.swift; sourceTree = "<group>"; };
-		2F32CB10229D3A16003A6768 /* OIDAuthState+Okta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OIDAuthState+Okta.swift"; sourceTree = "<group>"; };
 		2F32CB5C229D3AA8003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CB9D229D422F003A6768 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F32CBB0229D427A003A6768 /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -418,24 +414,29 @@
 		A17E38CB234D2CB100837873 /* OIDAuthState+Mac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OIDAuthState+Mac.m"; path = "AppAuth/macOS/OIDAuthState+Mac.m"; sourceTree = "<group>"; };
 		A17E38CC234D2CB100837873 /* OIDAuthorizationService+Mac.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OIDAuthorizationService+Mac.m"; path = "AppAuth/macOS/OIDAuthorizationService+Mac.m"; sourceTree = "<group>"; };
 		A17E38DC234D2DF800837873 /* OktaOidc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OktaOidc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A17E38DE234D2DF800837873 /* okta_oidc_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = okta_oidc_mac.h; sourceTree = "<group>"; };
-		A17E38DF234D2DF800837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A17E38E4234D2DF800837873 /* okta-oidc-macTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "okta-oidc-macTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A17E38E9234D2DF800837873 /* okta_oidc_macTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = okta_oidc_macTests.swift; sourceTree = "<group>"; };
-		A17E38EB234D2DF800837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A17E397F234D5F8E00837873 /* OktaOidc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OktaOidc.h; sourceTree = "<group>"; };
 		A17E3993234E60A800837873 /* OktaOidc+Browser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "OktaOidc+Browser.swift"; path = "macOS/OktaOidc+Browser.swift"; sourceTree = "<group>"; };
-		A17E3995234E636200837873 /* OktaOidcSignOutHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcSignOutHandler.swift; sourceTree = "<group>"; };
-		A17E3998234E645C00837873 /* OktaOidcSignOutHandlerIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcSignOutHandlerIOS.swift; path = Okta/OktaOidc/iOS/OktaOidcSignOutHandlerIOS.swift; sourceTree = SOURCE_ROOT; };
 		A17E399A234E65B800837873 /* OktaOidc+Browser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OktaOidc+Browser.swift"; path = "iOS/OktaOidc+Browser.swift"; sourceTree = "<group>"; };
-		A17E399D234EA71000837873 /* OktaOidcSignOutHandlerMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcSignOutHandlerMAC.swift; path = macOS/OktaOidcSignOutHandlerMAC.swift; sourceTree = "<group>"; };
 		A17E399F235135FE00837873 /* OktaRedirectServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaRedirectServer.swift; path = macOS/OktaRedirectServer.swift; sourceTree = "<group>"; };
 		A17E39A12351540000837873 /* OktaRedirectServerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaRedirectServerConfiguration.swift; path = macOS/OktaRedirectServerConfiguration.swift; sourceTree = "<group>"; };
-		A17E39B423553E5200837873 /* OktaOidcBrowserTaskIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserTaskIOS.swift; path = iOS/OktaOidcBrowserTaskIOS.swift; sourceTree = "<group>"; };
-		A17E39B92356336800837873 /* OktaOidcBrowserTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcBrowserTask.swift; sourceTree = "<group>"; };
-		A17E39BC23563B2700837873 /* OktaOidcBrowserTaskMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserTaskMAC.swift; path = macOS/OktaOidcBrowserTaskMAC.swift; sourceTree = "<group>"; };
-		A1A5FC1522D01216008F9511 /* OktaUserAgent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaUserAgent.h; sourceTree = "<group>"; };
-		A1A5FC1622D01216008F9511 /* OktaUserAgent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OktaUserAgent.m; sourceTree = "<group>"; };
+		A17E39C32357C99100837873 /* okta_oidc_macTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = okta_oidc_macTests.swift; path = Tests/MacOS/okta_oidc_macTests.swift; sourceTree = SOURCE_ROOT; };
+		A17E39C52357DB0F00837873 /* OktaOidcRestApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcRestApi.swift; path = Internal/OktaOidcRestApi.swift; sourceTree = "<group>"; };
+		A17E39C62357DB0F00837873 /* OIDAuthorizationService+Okta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OIDAuthorizationService+Okta.swift"; path = "Internal/OIDAuthorizationService+Okta.swift"; sourceTree = "<group>"; };
+		A17E39C72357DB0F00837873 /* OktaUserAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OktaUserAgent.h; path = Internal/OktaUserAgent.h; sourceTree = "<group>"; };
+		A17E39C82357DB0F00837873 /* OktaUserAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OktaUserAgent.m; path = Internal/OktaUserAgent.m; sourceTree = "<group>"; };
+		A17E39C92357DB0F00837873 /* OktaOidcEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcEndpoint.swift; path = Internal/OktaOidcEndpoint.swift; sourceTree = "<group>"; };
+		A17E39CA2357DB0F00837873 /* OktaOidcSignOutHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcSignOutHandler.swift; path = Internal/OktaOidcSignOutHandler.swift; sourceTree = "<group>"; };
+		A17E39CB2357DB0F00837873 /* OIDAuthState+Okta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "OIDAuthState+Okta.swift"; path = "Internal/OIDAuthState+Okta.swift"; sourceTree = "<group>"; };
+		A17E39DA2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcSignOutHandlerIOS.swift; path = Internal/iOS/OktaOidcSignOutHandlerIOS.swift; sourceTree = "<group>"; };
+		A17E39DC2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcSignOutHandlerMAC.swift; path = Internal/macOS/OktaOidcSignOutHandlerMAC.swift; sourceTree = "<group>"; };
+		A17E39DE2357DB6800837873 /* OktaOidcTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcTask.swift; path = Okta/OktaOidc/Internal/Tasks/OktaOidcTask.swift; sourceTree = SOURCE_ROOT; };
+		A17E39DF2357DB6800837873 /* OktaOidcAuthenticate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcAuthenticate.swift; path = Okta/OktaOidc/Internal/Tasks/OktaOidcAuthenticate.swift; sourceTree = SOURCE_ROOT; };
+		A17E39E02357DB6800837873 /* OktaOidcBrowserTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserTask.swift; path = Okta/OktaOidc/Internal/Tasks/OktaOidcBrowserTask.swift; sourceTree = SOURCE_ROOT; };
+		A17E39E72357DB7700837873 /* OktaOidcBrowserTaskMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserTaskMAC.swift; path = Okta/OktaOidc/Internal/Tasks/macOS/OktaOidcBrowserTaskMAC.swift; sourceTree = SOURCE_ROOT; };
+		A17E39E92357DB8C00837873 /* OktaOidcBrowserTaskIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserTaskIOS.swift; path = Okta/OktaOidc/Internal/Tasks/iOS/OktaOidcBrowserTaskIOS.swift; sourceTree = SOURCE_ROOT; };
+		A17E39EB235835F800837873 /* OktaOidcBrowserProtocolMAC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserProtocolMAC.swift; path = Internal/macOS/OktaOidcBrowserProtocolMAC.swift; sourceTree = "<group>"; };
+		A17E39ED23583BBA00837873 /* OktaOidcBrowserProtocolIOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserProtocolIOS.swift; path = Internal/iOS/OktaOidcBrowserProtocolIOS.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -496,8 +497,7 @@
 				2F32CBAF229D427A003A6768 /* Example */,
 				2F32CBE5229D4CF8003A6768 /* Tests */,
 				2F32CC89229D4FCD003A6768 /* UITests */,
-				A17E38DD234D2DF800837873 /* okta-oidc-mac */,
-				A17E38E8234D2DF800837873 /* okta-oidc-macTests */,
+				A17E38E8234D2DF800837873 /* macTests */,
 				2F32CA1F229D38D4003A6768 /* Products */,
 				2F32CBD2229D42D0003A6768 /* Frameworks */,
 			);
@@ -537,24 +537,16 @@
 		2F32CAFF229D3A16003A6768 /* OktaOidc */ = {
 			isa = PBXGroup;
 			children = (
+				A17E39BE2357C50700837873 /* Internal */,
 				A17E3987234E480400837873 /* macOS */,
 				A17E3985234E47E800837873 /* iOS */,
-				2F32CB00229D3A16003A6768 /* Tasks */,
-				A17E397F234D5F8E00837873 /* OktaOidc.h */,
 				2F32CB07229D3A16003A6768 /* OktaOidcStateManager.swift */,
-				2F32CB08229D3A16003A6768 /* OktaOidcEndpoint.swift */,
 				2F32CB09229D3A16003A6768 /* OktaOidcUtils.swift */,
 				2F32CB0A229D3A16003A6768 /* OktaOidcKeychain.swift */,
 				2F32CB0B229D3A16003A6768 /* OktaOidc.swift */,
-				2F32CB0C229D3A16003A6768 /* OktaOidcRestApi.swift */,
-				2F32CB0D229D3A16003A6768 /* OIDAuthorizationService+Okta.swift */,
 				2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */,
 				2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */,
-				2F32CB10229D3A16003A6768 /* OIDAuthState+Okta.swift */,
-				A1A5FC1522D01216008F9511 /* OktaUserAgent.h */,
-				A1A5FC1622D01216008F9511 /* OktaUserAgent.m */,
 				A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */,
-				A17E3995234E636200837873 /* OktaOidcSignOutHandler.swift */,
 			);
 			path = OktaOidc;
 			sourceTree = "<group>";
@@ -562,11 +554,11 @@
 		2F32CB00229D3A16003A6768 /* Tasks */ = {
 			isa = PBXGroup;
 			children = (
+				A17E39DF2357DB6800837873 /* OktaOidcAuthenticate.swift */,
+				A17E39E02357DB6800837873 /* OktaOidcBrowserTask.swift */,
+				A17E39DE2357DB6800837873 /* OktaOidcTask.swift */,
 				A17E398A234E494F00837873 /* macOS */,
 				A17E3989234E494900837873 /* iOS */,
-				2F32CB03229D3A16003A6768 /* OktaOidcAuthenticate.swift */,
-				2F32CB04229D3A16003A6768 /* OktaOidcTask.swift */,
-				A17E39B92356336800837873 /* OktaOidcBrowserTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -783,29 +775,18 @@
 			path = AppAuth/macOS/LoopbackHTTPServer;
 			sourceTree = "<group>";
 		};
-		A17E38DD234D2DF800837873 /* okta-oidc-mac */ = {
+		A17E38E8234D2DF800837873 /* macTests */ = {
 			isa = PBXGroup;
 			children = (
-				A17E38DE234D2DF800837873 /* okta_oidc_mac.h */,
-				A17E38DF234D2DF800837873 /* Info.plist */,
+				A17E39C32357C99100837873 /* okta_oidc_macTests.swift */,
 			);
-			path = "okta-oidc-mac";
-			sourceTree = "<group>";
-		};
-		A17E38E8234D2DF800837873 /* okta-oidc-macTests */ = {
-			isa = PBXGroup;
-			children = (
-				A17E38E9234D2DF800837873 /* okta_oidc_macTests.swift */,
-				A17E38EB234D2DF800837873 /* Info.plist */,
-			);
-			path = "okta-oidc-macTests";
+			path = macTests;
 			sourceTree = "<group>";
 		};
 		A17E3985234E47E800837873 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
 				A17E399A234E65B800837873 /* OktaOidc+Browser.swift */,
-				A17E3998234E645C00837873 /* OktaOidcSignOutHandlerIOS.swift */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -814,7 +795,6 @@
 			isa = PBXGroup;
 			children = (
 				A17E3993234E60A800837873 /* OktaOidc+Browser.swift */,
-				A17E399D234EA71000837873 /* OktaOidcSignOutHandlerMAC.swift */,
 				A17E399F235135FE00837873 /* OktaRedirectServer.swift */,
 				A17E39A12351540000837873 /* OktaRedirectServerConfiguration.swift */,
 			);
@@ -824,7 +804,7 @@
 		A17E3989234E494900837873 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				A17E39B423553E5200837873 /* OktaOidcBrowserTaskIOS.swift */,
+				A17E39E92357DB8C00837873 /* OktaOidcBrowserTaskIOS.swift */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -832,9 +812,45 @@
 		A17E398A234E494F00837873 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				A17E39BC23563B2700837873 /* OktaOidcBrowserTaskMAC.swift */,
+				A17E39E72357DB7700837873 /* OktaOidcBrowserTaskMAC.swift */,
 			);
 			name = macOS;
+			sourceTree = "<group>";
+		};
+		A17E39BE2357C50700837873 /* Internal */ = {
+			isa = PBXGroup;
+			children = (
+				2F32CB00229D3A16003A6768 /* Tasks */,
+				A17E39C02357C62700837873 /* macOS */,
+				A17E39C22357C64900837873 /* iOS */,
+				A17E39C62357DB0F00837873 /* OIDAuthorizationService+Okta.swift */,
+				A17E39CB2357DB0F00837873 /* OIDAuthState+Okta.swift */,
+				A17E39C92357DB0F00837873 /* OktaOidcEndpoint.swift */,
+				A17E39C52357DB0F00837873 /* OktaOidcRestApi.swift */,
+				A17E39CA2357DB0F00837873 /* OktaOidcSignOutHandler.swift */,
+				A17E39C72357DB0F00837873 /* OktaUserAgent.h */,
+				A17E39C82357DB0F00837873 /* OktaUserAgent.m */,
+				A17E397F234D5F8E00837873 /* OktaOidc.h */,
+			);
+			name = Internal;
+			sourceTree = "<group>";
+		};
+		A17E39C02357C62700837873 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				A17E39DC2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift */,
+				A17E39EB235835F800837873 /* OktaOidcBrowserProtocolMAC.swift */,
+			);
+			name = macOS;
+			sourceTree = "<group>";
+		};
+		A17E39C22357C64900837873 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				A17E39DA2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift */,
+				A17E39ED23583BBA00837873 /* OktaOidcBrowserProtocolIOS.swift */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -844,7 +860,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1A5FC1722D01216008F9511 /* OktaUserAgent.h in Headers */,
 				A17E3887234CFEED00837873 /* OIDAuthorizationResponse.h in Headers */,
 				A17E387A234CFEED00837873 /* AppAuthCore.h in Headers */,
 				A17E3893234CFEED00837873 /* OIDError.h in Headers */,
@@ -876,6 +891,7 @@
 				A17E3884234CFEED00837873 /* OIDServiceConfiguration.h in Headers */,
 				A17E38BA234CFF1E00837873 /* OIDExternalUserAgentIOS.h in Headers */,
 				A17E3889234CFEED00837873 /* OIDRegistrationRequest.h in Headers */,
+				A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A17E3880234CFEED00837873 /* OIDEndSessionResponse.h in Headers */,
 				A17E3886234CFEED00837873 /* OIDURLSessionProvider.h in Headers */,
 				A17E3881234CFEED00837873 /* OIDAuthorizationRequest.h in Headers */,
@@ -888,7 +904,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A17E38EC234D2DF800837873 /* okta_oidc_mac.h in Headers */,
 				A17E397A234D2EC900837873 /* OIDLoopbackHTTPServer.h in Headers */,
 				A17E397B234D2EC900837873 /* OIDAuthorizationService+Mac.h in Headers */,
 				A17E397C234D2ECA00837873 /* OIDAuthState+Mac.h in Headers */,
@@ -921,6 +936,7 @@
 				A17E396D234D2EAA00837873 /* OIDScopeUtilities.h in Headers */,
 				A17E396E234D2EAA00837873 /* OIDServiceConfiguration.h in Headers */,
 				A17E396F234D2EAA00837873 /* OIDServiceDiscovery.h in Headers */,
+				A17E39D12357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A17E3970234D2EAA00837873 /* OIDTokenRequest.h in Headers */,
 				A17E3971234D2EAA00837873 /* OIDTokenResponse.h in Headers */,
 				A17E3972234D2EAA00837873 /* OIDTokenUtilities.h in Headers */,
@@ -1152,16 +1168,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				A17E388E234CFEED00837873 /* OIDURLSessionProvider.m in Sources */,
-				2F32CB52229D3A16003A6768 /* OktaOidcEndpoint.swift in Sources */,
+				A17E39E52357DB6800837873 /* OktaOidcBrowserTask.swift in Sources */,
 				2F32CB59229D3A16003A6768 /* OktaOidcError.swift in Sources */,
 				A17E3885234CFEED00837873 /* OIDGrantTypes.m in Sources */,
-				A17E3999234E645C00837873 /* OktaOidcSignOutHandlerIOS.swift in Sources */,
 				A17E38A2234CFEED00837873 /* OIDServiceDiscovery.m in Sources */,
-				2F32CB57229D3A16003A6768 /* OIDAuthorizationService+Okta.swift in Sources */,
+				A17E39CC2357DB0F00837873 /* OktaOidcRestApi.swift in Sources */,
 				A17E3898234CFEED00837873 /* OIDErrorUtilities.m in Sources */,
-				2F32CB5A229D3A16003A6768 /* OIDAuthState+Okta.swift in Sources */,
+				A17E39EA2357DB8C00837873 /* OktaOidcBrowserTaskIOS.swift in Sources */,
 				2F32CB58229D3A16003A6768 /* OktaOidcConfig.swift in Sources */,
+				A17E39D82357DB1000837873 /* OIDAuthState+Okta.swift in Sources */,
 				A17E38A0234CFEED00837873 /* OIDAuthorizationResponse.m in Sources */,
+				A17E39DB2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift in Sources */,
 				A17E3899234CFEED00837873 /* OIDError.m in Sources */,
 				A17E38BE234CFF1E00837873 /* OIDExternalUserAgentIOSCustomBrowser.m in Sources */,
 				A17E38AA234CFEED00837873 /* OIDTokenRequest.m in Sources */,
@@ -1169,12 +1186,12 @@
 				A17E389E234CFEED00837873 /* OIDAuthorizationService.m in Sources */,
 				A17E387E234CFEED00837873 /* OIDURLQueryComponent.m in Sources */,
 				A17E38BF234CFF1E00837873 /* OIDAuthorizationService+IOS.m in Sources */,
-				A1A5FC1822D01216008F9511 /* OktaUserAgent.m in Sources */,
 				A17E38C0234CFF1E00837873 /* OIDExternalUserAgentIOS.m in Sources */,
+				A17E39EE23583BBA00837873 /* OktaOidcBrowserProtocolIOS.swift in Sources */,
 				A17E38B1234CFEED00837873 /* OIDClientMetadataParameters.m in Sources */,
+				A17E39E32357DB6800837873 /* OktaOidcAuthenticate.swift in Sources */,
 				A17E387D234CFEED00837873 /* OIDTokenUtilities.m in Sources */,
-				2F32CB56229D3A16003A6768 /* OktaOidcRestApi.swift in Sources */,
-				A17E39BA2356336800837873 /* OktaOidcBrowserTask.swift in Sources */,
+				A17E39D62357DB1000837873 /* OktaOidcSignOutHandler.swift in Sources */,
 				A17E389A234CFEED00837873 /* OIDScopes.m in Sources */,
 				2F32CB55229D3A16003A6768 /* OktaOidc.swift in Sources */,
 				A17E3882234CFEED00837873 /* OIDIDToken.m in Sources */,
@@ -1186,17 +1203,17 @@
 				A17E399B234E65B800837873 /* OktaOidc+Browser.swift in Sources */,
 				A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 				A17E388D234CFEED00837873 /* OIDScopeUtilities.m in Sources */,
+				A17E39CE2357DB0F00837873 /* OIDAuthorizationService+Okta.swift in Sources */,
+				A17E39D22357DB1000837873 /* OktaUserAgent.m in Sources */,
 				A17E3888234CFEED00837873 /* OIDTokenResponse.m in Sources */,
-				2F32CB4E229D3A16003A6768 /* OktaOidcTask.swift in Sources */,
 				2F32CB53229D3A16003A6768 /* OktaOidcUtils.swift in Sources */,
-				A17E3996234E636200837873 /* OktaOidcSignOutHandler.swift in Sources */,
-				2F32CB4D229D3A16003A6768 /* OktaOidcAuthenticate.swift in Sources */,
 				2F32CB54229D3A16003A6768 /* OktaOidcKeychain.swift in Sources */,
-				A17E39B523553E5200837873 /* OktaOidcBrowserTaskIOS.swift in Sources */,
+				A17E39D42357DB1000837873 /* OktaOidcEndpoint.swift in Sources */,
 				A17E38A4234CFEED00837873 /* OIDEndSessionResponse.m in Sources */,
 				A17E38A6234CFEED00837873 /* OIDResponseTypes.m in Sources */,
 				A17E38A9234CFEED00837873 /* OIDRegistrationRequest.m in Sources */,
 				2F32CB51229D3A16003A6768 /* OktaOidcStateManager.swift in Sources */,
+				A17E39E12357DB6800837873 /* OktaOidcTask.swift in Sources */,
 				A17E387C234CFEED00837873 /* OIDServiceConfiguration.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1261,54 +1278,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				A17E399C234E665D00837873 /* OIDIDToken.m in Sources */,
+				A17E39D32357DB1000837873 /* OktaUserAgent.m in Sources */,
 				A17E3975234D2EBE00837873 /* OIDLoopbackHTTPServer.m in Sources */,
+				A17E39D92357DB1000837873 /* OIDAuthState+Okta.swift in Sources */,
 				A17E3976234D2EBE00837873 /* OIDAuthorizationService+Mac.m in Sources */,
 				A17E3977234D2EBE00837873 /* OIDAuthState+Mac.m in Sources */,
 				A17E3978234D2EBE00837873 /* OIDExternalUserAgentMac.m in Sources */,
 				A17E3979234D2EBE00837873 /* OIDRedirectHTTPHandler.m in Sources */,
-				A17E3944234D2E8100837873 /* OktaOidcAuthenticate.swift in Sources */,
-				A17E3945234D2E8100837873 /* OktaOidcTask.swift in Sources */,
 				A17E3948234D2E8100837873 /* OktaOidcStateManager.swift in Sources */,
-				A17E3949234D2E8100837873 /* OktaOidcEndpoint.swift in Sources */,
 				A17E394A234D2E8100837873 /* OktaOidcUtils.swift in Sources */,
 				A17E394B234D2E8100837873 /* OktaOidcKeychain.swift in Sources */,
 				A17E394C234D2E8100837873 /* OktaOidc.swift in Sources */,
-				A17E394D234D2E8100837873 /* OktaOidcRestApi.swift in Sources */,
-				A17E394E234D2E8100837873 /* OIDAuthorizationService+Okta.swift in Sources */,
+				A17E39E42357DB6800837873 /* OktaOidcAuthenticate.swift in Sources */,
 				A17E394F234D2E8100837873 /* OktaOidcConfig.swift in Sources */,
 				A17E3950234D2E8100837873 /* OktaOidcError.swift in Sources */,
-				A17E3951234D2E8100837873 /* OIDAuthState+Okta.swift in Sources */,
-				A17E3952234D2E8100837873 /* OktaUserAgent.m in Sources */,
+				A17E39D52357DB1000837873 /* OktaOidcEndpoint.swift in Sources */,
 				A17E3953234D2E8100837873 /* OktaSignOutOptions.swift in Sources */,
 				A17E392B234D2E7100837873 /* OIDAuthorizationRequest.m in Sources */,
 				A17E392C234D2E7100837873 /* OIDAuthorizationResponse.m in Sources */,
+				A17E39E62357DB6800837873 /* OktaOidcBrowserTask.swift in Sources */,
 				A17E392D234D2E7100837873 /* OIDAuthorizationService.m in Sources */,
 				A17E392E234D2E7100837873 /* OIDAuthState.m in Sources */,
 				A17E392F234D2E7100837873 /* OIDClientMetadataParameters.m in Sources */,
 				A17E3930234D2E7100837873 /* OIDEndSessionRequest.m in Sources */,
 				A17E3931234D2E7100837873 /* OIDEndSessionResponse.m in Sources */,
 				A17E3932234D2E7100837873 /* OIDError.m in Sources */,
-				A17E39BD23563B2700837873 /* OktaOidcBrowserTaskMAC.swift in Sources */,
+				A17E39D72357DB1000837873 /* OktaOidcSignOutHandler.swift in Sources */,
 				A17E3933234D2E7100837873 /* OIDErrorUtilities.m in Sources */,
 				A17E3934234D2E7100837873 /* OIDFieldMapping.m in Sources */,
-				A17E39BB2356336800837873 /* OktaOidcBrowserTask.swift in Sources */,
+				A17E39DD2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift in Sources */,
 				A17E3935234D2E7100837873 /* OIDGrantTypes.m in Sources */,
 				A17E3936234D2E7100837873 /* OIDRegistrationRequest.m in Sources */,
 				A17E3937234D2E7100837873 /* OIDRegistrationResponse.m in Sources */,
 				A17E39A22351540000837873 /* OktaRedirectServerConfiguration.swift in Sources */,
 				A17E3938234D2E7100837873 /* OIDResponseTypes.m in Sources */,
+				A17E39EC235835F800837873 /* OktaOidcBrowserProtocolMAC.swift in Sources */,
 				A17E3939234D2E7100837873 /* OIDScopes.m in Sources */,
 				A17E393A234D2E7100837873 /* OIDScopeUtilities.m in Sources */,
 				A17E393B234D2E7100837873 /* OIDServiceConfiguration.m in Sources */,
+				A17E39E82357DB7700837873 /* OktaOidcBrowserTaskMAC.swift in Sources */,
 				A17E393C234D2E7100837873 /* OIDServiceDiscovery.m in Sources */,
 				A17E39A0235135FE00837873 /* OktaRedirectServer.swift in Sources */,
 				A17E393D234D2E7100837873 /* OIDTokenRequest.m in Sources */,
 				A17E393E234D2E7100837873 /* OIDTokenResponse.m in Sources */,
 				A17E3994234E60A800837873 /* OktaOidc+Browser.swift in Sources */,
-				A17E3997234E636200837873 /* OktaOidcSignOutHandler.swift in Sources */,
-				A17E399E234EA71000837873 /* OktaOidcSignOutHandlerMAC.swift in Sources */,
 				A17E393F234D2E7100837873 /* OIDTokenUtilities.m in Sources */,
+				A17E39CD2357DB0F00837873 /* OktaOidcRestApi.swift in Sources */,
+				A17E39CF2357DB0F00837873 /* OIDAuthorizationService+Okta.swift in Sources */,
 				A17E3940234D2E7100837873 /* OIDURLQueryComponent.m in Sources */,
+				A17E39E22357DB6800837873 /* OktaOidcTask.swift in Sources */,
 				A17E3941234D2E7100837873 /* OIDURLSessionProvider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1317,7 +1335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A17E38EA234D2DF800837873 /* okta_oidc_macTests.swift in Sources */,
+				A17E39C42357C99100837873 /* okta_oidc_macTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1498,7 +1516,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "okta-oidc/Resources/Info.plist";
+				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1526,7 +1544,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "okta-oidc/Resources/Info.plist";
+				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1672,7 +1690,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "okta-oidc-mac/Info.plist";
+				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1698,7 +1716,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "okta-oidc-mac/Info.plist";
+				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1719,9 +1737,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "okta-oidc-macTests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -1739,9 +1758,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "okta-oidc-macTests/Info.plist";
+				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
