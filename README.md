@@ -12,7 +12,7 @@
 
 > This is a new version of this SDK, the new pod name is [OktaOidc](https://cocoapods.org/pods/OktaOidc). The old [OktaAuth](https://cocoapods.org/pods/OktaAuth) pod is now deprecated. 
 
-This library is a swift wrapper around the AppAuth-iOS objective-c code for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
+This library is a swift wrapper around the [AppAuth-iOS](https://github.com/openid/AppAuth-iOS) objective-c code for communicating with Okta as an OAuth 2.0 + OpenID Connect provider, and follows current best practice for native apps using [Authorization Code Flow + PKCE](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce).
 
 You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) page in our documentation. You can also download our [sample application](https://github.com/okta/samples-ios/tree/master/browser-sign-in) 
 
@@ -49,6 +49,14 @@ You'll also need:
 
 - An Okta account, called an _organization_ (sign up for a free [developer organization](https://developer.okta.com/signup/) if you need one).
 - An Okta Application, configured as a Native App. This is done from the Okta Developer Console and you can find instructions [here](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce). When following the wizard, use the default properties. They are designed to work with our sample applications.
+
+## Supported Platforms
+
+### iOS
+Okta OIDC supports iOS 9 and above.
+
+### macOS
+Okta OIDC supports macOS (OS X) 10.9 and above. Library supports both custom schemes; a loopback HTTP redirects via a small embedded server.
 
 ### Cocoapods
 
@@ -177,8 +185,9 @@ let configuration = OktaOidcConfig(with: [
 
 Start the authorization flow by simply calling `signIn`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
 
+#### iOS
 ```swift
-oktaOidc.signInWithBrowser(from: self) { stateManager, error in
+oktaOidc.signInWithBrowser(from: viewController) { stateManager, error in
   if let error = error {
     // Error
     return
@@ -191,15 +200,33 @@ oktaOidc.signInWithBrowser(from: self) { stateManager, error in
 ```
 Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/WelcomeViewController.swift#L35-L46)
 
+#### macOS
+```swift
+// Create redirect server configuration and start local HTTP server if you don't want to use custom schemes
+let serverConfig = OktaRedirectServerConfiguration.default
+serverConfig.port = 63875
+oktaOidc.signInWithBrowser(redirectServerConfiguration: serverConfig) { stateManager, error in
+  if let error = error {
+    // Error
+    return
+  }
+
+  // stateManager.accessToken
+  // stateManager.idToken
+  // stateManager.refreshToken
+}
+```
+
 ### signOutOfOkta
 
 This method ends the user's Okta session in the browser. The method deletes Okta's persistent cookie and disables SSO capabilities.
 
 **Important**: This method **does not** clear or revoke tokens minted by Okta. Use the [`revoke`](#revoke) and [`clear`](#clear) methods of `OktaOidcStateManager` to terminate the user's local session in your application.
 
+#### iOS
 ```swift
 // Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
-oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
+oktaOidc.signOutOfOkta(authStateManager, from: viewController) { error in
   if let error = error {
     // Error
     return
@@ -207,6 +234,20 @@ oktaOidc.signOutOfOkta(authStateManager, from: self) { error in
 }
 ```
 Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sign-in/OktaBrowserSignIn/SignInViewController.swift#L62-L74)
+
+#### macOS
+```swift
+// Create redirect server configuration and start local HTTP server if you don't want to use custom schemes
+let serverConfig = OktaRedirectServerConfiguration.default
+serverConfig.port = 63875
+// Redirects to the configured 'logoutRedirectUri' specified in Okta.plist.
+oktaOidc.signOutOfOkta(authStateManager: authStateManager, redirectServerConfiguration: serverConfig) { error in
+  if let error = error {
+    // Error
+    return
+  }
+}
+```
 
 ### signOut
 
@@ -225,10 +266,11 @@ The order of operations performed by the SDK:
 3. Remove tokens from the secure storage, if the option is set.
 4. Browser sign out, if the option is set.
 
+#### iOS
 ```swift
 let options: OktaSignOutOptions = .revokeTokensOptions
 options.insert(.signOutFromOkta)
-oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
+oktaOidc?.signOut(authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
     if currentOption.contains(.revokeAccessToken) {
         // update progress
     } else if currentOption.contains(.revokeRefreshToken) {
@@ -242,6 +284,29 @@ oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHan
     }
 })
 ```
+
+#### macOS
+```swift
+// Create redirect server configuration and start local HTTP server if you don't want to use custom schemes
+let serverConfig = OktaRedirectServerConfiguration.default
+serverConfig.port = 63875
+let options: OktaSignOutOptions = .revokeTokensOptions
+options.insert(.signOutFromOkta)
+oktaOidc?.signOut(authStateManager: authStateManager,
+                  redirectServerConfiguration: serverConfig,
+                  progressHandler: { currentOption in
+    if currentOption.contains(.revokeAccessToken) {
+        // update progress
+    } else if currentOption.contains(.revokeRefreshToken) {
+        // update progress
+    } else if currentOption.contains(.signOutFromOkta) {
+        // update progress
+    }
+}, completionHandler: { success, failedOptions in
+    if !success {
+        // handle error
+    }
+})
 
 ### authenticate
 
