@@ -15,7 +15,7 @@ import AppKit
 
 extension OktaOidc: OktaOidcBrowserProtocolMAC {
 
-    @objc public func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration?,
+    @objc public func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let signInTask = OktaOidcBrowserTaskMAC(config: configuration,
                                                 oktaAPI: OktaOidcRestApi(),
