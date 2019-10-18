@@ -255,6 +255,13 @@
 			remoteGlobalIDString = 2F32CA1D229D38D4003A6768;
 			remoteInfo = "okta-oidc";
 		};
+		A17E3A27235931E100837873 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2F32CA15229D38D4003A6768 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2F32CB9C229D422F003A6768;
+			remoteInfo = Example;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -281,7 +288,6 @@
 		2F32CB0B229D3A16003A6768 /* OktaOidc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidc.swift; sourceTree = "<group>"; };
 		2F32CB0E229D3A16003A6768 /* OktaOidcConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcConfig.swift; sourceTree = "<group>"; };
 		2F32CB0F229D3A16003A6768 /* OktaOidcError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaOidcError.swift; sourceTree = "<group>"; };
-		2F32CB5C229D3AA8003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CB9D229D422F003A6768 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F32CBB0229D427A003A6768 /* AuthViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		2F32CBB1229D427A003A6768 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -436,6 +442,7 @@
 		A17E3A0D2358FA3200837873 /* OIDServiceConfigurationTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDServiceConfigurationTests.m; sourceTree = "<group>"; };
 		A17E3A0E2358FA3200837873 /* OIDServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceDiscoveryTests.h; sourceTree = "<group>"; };
 		A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenResponseTests.m; sourceTree = "<group>"; };
+		A17E3A2423592D6000837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Okta/Framework/Info.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -519,7 +526,7 @@
 			isa = PBXGroup;
 			children = (
 				2F32CAC3229D3A16003A6768 /* Okta */,
-				2F32CB5B229D3AA8003A6768 /* Resources */,
+				A17E3A2423592D6000837873 /* Info.plist */,
 			);
 			path = "okta-oidc";
 			sourceTree = "<group>";
@@ -561,15 +568,6 @@
 			);
 			path = Tasks;
 			sourceTree = "<group>";
-		};
-		2F32CB5B229D3AA8003A6768 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				2F32CB5C229D3AA8003A6768 /* Info.plist */,
-			);
-			name = Resources;
-			path = "okta-oidc/Resources";
-			sourceTree = SOURCE_ROOT;
 		};
 		2F32CBAF229D427A003A6768 /* Example */ = {
 			isa = PBXGroup;
@@ -995,6 +993,7 @@
 			);
 			dependencies = (
 				A17E39F02358C85F00837873 /* PBXTargetDependency */,
+				A17E3A28235931E100837873 /* PBXTargetDependency */,
 			);
 			name = OktaOidcTests;
 			productName = OktaOidcTests;
@@ -1359,6 +1358,11 @@
 			isa = PBXTargetDependency;
 			target = 2F32CA1D229D38D4003A6768 /* okta-oidc */;
 			targetProxy = A17E39EF2358C85F00837873 /* PBXContainerItemProxy */;
+		};
+		A17E3A28235931E100837873 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2F32CB9C229D422F003A6768 /* Example */;
+			targetProxy = A17E3A27235931E100837873 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A17E38DB234D2DF700837873"
-               BuildableName = "okta_oidc_mac.framework"
+               BuildableName = "OktaOidc.framework"
                BlueprintName = "okta-oidc-mac"
                ReferencedContainer = "container:okta-oidc.xcodeproj">
             </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A17E38DB234D2DF700837873"
-            BuildableName = "okta_oidc_mac.framework"
+            BuildableName = "OktaOidc.framework"
             BlueprintName = "okta-oidc-mac"
             ReferencedContainer = "container:okta-oidc.xcodeproj">
          </BuildableReference>
