@@ -13,7 +13,7 @@
 class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
 
     var redirectServer: OktaRedirectServer?
-    var redirectUrl: URL?
+    var redirectURL: URL?
 
     init(config: OktaOidcConfig,
          oktaAPI: OktaOidcHttpApiProtocol,
@@ -45,13 +45,13 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
     override func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
         if let redirectServer = self.redirectServer {
             do {
-                redirectUrl = try redirectServer.startListener()
+                redirectURL = try redirectServer.startListener()
             } catch(let error) {
                 callback(nil, OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
                 return
             }
         } else {
-            redirectUrl = self.config.redirectUri
+            redirectURL = self.config.redirectUri
         }
 
         super.signIn(callback: callback)
@@ -60,24 +60,24 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
     override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
         if let redirectServer = self.redirectServer {
             do {
-                redirectUrl = try redirectServer.startListener()
+                redirectURL = try redirectServer.startListener()
             } catch(let error) {
                 callback(nil, OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
                 return
             }
         } else {
-            redirectUrl = self.config.logoutRedirectUri
+            redirectURL = self.config.logoutRedirectUri
         }
 
         super.signOutWithIdToken(idToken: idToken, callback: callback)
     }
 
     override func signInRedirectUri() -> URL? {
-        return redirectUrl
+        return redirectURL
     }
 
     override func signOutRedirectUri() -> URL? {
-        return redirectUrl
+        return redirectURL
     }
 
     override func externalUserAgent() -> OIDExternalUserAgent? {
@@ -85,10 +85,10 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
     }
     
     @objc func handleEvent(_ event: NSAppleEventDescriptor!, withReplyEvent: NSAppleEventDescriptor!) {
-        let eventDescriptor = event.paramDescriptor(forKeyword: AEEventID(keyDirectObject))
-        if let stringValue = eventDescriptor?.stringValue,
+        if let eventDescriptor = event.paramDescriptor(forKeyword: AEEventID(keyDirectObject)),
+           let stringValue = eventDescriptor.stringValue,
            let url = URL(string: stringValue) {
-            self.resume(with: url)
+                self.resume(with: url)
         }
     }
 }
