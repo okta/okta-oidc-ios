@@ -18,7 +18,8 @@
 
 #import <XCTest/XCTest.h>
 
-@import OktaOidc;
+#import "OIDAuthStateChangeDelegate.h"
+#import "OIDAuthStateErrorDelegate.h"
 
 @class OIDAuthState;
 

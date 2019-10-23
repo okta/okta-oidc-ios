@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import Foundation
+
 public class OktaOidcConfig: NSObject, Codable {
     @objc public static let defaultPlistName = "Okta"
     
@@ -96,6 +98,7 @@ public class OktaOidcConfig: NSObject, Codable {
         */
         let config = URLSessionConfiguration.default
         config.httpShouldSetCookies = false
+        config.httpAdditionalHeaders = [[OktaUserAgent.userAgentHeaderKey()] : [OktaUserAgent.userAgentHeaderValue()]]
 
         let session = URLSession(
             configuration: config,
