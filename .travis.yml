@@ -3,4 +3,4 @@ osx_image: xcode10.3
 jobs:
   include:
       script:
-      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 8" clean test
+      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 8" clean test | xcpretty
