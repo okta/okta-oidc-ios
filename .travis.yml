@@ -1,8 +1,6 @@
 language: objective-c
-osx_image: xcode10.1
-before_install:
-  - rvm install ruby-2.3.1
-  - gem install cocoapods
-  - gem install xcpretty
-script:
-  - bash ./scripts/build-and-test.sh
+osx_image: xcode10.3
+jobs:
+  include:
+      script:
+      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 8" clean test | xcpretty
