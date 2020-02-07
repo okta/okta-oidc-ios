@@ -62,7 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
         Calling this more than once will result in the previous listener being cancelled (equivalent
         of @c cancelHTTPListener being called).
  */
-- (nullable NSURL *)startHTTPListener:(NSError **)returnError withPort:(uint16_t)port;
+- (nullable NSURL *)startHTTPListener:(nullable NSString *)domain withPort:(uint16_t)port error:(NSError **)returnError;
 
 /*! @brief Starts listening on the loopback interface on a random available port, and returns a URL
         with the base address. Use the returned redirect URI to build a @c OIDExternalUserAgentRequest,
@@ -74,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
         Calling this more than once will result in the previous listener being cancelled (equivalent
         of @c cancelHTTPListener being called).
  */
-- (nullable NSURL *)startHTTPListener:(NSError **)returnError;
+- (nullable NSURL *)startHTTPListener:(nullable NSString *)domain error:(NSError **)returnError;
 
 /*! @brief Stops listening the loopback interface and sends an cancellation error (in the domain
         ::OIDGeneralErrorDomain, with the code ::OIDErrorCodeProgramCanceledAuthorizationFlow) to
