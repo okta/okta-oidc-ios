@@ -22,15 +22,11 @@ public class OktaRedirectServer {
         self.port = port
     }
 
-    public func startListener() throws -> URL {
+    public func startListener(with domainName: String? = nil) throws -> URL {
         if port == 0 {
-            return try startListenerOnRandomPort()
+            return try startListenerOnRandomPort(with: domainName)
         } else {
-            var error: NSError? = nil
-            guard let redirectUrl = redirectHandler.startHTTPListener(&error, withPort: port) else {
-                throw error ?? NSError()
-            }
-            return redirectUrl
+            return try redirectHandler.startHTTPListener(domainName, withPort: port)
         }
     }
 
@@ -38,7 +34,7 @@ public class OktaRedirectServer {
         redirectHandler.cancelHTTPListener()
     }
 
-    private func startListenerOnRandomPort() throws -> URL {
-        return try redirectHandler.startHTTPListener()
+    private func startListenerOnRandomPort(with domainName: String? = nil) throws -> URL {
+        return try redirectHandler.startHTTPListener(domainName)
     }
 }

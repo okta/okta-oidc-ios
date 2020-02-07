@@ -14,6 +14,8 @@
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
+    @modifications
+        Copyright (C) 2019 Okta Inc.
  */
 
 #import "OIDRedirectHTTPHandler.h"
@@ -64,7 +66,7 @@ static NSString *const kHTMLErrorRedirectNotValid =
   return self;
 }
 
-- (NSURL *)startHTTPListener:(NSError **)returnError withPort:(uint16_t)port {
+- (NSURL *)startHTTPListener:(NSString *)domain withPort:(uint16_t)port error:(NSError **)returnError  {
   // Cancels any pending requests.
   [self cancelHTTPListener];
 
@@ -79,6 +81,10 @@ static NSString *const kHTMLErrorRedirectNotValid =
       *returnError = error;
     }
     return nil;
+  } else if (domain.length > 0) {
+      // Use provided domain name
+      NSString *serverURL = [NSString stringWithFormat:@"http://%@:%d/", domain, [_httpServ port]];
+      return [NSURL URLWithString:serverURL];
   } else if ([_httpServ hasIPv4Socket]) {
     // Prefer the IPv4 loopback address
     NSString *serverURL = [NSString stringWithFormat:@"http://127.0.0.1:%d/", [_httpServ port]];
@@ -92,9 +98,9 @@ static NSString *const kHTMLErrorRedirectNotValid =
   return nil;
 }
 
-- (NSURL *)startHTTPListener:(NSError **)returnError {
+- (NSURL *)startHTTPListener:(NSString *)domain error:(NSError **)returnError {
   // A port of 0 requests a random available port
-  return [self startHTTPListener:returnError withPort:63875];
+  return [self startHTTPListener:domain withPort:63875 error:returnError];
 }
 
 - (void)cancelHTTPListener {
