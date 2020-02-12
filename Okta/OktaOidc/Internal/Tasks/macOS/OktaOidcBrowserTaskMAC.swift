@@ -14,6 +14,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
 
     var redirectServer: OktaRedirectServer?
     var redirectURL: URL?
+    var domainName: String?
 
     init(config: OktaOidcConfig,
          oktaAPI: OktaOidcHttpApiProtocol,
@@ -22,6 +23,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
             redirectServer = OktaRedirectServer(successURL: redirectServerConfiguration.successRedirectURL,
                                                 port: redirectServerConfiguration.port ?? 0)
         }
+        self.domainName = redirectServerConfiguration?.domainName
 
         super.init(config: config, oktaAPI: oktaAPI)
 
@@ -45,7 +47,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
     override func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
         if let redirectServer = self.redirectServer {
             do {
-                redirectURL = try redirectServer.startListener()
+                redirectURL = try redirectServer.startListener(with: domainName)
             } catch(let error) {
                 callback(nil, OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
                 return
@@ -60,7 +62,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
     override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
         if let redirectServer = self.redirectServer {
             do {
-                redirectURL = try redirectServer.startListener()
+                redirectURL = try redirectServer.startListener(with: domainName)
             } catch(let error) {
                 callback(nil, OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
                 return

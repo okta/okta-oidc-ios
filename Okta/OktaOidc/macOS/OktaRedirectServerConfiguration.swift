@@ -15,15 +15,18 @@ import Foundation
 public class OktaRedirectServerConfiguration: NSObject {
     public var port: UInt16?
     public var successRedirectURL: URL?
+    public var domainName: String?
 
-    public init(successRedirectURL: URL?, port: UInt16?) {
+    public init(successRedirectURL: URL?, port: UInt16?, domainName: String?) {
         self.successRedirectURL = successRedirectURL
         self.port = port
+        self.domainName = domainName
     }
 
     public static var `default`: OktaRedirectServerConfiguration {
         let configuration = OktaRedirectServerConfiguration(successRedirectURL: URL(string: "http://openid.github.io/AppAuth-iOS/redirect/"),
-                                                            port: nil)
+                                                            port: nil,
+                                                            domainName: nil)
         return configuration
     }
 }
