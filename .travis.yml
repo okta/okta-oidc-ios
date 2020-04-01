@@ -6,6 +6,10 @@ jobs:
       name: iOS
       script:
       - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 8" clean test
+    - stage: Unit tests MacOS
+      name: MacOS
+      script:
+      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-mac" -destination "platform=macOS" clean test
     - stage: UI tests iOS
       name: iOS
       script:

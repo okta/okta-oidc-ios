@@ -14,7 +14,7 @@ import Foundation
 
 class OktaOidcBrowserTask: OktaOidcTask {
 
-    public var userAgentSession: OIDExternalUserAgentSession?
+    var userAgentSession: OIDExternalUserAgentSession?
     
     func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
         self.downloadOidcConfiguration() { oidConfig, error in
@@ -28,13 +28,8 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 return
             }
 
-            let request = OIDAuthorizationRequest(configuration: oidConfiguration,
-                                                  clientId: self.config.clientId,
-                                                  scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
-                                                  redirectURL: successRedirectURL,
-                                                  responseType: OIDResponseTypeCode,
-                                                  additionalParameters: self.config.additionalParams)
-            
+            let request = self.createAuthorizationRequest(configuration: oidConfiguration,
+                                                          redirectURL: successRedirectURL)
             guard let externalUserAgent = self.externalUserAgent() else {
                 callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
@@ -71,7 +66,6 @@ class OktaOidcBrowserTask: OktaOidcTask {
                                                idTokenHint: idToken,
                                                postLogoutRedirectURL: successRedirectURL,
                                                additionalParameters: self.config.additionalParams)
-
             guard let externalUserAgent = self.externalUserAgent() else {
                 callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
@@ -111,5 +105,15 @@ class OktaOidcBrowserTask: OktaOidcTask {
     func externalUserAgent() -> OIDExternalUserAgent? {
         // override
         return nil
+    }
+
+    func createAuthorizationRequest(configuration: OIDServiceConfiguration,
+                                    redirectURL: URL) -> OIDAuthorizationRequest {
+        return OIDAuthorizationRequest(configuration: configuration,
+                                       clientId: self.config.clientId,
+                                       scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
+                                       redirectURL: redirectURL,
+                                       responseType: OIDResponseTypeCode,
+                                       additionalParameters: self.config.additionalParams)
     }
 }
