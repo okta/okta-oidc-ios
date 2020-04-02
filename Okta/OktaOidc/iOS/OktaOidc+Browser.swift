@@ -17,19 +17,7 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
     @objc public func signInWithBrowser(from presenter: UIViewController,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signInTask
-
-        signInTask.signIn { [weak self] authState, error in
-            defer { self?.currentUserSessionTask = nil }
-        
-            guard let authState = authState else {
-                callback(nil, error)
-                return
-            }
-            
-            let authStateManager = OktaOidcStateManager(authState: authState)
-            callback(authStateManager, nil)
-        }
+        signInWithBrowserTask(signInTask, callback: callback)
     }
 
     @objc public func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
@@ -42,12 +30,7 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
             return
         }
         let signOutTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signOutTask
-
-        signOutTask.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
-            self?.currentUserSessionTask = nil
-            callback(error)
-        }
+        signOutWithBrowserTask(signOutTask, idToken: idToken, callback: callback)
     }
     
     public func signOut(authStateManager: OktaOidcStateManager,

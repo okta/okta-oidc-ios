@@ -13,7 +13,7 @@
 import Foundation
 @testable import OktaOidc
 
-class OktaOidcMACMock: OktaOidcBrowserProtocolMAC {
+class OktaOidcMacMock: OktaOidcBrowserProtocolMAC {
     func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil, callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         
     }

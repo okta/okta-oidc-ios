@@ -41,11 +41,13 @@
 		A167889E2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */; };
 		A16788A02433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889F2433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift */; };
 		A16788A22433D45200D1651D /* OktaOidcApiMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CBE7229D4CF8003A6768 /* OktaOidcApiMock.swift */; };
-		A16788A4243410AE00D1651D /* OIDExternalUserAgentMacMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788A3243410AE00D1651D /* OIDExternalUserAgentMacMock.swift */; };
 		A16788A5243410AE00D1651D /* OIDExternalUserAgentMacMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788A3243410AE00D1651D /* OIDExternalUserAgentMacMock.swift */; };
 		A16788A72435250700D1651D /* OktaOidcSignOutHandlerMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788A62435250700D1651D /* OktaOidcSignOutHandlerMACTests.swift */; };
 		A16788A82435265600D1651D /* TestUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CC0F229D4CF8003A6768 /* TestUtils.swift */; };
-		A16788AA2435285900D1651D /* OktaOidcMACMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788A92435285900D1651D /* OktaOidcMACMock.swift */; };
+		A16788AA2435285900D1651D /* OktaOidcMacMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788A92435285900D1651D /* OktaOidcMacMock.swift */; };
+		A16788AC2435536B00D1651D /* OktaOidcTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788AB2435536B00D1651D /* OktaOidcTests.swift */; };
+		A16788AE243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788AD243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift */; };
+		A16788B624367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788B524367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift */; };
 		A17E387A234CFEED00837873 /* AppAuthCore.h in Headers */ = {isa = PBXBuildFile; fileRef = A17E3842234CFEE700837873 /* AppAuthCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A17E387B234CFEED00837873 /* OIDAuthState.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3843234CFEE700837873 /* OIDAuthState.m */; };
 		A17E387C234CFEED00837873 /* OIDServiceConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3844234CFEE700837873 /* OIDServiceConfiguration.m */; };
@@ -328,7 +330,10 @@
 		A167889F2433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcBrowserTaskMACTests.swift; sourceTree = "<group>"; };
 		A16788A3243410AE00D1651D /* OIDExternalUserAgentMacMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDExternalUserAgentMacMock.swift; sourceTree = "<group>"; };
 		A16788A62435250700D1651D /* OktaOidcSignOutHandlerMACTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcSignOutHandlerMACTests.swift; sourceTree = "<group>"; };
-		A16788A92435285900D1651D /* OktaOidcMACMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcMACMock.swift; sourceTree = "<group>"; };
+		A16788A92435285900D1651D /* OktaOidcMacMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcMacMock.swift; sourceTree = "<group>"; };
+		A16788AB2435536B00D1651D /* OktaOidcTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcTests.swift; sourceTree = "<group>"; };
+		A16788AD243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcBrowserTaskMacMock.swift; sourceTree = "<group>"; };
+		A16788B524367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcBrowserTaskIOSTests.swift; sourceTree = "<group>"; };
 		A17E3842234CFEE700837873 /* AppAuthCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppAuthCore.h; path = AppAuth/AppAuthCore.h; sourceTree = "<group>"; };
 		A17E3843234CFEE700837873 /* OIDAuthState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OIDAuthState.m; path = AppAuth/OIDAuthState.m; sourceTree = "<group>"; };
 		A17E3844234CFEE700837873 /* OIDServiceConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OIDServiceConfiguration.m; path = AppAuth/OIDServiceConfiguration.m; sourceTree = "<group>"; };
@@ -620,6 +625,7 @@
 				2F32CC0B229D4CF8003A6768 /* OktaOidcUtilsTests.swift */,
 				2F32CC0E229D4CF8003A6768 /* Info.plist */,
 				2F32CC0F229D4CF8003A6768 /* TestUtils.swift */,
+				A16788B524367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -676,7 +682,8 @@
 			isa = PBXGroup;
 			children = (
 				A167889B2432CDD700D1651D /* OIDRedirectHTTPHandlerMock.swift */,
-				A16788A92435285900D1651D /* OktaOidcMACMock.swift */,
+				A16788A92435285900D1651D /* OktaOidcMacMock.swift */,
+				A16788AD243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -812,6 +819,7 @@
 				A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */,
 				A167889F2433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift */,
 				A16788A62435250700D1651D /* OktaOidcSignOutHandlerMACTests.swift */,
+				A16788AB2435536B00D1651D /* OktaOidcTests.swift */,
 			);
 			path = macTests;
 			sourceTree = "<group>";
@@ -1276,7 +1284,7 @@
 				2F32CC3F229D4D11003A6768 /* OktaOidcUtilsTests.swift in Sources */,
 				2F32CC42229D4D11003A6768 /* TestUtils.swift in Sources */,
 				A17E3A112358FA3300837873 /* OIDResponseTypesTests.m in Sources */,
-				A16788A4243410AE00D1651D /* OIDExternalUserAgentMacMock.swift in Sources */,
+				A16788B624367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift in Sources */,
 				A17E3A172358FA3300837873 /* OIDAuthorizationRequestTests.m in Sources */,
 				2F32CC3C229D4D11003A6768 /* OktaOidcApiMock.swift in Sources */,
 				A17E3A162358FA3300837873 /* OIDRPProfileCode.m in Sources */,
@@ -1375,10 +1383,12 @@
 				A16788A22433D45200D1651D /* OktaOidcApiMock.swift in Sources */,
 				A167889C2432CDD800D1651D /* OIDRedirectHTTPHandlerMock.swift in Sources */,
 				A167889E2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift in Sources */,
-				A16788AA2435285900D1651D /* OktaOidcMACMock.swift in Sources */,
+				A16788AE243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift in Sources */,
+				A16788AA2435285900D1651D /* OktaOidcMacMock.swift in Sources */,
 				A16788992432A5C000D1651D /* OktaRedirectServerTests.swift in Sources */,
 				A16788A72435250700D1651D /* OktaOidcSignOutHandlerMACTests.swift in Sources */,
 				A16788A02433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift in Sources */,
+				A16788AC2435536B00D1651D /* OktaOidcTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

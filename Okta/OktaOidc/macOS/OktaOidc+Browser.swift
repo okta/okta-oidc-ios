@@ -20,12 +20,9 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
         let signInTask = OktaOidcBrowserTaskMAC(config: configuration,
                                                 oktaAPI: OktaOidcRestApi(),
                                                 redirectServerConfiguration: redirectServerConfiguration)
-        currentUserSessionTask = signInTask
-
-        signInTask.signIn { [weak self] authState, error in
-            defer { self?.currentUserSessionTask = nil }
+        signInWithBrowserTask(signInTask) { stateManager, error in
             NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
-            self?.handleSignInRedirect(authState: authState, error: error, callback: callback)
+            callback(stateManager, error)
         }
     }
 
@@ -41,10 +38,7 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
         let signOutTask = OktaOidcBrowserTaskMAC(config: configuration,
                                                  oktaAPI: OktaOidcRestApi(),
                                                  redirectServerConfiguration: redirectServerConfiguration)
-        currentUserSessionTask = signOutTask
-        
-        signOutTask.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
-            defer { self?.currentUserSessionTask = nil }
+        signOutWithBrowserTask(signOutTask, idToken: idToken) { error in
             NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
             callback(error)
         }
@@ -80,17 +74,5 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
             return
         }
         userAgentSession.cancel(completion: completion)
-    }
-
-    func handleSignInRedirect(authState: OIDAuthState?,
-                              error: Error?,
-                              callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        guard let authState = authState else {
-            callback(nil, error)
-            return
-        }
-        
-        let authStateManager = OktaOidcStateManager(authState: authState)
-        callback(authStateManager, nil)
     }
 }

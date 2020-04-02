@@ -41,6 +41,33 @@ public class OktaOidc: NSObject {
         return currentUserSessionTask != nil
     }
 
+    func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
+                               callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        currentUserSessionTask = task
+
+        task.signIn { [weak self] authState, error in
+            defer { self?.currentUserSessionTask = nil }
+            guard let authState = authState else {
+                callback(nil, error)
+                return
+            }
+            
+            let authStateManager = OktaOidcStateManager(authState: authState)
+            callback(authStateManager, nil)
+        }
+    }
+
+    func signOutWithBrowserTask(_ task: OktaOidcBrowserTask,
+                                idToken: String,
+                               callback: @escaping ((Error?) -> Void)) {
+        currentUserSessionTask = task
+
+        task.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
+            defer { self?.currentUserSessionTask = nil }
+            callback(error)
+        }
+    }
+
     // Holds the browser session
     var currentUserSessionTask: OktaOidcBrowserTask?
 }

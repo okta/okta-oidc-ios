@@ -33,7 +33,10 @@ struct TestUtils {
     static var authStateManager = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId) }
     static var authStateManagerWithExpiration = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId, expiresIn: 5) }
     
-    static func setupMockAuthState(issuer: String, clientId: String, expiresIn: TimeInterval = 300) -> OIDAuthState {
+    static func setupMockAuthState(issuer: String,
+                                   clientId: String,
+                                   expiresIn: TimeInterval = 300,
+                                   skipTokenResponse: Bool = false) -> OIDAuthState {
         // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
         let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
@@ -66,19 +69,23 @@ struct TestUtils {
             parameters: ["code": "mockAuthCode" as NSCopying & NSObjectProtocol]
         )
 
-        let mockTokenResponse = OIDTokenResponse(
-            request: mockTokenRequest,
-            parameters: [
-                "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
-                "expires_in": expiresIn as NSCopying & NSObjectProtocol,
-                "token_type": "Bearer" as NSCopying & NSObjectProtocol,
-                "id_token": mockIdToken as NSCopying & NSObjectProtocol,
-                "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
-                "scope": mockScopes as NSCopying & NSObjectProtocol
-            ]
-        )
+        if skipTokenResponse {
+            return OIDAuthState(authorizationResponse: mockAuthResponse)
+        } else {
+            let mockTokenResponse = OIDTokenResponse(
+                request: mockTokenRequest,
+                parameters: [
+                    "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
+                    "expires_in": expiresIn as NSCopying & NSObjectProtocol,
+                    "token_type": "Bearer" as NSCopying & NSObjectProtocol,
+                    "id_token": mockIdToken as NSCopying & NSObjectProtocol,
+                    "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
+                    "scope": mockScopes as NSCopying & NSObjectProtocol
+                ]
+            )
 
-        return OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+            return OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+        }
     }
 
 

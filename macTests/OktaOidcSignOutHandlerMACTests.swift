@@ -36,7 +36,7 @@ class OktaOidcSignOutHandlerMACTests: XCTestCase {
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
         )
         let signOutHandler = OktaOidcSignOutHandlerMAC(options: .allOptions,
-                                                       oidcClient: OktaOidcMACMock(),
+                                                       oidcClient: OktaOidcMacMock(),
                                                        authStateManager: authStateManager,
                                                        redirectServerConfiguration: OktaRedirectServerConfiguration.default)
         XCTAssertNotNil(signOutHandler.redirectServerConfiguration)
