@@ -12,7 +12,7 @@
 
 class OktaOidcBrowserTaskIOS: OktaOidcBrowserTask {
 
-    private let presenter: UIViewController
+    let presenter: UIViewController
 
     init(presenter: UIViewController, config: OktaOidcConfig, oktaAPI: OktaOidcHttpApiProtocol) {
         self.presenter = presenter

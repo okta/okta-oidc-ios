@@ -170,6 +170,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
 public extension OktaOidcStateManager {
 
+    @available(*, deprecated, message: "Please use readFromSecureStorage(for config: OktaOidcConfig) function")
     class func readFromSecureStorage() -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }

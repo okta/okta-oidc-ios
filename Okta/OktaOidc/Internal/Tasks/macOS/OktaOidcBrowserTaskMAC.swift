@@ -13,6 +13,7 @@
 class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
 
     var redirectServer: OktaRedirectServer?
+    var redirectServerConfiguration: OktaRedirectServerConfiguration?
     var redirectURL: URL?
     var domainName: String?
 
@@ -24,6 +25,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
                                                 port: redirectServerConfiguration.port ?? 0)
         }
         self.domainName = redirectServerConfiguration?.domainName
+        self.redirectServerConfiguration = redirectServerConfiguration
 
         super.init(config: config, oktaAPI: oktaAPI)
 

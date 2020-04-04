@@ -13,7 +13,7 @@
 import XCTest
 @testable import OktaOidc
 
-class OktaOidcPartialMock: OktaOidc {
+fileprivate class OktaOidcPartialMock: OktaOidc {
     var error: Error?
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
@@ -153,7 +153,7 @@ class OktaOidcTests: XCTestCase {
 
         // Success case
         var signInExpectation = expectation(description: "Completion should be called!")
-        var browserTaskMock = OktaOidcBrowserTaskMacMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
+        var browserTaskMock = OktaOidcBrowserTaskMACUnitMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
         oidc.signInWithBrowserTask(browserTaskMock) { stateManager, error in
             XCTAssertNil(error)
             XCTAssertNotNil(stateManager)
@@ -166,7 +166,7 @@ class OktaOidcTests: XCTestCase {
 
         // Error case
         signInExpectation = expectation(description: "Completion should be called!")
-        browserTaskMock = OktaOidcBrowserTaskMacMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
+        browserTaskMock = OktaOidcBrowserTaskMACUnitMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
         browserTaskMock.error = OktaOidcError.noDiscoveryEndpoint
         oidc.signInWithBrowserTask(browserTaskMock) { stateManager, error in
             XCTAssertNil(stateManager)
@@ -188,7 +188,7 @@ class OktaOidcTests: XCTestCase {
 
         // Success case
         var signOutExpectation = expectation(description: "Completion should be called!")
-        var browserTaskMock = OktaOidcBrowserTaskMacMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
+        var browserTaskMock = OktaOidcBrowserTaskMACUnitMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
         oidc.signOutWithBrowserTask(browserTaskMock, idToken: "id_token") { error in
             XCTAssertNil(error)
             signOutExpectation.fulfill()
@@ -200,7 +200,7 @@ class OktaOidcTests: XCTestCase {
 
         // Error case
         signOutExpectation = expectation(description: "Completion should be called!")
-        browserTaskMock = OktaOidcBrowserTaskMacMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
+        browserTaskMock = OktaOidcBrowserTaskMACUnitMock(config: createTestConfig()!, oktaAPI: OktaOidcApiMock())
         browserTaskMock.error = OktaOidcError.noDiscoveryEndpoint
         oidc.signOutWithBrowserTask(browserTaskMock, idToken: "id_token") { error in
             XCTAssertNotNil(error)

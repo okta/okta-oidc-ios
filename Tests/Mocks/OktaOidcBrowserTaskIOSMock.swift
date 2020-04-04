@@ -10,45 +10,16 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
-import Foundation
+import XCTest
 @testable import OktaOidc
 
-class OktaOidcBrowserTaskMACUnitMock: OktaOidcBrowserTaskMAC {
-    var signInCalled = false
-    var signOutCalled = false
-    var error: OktaOidcError?
-    
-    override func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
-        DispatchQueue.main.async {
-            self.signInCalled = true
-            if let error = self.error {
-                callback(nil, error)
-            } else {
-                let authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
-                callback(authState, nil)
-            }
-        }
-    }
-
-    override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
-        DispatchQueue.main.async {
-            self.signOutCalled = true
-            if let error = self.error {
-                callback(nil, error)
-            } else {
-                callback((), nil)
-            }
-        }
-    }
-}
-
-class OktaOidcBrowserTaskMACFunctionalMock: OktaOidcBrowserTaskMAC {
+class OktaOidcBrowserTaskIOSMock: OktaOidcBrowserTaskIOS {
     override func authStateClass() -> OIDAuthState.Type {
-        return OIDAuthStateMACMock.self
+        return OIDAuthStateMock.self
     }
 
     override func authorizationServiceClass() -> OIDAuthorizationService.Type {
-        return OIDAuthorizationServiceMACMock.self
+        return OIDAuthorizationServiceMock.self
     }
 
     override func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
