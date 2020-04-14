@@ -10,16 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import UIKit
-
 public class OktaOidc: NSObject {
 
     // Cache Okta.plist for reference
     @objc public let configuration: OktaOidcConfig
-    
-    // Holds the browser session
-    private var currentUserSessionTask: OktaOidcUserSessionTask?
-    
+
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
         if let config = configuration {
             self.configuration = config
@@ -28,14 +23,10 @@ public class OktaOidc: NSObject {
         }
     }
 
-    @objc public func signInWithBrowser(from presenter: UIViewController,
-                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcSignInTask(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signInTask
-
-        signInTask.run { [weak self] authState, error in
-            defer { self?.currentUserSessionTask = nil }
-        
+    @objc public func authenticate(withSessionToken sessionToken: String,
+                                   callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi())
+        .authenticateWithSessionToken(sessionToken: sessionToken) { authState, error in
             guard let authState = authState else {
                 callback(nil, error)
                 return
@@ -46,69 +37,37 @@ public class OktaOidc: NSObject {
         }
     }
 
-    @objc public func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
-                                    from presenter: UIViewController,
-                                    callback: @escaping ((Error?) -> Void)) {
-        // Use idToken from last auth response since authStateManager.idToken returns idToken only if it is valid.
-        // Validation is not needed for SignOut operation.
-        guard let idToken = authStateManager.authState.lastTokenResponse?.idToken else {
-            callback(OktaOidcError.missingIdToken)
-            return
+    @objc public func hasActiveBrowserSession() -> Bool {
+        return currentUserSessionTask != nil
+    }
+
+    func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
+                               callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        currentUserSessionTask = task
+
+        task.signIn { [weak self] authState, error in
+            defer { self?.currentUserSessionTask = nil }
+            guard let authState = authState else {
+                callback(nil, error)
+                return
+            }
+            
+            let authStateManager = OktaOidcStateManager(authState: authState)
+            callback(authStateManager, nil)
         }
-        
-        let signOutTask = OktaOidcSignOutTask(idToken: idToken, presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi())
-        currentUserSessionTask = signOutTask
-        
-        signOutTask.run { [weak self] _, error in
-            self?.currentUserSessionTask = nil
+    }
+
+    func signOutWithBrowserTask(_ task: OktaOidcBrowserTask,
+                                idToken: String,
+                               callback: @escaping ((Error?) -> Void)) {
+        currentUserSessionTask = task
+
+        task.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
+            defer { self?.currentUserSessionTask = nil }
             callback(error)
         }
     }
-    
-    public func signOut(authStateManager: OktaOidcStateManager,
-                        from presenter: UIViewController,
-                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        self.signOut(with: .allOptions,
-                     authStateManager: authStateManager,
-                     from: presenter,
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)
-    }
 
-    public func signOut(with options: OktaSignOutOptions,
-                        authStateManager: OktaOidcStateManager,
-                        from presenter: UIViewController,
-                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                        completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        self.signOut(with: options,
-                     authStateManager: authStateManager,
-                     from: presenter,
-                     failedOptions: [],
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)
-    }
-
-    @objc public func authenticate(withSessionToken sessionToken: String,
-                                   callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(sessionToken: sessionToken, config: configuration, oktaAPI: OktaOidcRestApi())
-        .run { authState, error in
-            guard let authState = authState else {
-                callback(nil, error)
-                return
-            }
-            
-            let authStateManager = OktaOidcStateManager(authState: authState)
-            callback(authStateManager, nil)
-        }
-    }
-
-    @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
-    @objc public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        guard let currentUserSessionTask = currentUserSessionTask else {
-            return false
-        }
-        
-        return currentUserSessionTask.resume(with: url)
-    }
+    // Holds the browser session
+    var currentUserSessionTask: OktaOidcBrowserTask?
 }

@@ -14,10 +14,8 @@
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
-
     @modifications
         Copyright (C) 2019 Okta Inc.
-
  */
 
 #import "OIDTokenRequest.h"
@@ -275,8 +273,7 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   NSMutableURLRequest *URLRequest = [[NSURLRequest requestWithURL:tokenRequestURL] mutableCopy];
   URLRequest.HTTPMethod = kHTTPPost;
   [URLRequest setValue:kHTTPContentTypeHeaderValue forHTTPHeaderField:kHTTPContentTypeHeaderKey];
-  [URLRequest setValue:[OktaUserAgent userAgentHeaderValue] forHTTPHeaderField:[OktaUserAgent userAgentHeaderKey]];
-
+  [URLRequest setValue:OktaUserAgent.userAgentHeaderValue forHTTPHeaderField:OktaUserAgent.userAgentHeaderKey];
 
   OIDURLQueryComponent *bodyParameters = [self tokenRequestBody];
   NSMutableDictionary *httpHeaders = [[NSMutableDictionary alloc] init];

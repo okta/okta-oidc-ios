@@ -19,8 +19,9 @@
 #import "OIDEndSessionRequestTests.h"
 
 #import "OIDServiceDiscoveryTests.h"
-
-@import OktaOidc;
+#import "OIDEndSessionRequest.h"
+#import "OIDServiceConfiguration.h"
+#import "OIDServiceDiscovery.h"
 
 /*! @brief Test value for the @c redirectURL property.
  */

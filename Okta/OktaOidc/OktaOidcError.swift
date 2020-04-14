@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import Foundation
+
 public enum OktaOidcError: Error {
     case APIError(String)
     case errorFetchingFreshTokens(String)
@@ -30,6 +32,7 @@ public enum OktaOidcError: Error {
     case missingIdToken
     case unexpectedAuthCodeResponse
     case unableToGetAuthCode
+    case redirectServerError(String)
 }
 
 extension OktaOidcError: LocalizedError {
@@ -74,6 +77,8 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("Unexpected response format while retrieving authorization code.", comment: "")
         case .unableToGetAuthCode:
             return NSLocalizedString("Unable to get authorization code.", comment: "")
+        case .redirectServerError(error: let error):
+            return NSLocalizedString(error, comment: "")
         }
     }
 }

@@ -10,7 +10,11 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-open class OktaOidcStateManager: NSObject, NSCoding {
+import Foundation
+
+open class OktaOidcStateManager: NSObject, NSSecureCoding {
+
+    public static var supportsSecureCoding = true
 
     @objc open var authState: OIDAuthState
     @objc open var accessibility: CFString
@@ -166,6 +170,7 @@ open class OktaOidcStateManager: NSObject, NSCoding {
 
 public extension OktaOidcStateManager {
 
+    @available(*, deprecated, message: "Please use readFromSecureStorage(for config: OktaOidcConfig) function")
     class func readFromSecureStorage() -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
@@ -175,8 +180,14 @@ public extension OktaOidcStateManager {
     }
     
     func writeToSecureStorage() {
-        let authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
+        let authStateData: Data
         do {
+            if #available(iOS 11, OSX 10.14, *) {
+                authStateData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+            } else {
+                authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
+            }
+
             try OktaOidcKeychain.set(
                 key: self.clientId,
                 data: authStateData,
@@ -192,8 +203,11 @@ public extension OktaOidcStateManager {
             return nil
         }
 
-        guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager else {
-            return nil
+        let state: OktaOidcStateManager?
+        if #available(iOS 11, OSX 10.14, *) {
+            state = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState)) as? OktaOidcStateManager
+        } else {
+            state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager
         }
 
         return state
