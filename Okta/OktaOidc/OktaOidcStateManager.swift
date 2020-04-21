@@ -168,18 +168,18 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     }
 }
 
-public extension OktaOidcStateManager {
+@objc public extension OktaOidcStateManager {
 
     @available(*, deprecated, message: "Please use readFromSecureStorage(for config: OktaOidcConfig) function")
     class func readFromSecureStorage() -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
 
-    class func readFromSecureStorage(for config: OktaOidcConfig) -> OktaOidcStateManager? {
+    @objc class func readFromSecureStorage(for config: OktaOidcConfig) -> OktaOidcStateManager? {
         return readFromSecureStorage(forKey: config.clientId)
     }
     
-    func writeToSecureStorage() {
+    @objc func writeToSecureStorage() {
         let authStateData: Data
         do {
             if #available(iOS 11, OSX 10.14, *) {

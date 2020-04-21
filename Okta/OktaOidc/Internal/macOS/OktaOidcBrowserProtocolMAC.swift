@@ -12,21 +12,12 @@
 
 import Foundation
 
-public protocol OktaOidcBrowserProtocolMAC {
+@objc public protocol OktaOidcBrowserProtocolMAC {
     func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration?,
                            callback: @escaping ((OktaOidcStateManager?, Error?) -> Void))
     func signOutOfOkta(authStateManager: OktaOidcStateManager,
                        redirectServerConfiguration: OktaRedirectServerConfiguration?,
                        callback: @escaping ((Error?) -> Void))
-    func signOut(authStateManager: OktaOidcStateManager,
-                 redirectServerConfiguration: OktaRedirectServerConfiguration?,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void))
-    func signOut(with options: OktaSignOutOptions,
-                 authStateManager: OktaOidcStateManager,
-                 redirectServerConfiguration: OktaRedirectServerConfiguration?,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void))
     func cancelBrowserSession(completion: (()-> Void)?)
 }
 
@@ -42,26 +33,6 @@ public extension OktaOidcBrowserProtocolMAC {
         signOutOfOkta(authStateManager: authStateManager,
                       redirectServerConfiguration: redirectServerConfiguration,
                       callback: callback)
-    }
-    func signOut(authStateManager: OktaOidcStateManager,
-                 redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        signOut(authStateManager: authStateManager,
-                redirectServerConfiguration: redirectServerConfiguration,
-                progressHandler: progressHandler,
-                completionHandler: completionHandler)
-    }
-    func signOut(with options: OktaSignOutOptions,
-                 authStateManager: OktaOidcStateManager,
-                 redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        signOut(with: options,
-                authStateManager: authStateManager,
-                redirectServerConfiguration: redirectServerConfiguration,
-                progressHandler: progressHandler,
-                completionHandler: completionHandler)
     }
     func cancelBrowserSession(completion: (()-> Void)? = nil) {
         cancelBrowserSession(completion: completion)
