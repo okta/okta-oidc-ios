@@ -13,7 +13,7 @@
 import Foundation
 @testable import OktaOidc
 
-class OktaOidcMacMock: OktaOidcBrowserProtocolMAC {
+class OktaOidcMacMock: NSObject, OktaOidcBrowserProtocolMAC {
     func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil, callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         
     }
@@ -23,6 +23,10 @@ class OktaOidcMacMock: OktaOidcBrowserProtocolMAC {
     }
 
     func signOut(authStateManager: OktaOidcStateManager, redirectServerConfiguration: OktaRedirectServerConfiguration? = nil, progressHandler: @escaping ((OktaSignOutOptions) -> Void), completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+        
+    }
+
+    func cancelBrowserSession(completion: (() -> Void)? = nil) {
         
     }
 
