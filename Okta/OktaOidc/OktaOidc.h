@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (c) 2017-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
@@ -36,6 +36,11 @@
 #import "OIDURLSessionProvider.h"
 #import "OIDEndSessionRequest.h"
 #import "OIDEndSessionResponse.h"
+#import "OIDClientMetadataParameters.h"
+#import "AppAuthCore.h"
+#import "OIDDefines.h"
+#import "OIDFieldMapping.h"
+#import "OIDURLQueryComponent.h"
 #import "OktaUserAgent.h"
 
 #if TARGET_OS_IOS
@@ -48,6 +53,7 @@
 #import "OIDAuthorizationService+Mac.h"
 #import "OIDExternalUserAgentMac.h"
 #import "OIDRedirectHTTPHandler.h"
+#import "OIDLoopbackHTTPServer.h"
 #else
 #error "Platform Undefined"
 #endif
