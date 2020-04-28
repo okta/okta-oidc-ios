@@ -15,6 +15,12 @@
 
 @implementation OktaUserAgent
 
+static NSString *userAgentValue = nil;
+
++(void)setUserAgentValue:(NSString*)value {
+    userAgentValue = value;
+}
+
 +(NSString*)userAgentVersion {
     return @"3.6.1";
 }
@@ -24,23 +30,27 @@
 }
 
 +(NSString*)userAgentHeaderValue {
-    
-    NSString *bundleVersion = [self.class userAgentVersion];
-    NSString *systemVersion = [[NSProcessInfo processInfo] operatingSystemVersionString];
-    struct utsname deviceInfo;
-    uname(&deviceInfo);
-    NSString *deviceModel = [NSString stringWithUTF8String:deviceInfo.machine];
-    NSString *osName = @"iOS";
-#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
-    osName = @"macOS";
+
+    if (userAgentValue.length > 0) {
+        return userAgentValue;
+    } else {
+        NSString *bundleVersion = [self.class userAgentVersion];
+        NSString *systemVersion = [[NSProcessInfo processInfo] operatingSystemVersionString];
+        struct utsname deviceInfo;
+        uname(&deviceInfo);
+        NSString *deviceModel = [NSString stringWithUTF8String:deviceInfo.machine];
+        NSString *osName = @"iOS";
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRE
+        osName = @"macOS";
 #endif
 
-    NSString *formattedString = [NSString stringWithFormat:@"okta-oidc-ios/%@ %@/%@ Device/%@",
-                                 bundleVersion.length > 0 ? bundleVersion : @"",
-                                 osName,
-                                 systemVersion,
-                                 deviceModel];
-    return formattedString;
+        NSString *formattedString = [NSString stringWithFormat:@"okta-oidc-ios/%@ %@/%@ Device/%@",
+                                     bundleVersion.length > 0 ? bundleVersion : @"",
+                                     osName,
+                                     systemVersion,
+                                     deviceModel];
+        return formattedString;
+    }
 }
 
 @end
