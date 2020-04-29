@@ -64,19 +64,9 @@ public class OktaOidcConfig: NSObject, Codable {
         
         try self.init(with: configDict)
     }
-    
-    private static func extractAdditionalParams(_ config: [String: String]) -> [String: String]? {
-        // Parse the additional parameters to be passed to the /authorization endpoint
-        var configCopy = config
-        
-        // Remove "issuer", "clientId", "redirectUri", "scopes" and "logoutRedirectUri"
-        configCopy.removeValue(forKey: "issuer")
-        configCopy.removeValue(forKey: "clientId")
-        configCopy.removeValue(forKey: "redirectUri")
-        configCopy.removeValue(forKey: "scopes")
-        configCopy.removeValue(forKey: "logoutRedirectUri")
-        
-        return configCopy
+
+    public class func setUserAgent(value: String) {
+        OktaUserAgent.setUserAgentValue(value)
     }
     
     override public func isEqual(_ object: Any?) -> Bool {
@@ -106,6 +96,20 @@ public class OktaOidcConfig: NSObject, Codable {
             delegateQueue: .main)
         
         OIDURLSessionProvider.setSession(session)
+    }
+
+    private static func extractAdditionalParams(_ config: [String: String]) -> [String: String]? {
+        // Parse the additional parameters to be passed to the /authorization endpoint
+        var configCopy = config
+        
+        // Remove "issuer", "clientId", "redirectUri", "scopes" and "logoutRedirectUri"
+        configCopy.removeValue(forKey: "issuer")
+        configCopy.removeValue(forKey: "clientId")
+        configCopy.removeValue(forKey: "redirectUri")
+        configCopy.removeValue(forKey: "scopes")
+        configCopy.removeValue(forKey: "logoutRedirectUri")
+        
+        return configCopy
     }
 
     class RedirectBlockingURLSessionDelegate: NSObject, URLSessionTaskDelegate {

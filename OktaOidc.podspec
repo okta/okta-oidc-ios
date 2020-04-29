@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaOidc'
-  s.version          = '3.6.1'
+  s.version          = '3.7.0'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
   s.description      = <<-DESC
 Integrate your native app with Okta using the AppAuth library.
@@ -23,15 +23,25 @@ Integrate your native app with Okta using the AppAuth library.
   s.subspec 'Okta' do |okta|
      okta.dependency 'OktaOidc/AppAuth'
      okta.subspec 'Classes' do |classes|
-        classes.source_files = 'Okta/OktaOidc/*.{h,m,swift}','Okta/OktaOidc/Internal/*.{h,m,swift}','Okta/OktaOidc/Internal/Tasks/*.{h,m,swift}'
-        classes.exclude_files = 'Okta/OktaOidc/OktaOidc.swift','Okta/OktaOidc/iOS/OktaOidc+Browser.swift','Okta/OktaOidc/macOS/OktaOidc+Browser.swift'
-        classes.ios.source_files = 'Okta/OktaOidc/iOS/*.{swift}','Okta/OktaOidc/Internal/iOS/*.{swift}','Okta/OktaOidc/Internal/Tasks/iOS/*.{swift}'
+        classes.source_files = 'Okta/OktaOidc/*.{h,m,swift}',
+                                            'Okta/OktaOidc/Internal/*.{h,m,swift}',
+                                            'Okta/OktaOidc/Internal/Tasks/*.{h,m,swift}'
+        classes.exclude_files = 'Okta/OktaOidc/OktaOidc.swift',
+                                              'Okta/OktaOidc/iOS/OktaOidc+Browser.swift',
+                                              'Okta/OktaOidc/macOS/OktaOidc+Browser.swift'
+        classes.ios.source_files = 'Okta/OktaOidc/iOS/*.{swift}',
+                                                  'Okta/OktaOidc/Internal/iOS/*.{swift}',
+                                                  'Okta/OktaOidc/Internal/Tasks/iOS/*.{swift}'
         classes.ios.deployment_target = '9.0'
-        classes.osx.source_files = 'Okta/OktaOidc/macOS/*.{swift}','Okta/OktaOidc/Internal/macOS/*.{swift}','Okta/OktaOidc/Internal/Tasks/macOS/*.{swift}'
+        classes.osx.source_files = 'Okta/OktaOidc/macOS/*.{swift}',
+                                                   'Okta/OktaOidc/Internal/macOS/*.{swift}',
+                                                   'Okta/OktaOidc/Internal/Tasks/macOS/*.{swift}'
         classes.osx.deployment_target = '10.10'        
      end
      okta.source_files = 'Okta/OktaOidc/OktaOidc.swift'
      okta.ios.source_files = 'Okta/OktaOidc/iOS/OktaOidc+Browser.swift'
      okta.osx.source_files = 'Okta/OktaOidc/macOS/OktaOidc+Browser.swift'
   end
+
+s.xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${SRCROOT}/OktaOidc/**' }
 end

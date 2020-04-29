@@ -165,4 +165,9 @@ class OktaOidcConfigTests: XCTestCase {
         
         XCTAssertNil(config)
     }
+
+    func testUserAgent() {
+        OktaOidcConfig.setUserAgent(value: "some user agent")
+        XCTAssertEqual(OktaUserAgent.userAgentHeaderValue(), "some user agent")
+    }
 }

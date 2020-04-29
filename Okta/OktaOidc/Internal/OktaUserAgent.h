@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OktaUserAgent : NSObject
 
++(void)setUserAgentValue:(NSString*)value;
 +(NSString*)userAgentVersion;
 +(NSString*)userAgentHeaderKey;
 +(NSString*)userAgentHeaderValue;
