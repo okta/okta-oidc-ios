@@ -170,4 +170,25 @@ class OktaOidcConfigTests: XCTestCase {
         OktaOidcConfig.setUserAgent(value: "some user agent")
         XCTAssertEqual(OktaUserAgent.userAgentHeaderValue(), "some user agent")
     }
+
+    func testNoSSOOption() {
+        do {
+            if #available(iOS 13.0, *) {
+                let config = try OktaOidcConfig.default()
+                var oidc = OktaOidcBrowserTaskIOS(presenter: UIViewController(), config: config, oktaAPI: OktaOidcRestApi())
+                var externalUA = oidc.externalUserAgent()
+                XCTAssertTrue(externalUA is OIDExternalUserAgentIOS)
+
+                config.noSSO = true
+                oidc = OktaOidcBrowserTaskIOS(presenter: UIViewController(), config: config, oktaAPI: OktaOidcRestApi())
+                externalUA = oidc.externalUserAgent()
+                XCTAssertTrue(externalUA is OIDExternalUserAgentNoSsoIOS)
+            }
+        } catch let error {
+            XCTAssertEqual(
+                OktaOidcError.missingConfigurationValues.localizedDescription,
+                error.localizedDescription
+            )
+        }
+    }
 }

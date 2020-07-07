@@ -36,6 +36,9 @@
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
 		A10798972322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */; };
+		A10FA55224B4DA3200E00620 /* OIDExternalUserAgentNoSsoIOS.m in Sources */ = {isa = PBXBuildFile; fileRef = A10FA55124B4DA3200E00620 /* OIDExternalUserAgentNoSsoIOS.m */; };
+		A10FA55424B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A10FA55324B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A10FA55624B6310500E00620 /* OIDExternalUserAgentNoSsoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10FA55524B6310400E00620 /* OIDExternalUserAgentNoSsoTests.swift */; };
 		A16788992432A5C000D1651D /* OktaRedirectServerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788982432A5BF00D1651D /* OktaRedirectServerTests.swift */; };
 		A167889C2432CDD800D1651D /* OIDRedirectHTTPHandlerMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889B2432CDD700D1651D /* OIDRedirectHTTPHandlerMock.swift */; };
 		A167889E2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */; };
@@ -336,6 +339,9 @@
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CC8C229D4FCD003A6768 /* UITestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestUtils.swift; sourceTree = "<group>"; };
 		A10798952322DB8700327ED9 /* OktaSignOutOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaSignOutOptions.swift; sourceTree = "<group>"; };
+		A10FA55124B4DA3200E00620 /* OIDExternalUserAgentNoSsoIOS.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = OIDExternalUserAgentNoSsoIOS.m; path = AppAuth/iOS/OIDExternalUserAgentNoSsoIOS.m; sourceTree = "<group>"; };
+		A10FA55324B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OIDExternalUserAgentNoSsoIOS.h; path = AppAuth/iOS/OIDExternalUserAgentNoSsoIOS.h; sourceTree = "<group>"; };
+		A10FA55524B6310400E00620 /* OIDExternalUserAgentNoSsoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDExternalUserAgentNoSsoTests.swift; sourceTree = "<group>"; };
 		A16788982432A5BF00D1651D /* OktaRedirectServerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OktaRedirectServerTests.swift; path = Tests/MacOS/OktaRedirectServerTests.swift; sourceTree = SOURCE_ROOT; };
 		A167889B2432CDD700D1651D /* OIDRedirectHTTPHandlerMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDRedirectHTTPHandlerMock.swift; sourceTree = "<group>"; };
 		A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaRedirectServerConfigurationTests.swift; sourceTree = "<group>"; };
@@ -725,6 +731,7 @@
 				2F32CC0F229D4CF8003A6768 /* TestUtils.swift */,
 				A16788B524367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift */,
 				A16788BB2436AE5900D1651D /* OktaOidcBrowserTests.swift */,
+				A10FA55524B6310400E00620 /* OIDExternalUserAgentNoSsoTests.swift */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -820,6 +827,8 @@
 				A17E38B8234CFF1E00837873 /* OIDExternalUserAgentIOS.m */,
 				A17E38B4234CFF1E00837873 /* OIDExternalUserAgentIOSCustomBrowser.h */,
 				A17E38B6234CFF1E00837873 /* OIDExternalUserAgentIOSCustomBrowser.m */,
+				A10FA55324B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h */,
+				A10FA55124B4DA3200E00620 /* OIDExternalUserAgentNoSsoIOS.m */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -977,6 +986,7 @@
 				A1763A3B2450BF2B0031E050 /* OktaOidc.h in Headers */,
 				A17E3896234CFEED00837873 /* OIDExternalUserAgentRequest.h in Headers */,
 				A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */,
+				A10FA55424B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h in Headers */,
 				A17E38BD234CFF1E00837873 /* OIDAuthorizationService+IOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1151,21 +1161,25 @@
 				TargetAttributes = {
 					2F32CA1D229D38D4003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1130;
 					};
 					2F32CB9C229D422F003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1130;
 					};
 					2F32CBD9229D4CE9003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1130;
 						TestTargetID = 2F32CB9C229D422F003A6768;
 					};
 					2F32CC7E229D4FC0003A6768 = {
 						CreatedOnToolsVersion = 10.2.1;
-						LastSwiftMigration = 1100;
+						LastSwiftMigration = 1130;
 						TestTargetID = 2F32CB9C229D422F003A6768;
 					};
 					A17E38DB234D2DF700837873 = {
 						CreatedOnToolsVersion = 11.0;
+						LastSwiftMigration = 1130;
 					};
 					A17E38E3234D2DF800837873 = {
 						CreatedOnToolsVersion = 11.0;
@@ -1280,6 +1294,7 @@
 				A17E3892234CFEED00837873 /* OIDFieldMapping.m in Sources */,
 				A17E389B234CFEED00837873 /* OIDAuthorizationRequest.m in Sources */,
 				A17E38A8234CFEED00837873 /* OIDEndSessionRequest.m in Sources */,
+				A10FA55224B4DA3200E00620 /* OIDExternalUserAgentNoSsoIOS.m in Sources */,
 				A17E38C1234CFF1E00837873 /* OIDAuthState+IOS.m in Sources */,
 				A17E387B234CFEED00837873 /* OIDAuthState.m in Sources */,
 				A17E399B234E65B800837873 /* OktaOidc+Browser.swift in Sources */,
@@ -1348,6 +1363,7 @@
 				2F32CC43229D4D11003A6768 /* OktaOidcConfigTests.swift in Sources */,
 				A17E3A142358FA3300837873 /* OIDURLQueryComponentTests.m in Sources */,
 				2F32CC3B229D4D11003A6768 /* OktaOidcEndpointTests.swift in Sources */,
+				A10FA55624B6310500E00620 /* OIDExternalUserAgentNoSsoTests.swift in Sources */,
 				A16788C12436B1DF00D1651D /* OIDExternalUserAgentSessionMock.swift in Sources */,
 				2F32CC3E229D4D11003A6768 /* OktaOidcStateManagerTests.swift in Sources */,
 			);
@@ -1628,18 +1644,19 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 3.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1656,18 +1673,19 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Okta/Framework/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MARKETING_VERSION = 3.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1679,14 +1697,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1698,14 +1716,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Example/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1715,7 +1733,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1723,7 +1741,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaOidcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
@@ -1734,7 +1752,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = Tests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1742,7 +1760,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaOidcTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Example.app/Example";
 			};
@@ -1754,7 +1772,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = UITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1764,7 +1782,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Example;
 			};
@@ -1776,7 +1794,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = UITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1785,7 +1803,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.OktaOidcUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Example;
 			};
@@ -1808,11 +1826,12 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 3.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -1833,11 +1852,12 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MARKETING_VERSION = 3.8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

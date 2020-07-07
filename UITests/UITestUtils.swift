@@ -29,18 +29,45 @@ public struct UITestUtils {
         // Sign In via username and password inside of the Safari WebView
         let webViewsQuery = testApp.webViews
         let uiElementUsername = webViewsQuery.textFields.element(boundBy: 0)
-        XCTAssertTrue(uiElementUsername.waitForExistence(timeout: 60))
+        XCTAssertTrue(uiElementUsername.waitForExistence(timeout: 20))
         uiElementUsername.tap()
         uiElementUsername.typeText(username)
-        let uiElementPassword: XCUIElement = webViewsQuery.secureTextFields.element(boundBy: 0)
         if webViewsQuery.buttons["Next"].exists {
             webViewsQuery.buttons["Next"].tap()
-            XCTAssertTrue(uiElementPassword.waitForExistence(timeout: 60))
         }
-        uiElementPassword.tap()
-        sleep(1)
-        uiElementPassword.typeText(password)
-        webViewsQuery.buttons["Sign In"].tap()
+        enterPassword(password, in: webViewsQuery)
+        if webViewsQuery.buttons["Sign In"].exists {
+            webViewsQuery.buttons["Sign In"].tap()
+        } else if webViewsQuery.buttons["Verify"].exists {
+            webViewsQuery.buttons["Verify"].tap()
+        }
+
+        XCTAssertTrue(webViewsQuery.buttons["Verify"].waitForExistence(timeout: 20))
+        enterPassword("okta", in: webViewsQuery)
+        webViewsQuery.buttons["Verify"].tap()
+    }
+
+    func enterPassword(_ password: String, in element: XCUIElementQuery) {
+        var passwordTextField: XCUIElement?
+        if element.secureTextFields.count > 1 {
+            var currentTextFieldWidth: CGFloat = 0.0
+            for i in 0...(element.secureTextFields.count-1) {
+                let textField = element.secureTextFields.element(boundBy: i)
+                if textField.frame.width > currentTextFieldWidth {
+                    passwordTextField = textField
+                    currentTextFieldWidth = textField.frame.width
+                }
+            }
+        } else {
+            passwordTextField = element.secureTextFields.element(boundBy: 0)
+        }
+
+        if let passwordTextField = passwordTextField {
+            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 60))
+            passwordTextField.tap()
+            sleep(1)
+            passwordTextField.typeText(password)
+        }
     }
 
     func getTextViewValue(label: String) -> String? {

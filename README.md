@@ -55,10 +55,10 @@ You'll also need:
 ## Supported Platforms
 
 ### iOS
-Okta OIDC supports iOS 9 and above.
+Okta OIDC supports iOS 11 and above.
 
 ### macOS
-Okta OIDC supports macOS (OS X) 10.9 and above. Library supports both custom schemes; a loopback HTTP redirects via a small embedded server.
+Okta OIDC supports macOS (OS X) 10.10 and above. Library supports both custom schemes; a loopback HTTP redirects via a small embedded server.
 
 ## Install
 
@@ -184,6 +184,18 @@ let configuration = OktaOidcConfig(with: [
   "login_hint": "username@email.com"
 ])
 ```
+
+### Disable Single Sign-On for the authentication session
+
+You can disable SSO capabilities by setting `noSSO` flag to `true` for `OktaOidcConfig` instance.
+
+```swift
+let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
+if #available(iOS 13.0, *) {
+    configuration?.noSSO = true
+}
+```
+***Note*** Flag is available on iOS 13 and above versions
 
 ## API Reference
 

@@ -20,6 +20,9 @@ public class OktaOidcConfig: NSObject, Codable {
     @objc public let scopes: String
     @objc public let redirectUri: URL
     @objc public let logoutRedirectUri: URL?
+
+    @available(iOS 13.0, *)
+    @objc public lazy var noSSO: Bool = false
     
     @objc public let additionalParams: [String:String]?
 
@@ -73,6 +76,12 @@ public class OktaOidcConfig: NSObject, Codable {
         guard let config = object as? OktaOidcConfig else {
             return false
         }
+        if #available(iOS 13.0, *) {
+            if self.noSSO != config.noSSO {
+                return false
+            }
+        }
+
         return self.clientId == config.clientId &&
                self.issuer == config.issuer &&
                self.scopes == config.scopes &&

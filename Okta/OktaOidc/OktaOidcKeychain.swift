@@ -82,7 +82,7 @@ public class OktaOidcKeychain: NSObject {
     public class func get(key: String) throws -> Data {
         let q = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecReturnData as String: kCFBooleanTrue,
+            kSecReturnData as String: kCFBooleanTrue as Any,
             kSecMatchLimit as String: kSecMatchLimitOne,
             kSecAttrAccount as String: key
         ] as CFDictionary

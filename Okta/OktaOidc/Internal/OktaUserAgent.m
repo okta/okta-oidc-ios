@@ -22,7 +22,7 @@ static NSString *userAgentValue = nil;
 }
 
 +(NSString*)userAgentVersion {
-    return @"3.7.0";
+    return @"3.8.0";
 }
 
 +(NSString*)userAgentHeaderKey {

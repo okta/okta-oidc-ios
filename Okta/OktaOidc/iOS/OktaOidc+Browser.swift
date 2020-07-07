@@ -66,13 +66,4 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
         }
         userAgentSession.cancel(completion: completion)
     }
-
-    @available(iOS, obsoleted: 11.0, message: "Unused on iOS 11+")
-    @objc public func resume(_ url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        guard let currentUserSessionTask = currentUserSessionTask else {
-            return false
-        }
-        
-        return currentUserSessionTask.resume(with: url)
-    }
 }
