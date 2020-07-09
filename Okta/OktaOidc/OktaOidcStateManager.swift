@@ -98,8 +98,11 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         guard payload.count > 1 else {
             return [:]
         }
-        
-        var encodedPayload = "\(payload[1])"
+
+        /// Required to get around compiler bug in Xcode 12 beta 1 & 2
+        let compilerFix = payload[1]
+
+        var encodedPayload = String(payload[1])
         if encodedPayload.count % 4 != 0 {
             let padding = 4 - encodedPayload.count % 4
             encodedPayload += String(repeating: "=", count: padding)
