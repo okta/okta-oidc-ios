@@ -20,6 +20,11 @@ class OktaOidcBrowserTaskIOS: OktaOidcBrowserTask {
     }
 
     override func externalUserAgent() -> OIDExternalUserAgent {
-        return OIDExternalUserAgentIOS(presenting: presenter)
+        if #available(iOS 13.0, *) {
+            return config.noSSO ? OIDExternalUserAgentNoSsoIOS(presenting: presenter) :
+                                  OIDExternalUserAgentIOS(presenting: presenter)
+        } else {
+            return OIDExternalUserAgentIOS(presenting: presenter)
+        }
     }
 }

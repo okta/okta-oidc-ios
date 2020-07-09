@@ -29,12 +29,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         return true
     }
-
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any]) -> Bool {
-        guard #available(iOS 11, *) else {
-            return oktaOidc?.resume(url, options: options) ?? false
-        }
-        
-        return false
-    }
 }

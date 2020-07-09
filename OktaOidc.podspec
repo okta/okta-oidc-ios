@@ -1,21 +1,21 @@
 Pod::Spec.new do |s|
   s.name             = 'OktaOidc'
-  s.version          = '3.7.0'
+  s.version          = '3.8.0'
   s.summary          = 'SDK to easily integrate AppAuth with Okta'
   s.description      = <<-DESC
 Integrate your native app with Okta using the AppAuth library.
                        DESC
-  s.platforms    = { :ios => "9.0", :osx => "10.10"}
+  s.platforms    = { :ios => "11.0", :osx => "10.10"}
   s.homepage         = 'https://github.com/okta/okta-oidc-ios'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com"}
   s.source           = { :git => 'https://github.com/okta/okta-oidc-ios.git', :tag => s.version.to_s }
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 
   s.subspec 'AppAuth' do |appauth|
      appauth.source_files = 'Okta/AppAuth/*.{h,m}','Okta/OktaOidc/Internal/OktaUserAgent.{h,m}'
      appauth.ios.source_files      = 'Okta/AppAuth/iOS/*.{h,m}'
-     appauth.ios.deployment_target = '9.0'
+     appauth.ios.deployment_target = '11.0'
      appauth.osx.source_files = 'Okta/AppAuth/macOS/**/*.{h,m}'
      appauth.osx.deployment_target = '10.10'
   end
@@ -32,7 +32,7 @@ Integrate your native app with Okta using the AppAuth library.
         classes.ios.source_files = 'Okta/OktaOidc/iOS/*.{swift}',
                                                   'Okta/OktaOidc/Internal/iOS/*.{swift}',
                                                   'Okta/OktaOidc/Internal/Tasks/iOS/*.{swift}'
-        classes.ios.deployment_target = '9.0'
+        classes.ios.deployment_target = '11.0'
         classes.osx.source_files = 'Okta/OktaOidc/macOS/*.{swift}',
                                                    'Okta/OktaOidc/Internal/macOS/*.{swift}',
                                                    'Okta/OktaOidc/Internal/Tasks/macOS/*.{swift}'
