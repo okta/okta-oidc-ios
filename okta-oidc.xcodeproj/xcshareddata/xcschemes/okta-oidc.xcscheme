@@ -66,11 +66,6 @@
                BlueprintName = "OktaOidcUITests"
                ReferencedContainer = "container:okta-oidc.xcodeproj">
             </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "OktaUITests">
-               </Test>
-            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>
