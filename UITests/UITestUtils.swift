@@ -13,60 +13,80 @@
 import XCTest
 
 public struct UITestUtils {
+    let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
     var testApp: XCUIApplication
+
     init(_ app: XCUIApplication) {
         testApp = app
     }
 
-    func signIn(username: String, password: String) {
-        // Wait for browser to load
-        // This sleep bypasses the need to "click" the consent for Safari
-        sleep(5)
-
-        // Known bug with iOS 11 and system alerts
-        testApp.tap()
-
-        // Sign In via username and password inside of the Safari WebView
-        let webViewsQuery = testApp.webViews
-        let uiElementUsername = webViewsQuery.textFields.element(boundBy: 0)
-        XCTAssertTrue(uiElementUsername.waitForExistence(timeout: 20))
-        uiElementUsername.tap()
-        uiElementUsername.typeText(username)
-        if webViewsQuery.buttons["Next"].exists {
-            webViewsQuery.buttons["Next"].tap()
+    func allowBrowserLaunch() {
+        let allowButton = springboard.buttons["Continue"].firstMatch
+        if allowButton.waitForExistence(timeout: 5) {
+            allowButton.tap()
+        } else {
+            XCTFail("Expected system alert to appear!")
         }
-        enterPassword(password, in: webViewsQuery)
-        if webViewsQuery.buttons["Sign In"].exists {
-            webViewsQuery.buttons["Sign In"].tap()
-        } else if webViewsQuery.buttons["Verify"].exists {
-            webViewsQuery.buttons["Verify"].tap()
-        }
-
-        XCTAssertTrue(webViewsQuery.buttons["Verify"].waitForExistence(timeout: 20))
-        enterPassword("okta", in: webViewsQuery)
-        webViewsQuery.buttons["Verify"].tap()
     }
 
-    func enterPassword(_ password: String, in element: XCUIElementQuery) {
-        var passwordTextField: XCUIElement?
-        if element.secureTextFields.count > 1 {
-            var currentTextFieldWidth: CGFloat = 0.0
-            for i in 0...(element.secureTextFields.count-1) {
-                let textField = element.secureTextFields.element(boundBy: i)
-                if textField.frame.width > currentTextFieldWidth {
-                    passwordTextField = textField
-                    currentTextFieldWidth = textField.frame.width
-                }
-            }
-        } else {
-            passwordTextField = element.secureTextFields.element(boundBy: 0)
+    func findPasswordField(app:XCUIApplication, usernameFieldFrame: CGRect) -> XCUIElement? {
+        let secureTextFields = app.webViews.secureTextFields
+        guard secureTextFields.count > 0 else {
+            return nil
         }
 
-        if let passwordTextField = passwordTextField {
-            XCTAssertTrue(passwordTextField.waitForExistence(timeout: 60))
-            passwordTextField.tap()
-            sleep(1)
-            passwordTextField.typeText(password)
+        if secureTextFields.count == 1 {
+            return secureTextFields.firstMatch
+        }
+
+        // SIW may contain 3 instances of secure text fields: 2 invisible and the password text field.
+        // As neither of those fields has identifier, and all of them are reported as enabled and hittable,
+        // detect password field as the one which is at least as wide as the username field
+        for index in 0...secureTextFields.count {
+            let textField = secureTextFields.element(boundBy: index)
+            guard textField.isHittable else {
+                continue
+            }
+
+            let textFieldFrame = textField.frame
+            if (textFieldFrame.size.width >= usernameFieldFrame.size.width) {
+                return textField
+            }
+        }
+        return nil
+    }
+
+    func signIn(username: String, password: String) {
+        allowBrowserLaunch()
+
+        let webViewsQuery = testApp.webViews
+        let uiElementUsername = webViewsQuery.textFields.element(boundBy: 0)
+        XCTAssertTrue(uiElementUsername.waitForExistence(timeout: 60))
+        let usernameFrame = uiElementUsername.frame
+
+        uiElementUsername.tap()
+        uiElementUsername.typeText(username)
+
+        if webViewsQuery.buttons["Next"].exists {
+            webViewsQuery.buttons["Next"].firstMatch.tap()
+        }
+
+        let uiElementPasswordDetectExistence = webViewsQuery.secureTextFields.element(boundBy: 0)
+
+        XCTAssertTrue(uiElementPasswordDetectExistence.waitForExistence(timeout: 60))
+
+        guard let uiElementPassword = findPasswordField(app: testApp, usernameFieldFrame: usernameFrame) else {
+            XCTFail("Unable to detect password text field")
+            return
+        }
+
+        uiElementPassword.tap()
+        uiElementPassword.typeText(password)
+
+        if webViewsQuery.buttons["Verify"].exists {
+            webViewsQuery.buttons["Verify"].firstMatch.tap()
+        } else {
+            webViewsQuery.buttons["Sign In"].firstMatch.tap()
         }
     }
 
