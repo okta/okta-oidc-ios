@@ -10,6 +10,9 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+import Foundation
+import AppAuth
+
 class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
 
     var redirectServer: OktaRedirectServer?

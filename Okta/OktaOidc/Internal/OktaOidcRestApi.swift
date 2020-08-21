@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AppAuth
 
 protocol OktaOidcHttpApiProtocol {
     typealias OktaApiSuccessCallback = ([String: Any]?) -> Void

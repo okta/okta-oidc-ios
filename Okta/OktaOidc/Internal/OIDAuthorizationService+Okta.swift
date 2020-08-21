@@ -10,6 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+import AppAuth
+
 // Okta Extension of OIDAuthorizationService
 extension OIDAuthorizationService {
 

@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AppAuth
 
 open class OktaOidcStateManager: NSObject, NSSecureCoding {
 

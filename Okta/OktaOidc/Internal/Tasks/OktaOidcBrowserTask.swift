@@ -11,6 +11,7 @@
 */
 
 import Foundation
+import AppAuth
 
 class OktaOidcBrowserTask: OktaOidcTask {
 

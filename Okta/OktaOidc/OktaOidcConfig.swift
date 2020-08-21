@@ -11,6 +11,7 @@
  */
 
 import Foundation
+import AppAuth
 
 public class OktaOidcConfig: NSObject {
     @objc public static let defaultPlistName = "Okta"
