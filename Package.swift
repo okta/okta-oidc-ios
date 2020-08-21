@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,13 +6,68 @@ import PackageDescription
 let package = Package(
     name: "OktaOidc",
     platforms: [
-        .macOS(.v10_10), .iOS(.v11)
+        .iOS(.v11),
+//        .macOS(.v10_10),
     ],
     products: [
-        .library(name: "OktaOidc", targets: ["OktaOidc"])
+        // Products define the executables and libraries a package produces, and make them visible to other packages.
+        .library(
+            name: "okta-oidc",
+            targets: ["OktaOidc"]
+        ),
+//        .library(
+//            name: "okta-oidc-mac",
+//            targets: ["OktaOidc-macOS"]
+//        ),
     ],
     targets: [
-        .target(name: "OktaOidc", dependencies: []),
-        .testTarget(name: "OktaTests", dependencies: ["OktaOidc"])
-    ]
+        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
+        // Targets can depend on other targets in this package, and on products in packages this package depends on.
+        .target(
+            name: "OktaOidc",
+            dependencies: ["AppAuth"],
+            path: "Okta/OktaOidc",
+            exclude: [
+                "macOS",
+                "Internal/macOS",
+                "Internal/Tasks/macOS",
+            ]
+        ),
+
+        .target(
+            name: "AppAuth",
+            dependencies: [],
+            path: "Okta/AppAuth",
+            exclude: [
+                "macOS",
+            ],
+            cSettings: [
+                .headerSearchPath("Internal"),
+            ]
+        ),
+
+//        .target(
+//            name: "OktaOidc-macOS",
+//            dependencies: ["AppAuth-macOS"],
+//            path: "Okta/OktaOidc",
+//            exclude: [
+//                "iOS",
+//                "Internal/iOS",
+//                "Internal/Tasks/iOS",
+//            ]
+//        ),
+//
+//        .target(
+//            name: "AppAuth-macOS",
+//            dependencies: [],
+//            path: "Okta/AppAuth",
+//            exclude: [
+//                "iOS",
+//            ],
+//            cSettings: [
+//                .headerSearchPath("Internal"),
+//            ]
+//        ),
+    ],
+    swiftLanguageVersions: [.v5]
 )

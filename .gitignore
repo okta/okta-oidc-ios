@@ -20,3 +20,4 @@ Example/build/
 # IDEs
 *.xccheckout
 .idea/
+/.build
