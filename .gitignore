@@ -21,3 +21,4 @@ Example/build/
 *.xccheckout
 .idea/
 /.build
+/.swiftpm

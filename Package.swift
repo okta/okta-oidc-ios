@@ -28,6 +28,9 @@ let package = Package(
             dependencies: ["AppAuth"],
             path: "Okta/OktaOidc",
             exclude: [
+                "iOS",
+                "Internal/iOS",
+                "Internal/Tasks/iOS",
                 "macOS",
                 "Internal/macOS",
                 "Internal/Tasks/macOS",
@@ -39,10 +42,12 @@ let package = Package(
             dependencies: [],
             path: "Okta/AppAuth",
             exclude: [
+                "iOS",
                 "macOS",
             ],
             cSettings: [
                 .headerSearchPath("Internal"),
+//                .define("BUILD_FOR_IOS")
             ]
         ),
 
