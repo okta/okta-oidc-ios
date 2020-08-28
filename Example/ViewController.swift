@@ -187,11 +187,9 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: OktaOidcHTTPProtocol {
-    func willSend(_ request: URLRequest) {
-        print("")
+    func willSend(_ request: URLRequest?) {
     }
     
     func didReceive(_ response: URLResponse?) {
-        print("")
     }
 }

@@ -10,7 +10,7 @@
 
 @protocol OktaOidcHTTPProtocol <NSObject>
 
-- (void)willSendRequest: (nonnull NSURLRequest *)request;
+- (void)willSendRequest: (nullable NSURLRequest *)request;
 - (void)didReceiveResponse: (nullable NSURLResponse *)response;
 
 @end
