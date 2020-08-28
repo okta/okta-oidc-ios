@@ -17,6 +17,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "OktaOidcHTTPProtocol.h"
 
 @class OIDAuthorization;
 @class OIDAuthorizationRequest;
@@ -147,7 +148,9 @@ typedef void (^OIDRegistrationCompletion)(OIDRegistrationResponse *_Nullable reg
     @param request The token request.
     @param callback The method called when the request has completed or failed.
  */
-+ (void)performTokenRequest:(OIDTokenRequest *)request callback:(OIDTokenCallback)callback;
++ (void)performTokenRequest:(OIDTokenRequest *)request
+                   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                   callback:(OIDTokenCallback)callback;
 
 /*! @brief Performs a token request.
     @param request The token request.
@@ -155,14 +158,16 @@ typedef void (^OIDRegistrationCompletion)(OIDRegistrationResponse *_Nullable reg
     @param callback The method called when the request has completed or failed.
  */
 + (void)performTokenRequest:(OIDTokenRequest *)request
-    originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
-                         callback:(OIDTokenCallback)callback;
+originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+                   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                   callback:(OIDTokenCallback)callback;
 
 /*! @brief Performs a registration request.
     @param request The registration request.
     @param completion The method called when the request has completed or failed.
  */
 + (void)performRegistrationRequest:(OIDRegistrationRequest *)request
+                          delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
                         completion:(OIDRegistrationCompletion)completion;
 
 @end

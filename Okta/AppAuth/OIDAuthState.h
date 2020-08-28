@@ -27,6 +27,7 @@
 @protocol OIDAuthStateErrorDelegate;
 @protocol OIDExternalUserAgent;
 @protocol OIDExternalUserAgentSession;
+@protocol OktaOidcHTTPProtocol;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -132,6 +133,7 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+                                     delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
                                      callback:(OIDAuthStateAuthorizationCallback)callback;
 
 /*! @internal
@@ -162,9 +164,10 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
     @param registrationResponse The registration response.
  */
 - (instancetype)initWithAuthorizationResponse:
-    (nullable OIDAuthorizationResponse *)authorizationResponse
-           tokenResponse:(nullable OIDTokenResponse *)tokenResponse
-    registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
+(nullable OIDAuthorizationResponse *)authorizationResponse
+       tokenResponse:(nullable OIDTokenResponse *)tokenResponse
+                     registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
+                                 delegate:(nullable id<OktaOidcHTTPProtocol>)delegate
     NS_DESIGNATED_INITIALIZER;
 
 /*! @brief Updates the authorization state based on a new authorization response.

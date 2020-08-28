@@ -102,11 +102,18 @@ extension OktaOidcHttpApiProtocol {
 }
 
 class OktaOidcRestApi: OktaOidcHttpApiProtocol {
+    var delegate: OktaOidcHTTPProtocol?
+    
+    init(delegate: OktaOidcHTTPProtocol? = nil) {
+        self.delegate = delegate
+    }
 
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,
                      onError: @escaping OktaApiErrorCallback) {
+        delegate?.willSend(request)
         let task = OIDURLSessionProvider.session().dataTask(with: request){ data, response, error in
+            self.delegate?.didReceive(response)
             guard let data = data,
                   error == nil,
                   let httpResponse = response as? HTTPURLResponse else {

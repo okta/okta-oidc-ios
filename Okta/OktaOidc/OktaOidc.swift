@@ -14,6 +14,7 @@ public class OktaOidc: NSObject {
 
     // Cache Okta.plist for reference
     @objc public let configuration: OktaOidcConfig
+    @objc public weak var delegate: OktaOidcHTTPProtocol?
 
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
         if let config = configuration {
@@ -25,8 +26,7 @@ public class OktaOidc: NSObject {
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi())
-        .authenticateWithSessionToken(sessionToken: sessionToken) { authState, error in
+        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi(delegate: delegate)).authenticateWithSessionToken(sessionToken: sessionToken, delegate: delegate, callback: { (authState, error) in
             guard let authState = authState else {
                 callback(nil, error)
                 return
@@ -34,7 +34,7 @@ public class OktaOidc: NSObject {
             
             let authStateManager = OktaOidcStateManager(authState: authState)
             callback(authStateManager, nil)
-        }
+        })
     }
 
     @objc public func hasActiveBrowserSession() -> Bool {
@@ -45,7 +45,7 @@ public class OktaOidc: NSObject {
                                callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signIn { [weak self] authState, error in
+        task.signIn(delegate: delegate) { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
             guard let authState = authState else {
                 callback(nil, error)

@@ -43,6 +43,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : nil)
+        oktaAppAuth?.delegate = self
         AppDelegate.shared.oktaOidc = oktaAppAuth
         
         if let config = oktaAppAuth?.configuration {
@@ -182,5 +183,15 @@ class ViewController: UIViewController {
         }
 
         self.updateUI(updateText: tokenString)
+    }
+}
+
+extension ViewController: OktaOidcHTTPProtocol {
+    func willSend(_ request: URLRequest) {
+        print("")
+    }
+    
+    func didReceive(_ response: URLResponse?) {
+        print("")
     }
 }

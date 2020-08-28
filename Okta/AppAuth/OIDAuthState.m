@@ -102,6 +102,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 @property(nonatomic, readonly, nullable) NSString *idToken;
 
+@property(nonatomic, weak, nullable)id<OktaOidcHTTPProtocol> delegate;
+
 /*! @brief Private method, called when the internal state changes.
  */
 - (void)didChangeState;
@@ -128,6 +130,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+                                     delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
                                      callback:(OIDAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OIDExternalUserAgentSession> authFlowSession = [OIDAuthorizationService
@@ -145,19 +148,16 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                // code exchange
                                OIDTokenRequest *tokenExchangeRequest =
                                    [authorizationResponse tokenExchangeRequest];
-                               [OIDAuthorizationService performTokenRequest:tokenExchangeRequest
-                                              originalAuthorizationResponse:authorizationResponse
-                                   callback:^(OIDTokenResponse *_Nullable tokenResponse,
-                                                         NSError *_Nullable tokenError) {
-                                                OIDAuthState *authState;
-                                                if (tokenResponse) {
-                                                  authState = [[OIDAuthState alloc]
-                                                      initWithAuthorizationResponse:
-                                                          authorizationResponse
-                                                                      tokenResponse:tokenResponse];
-                                                }
-                                                callback(authState, tokenError);
-                               }];
+                                 [OIDAuthorizationService performTokenRequest:tokenExchangeRequest originalAuthorizationResponse:authorizationResponse delegate:delegate callback:^(OIDTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
+                                     OIDAuthState *authState;
+                                     if (tokenResponse) {
+                                       authState = [[OIDAuthState alloc]
+                                           initWithAuthorizationResponse:
+                                               authorizationResponse
+                                                           tokenResponse:tokenResponse];
+                                     }
+                                     callback(authState, tokenError);
+                                 }];
                              } else {
                                // hybrid flow (code id_token). Two possible cases:
                                // 1. The code is not for this client, ie. will be sent to a
@@ -196,26 +196,27 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 - (instancetype)initWithAuthorizationResponse:(OIDAuthorizationResponse *)authorizationResponse
                                          tokenResponse:(nullable OIDTokenResponse *)tokenResponse {
-  return [self initWithAuthorizationResponse:authorizationResponse
-                               tokenResponse:tokenResponse
-                        registrationResponse:nil];
+    return [self initWithAuthorizationResponse:authorizationResponse tokenResponse:tokenResponse registrationResponse:nil delegate:nil];
 }
 
 /*! @brief Creates an auth state from an registration response.
     @param registrationResponse The registration response.
  */
 - (instancetype)initWithRegistrationResponse:(OIDRegistrationResponse *)registrationResponse {
-  return [self initWithAuthorizationResponse:nil
-                               tokenResponse:nil
-                        registrationResponse:registrationResponse];
+    return [self initWithAuthorizationResponse:nil
+                                 tokenResponse:nil
+                          registrationResponse:registrationResponse
+                                      delegate:nil];
 }
 
 - (instancetype)initWithAuthorizationResponse:
     (nullable OIDAuthorizationResponse *)authorizationResponse
            tokenResponse:(nullable OIDTokenResponse *)tokenResponse
-    registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse {
+                         registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
+                                     delegate:(nullable id<OktaOidcHTTPProtocol>)delegate {
   self = [super init];
   if (self) {
+    _delegate = delegate;
     _pendingActionsSyncObject = [[NSObject alloc] init];
 
     if (registrationResponse) {
@@ -512,6 +513,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
       [self tokenRefreshRequestWithAdditionalParameters:additionalParameters];
   [OIDAuthorizationService performTokenRequest:tokenRefreshRequest
                  originalAuthorizationResponse:_lastAuthorizationResponse
+                                      delegate:_delegate
                                       callback:^(OIDTokenResponse *_Nullable response,
                                                  NSError *_Nullable error) {
     // update OIDAuthState based on response

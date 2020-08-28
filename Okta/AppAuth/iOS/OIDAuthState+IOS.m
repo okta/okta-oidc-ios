@@ -23,24 +23,23 @@
 @implementation OIDAuthState (IOS)
 
 + (id<OIDExternalUserAgentSession>)
-    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
-                     presentingViewController:(UIViewController *)presentingViewController
-                                     callback:(OIDAuthStateAuthorizationCallback)callback {
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest presentingViewController:(UIViewController *)presentingViewController delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate callback:(OIDAuthStateAuthorizationCallback)callback {
     OIDExternalUserAgentIOS *externalUserAgent =
         [[OIDExternalUserAgentIOS alloc]
             initWithPresentingViewController:presentingViewController];
-  return [self authStateByPresentingAuthorizationRequest:authorizationRequest
-                                       externalUserAgent:externalUserAgent
-                                                callback:callback];
+    return [self authStateByPresentingAuthorizationRequest:authorizationRequest
+                                         externalUserAgent:externalUserAgent
+                                                  delegate:delegate
+                                                  callback:callback];
 }
 
 + (id<OIDExternalUserAgentSession>)
-    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
                                   callback:(OIDAuthStateAuthorizationCallback)callback {
   OIDExternalUserAgentIOS *externalUserAgent = [[OIDExternalUserAgentIOS alloc] init];
   return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                        externalUserAgent:externalUserAgent
-                                                callback:callback];
+                                                delegate:delegate callback:callback];
 }
 
 @end

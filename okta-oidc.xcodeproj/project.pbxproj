@@ -250,6 +250,8 @@
 		A17E3A202358FA3300837873 /* OIDTokenUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0A2358FA3200837873 /* OIDTokenUtilitiesTests.m */; };
 		A17E3A212358FA3300837873 /* OIDServiceConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0D2358FA3200837873 /* OIDServiceConfigurationTests.m */; };
 		A17E3A222358FA3300837873 /* OIDTokenResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */; };
+		E25AB7B724F826C20057E9B0 /* OktaOidcHTTPProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E25AB7B624F826C20057E9B0 /* OktaOidcHTTPProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E25AB7B824F827290057E9B0 /* OktaOidcHTTPProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E25AB7B624F826C20057E9B0 /* OktaOidcHTTPProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -487,6 +489,7 @@
 		A17E3A0E2358FA3200837873 /* OIDServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceDiscoveryTests.h; sourceTree = "<group>"; };
 		A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenResponseTests.m; sourceTree = "<group>"; };
 		A17E3A2423592D6000837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Okta/Framework/Info.plist; sourceTree = SOURCE_ROOT; };
+		E25AB7B624F826C20057E9B0 /* OktaOidcHTTPProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaOidcHTTPProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -812,6 +815,7 @@
 				A17E3846234CFEE700837873 /* OIDURLQueryComponent.m */,
 				A17E384E234CFEE800837873 /* OIDURLSessionProvider.h */,
 				A17E3856234CFEE900837873 /* OIDURLSessionProvider.m */,
+				E25AB7B624F826C20057E9B0 /* OktaOidcHTTPProtocol.h */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -984,6 +988,7 @@
 				A17E3886234CFEED00837873 /* OIDURLSessionProvider.h in Headers */,
 				A17E3881234CFEED00837873 /* OIDAuthorizationRequest.h in Headers */,
 				A1763A3B2450BF2B0031E050 /* OktaOidc.h in Headers */,
+				E25AB7B724F826C20057E9B0 /* OktaOidcHTTPProtocol.h in Headers */,
 				A17E3896234CFEED00837873 /* OIDExternalUserAgentRequest.h in Headers */,
 				A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A10FA55424B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h in Headers */,
@@ -1029,6 +1034,7 @@
 				A17E3970234D2EAA00837873 /* OIDTokenRequest.h in Headers */,
 				A17E3971234D2EAA00837873 /* OIDTokenResponse.h in Headers */,
 				A17E3972234D2EAA00837873 /* OIDTokenUtilities.h in Headers */,
+				E25AB7B824F827290057E9B0 /* OktaOidcHTTPProtocol.h in Headers */,
 				A17E3973234D2EAA00837873 /* OIDURLQueryComponent.h in Headers */,
 				A17E39D12357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A1763A3F2450C3350031E050 /* OktaOidc.h in Headers */,
