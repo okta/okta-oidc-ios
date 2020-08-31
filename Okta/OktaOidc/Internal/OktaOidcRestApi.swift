@@ -102,17 +102,17 @@ extension OktaOidcHttpApiProtocol {
 }
 
 class OktaOidcRestApi: OktaOidcHttpApiProtocol {
-    var delegate: OktaOidcHTTPProtocol?
+    var delegate: OktaNetworkRequestCustomizationDelegate?
     
-    init(delegate: OktaOidcHTTPProtocol? = nil) {
+    init(delegate: OktaNetworkRequestCustomizationDelegate? = nil) {
         self.delegate = delegate
     }
 
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,
                      onError: @escaping OktaApiErrorCallback) {
-        delegate?.willSend(request)
-        let task = OIDURLSessionProvider.session().dataTask(with: request){ data, response, error in
+        let customizedRequest = delegate?.sendCustomizableRequest(request) ?? request
+        let task = OIDURLSessionProvider.session().dataTask(with: customizedRequest){ data, response, error in
             self.delegate?.didReceive(response)
             guard let data = data,
                   error == nil,

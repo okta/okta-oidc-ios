@@ -14,7 +14,7 @@ public class OktaOidc: NSObject {
 
     // Cache Okta.plist for reference
     @objc public let configuration: OktaOidcConfig
-    @objc public weak var delegate: OktaOidcHTTPProtocol?
+    @objc public weak var delegate: OktaNetworkRequestCustomizationDelegate?
 
     @objc public init(configuration: OktaOidcConfig? = nil) throws {
         if let config = configuration {
@@ -26,7 +26,10 @@ public class OktaOidc: NSObject {
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi(delegate: delegate)).authenticateWithSessionToken(sessionToken: sessionToken, delegate: delegate, callback: { (authState, error) in
+        OktaOidcAuthenticateTask(config: configuration,
+                                 oktaAPI: OktaOidcRestApi(delegate: delegate)).authenticateWithSessionToken(sessionToken: sessionToken,
+                                                                                                            delegate: delegate,
+                                                                                                            callback: { (authState, error) in
             guard let authState = authState else {
                 callback(nil, error)
                 return

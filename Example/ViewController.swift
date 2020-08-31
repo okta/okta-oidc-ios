@@ -186,10 +186,13 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: OktaOidcHTTPProtocol {
-    func willSend(_ request: URLRequest?) {
+extension ViewController: OktaNetworkRequestCustomizationDelegate {
+    func sendCustomizableRequest(_ request: URLRequest?) -> URLRequest? {
+        print("request: \(request)")
+        return request
     }
-    
+   
     func didReceive(_ response: URLResponse?) {
+        print("response: \(response)")
     }
 }

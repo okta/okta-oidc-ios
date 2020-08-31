@@ -42,10 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
         @c OIDExternalUserAgentSession.resumeExternalUserAgentFlowWithURL: message.
  */
 + (id<OIDExternalUserAgentSession>)
-    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest presentingViewController:(UIViewController *)presentingViewController delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate callback:(OIDAuthStateAuthorizationCallback)callback;
+    authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest presentingViewController:(UIViewController *)presentingViewController delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate callback:(OIDAuthStateAuthorizationCallback)callback;
 
 + (id<OIDExternalUserAgentSession>)
-authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest   delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                               callback:(OIDAuthStateAuthorizationCallback)callback API_AVAILABLE(ios(11))
     __deprecated_msg("This method will not work on iOS 13. Use "
         "authStateByPresentingAuthorizationRequest:presentingViewController:callback:");

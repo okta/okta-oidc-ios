@@ -42,7 +42,7 @@
 #import "OIDFieldMapping.h"
 #import "OIDURLQueryComponent.h"
 #import "OktaUserAgent.h"
-#import "OktaOidcHTTPProtocol.h"
+#import "OktaNetworkRequestCustomizationDelegate.h"
 
 #if TARGET_OS_IOS
 #import "OIDAuthState+IOS.h"

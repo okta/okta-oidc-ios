@@ -102,7 +102,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 @property(nonatomic, readonly, nullable) NSString *idToken;
 
-@property(nonatomic, weak, nullable)id<OktaOidcHTTPProtocol> delegate;
+@property(nonatomic, weak, nullable)id<OktaNetworkRequestCustomizationDelegate> delegate;
 
 /*! @brief Private method, called when the internal state changes.
  */
@@ -130,7 +130,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
-                                     delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                                     delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                                      callback:(OIDAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OIDExternalUserAgentSession> authFlowSession = [OIDAuthorizationService
@@ -213,7 +213,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     (nullable OIDAuthorizationResponse *)authorizationResponse
            tokenResponse:(nullable OIDTokenResponse *)tokenResponse
                          registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
-                                     delegate:(nullable id<OktaOidcHTTPProtocol>)delegate {
+                                     delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate {
   self = [super init];
   if (self) {
     _delegate = delegate;

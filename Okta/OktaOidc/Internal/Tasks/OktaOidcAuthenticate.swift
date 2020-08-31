@@ -13,7 +13,7 @@
 class OktaOidcAuthenticateTask: OktaOidcTask {
     
     func authenticateWithSessionToken(sessionToken: String,
-                                      delegate: OktaOidcHTTPProtocol? = nil,
+                                      delegate: OktaNetworkRequestCustomizationDelegate? = nil,
                                       callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfig = oidConfig else {

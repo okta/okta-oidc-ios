@@ -421,22 +421,24 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Token Endpoint
 
 + (void)performTokenRequest:(OIDTokenRequest *)request
-                   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                   delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                    callback:(OIDTokenCallback)callback {
     [[self class] performTokenRequest:request originalAuthorizationResponse:nil delegate:delegate callback:callback];
 }
 
 + (void)performTokenRequest:(OIDTokenRequest *)request
 originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
-                   delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                   delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                    callback:(OIDTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
-  [delegate willSendRequest:URLRequest];
+  if ([delegate conformsToProtocol:@protocol(OktaNetworkRequestCustomizationDelegate)]) {
+    URLRequest = [delegate sendCustomizableRequest:URLRequest];
+  }
   AppAuthRequestTrace(@"Token Request: %@\nHeaders:%@\nHTTPBody: %@",
-                      URLRequest.URL,
-                      URLRequest.allHTTPHeaderFields,
-                      [[NSString alloc] initWithData:URLRequest.HTTPBody
+                      customizedRequest.URL,
+                      customizedRequest.allHTTPHeaderFields,
+                      [[NSString alloc] initWithData:customizedRequest.HTTPBody
                                             encoding:NSUTF8StringEncoding]);
 
   NSURLSession *session = [OIDURLSessionProvider session];
@@ -671,7 +673,7 @@ originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorization
 #pragma mark - Registration Endpoint
 
 + (void)performRegistrationRequest:(OIDRegistrationRequest *)request
-                          delegate:(id<OktaOidcHTTPProtocol> _Nullable)delegate
+                          delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                           completion:(OIDRegistrationCompletion)completion {
   NSURLRequest *URLRequest = [request URLRequest];
   if (!URLRequest) {
@@ -685,7 +687,9 @@ originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorization
     });
     return;
   }
-  [delegate willSendRequest:URLRequest];
+  if ([delegate conformsToProtocol:@protocol(OktaNetworkRequestCustomizationDelegate)]) {
+    URLRequest = [delegate sendCustomizableRequest:URLRequest];
+  }
   NSURLSession *session = [OIDURLSessionProvider session];
   [[session dataTaskWithRequest:URLRequest
               completionHandler:^(NSData *_Nullable data,

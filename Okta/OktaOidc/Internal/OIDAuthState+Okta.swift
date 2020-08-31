@@ -13,7 +13,7 @@
 // Okta Extension of OIDAuthState
 extension OIDAuthState {
 
-    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, delegate: OktaOidcHTTPProtocol? = nil,callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
+    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil,callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
         
         let finalize: ((OIDAuthState?, OktaOidcError?) -> Void) = { state, error in
             callback(state, error)
