@@ -46,7 +46,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         }
     } 
 
-    override func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
+    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
         if let redirectServer = self.redirectServer {
             do {
                 redirectURL = try redirectServer.startListener(with: domainName)

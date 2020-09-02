@@ -18,6 +18,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc open var authState: OIDAuthState
     @objc open var accessibility: CFString
+    private weak var delegate: OktaNetworkRequestCustomizationDelegate?
 
     @objc open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
@@ -55,9 +56,14 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     // Needed for UTs only. Entry point for mocking network calls.
     var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
 
-    @objc public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
+    @objc public init(authState: OIDAuthState,
+                      accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+                      delegate: OktaNetworkRequestCustomizationDelegate? = nil) {
         self.authState = authState
         self.accessibility = accessibility
+        if let _ = delegate {
+            restAPI = OktaOidcRestApi(delegate: delegate)
+        }
         OktaOidcConfig.setupURLSession()
         
         super.init()
@@ -264,7 +270,6 @@ private extension OktaOidcStateManager {
         if let headers = headers {
             requestHeaders.merge(headers) { (_, new) in new }
         }
-
         restAPI.post(endpointURL, headers: requestHeaders, postString: postString, onSuccess: { response in
             callback(response, nil)
         }, onError: { error in
