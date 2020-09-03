@@ -250,8 +250,7 @@
 		A17E3A202358FA3300837873 /* OIDTokenUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0A2358FA3200837873 /* OIDTokenUtilitiesTests.m */; };
 		A17E3A212358FA3300837873 /* OIDServiceConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0D2358FA3200837873 /* OIDServiceConfigurationTests.m */; };
 		A17E3A222358FA3300837873 /* OIDTokenResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */; };
-		E25AB7B724F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E25AB7B624F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E25AB7B824F827290057E9B0 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E25AB7B624F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -489,7 +488,7 @@
 		A17E3A0E2358FA3200837873 /* OIDServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceDiscoveryTests.h; sourceTree = "<group>"; };
 		A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenResponseTests.m; sourceTree = "<group>"; };
 		A17E3A2423592D6000837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Okta/Framework/Info.plist; sourceTree = SOURCE_ROOT; };
-		E25AB7B624F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OktaNetworkRequestCustomizationDelegate.h; sourceTree = "<group>"; };
+		E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OktaNetworkRequestCustomizationDelegate.h; path = AppAuth/OktaNetworkRequestCustomizationDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -760,6 +759,7 @@
 		A17E383F234CFE9400837873 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */,
 				A17E3842234CFEE700837873 /* AppAuthCore.h */,
 				A17E3849234CFEE700837873 /* OIDAuthorizationRequest.h */,
 				A17E3863234CFEEA00837873 /* OIDAuthorizationRequest.m */,
@@ -815,7 +815,6 @@
 				A17E3846234CFEE700837873 /* OIDURLQueryComponent.m */,
 				A17E384E234CFEE800837873 /* OIDURLSessionProvider.h */,
 				A17E3856234CFEE900837873 /* OIDURLSessionProvider.m */,
-				E25AB7B624F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -979,6 +978,7 @@
 				A17E389F234CFEED00837873 /* OIDTokenRequest.h in Headers */,
 				A17E3897234CFEED00837873 /* OIDResponseTypes.h in Headers */,
 				A17E3883234CFEED00837873 /* OIDAuthState.h in Headers */,
+				E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E3894234CFEED00837873 /* OIDErrorUtilities.h in Headers */,
 				A17E38AD234CFEED00837873 /* OIDAuthStateChangeDelegate.h in Headers */,
 				A17E3884234CFEED00837873 /* OIDServiceConfiguration.h in Headers */,
@@ -988,7 +988,6 @@
 				A17E3886234CFEED00837873 /* OIDURLSessionProvider.h in Headers */,
 				A17E3881234CFEED00837873 /* OIDAuthorizationRequest.h in Headers */,
 				A1763A3B2450BF2B0031E050 /* OktaOidc.h in Headers */,
-				E25AB7B724F826C20057E9B0 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E3896234CFEED00837873 /* OIDExternalUserAgentRequest.h in Headers */,
 				A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A10FA55424B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h in Headers */,
@@ -1034,7 +1033,6 @@
 				A17E3970234D2EAA00837873 /* OIDTokenRequest.h in Headers */,
 				A17E3971234D2EAA00837873 /* OIDTokenResponse.h in Headers */,
 				A17E3972234D2EAA00837873 /* OIDTokenUtilities.h in Headers */,
-				E25AB7B824F827290057E9B0 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E3973234D2EAA00837873 /* OIDURLQueryComponent.h in Headers */,
 				A17E39D12357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A1763A3F2450C3350031E050 /* OktaOidc.h in Headers */,
