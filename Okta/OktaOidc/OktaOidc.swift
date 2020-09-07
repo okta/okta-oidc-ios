@@ -26,15 +26,15 @@ public class OktaOidc: NSObject {
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         OktaOidcAuthenticateTask(config: configuration,
-                                 oktaAPI: OktaOidcRestApi(delegate: configuration.delegate)).authenticateWithSessionToken(sessionToken: sessionToken,
-                                                                                                                          delegate: configuration.delegate,
+                                 oktaAPI: OktaOidcRestApi(delegate: configuration.requestCustomizationDelegate)).authenticateWithSessionToken(sessionToken: sessionToken,
+                                                                                                                          delegate: configuration.requestCustomizationDelegate,
                                                                                                             callback: { (authState, error) in
             guard let authState = authState else {
                 callback(nil, error)
                 return
             }
             
-            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self.configuration.delegate)
+            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self.configuration.requestCustomizationDelegate)
             callback(authStateManager, nil)
         })
     }
@@ -47,14 +47,14 @@ public class OktaOidc: NSObject {
                                callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signIn(delegate: configuration.delegate) { [weak self] authState, error in
+        task.signIn(delegate: configuration.requestCustomizationDelegate) { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
             guard let authState = authState else {
                 callback(nil, error)
                 return
             }
             
-            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self?.configuration.delegate)
+            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self?.configuration.requestCustomizationDelegate)
             callback(authStateManager, nil)
         }
     }

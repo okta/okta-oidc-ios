@@ -148,16 +148,19 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                // code exchange
                                OIDTokenRequest *tokenExchangeRequest =
                                    [authorizationResponse tokenExchangeRequest];
-                                 [OIDAuthorizationService performTokenRequest:tokenExchangeRequest originalAuthorizationResponse:authorizationResponse delegate:delegate callback:^(OIDTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
-                                     OIDAuthState *authState;
-                                     if (tokenResponse) {
-                                       authState = [[OIDAuthState alloc]
-                                           initWithAuthorizationResponse:
-                                               authorizationResponse
-                                                           tokenResponse:tokenResponse];
-                                     }
-                                     callback(authState, tokenError);
-                                 }];
+                               [OIDAuthorizationService performTokenRequest:tokenExchangeRequest
+                                              originalAuthorizationResponse:authorizationResponse
+                                                                   delegate:delegate
+                                                                   callback:^(OIDTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
+                                 OIDAuthState *authState;
+                                 if (tokenResponse) {
+                                   authState = [[OIDAuthState alloc]
+                                                initWithAuthorizationResponse:
+                                                authorizationResponse
+                                                tokenResponse:tokenResponse];
+                                 }
+                                 callback(authState, tokenError);
+                               }];
                              } else {
                                // hybrid flow (code id_token). Two possible cases:
                                // 1. The code is not for this client, ie. will be sent to a

@@ -250,7 +250,8 @@
 		A17E3A202358FA3300837873 /* OIDTokenUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0A2358FA3200837873 /* OIDTokenUtilitiesTests.m */; };
 		A17E3A212358FA3300837873 /* OIDServiceConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0D2358FA3200837873 /* OIDServiceConfigurationTests.m */; };
 		A17E3A222358FA3300837873 /* OIDTokenResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */; };
-		E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; };
+		DEE37AD125065C7300318DC3 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -978,7 +979,6 @@
 				A17E389F234CFEED00837873 /* OIDTokenRequest.h in Headers */,
 				A17E3897234CFEED00837873 /* OIDResponseTypes.h in Headers */,
 				A17E3883234CFEED00837873 /* OIDAuthState.h in Headers */,
-				E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E3894234CFEED00837873 /* OIDErrorUtilities.h in Headers */,
 				A17E38AD234CFEED00837873 /* OIDAuthStateChangeDelegate.h in Headers */,
 				A17E3884234CFEED00837873 /* OIDServiceConfiguration.h in Headers */,
@@ -991,6 +991,7 @@
 				A17E3896234CFEED00837873 /* OIDExternalUserAgentRequest.h in Headers */,
 				A17E39D02357DB0F00837873 /* OktaUserAgent.h in Headers */,
 				A10FA55424B4DAA600E00620 /* OIDExternalUserAgentNoSsoIOS.h in Headers */,
+				E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E38BD234CFF1E00837873 /* OIDAuthorizationService+IOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1024,6 +1025,7 @@
 				A17E3967234D2EAA00837873 /* OIDGrantTypes.h in Headers */,
 				A17E3968234D2EAA00837873 /* OIDIDToken.h in Headers */,
 				A17E3969234D2EAA00837873 /* OIDRegistrationRequest.h in Headers */,
+				DEE37AD125065C7300318DC3 /* OktaNetworkRequestCustomizationDelegate.h in Headers */,
 				A17E396A234D2EAA00837873 /* OIDRegistrationResponse.h in Headers */,
 				A17E396B234D2EAA00837873 /* OIDResponseTypes.h in Headers */,
 				A17E396C234D2EAA00837873 /* OIDScopes.h in Headers */,

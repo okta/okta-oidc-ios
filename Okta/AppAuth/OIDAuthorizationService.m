@@ -432,13 +432,13 @@ originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorization
                    callback:(OIDTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
-  if ([delegate conformsToProtocol:@protocol(OktaNetworkRequestCustomizationDelegate)]) {
-    URLRequest = [delegate customizableRequest:URLRequest];
+  if ([delegate respondsToSelector:@selector(customizableURLRequest:)]) {
+    URLRequest = [delegate customizableURLRequest:URLRequest];
   }
   AppAuthRequestTrace(@"Token Request: %@\nHeaders:%@\nHTTPBody: %@",
-                      customizedRequest.URL,
-                      customizedRequest.allHTTPHeaderFields,
-                      [[NSString alloc] initWithData:customizedRequest.HTTPBody
+                      URLRequest.URL,
+                      URLRequest.allHTTPHeaderFields,
+                      [[NSString alloc] initWithData:URLRequest.HTTPBody
                                             encoding:NSUTF8StringEncoding]);
 
   NSURLSession *session = [OIDURLSessionProvider session];
@@ -687,8 +687,8 @@ originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorization
     });
     return;
   }
-  if ([delegate conformsToProtocol:@protocol(OktaNetworkRequestCustomizationDelegate)]) {
-    URLRequest = [delegate customizableRequest:URLRequest];
+  if ([delegate respondsToSelector:@selector(customizableURLRequest:)]) {
+    URLRequest = [delegate customizableURLRequest:URLRequest];
   }
   NSURLSession *session = [OIDURLSessionProvider session];
   [[session dataTaskWithRequest:URLRequest

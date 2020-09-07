@@ -24,9 +24,9 @@
 
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
-presentingViewController:(UIViewController *)presentingViewController
-delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-callback:(OIDAuthStateAuthorizationCallback)callback {
+                     presentingViewController:(UIViewController *)presentingViewController
+                                     delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                     callback:(OIDAuthStateAuthorizationCallback)callback {
     OIDExternalUserAgentIOS *externalUserAgent =
         [[OIDExternalUserAgentIOS alloc]
             initWithPresentingViewController:presentingViewController];
@@ -38,12 +38,13 @@ callback:(OIDAuthStateAuthorizationCallback)callback {
 
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
-delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-callback:(OIDAuthStateAuthorizationCallback)callback {
+                                     delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                     callback:(OIDAuthStateAuthorizationCallback)callback {
   OIDExternalUserAgentIOS *externalUserAgent = [[OIDExternalUserAgentIOS alloc] init];
   return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                        externalUserAgent:externalUserAgent
-                                                delegate:delegate callback:callback];
+                                                delegate:delegate
+                                                callback:callback];
 }
 
 @end

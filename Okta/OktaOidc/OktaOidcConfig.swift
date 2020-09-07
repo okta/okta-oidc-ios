@@ -20,18 +20,18 @@ public class OktaOidcConfig: NSObject {
     @objc public let scopes: String
     @objc public let redirectUri: URL
     @objc public let logoutRedirectUri: URL?
-    @objc public weak var delegate: OktaNetworkRequestCustomizationDelegate?
+    @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
 
     @available(iOS 13.0, *)
     @objc public lazy var noSSO: Bool = false
     
     @objc public let additionalParams: [String:String]?
 
-    @objc public static func `default`(delegate: OktaNetworkRequestCustomizationDelegate? = nil) throws -> OktaOidcConfig {
-        return try OktaOidcConfig(fromPlist: defaultPlistName, delegate: delegate)
+    @objc public static func `default`() throws -> OktaOidcConfig {
+        return try OktaOidcConfig(fromPlist: defaultPlistName)
     }
 
-    @objc public init(with dict: [String: String], delegate: OktaNetworkRequestCustomizationDelegate? = nil) throws {
+    @objc public init(with dict: [String: String]) throws {
         guard let clientId = dict["clientId"], clientId.count > 0,
               let issuer = dict["issuer"], let _ = URL(string: issuer),
               let scopes = dict["scopes"], scopes.count > 0,
@@ -40,7 +40,6 @@ public class OktaOidcConfig: NSObject {
                 throw OktaOidcError.missingConfigurationValues
         }
         
-        self.delegate = delegate
         self.clientId = clientId
         self.issuer = issuer
         self.scopes = scopes
@@ -56,7 +55,7 @@ public class OktaOidcConfig: NSObject {
         OktaOidcConfig.setupURLSession()
     }
 
-    @objc public convenience init(fromPlist plistName: String, delegate: OktaNetworkRequestCustomizationDelegate? = nil) throws {
+    @objc public convenience init(fromPlist plistName: String) throws {
         guard let path = Bundle.main.url(forResource: plistName, withExtension: "plist") else {
             throw OktaOidcError.noPListGiven
         }
@@ -67,7 +66,7 @@ public class OktaOidcConfig: NSObject {
                 throw OktaOidcError.pListParseFailure
         }
         
-        try self.init(with: configDict, delegate: delegate)
+        try self.init(with: configDict)
     }
 
     public class func setUserAgent(value: String) {

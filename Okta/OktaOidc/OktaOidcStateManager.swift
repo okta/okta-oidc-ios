@@ -18,7 +18,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc open var authState: OIDAuthState
     @objc open var accessibility: CFString
-    private weak var delegate: OktaNetworkRequestCustomizationDelegate?
+    private weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
 
     @objc open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
