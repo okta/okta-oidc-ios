@@ -16,6 +16,7 @@ import XCTest
 class OIDAuthStateMACMock: OIDAuthState {
     class override func authState(byPresenting authorizationRequest: OIDAuthorizationRequest,
                                   externalUserAgent: OIDExternalUserAgent,
+                                  delegate: OktaNetworkRequestCustomizationDelegate?,
                                   callback: @escaping OIDAuthStateAuthorizationCallback) -> OIDExternalUserAgentSession {
         DispatchQueue.main.async {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
