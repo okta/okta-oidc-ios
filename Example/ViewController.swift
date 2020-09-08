@@ -188,11 +188,15 @@ class ViewController: UIViewController {
 
 extension ViewController: OktaNetworkRequestCustomizationDelegate {
     func customizableURLRequest(_ request: URLRequest?) -> URLRequest? {
-        print("request: \(request)")
-        return nil
+        if let request = request {
+            print("request: \(request)")
+        }
+        return request
     }
    
     func didReceive(_ response: URLResponse?) {
-        print("response: \(response)")
+        if let response = response {
+            print("response: \(response)")
+        }
     }
 }
