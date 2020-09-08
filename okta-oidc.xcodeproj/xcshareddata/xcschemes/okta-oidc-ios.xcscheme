@@ -50,6 +50,16 @@
          </EnvironmentVariable>
       </EnvironmentVariables>
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "2F32CBD9229D4CE9003A6768"
+               BuildableName = "OktaOidcTests.xctest"
+               BlueprintName = "OktaOidcTests"
+               ReferencedContainer = "container:okta-oidc.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

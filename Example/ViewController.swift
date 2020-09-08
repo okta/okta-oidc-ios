@@ -42,7 +42,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let configuration = try? OktaOidcConfig.default(delegate: self)
+        let configuration = try? OktaOidcConfig.default()
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
         
@@ -187,7 +187,7 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: OktaNetworkRequestCustomizationDelegate {
-    func sendCustomizableRequest(_ request: URLRequest?) -> URLRequest? {
+    func customizableURLRequest(_ request: URLRequest?) -> URLRequest? {
         print("request: \(request)")
         return nil
     }

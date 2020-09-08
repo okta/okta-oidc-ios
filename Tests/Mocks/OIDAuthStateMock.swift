@@ -16,6 +16,7 @@ import Foundation
 class OIDAuthStateMock: OIDAuthState {
     class override func authState(byPresenting authorizationRequest: OIDAuthorizationRequest,
                                   externalUserAgent: OIDExternalUserAgent,
+                                  delegate: OktaNetworkRequestCustomizationDelegate?,
                                   callback: @escaping OIDAuthStateAuthorizationCallback) -> OIDExternalUserAgentSession {
         DispatchQueue.main.async {
             let authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
