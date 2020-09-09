@@ -167,6 +167,16 @@ if #available(iOS 13.0, *) {
 ```
 ***Note*** Flag is available on iOS 13 and above versions
 
+### Modify network requests
+
+You can track and modify network requests throughout OktaOidc by passing object that conforms to `OktaNetworkRequestCustomizationDelegate` protocol to the `requestCustomizationDelegate` property of `OktaOidcConfig` instance.
+
+```swift
+let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
+configuration.requestCustomizationDelegate = {YourDelegateInstance}
+```
+***Note*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail.
+
 ### How to use in Objective-C project
 
 To use this SDK in Objective-C project, you should do the following:

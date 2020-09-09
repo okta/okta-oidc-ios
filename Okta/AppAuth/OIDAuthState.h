@@ -125,6 +125,7 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
         OIDAuthState.updateWithTokenResponse:error:).
     @param authorizationRequest The authorization request to present.
     @param externalUserAgent A external user agent that can present an external user-agent request.
+    @param delegate The network request customization delegate.
     @param callback The method called when the request has completed or failed.
     @return A @c OIDExternalUserAgentSession instance which will terminate when it
         receives a @c OIDExternalUserAgentSession.cancel message, or after processing a
@@ -162,6 +163,7 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
     @param authorizationResponse The authorization response.
     @param tokenResponse The token response.
     @param registrationResponse The registration response.
+    @param delegate The network request customization delegate.
  */
 - (instancetype)initWithAuthorizationResponse:
 (nullable OIDAuthorizationResponse *)authorizationResponse

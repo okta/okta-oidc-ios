@@ -12,9 +12,24 @@
 
 #import <Foundation/Foundation.h>
 
+/*! @brief Allows to modify network requests and track responses in OktaOidc.
+    @discussion More information could be found here: https://github.com/okta/okta-oidc-ios/blob/master/README.md#modify-network-requests.
+ */
 @protocol OktaNetworkRequestCustomizationDelegate <NSObject>
 
+/*! @brief Makes necessary changes to the URLRequest object.
+    @discussion Custom parameters could be added to the URLRequest here.
+                Note: It is highly recommended to copy all of the existing parameters
+                from the `request` object to modified request without any changes.
+                Altering of this data could lead network request to fail.
+    @param request The URLRequest object that could be changed.
+    @return Customized URLRequest object.
+*/
 - (nullable NSURLRequest*)customizableURLRequest: (nullable NSURLRequest *)request;
+
+/*! @brief Notifies about network request completion.
+    @param response Response of the network request.
+*/
 - (void)didReceiveResponse: (nullable NSURLResponse *)response;
 
 @end

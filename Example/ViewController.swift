@@ -43,6 +43,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let configuration = try? OktaOidcConfig.default()
+        configuration?.requestCustomizationDelegate = self
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
         

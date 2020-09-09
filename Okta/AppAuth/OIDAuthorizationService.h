@@ -146,6 +146,7 @@ typedef void (^OIDRegistrationCompletion)(OIDRegistrationResponse *_Nullable reg
 
 /*! @brief Performs a token request.
     @param request The token request.
+    @param delegate The network request customization delegate.
     @param callback The method called when the request has completed or failed.
  */
 + (void)performTokenRequest:(OIDTokenRequest *)request
@@ -155,6 +156,7 @@ typedef void (^OIDRegistrationCompletion)(OIDRegistrationResponse *_Nullable reg
 /*! @brief Performs a token request.
     @param request The token request.
     @param authorizationResponse The original authorization response related to this token request.
+    @param delegate The network request customization delegate.
     @param callback The method called when the request has completed or failed.
  */
 + (void)performTokenRequest:(OIDTokenRequest *)request
@@ -164,6 +166,7 @@ originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorization
 
 /*! @brief Performs a registration request.
     @param request The registration request.
+    @param delegate The network request customization delegate.
     @param completion The method called when the request has completed or failed.
  */
 + (void)performRegistrationRequest:(OIDRegistrationRequest *)request

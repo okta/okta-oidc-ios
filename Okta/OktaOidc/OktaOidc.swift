@@ -34,7 +34,10 @@ public class OktaOidc: NSObject {
                 return
             }
             
-            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self.configuration.requestCustomizationDelegate)
+            let authStateManager = OktaOidcStateManager(authState: authState)
+            if let delegate = self.configuration.requestCustomizationDelegate {
+                authStateManager.restAPI = OktaOidcRestApi(delegate: delegate)
+            }
             callback(authStateManager, nil)
         })
     }
@@ -54,7 +57,10 @@ public class OktaOidc: NSObject {
                 return
             }
             
-            let authStateManager = OktaOidcStateManager(authState: authState, delegate: self?.configuration.requestCustomizationDelegate)
+            let authStateManager = OktaOidcStateManager(authState: authState)
+            if let delegate = self?.configuration.requestCustomizationDelegate {
+                authStateManager.restAPI = OktaOidcRestApi(delegate: delegate)
+            }
             callback(authStateManager, nil)
         }
     }
