@@ -15,11 +15,10 @@ import OktaOidc
 
 class OktaNetworkRequestCustomizationDelegateMock: NSObject, OktaNetworkRequestCustomizationDelegate {
 
-    var customizedRequest: URLRequest?
+    var customizedRequest: URLRequest? = URLRequest(url: URL(string: "customized_url")!)
     var didReceiveCalled = false
 
     func customizableURLRequest(_ request: URLRequest?) -> URLRequest? {
-        customizedRequest = URLRequest(url: URL(string: "customized_url")!)
         return customizedRequest
     }
 

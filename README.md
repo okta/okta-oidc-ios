@@ -485,7 +485,7 @@ extension SomeNSObject: OktaNetworkRequestCustomizationDelegate {
 }
 ```
 
-***Note:*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail.
+***Note:*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail. If `customizableURLRequest(_:)` method returns `nil` default request will be used.
 
 ## Known issues
 

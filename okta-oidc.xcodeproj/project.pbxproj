@@ -250,6 +250,7 @@
 		A17E3A202358FA3300837873 /* OIDTokenUtilitiesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0A2358FA3200837873 /* OIDTokenUtilitiesTests.m */; };
 		A17E3A212358FA3300837873 /* OIDServiceConfigurationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0D2358FA3200837873 /* OIDServiceConfigurationTests.m */; };
 		A17E3A222358FA3300837873 /* OIDTokenResponseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */; };
+		DE10BAB3250A5CD900655FF8 /* OIDAuthorizationServiceOktaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE10BAB1250A5CAF00655FF8 /* OIDAuthorizationServiceOktaTests.swift */; };
 		DEBFB8E12507983300A27026 /* OktaOidcRestApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8DF250797F600A27026 /* OktaOidcRestApiTests.swift */; };
 		DEBFB8E42507A7C500A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */; };
 		DEBFB8E62507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */; };
@@ -493,6 +494,7 @@
 		A17E3A0E2358FA3200837873 /* OIDServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OIDServiceDiscoveryTests.h; sourceTree = "<group>"; };
 		A17E3A0F2358FA3200837873 /* OIDTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OIDTokenResponseTests.m; sourceTree = "<group>"; };
 		A17E3A2423592D6000837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Okta/Framework/Info.plist; sourceTree = SOURCE_ROOT; };
+		DE10BAB1250A5CAF00655FF8 /* OIDAuthorizationServiceOktaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceOktaTests.swift; sourceTree = "<group>"; };
 		DEBFB8DF250797F600A27026 /* OktaOidcRestApiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcRestApiTests.swift; sourceTree = "<group>"; };
 		DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceRequestDelegateTests.swift; sourceTree = "<group>"; };
 		DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaNetworkRequestCustomizationDelegateMock.swift; sourceTree = "<group>"; };
@@ -745,6 +747,7 @@
 				A10FA55524B6310400E00620 /* OIDExternalUserAgentNoSsoTests.swift */,
 				DEBFB8DF250797F600A27026 /* OktaOidcRestApiTests.swift */,
 				DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */,
+				DE10BAB1250A5CAF00655FF8 /* OIDAuthorizationServiceOktaTests.swift */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -1356,6 +1359,7 @@
 				2F32CC41229D4D11003A6768 /* OktaOidcDiscoveryTaskTests.swift in Sources */,
 				A17E3A1C2358FA3300837873 /* OIDAuthStateTests.m in Sources */,
 				A17E3A1B2358FA3300837873 /* OIDTokenRequestTests.m in Sources */,
+				DE10BAB3250A5CD900655FF8 /* OIDAuthorizationServiceOktaTests.swift in Sources */,
 				A17E3A152358FA3300837873 /* OIDURLSessionProviderTests.m in Sources */,
 				A17E3A222358FA3300837873 /* OIDTokenResponseTests.m in Sources */,
 				A16788BA2436AAB700D1651D /* OktaOidcBrowserTaskIOSMock.swift in Sources */,
