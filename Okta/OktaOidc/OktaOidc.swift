@@ -25,20 +25,24 @@ public class OktaOidc: NSObject {
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(config: configuration,
-                                 oktaAPI: OktaOidcRestApi(delegate: configuration.requestCustomizationDelegate)).authenticateWithSessionToken(sessionToken: sessionToken,
-                                                                                                                          delegate: configuration.requestCustomizationDelegate,
-                                                                                                            callback: { (authState, error) in
-            guard let authState = authState else {
-                callback(nil, error)
-                return
-            }
-            
-            let authStateManager = OktaOidcStateManager(authState: authState)
-            if let delegate = self.configuration.requestCustomizationDelegate {
-                authStateManager.restAPI = OktaOidcRestApi(delegate: delegate)
-            }
-            callback(authStateManager, nil)
+        let oktaAPI = OktaOidcRestApi()
+        oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
+
+        let task = OktaOidcAuthenticateTask(config: configuration, oktaAPI: oktaAPI)
+        task.authenticateWithSessionToken(
+            sessionToken: sessionToken,
+            delegate: configuration.requestCustomizationDelegate,
+            callback: { (authState, error) in
+                guard let authState = authState else {
+                    callback(nil, error)
+                    return
+                }
+
+                let authStateManager = OktaOidcStateManager(authState: authState)
+                if let delegate = self.configuration.requestCustomizationDelegate {
+                    authStateManager.restAPI.requestCustomizationDelegate = delegate
+                }
+                callback(authStateManager, nil)
         })
     }
 
@@ -59,7 +63,7 @@ public class OktaOidc: NSObject {
             
             let authStateManager = OktaOidcStateManager(authState: authState)
             if let delegate = self?.configuration.requestCustomizationDelegate {
-                authStateManager.restAPI = OktaOidcRestApi(delegate: delegate)
+                authStateManager.restAPI.requestCustomizationDelegate = delegate
             }
             callback(authStateManager, nil)
         }

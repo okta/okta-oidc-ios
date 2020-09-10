@@ -13,6 +13,8 @@
 @testable import OktaOidc
 
 class OktaOidcApiMock: OktaOidcHttpApiProtocol {
+
+    weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
     
     var lastRequest: URLRequest?
     

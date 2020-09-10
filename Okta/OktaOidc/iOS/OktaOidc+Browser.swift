@@ -16,7 +16,9 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
 
     @objc public func signInWithBrowser(from presenter: UIViewController,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi(delegate: configuration.requestCustomizationDelegate))
+        let oktaAPI = OktaOidcRestApi()
+        oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
+        let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: oktaAPI)
         signInWithBrowserTask(signInTask, callback: callback)
     }
 
@@ -29,7 +31,9 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
             callback(OktaOidcError.missingIdToken)
             return
         }
-        let signOutTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: OktaOidcRestApi(delegate: configuration.requestCustomizationDelegate))
+        let oktaAPI = OktaOidcRestApi()
+        oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
+        let signOutTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: oktaAPI)
         signOutWithBrowserTask(signOutTask, idToken: idToken, callback: callback)
     }
     

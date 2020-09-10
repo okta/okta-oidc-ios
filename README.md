@@ -39,6 +39,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
     - [getUser](#getuser)
 - [Development](#development)
   - [Running Tests](#running-tests)
+- [Modify network requests](#modify-network-requests)
 - [Known issues](#known-issues)
 
 <!-- /TOC -->
@@ -166,16 +167,6 @@ if #available(iOS 13.0, *) {
 }
 ```
 ***Note*** Flag is available on iOS 13 and above versions
-
-### Modify network requests
-
-You can track and modify network requests throughout OktaOidc by passing object that conforms to `OktaNetworkRequestCustomizationDelegate` protocol to the `requestCustomizationDelegate` property of `OktaOidcConfig` instance.
-
-```swift
-let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
-configuration.requestCustomizationDelegate = {YourDelegateInstance}
-```
-***Note*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail.
 
 ### How to use in Objective-C project
 
@@ -461,6 +452,40 @@ bash ./scripts/build-and-test.sh
 ```
 
 **Note:** *You may need to update the emulator device to match your Xcode version*
+
+## Modify network requests
+
+You can track and modify network requests throughout OktaOidc by passing object that conforms to `OktaNetworkRequestCustomizationDelegate` protocol to the `requestCustomizationDelegate` property of `OktaOidcConfig` instance.
+
+```swift
+let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
+configuration.requestCustomizationDelegate = {YourDelegateInstance}
+```
+
+For example, delegate could be implemented as follows:
+
+```swift
+extension SomeNSObject: OktaNetworkRequestCustomizationDelegate {
+
+    func customizableURLRequest(_ request: URLRequest?) -> URLRequest? {
+        guard var modifiedRequest = request else {
+            return nil
+        }
+        modifiedRequest.setValue("Some value", forHTTPHeaderField: "custom-header-field")
+        print("Okta OIDC network request: \(modifiedRequest)")
+        return modifiedRequest
+    }
+
+    func didReceive(_ response: URLResponse?) {
+        guard let response = response else {
+            return
+        }
+        print("Okta OIDC network response: \(response)")
+    }
+}
+```
+
+***Note:*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail.
 
 ## Known issues
 

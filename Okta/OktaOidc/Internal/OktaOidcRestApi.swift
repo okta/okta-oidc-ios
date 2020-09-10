@@ -15,7 +15,9 @@ import Foundation
 protocol OktaOidcHttpApiProtocol {
     typealias OktaApiSuccessCallback = ([String: Any]?) -> Void
     typealias OktaApiErrorCallback = (OktaOidcError) -> Void
-    
+
+    var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate? { get set }
+
     func post(_ url: URL,
               headers: [String: String]?,
               postString: String?,
@@ -103,10 +105,6 @@ extension OktaOidcHttpApiProtocol {
 
 class OktaOidcRestApi: OktaOidcHttpApiProtocol {
     weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
-    
-    init(delegate: OktaNetworkRequestCustomizationDelegate? = nil) {
-        self.requestCustomizationDelegate = delegate
-    }
 
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,

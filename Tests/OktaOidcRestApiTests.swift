@@ -39,7 +39,8 @@ class OktaOidcRestApiTests: XCTestCase {
 
     func testFireRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
-        let oktaRestApi = OktaOidcRestApi(delegate: delegateMock)
+        let oktaRestApi = OktaOidcRestApi()
+        oktaRestApi.requestCustomizationDelegate = delegateMock
         let request = URLRequest(url: URL(string: "test")!)
         let sessionMock = URLSessionMock()
         OIDURLSessionProvider.setSession(sessionMock)
