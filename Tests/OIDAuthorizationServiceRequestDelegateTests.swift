@@ -15,10 +15,16 @@ import XCTest
 
 class OIDAuthorizationServiceRequestDelegateTests: XCTestCase {
 
+    var sessionMock: URLSessionMock!
+
+    override func setUp() {
+        super.setUp()
+        sessionMock = URLSessionMock()
+        OIDURLSessionProvider.setSession(sessionMock)
+    }
+
     func testPerformTokenRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
-        let sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
         OIDAuthorizationService.perform(mockTokenRequest, delegate: delegateMock) { _, _ in
@@ -32,8 +38,6 @@ class OIDAuthorizationServiceRequestDelegateTests: XCTestCase {
 
     func testPerformAuthorizationRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
-        let sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
         OIDAuthorizationService.perform(mockRegistrationRequest, delegate: delegateMock) { _, _ in

@@ -15,39 +15,22 @@ import XCTest
 
 class OktaOidcRestApiTests: XCTestCase {
 
-    func testFireRequest_DelegateNil() {
-        let oktaRestApi = OktaOidcRestApi()
-        let request = URLRequest(url: URL(string: "no_delegate_test")!)
-        let sessionMock = URLSessionMock()
+    var sessionMock: URLSessionMock!
+
+    override func setUp() {
+        super.setUp()
+        sessionMock = URLSessionMock()
         OIDURLSessionProvider.setSession(sessionMock)
-
-        let requestCompleteExpectation = expectation(description: "Request completed!")
-        oktaRestApi.fireRequest(
-            request,
-            onSuccess: { _ in
-                requestCompleteExpectation.fulfill()
-            },
-            onError: { _ in 
-                requestCompleteExpectation.fulfill()
-                XCTFail("Request should be completed successfully")
-            }
-        )
-
-        waitForExpectations(timeout: 5.0, handler: nil)
-        XCTAssertEqual(request, sessionMock.request)
     }
 
     func testFireRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
         let oktaRestApi = OktaOidcRestApi()
         oktaRestApi.requestCustomizationDelegate = delegateMock
-        let request = URLRequest(url: URL(string: "test")!)
-        let sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
         oktaRestApi.fireRequest(
-            request,
+            testRequest,
             onSuccess: { _ in
                 requestCompleteExpectation.fulfill()
             },
@@ -60,5 +43,54 @@ class OktaOidcRestApiTests: XCTestCase {
         waitForExpectations(timeout: 5.0, handler: nil)
         XCTAssertEqual(delegateMock.customizedRequest, sessionMock.request)
         XCTAssertTrue(delegateMock.didReceiveCalled)
+    }
+
+    func testFireRequest_CustomizedRequestIsNil() {
+        let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
+        delegateMock.customizedRequest = nil
+        let oktaRestApi = OktaOidcRestApi()
+        oktaRestApi.requestCustomizationDelegate = delegateMock
+
+        let requestCompleteExpectation = expectation(description: "Request completed!")
+        oktaRestApi.fireRequest(
+            testRequest,
+            onSuccess: { _ in
+                requestCompleteExpectation.fulfill()
+            },
+            onError: { _ in 
+                requestCompleteExpectation.fulfill()
+                XCTFail("Request should be completed successfully")
+            }
+        )
+
+        waitForExpectations(timeout: 5.0, handler: nil)
+        XCTAssertEqual(testRequest, sessionMock.request)
+        XCTAssertTrue(delegateMock.didReceiveCalled)
+    }
+
+    func testFireRequest_DelegateNil() {
+        let oktaRestApi = OktaOidcRestApi()
+
+        let requestCompleteExpectation = expectation(description: "Request completed!")
+        oktaRestApi.fireRequest(
+            testRequest,
+            onSuccess: { _ in
+                requestCompleteExpectation.fulfill()
+            },
+            onError: { _ in 
+                requestCompleteExpectation.fulfill()
+                XCTFail("Request should be completed successfully")
+            }
+        )
+
+        waitForExpectations(timeout: 5.0, handler: nil)
+        XCTAssertEqual(testRequest, sessionMock.request)
+    }
+}
+
+private extension OktaOidcRestApiTests {
+
+    var testRequest: URLRequest {
+        return URLRequest(url: URL(string: "test")!)
     }
 }
