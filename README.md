@@ -455,7 +455,7 @@ bash ./scripts/build-and-test.sh
 
 ## Modify network requests
 
-You can track and modify network requests throughout OktaOidc by passing object that conforms to `OktaNetworkRequestCustomizationDelegate` protocol to the `requestCustomizationDelegate` property of `OktaOidcConfig` instance.
+You can track and modify network requests made by `OktaOidc`. In order to do this, create an object conforming to the `OktaNetworkRequestCustomizationDelegate` protocol and set it to the `requestCustomizationDelegate` property on an `OktaOidcConfig` instance.
 
 ```swift
 let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
