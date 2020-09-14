@@ -26,9 +26,10 @@
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                                      callback:(OIDAuthStateAuthorizationCallback)callback {
   OIDExternalUserAgentMac *externalUserAgent = [[OIDExternalUserAgentMac alloc] init];
-  return [self authStateByPresentingAuthorizationRequest:authorizationRequest
-                                       externalUserAgent:externalUserAgent
-                                                callback:callback];
+    return [self authStateByPresentingAuthorizationRequest:authorizationRequest
+                                         externalUserAgent:externalUserAgent
+                                                  delegate:nil
+                                                  callback:callback];
 }
 
 @end

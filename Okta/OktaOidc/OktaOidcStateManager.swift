@@ -52,10 +52,10 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         return self.authState.refreshToken
     }
     
-    // Needed for UTs only. Entry point for mocking network calls.
     var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
 
-    @objc public init(authState: OIDAuthState, accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
+    @objc public init(authState: OIDAuthState,
+                      accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
         self.accessibility = accessibility
         OktaOidcConfig.setupURLSession()
@@ -264,7 +264,6 @@ private extension OktaOidcStateManager {
         if let headers = headers {
             requestHeaders.merge(headers) { (_, new) in new }
         }
-
         restAPI.post(endpointURL, headers: requestHeaders, postString: postString, onSuccess: { response in
             callback(response, nil)
         }, onError: { error in

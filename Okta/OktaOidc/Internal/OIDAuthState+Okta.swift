@@ -13,7 +13,7 @@
 // Okta Extension of OIDAuthState
 extension OIDAuthState {
 
-    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
+    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
         
         let finalize: ((OIDAuthState?, OktaOidcError?) -> Void) = { state, error in
             callback(state, error)
@@ -33,7 +33,7 @@ extension OIDAuthState {
             }
 
             // Make token request
-            OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, callback:
+            OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, delegate: delegate, callback:
             { tokenResponse, error in
                 guard let tokenResponse = tokenResponse else {
                     finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))

@@ -25,16 +25,25 @@ public class OktaOidc: NSObject {
 
     @objc public func authenticate(withSessionToken sessionToken: String,
                                    callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        OktaOidcAuthenticateTask(config: configuration, oktaAPI: OktaOidcRestApi())
-        .authenticateWithSessionToken(sessionToken: sessionToken) { authState, error in
-            guard let authState = authState else {
-                callback(nil, error)
-                return
-            }
-            
-            let authStateManager = OktaOidcStateManager(authState: authState)
-            callback(authStateManager, nil)
-        }
+        let oktaAPI = OktaOidcRestApi()
+        oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
+
+        let task = OktaOidcAuthenticateTask(config: configuration, oktaAPI: oktaAPI)
+        task.authenticateWithSessionToken(
+            sessionToken: sessionToken,
+            delegate: configuration.requestCustomizationDelegate,
+            callback: { (authState, error) in
+                guard let authState = authState else {
+                    callback(nil, error)
+                    return
+                }
+
+                let authStateManager = OktaOidcStateManager(authState: authState)
+                if let delegate = self.configuration.requestCustomizationDelegate {
+                    authStateManager.restAPI.requestCustomizationDelegate = delegate
+                }
+                callback(authStateManager, nil)
+        })
     }
 
     @objc public func hasActiveBrowserSession() -> Bool {
@@ -45,7 +54,7 @@ public class OktaOidc: NSObject {
                                callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signIn { [weak self] authState, error in
+        task.signIn(delegate: configuration.requestCustomizationDelegate) { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
             guard let authState = authState else {
                 callback(nil, error)
@@ -53,6 +62,9 @@ public class OktaOidc: NSObject {
             }
             
             let authStateManager = OktaOidcStateManager(authState: authState)
+            if let delegate = self?.configuration.requestCustomizationDelegate {
+                authStateManager.restAPI.requestCustomizationDelegate = delegate
+            }
             callback(authStateManager, nil)
         }
     }

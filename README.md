@@ -39,6 +39,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
     - [getUser](#getuser)
 - [Development](#development)
   - [Running Tests](#running-tests)
+- [Modify network requests](#modify-network-requests)
 - [Known issues](#known-issues)
 
 <!-- /TOC -->
@@ -451,6 +452,40 @@ bash ./scripts/build-and-test.sh
 ```
 
 **Note:** *You may need to update the emulator device to match your Xcode version*
+
+## Modify network requests
+
+You can track and modify network requests made by `OktaOidc`. In order to do this, create an object conforming to the `OktaNetworkRequestCustomizationDelegate` protocol and set it to the `requestCustomizationDelegate` property on an `OktaOidcConfig` instance.
+
+```swift
+let configuration = OktaOidcConfig(with: {YourOidcConfiguration})
+configuration.requestCustomizationDelegate = {YourDelegateInstance}
+```
+
+For example, delegate could be implemented as follows:
+
+```swift
+extension SomeNSObject: OktaNetworkRequestCustomizationDelegate {
+
+    func customizableURLRequest(_ request: URLRequest?) -> URLRequest? {
+        guard var modifiedRequest = request else {
+            return nil
+        }
+        modifiedRequest.setValue("Some value", forHTTPHeaderField: "custom-header-field")
+        print("Okta OIDC network request: \(modifiedRequest)")
+        return modifiedRequest
+    }
+
+    func didReceive(_ response: URLResponse?) {
+        guard let response = response else {
+            return
+        }
+        print("Okta OIDC network response: \(response)")
+    }
+}
+```
+
+***Note:*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail. If `customizableURLRequest(_:)` method returns `nil` default request will be used.
 
 ## Known issues
 

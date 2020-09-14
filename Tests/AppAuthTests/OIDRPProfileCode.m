@@ -159,7 +159,8 @@ typedef void (^UserInfoCompletion)(OIDAuthState *_Nullable authState,
 
     // performs registration request
     [OIDAuthorizationService performRegistrationRequest:request
-        completion:^(OIDRegistrationResponse *_Nullable regResp, NSError *_Nullable error) {
+                                               delegate:nil
+                                             completion:^(OIDRegistrationResponse *_Nullable regResp, NSError *_Nullable error) {
       if (regResp) {
         callback(configuration, regResp, nil);
       } else {
@@ -235,7 +236,7 @@ typedef void (^UserInfoCompletion)(OIDAuthState *_Nullable authState,
 
       OIDTokenRequest *tokenExchangeRequest = [authorizationResponse tokenExchangeRequest];
       [OIDAuthorizationService performTokenRequest:tokenExchangeRequest
-                     originalAuthorizationResponse:authorizationResponse
+                                          delegate:nil
                                           callback:^(OIDTokenResponse *_Nullable tokenResponse,
                                                      NSError *_Nullable tokenError) {
         [token_exchange fulfill];

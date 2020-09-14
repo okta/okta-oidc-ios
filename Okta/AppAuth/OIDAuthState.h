@@ -27,6 +27,7 @@
 @protocol OIDAuthStateErrorDelegate;
 @protocol OIDExternalUserAgent;
 @protocol OIDExternalUserAgentSession;
+@protocol OktaNetworkRequestCustomizationDelegate;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -124,6 +125,7 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
         OIDAuthState.updateWithTokenResponse:error:).
     @param authorizationRequest The authorization request to present.
     @param externalUserAgent A external user agent that can present an external user-agent request.
+    @param delegate The network request customization delegate.
     @param callback The method called when the request has completed or failed.
     @return A @c OIDExternalUserAgentSession instance which will terminate when it
         receives a @c OIDExternalUserAgentSession.cancel message, or after processing a
@@ -132,6 +134,7 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
 + (id<OIDExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OIDAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OIDExternalUserAgent>)externalUserAgent
+                                     delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                                      callback:(OIDAuthStateAuthorizationCallback)callback;
 
 /*! @internal
@@ -160,11 +163,13 @@ typedef void (^OIDAuthStateAuthorizationCallback)(OIDAuthState *_Nullable authSt
     @param authorizationResponse The authorization response.
     @param tokenResponse The token response.
     @param registrationResponse The registration response.
+    @param delegate The network request customization delegate.
  */
 - (instancetype)initWithAuthorizationResponse:
-    (nullable OIDAuthorizationResponse *)authorizationResponse
-           tokenResponse:(nullable OIDTokenResponse *)tokenResponse
-    registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
+(nullable OIDAuthorizationResponse *)authorizationResponse
+       tokenResponse:(nullable OIDTokenResponse *)tokenResponse
+                     registrationResponse:(nullable OIDRegistrationResponse *)registrationResponse
+                                 delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate
     NS_DESIGNATED_INITIALIZER;
 
 /*! @brief Updates the authorization state based on a new authorization response.

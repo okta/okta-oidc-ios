@@ -18,7 +18,7 @@ class OktaOidcBrowserTaskMACUnitMock: OktaOidcBrowserTaskMAC {
     var signOutCalled = false
     var error: OktaOidcError?
     
-    override func signIn(callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
+    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
         DispatchQueue.main.async {
             self.signInCalled = true
             if let error = self.error {

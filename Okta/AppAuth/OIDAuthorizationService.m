@@ -420,18 +420,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Token Endpoint
 
-+ (void)performTokenRequest:(OIDTokenRequest *)request callback:(OIDTokenCallback)callback {
-  [[self class] performTokenRequest:request
-      originalAuthorizationResponse:nil
-                           callback:callback];
++ (void)performTokenRequest:(OIDTokenRequest *)request
+                   delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                   callback:(OIDTokenCallback)callback {
+    [[self class] performTokenRequest:request originalAuthorizationResponse:nil delegate:delegate callback:callback];
 }
 
 + (void)performTokenRequest:(OIDTokenRequest *)request
-    originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
-                         callback:(OIDTokenCallback)callback {
+originalAuthorizationResponse:(OIDAuthorizationResponse *_Nullable)authorizationResponse
+                   delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                   callback:(OIDTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
-  
+  if ([delegate respondsToSelector:@selector(customizableURLRequest:)]) {
+    URLRequest = [delegate customizableURLRequest:URLRequest];
+  }
   AppAuthRequestTrace(@"Token Request: %@\nHeaders:%@\nHTTPBody: %@",
                       URLRequest.URL,
                       URLRequest.allHTTPHeaderFields,
@@ -443,6 +446,7 @@ NS_ASSUME_NONNULL_BEGIN
               completionHandler:^(NSData *_Nullable data,
                                   NSURLResponse *_Nullable response,
                                   NSError *_Nullable error) {
+    [delegate didReceiveResponse:response];
     if (error) {
       // A network error or server error occurred.
       NSString *errorDescription =
@@ -669,6 +673,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Registration Endpoint
 
 + (void)performRegistrationRequest:(OIDRegistrationRequest *)request
+                          delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                           completion:(OIDRegistrationCompletion)completion {
   NSURLRequest *URLRequest = [request URLRequest];
   if (!URLRequest) {
@@ -682,12 +687,15 @@ NS_ASSUME_NONNULL_BEGIN
     });
     return;
   }
-
+  if ([delegate respondsToSelector:@selector(customizableURLRequest:)]) {
+    URLRequest = [delegate customizableURLRequest:URLRequest];
+  }
   NSURLSession *session = [OIDURLSessionProvider session];
   [[session dataTaskWithRequest:URLRequest
               completionHandler:^(NSData *_Nullable data,
                                   NSURLResponse *_Nullable response,
                                   NSError *_Nullable error) {
+    [delegate didReceiveResponse:response];
     if (error) {
       // A network error or server error occurred.
       NSString *errorDescription =

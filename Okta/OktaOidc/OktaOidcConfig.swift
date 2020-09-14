@@ -12,7 +12,7 @@
 
 import Foundation
 
-public class OktaOidcConfig: NSObject, Codable {
+public class OktaOidcConfig: NSObject {
     @objc public static let defaultPlistName = "Okta"
     
     @objc public let clientId: String
@@ -20,6 +20,12 @@ public class OktaOidcConfig: NSObject, Codable {
     @objc public let scopes: String
     @objc public let redirectUri: URL
     @objc public let logoutRedirectUri: URL?
+
+    /*!
+     Set the request customization delegate if you want to track and modify network
+     requests throughout OktaOidc. More information could be found here: https://github.com/okta/okta-oidc-ios/blob/master/README.md#modify-network-requests.
+     */
+    @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
 
     @available(iOS 13.0, *)
     @objc public lazy var noSSO: Bool = false
