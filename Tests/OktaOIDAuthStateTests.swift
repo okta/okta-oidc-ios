@@ -13,7 +13,7 @@
 import XCTest
 @testable import OktaOidc
 
-class OIDAuthStateTests: XCTestCase {
+class OktaOIDAuthStateTests: XCTestCase {
     var requestMock: OIDAuthorizationRequest!
     
     override func setUp() {
