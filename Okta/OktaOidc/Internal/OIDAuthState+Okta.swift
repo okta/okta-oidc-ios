@@ -20,7 +20,7 @@ extension OIDAuthState {
         }
 
         // Make authCode request
-        OIDAuthorizationService.perform(authRequest: authRequest, callback: { authResponse, error in
+        OIDAuthorizationService.perform(authRequest: authRequest, delegate: delegate, callback: { authResponse, error in
             guard let authResponse = authResponse else {
                 finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
