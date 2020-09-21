@@ -42,3 +42,5 @@
 #import "OIDURLSessionProvider.h"
 #import "OIDEndSessionRequest.h"
 #import "OIDEndSessionResponse.h"
+#import "OktaUserAgent.h"
+#import "OktaNetworkRequestCustomizationDelegate.h"
