@@ -249,6 +249,8 @@
 		BE2D3D4224EFA7A6006326B0 /* OIDURLSessionProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A17E3856234CFEE900837873 /* OIDURLSessionProvider.m */; };
 		BE2D3D4A24EFA891006326B0 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE2D3CE624EFA78A006326B0 /* AppAuth.framework */; };
 		BE2D3D5424EFA983006326B0 /* AppAuth-macOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE2D3D4824EFA7A6006326B0 /* AppAuth-macOS.framework */; };
+		BE2D3D6524EFBE25006326B0 /* AppAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = BE2D3D5C24EFAB32006326B0 /* AppAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE2D3D6624EFBE2B006326B0 /* AppAuth.h in Headers */ = {isa = PBXBuildFile; fileRef = BE2D3D5A24EFAB1B006326B0 /* AppAuth.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE4D8DB625184EF70042E089 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4D8DB525184EF70042E089 /* OktaNetworkRequestCustomizationDelegate.h */; };
 		BE4D8DB725184EF70042E089 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = BE4D8DB525184EF70042E089 /* OktaNetworkRequestCustomizationDelegate.h */; };
 /* End PBXBuildFile section */
@@ -509,7 +511,8 @@
 		BE2D3C8324EFA72E006326B0 /* OktaUserAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OktaUserAgent.m; path = AppAuth/OktaUserAgent.m; sourceTree = "<group>"; };
 		BE2D3CE624EFA78A006326B0 /* AppAuth.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AppAuth.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE2D3D4824EFA7A6006326B0 /* AppAuth-macOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "AppAuth-macOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BE2D3DCE24EFC6EA006326B0 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		BE2D3D5A24EFAB1B006326B0 /* AppAuth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppAuth.h; path = AppAuth/iOS/AppAuth.h; sourceTree = "<group>"; };
+		BE2D3D5C24EFAB32006326B0 /* AppAuth.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppAuth.h; path = AppAuth/macOS/AppAuth.h; sourceTree = "<group>"; };
 		BE4D8DB525184EF70042E089 /* OktaNetworkRequestCustomizationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OktaNetworkRequestCustomizationDelegate.h; path = AppAuth/OktaNetworkRequestCustomizationDelegate.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -864,6 +867,7 @@
 		A17E3840234CFEA800837873 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				BE2D3D5A24EFAB1B006326B0 /* AppAuth.h */,
 				A17E38B5234CFF1E00837873 /* OIDAuthorizationService+IOS.h */,
 				A17E38B7234CFF1E00837873 /* OIDAuthorizationService+IOS.m */,
 				A17E38B3234CFF1E00837873 /* OIDAuthState+IOS.h */,
@@ -882,6 +886,7 @@
 			isa = PBXGroup;
 			children = (
 				A17E38C3234D2CB000837873 /* LoopbackHTTPServer */,
+				BE2D3D5C24EFAB32006326B0 /* AppAuth.h */,
 				A17E38C8234D2CB100837873 /* OIDAuthorizationService+Mac.h */,
 				A17E38CC234D2CB100837873 /* OIDAuthorizationService+Mac.m */,
 				A17E38C9234D2CB100837873 /* OIDAuthState+Mac.h */,
@@ -1029,6 +1034,7 @@
 				BE2D3C9D24EFA78A006326B0 /* OIDExternalUserAgent.h in Headers */,
 				BE2D3C9E24EFA78A006326B0 /* OIDDefines.h in Headers */,
 				BE2D3C9F24EFA78A006326B0 /* OIDScopeUtilities.h in Headers */,
+				BE2D3D6624EFBE2B006326B0 /* AppAuth.h in Headers */,
 				BE2D3CA024EFA78A006326B0 /* OIDExternalUserAgentIOSCustomBrowser.h in Headers */,
 				BE2D3CA124EFA78A006326B0 /* OIDTokenRequest.h in Headers */,
 				BE2D3CA224EFA78A006326B0 /* OIDResponseTypes.h in Headers */,
@@ -1074,6 +1080,7 @@
 				BE2D3CFD24EFA7A6006326B0 /* OIDExternalUserAgent.h in Headers */,
 				BE2D3CFE24EFA7A6006326B0 /* OIDExternalUserAgentRequest.h in Headers */,
 				BE2D3CFF24EFA7A6006326B0 /* OIDExternalUserAgentSession.h in Headers */,
+				BE2D3D6524EFBE25006326B0 /* AppAuth.h in Headers */,
 				BE2D3D0024EFA7A6006326B0 /* OIDFieldMapping.h in Headers */,
 				BE2D3D0124EFA7A6006326B0 /* OIDGrantTypes.h in Headers */,
 				BE2D3D0224EFA7A6006326B0 /* OIDIDToken.h in Headers */,
@@ -1216,6 +1223,7 @@
 				BE2D3CAF24EFA78A006326B0 /* Frameworks */,
 				BE2D3CB024EFA78A006326B0 /* Sources */,
 				BE2D3CE224EFA78A006326B0 /* Resources */,
+				BE2D3D5924EFAAAF006326B0 /* Generate modulemap */,
 			);
 			buildRules = (
 			);
@@ -1234,6 +1242,7 @@
 				BE2D3D0F24EFA7A6006326B0 /* Sources */,
 				BE2D3D4324EFA7A6006326B0 /* Frameworks */,
 				BE2D3D4424EFA7A6006326B0 /* Resources */,
+				BE2D3D5E24EFAB9D006326B0 /* Generate modulemap */,
 			);
 			buildRules = (
 			);
@@ -1368,6 +1377,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		BE2D3D5924EFAAAF006326B0 /* Generate modulemap */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate modulemap";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"${BUILT_PRODUCTS_DIR}/AppAuth\" ]; then\necho \"${BUILT_PRODUCTS_DIR}/AppAuth directory already exists.\"\nelse\nmkdir -p \"${BUILT_PRODUCTS_DIR}/AppAuth\"\nfi\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/AppAuth/module.modulemap\"\nmodule AppAuth {\n    header \"${PROJECT_DIR}/Okta/AppAuth/iOS/AppAuth.h\"\n    export *\n}\nEOF\n";
+		};
+		BE2D3D5E24EFAB9D006326B0 /* Generate modulemap */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate modulemap";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \"${BUILT_PRODUCTS_DIR}/AppAuth-macOS\" ]; then\necho \"${BUILT_PRODUCTS_DIR}/AppAuth-macOS directory already exists.\"\nelse\nmkdir -p \"${BUILT_PRODUCTS_DIR}/AppAuth-macOS\"\nfi\n\ncat <<EOF > \"${BUILT_PRODUCTS_DIR}/AppAuth-macOS/module.modulemap\"\nmodule AppAuth_macOS {\n    header \"${PROJECT_DIR}/Okta/AppAuth/macOS/AppAuth.h\"\n    export *\n}\nEOF\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2F32CA1A229D38D4003A6768 /* Sources */ = {
