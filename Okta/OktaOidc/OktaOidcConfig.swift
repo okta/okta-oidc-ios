@@ -110,7 +110,7 @@ public class OktaOidcConfig: NSObject {
             delegate: RedirectBlockingURLSessionDelegate.shared,
             delegateQueue: .main)
         
-        OIDURLSessionProvider.setSession(session)
+        OKTURLSessionProvider.setSession(session)
     }
 
     private static func extractAdditionalParams(_ config: [String: String]) -> [String: String]? {

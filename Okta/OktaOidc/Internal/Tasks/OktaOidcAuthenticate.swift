@@ -14,35 +14,35 @@ class OktaOidcAuthenticateTask: OktaOidcTask {
     
     func authenticateWithSessionToken(sessionToken: String,
                                       delegate: OktaNetworkRequestCustomizationDelegate? = nil,
-                                      callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void) {
+                                      callback: @escaping (OKTAuthState?, OktaOidcError?) -> Void) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfig = oidConfig else {
                 callback(nil, error)
                 return
             }
             
-            let codeVerifier = OIDAuthorizationRequest.generateCodeVerifier()
-            let codeChallenge = OIDAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
-            let state = OIDAuthorizationRequest.generateState()
+            let codeVerifier = OKTAuthorizationRequest.generateCodeVerifier()
+            let codeChallenge = OKTAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
+            let state = OKTAuthorizationRequest.generateState()
             var additionalParameters = self.config.additionalParams ?? [String : String]()
             additionalParameters["sessionToken"] = sessionToken
             
-            let request = OIDAuthorizationRequest(
+            let request = OKTAuthorizationRequest(
                 configuration: oidConfig,
                 clientId: self.config.clientId,
                 clientSecret: nil,
                 scope: self.config.scopes,
                 redirectURL: self.config.redirectUri,
-                responseType: OIDResponseTypeCode,
+                responseType: OKTResponseTypeCode,
                 state: state,
-                nonce: OIDAuthorizationRequest.generateState(),
+                nonce: OKTAuthorizationRequest.generateState(),
                 codeVerifier: codeVerifier,
                 codeChallenge: codeChallenge,
-                codeChallengeMethod: OIDOAuthorizationRequestCodeChallengeMethodS256,
+                codeChallengeMethod: OKTOAuthorizationRequestCodeChallengeMethodS256,
                 additionalParameters: additionalParameters
             )
             
-            OIDAuthState.getState(withAuthRequest: request, delegate: delegate, callback: { authState, error in
+            OKTAuthState.getState(withAuthRequest: request, delegate: delegate, callback: { authState, error in
                 callback(authState, error)
             })
         }

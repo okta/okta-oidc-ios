@@ -20,7 +20,7 @@ class OktaOidcBrowserTaskIOSTests: XCTestCase {
                                                     config: createTestConfig()!,
                                                     oktaAPI: OktaOidcApiMock())
         let externalUserAgent = browserTaskIOS.externalUserAgent()
-        XCTAssertNotNil(externalUserAgent as? OIDExternalUserAgentIOS)
+        XCTAssertNotNil(externalUserAgent as? OKTExternalUserAgentIOS)
     }
 
     func createTestConfig() -> OktaOidcConfig? {

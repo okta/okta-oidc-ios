@@ -13,7 +13,7 @@
 import XCTest
 @testable import OktaOidc
 
-class OIDExternalUserAgentRequestMock: OIDExternalUserAgentRequest {
+class OKTExternalUserAgentRequestMock: OKTExternalUserAgentRequest {
     func externalUserAgentRequestURL() -> URL! {
         return URL(string: "https://tenant.okta.com")!
     }
@@ -23,7 +23,7 @@ class OIDExternalUserAgentRequestMock: OIDExternalUserAgentRequest {
     }
 }
 
-class OIDExternalUserAgentSessionNoSsoMock: NSObject, OIDExternalUserAgentSession {
+class OKTExternalUserAgentSessionNoSsoMock: NSObject, OKTExternalUserAgentSession {
 
     var cancelCalled = false
     var resumeExternalUserAgentFlowCalled = false
@@ -52,27 +52,27 @@ class OIDExternalUserAgentSessionNoSsoMock: NSObject, OIDExternalUserAgentSessio
     }
 }
 
-class OIDExternalUserAgentNoSsoIOSPartialMock: OIDExternalUserAgentNoSsoIOS {
+class OKTExternalUserAgentNoSsoIOSPartialMock: OKTExternalUserAgentNoSsoIOS {
 @available(iOS 13.0, *)
     override func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
         return UIWindow()
     }
 }
 
-class OIDExternalUserAgentNoSsoTests: XCTestCase {
+class OKTExternalUserAgentNoSsoTests: XCTestCase {
 
     func testCreateNoSsoExternalUserAgent_Success() {
         if #available(iOS 13.0, *) {
-            let mut = OIDExternalUserAgentNoSsoIOSPartialMock(presenting: UIViewController())
-            XCTAssertTrue(mut.present(OIDExternalUserAgentRequestMock(), session: OIDExternalUserAgentSessionNoSsoMock()))
+            let mut = OKTExternalUserAgentNoSsoIOSPartialMock(presenting: UIViewController())
+            XCTAssertTrue(mut.present(OKTExternalUserAgentRequestMock(), session: OKTExternalUserAgentSessionNoSsoMock()))
         }
     }
 
     func testCreateNoSsoExternalUserAgent_Failure() {
         if #available(iOS 13.0, *) {
-            let mut = OIDExternalUserAgentNoSsoIOS(presenting: UIViewController())
-            let sessionMock = OIDExternalUserAgentSessionNoSsoMock()
-            XCTAssertFalse(mut.present(OIDExternalUserAgentRequestMock(), session: sessionMock))
+            let mut = OKTExternalUserAgentNoSsoIOS(presenting: UIViewController())
+            let sessionMock = OKTExternalUserAgentSessionNoSsoMock()
+            XCTAssertFalse(mut.present(OKTExternalUserAgentRequestMock(), session: sessionMock))
             XCTAssertTrue(sessionMock.failExternalUserAgentFlowWithErrorCalled)
             XCTAssertNotNil(sessionMock.error)
         }

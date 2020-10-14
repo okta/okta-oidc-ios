@@ -16,7 +16,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     public static var supportsSecureCoding = true
 
-    @objc open var authState: OIDAuthState
+    @objc open var authState: OKTAuthState
     @objc open var accessibility: CFString
 
     @objc open var accessToken: String? {
@@ -54,7 +54,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     
     var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
 
-    @objc public init(authState: OIDAuthState,
+    @objc public init(authState: OKTAuthState,
                       accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
         self.accessibility = accessibility
@@ -64,7 +64,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     }
 
     @objc required public convenience init?(coder decoder: NSCoder) {
-        guard let state = decoder.decodeObject(forKey: "authState") as? OIDAuthState else {
+        guard let state = decoder.decodeObject(forKey: "authState") as? OKTAuthState else {
             return nil
         }
         
@@ -81,7 +81,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc public func validateToken(idToken: String?) -> Error? {
         guard let idToken = idToken,
-            let tokenObject = OIDIDToken(idTokenString: idToken) else {
+            let tokenObject = OKTIDToken(idTokenString: idToken) else {
                 return OktaOidcError.JWTDecodeError
         }
         

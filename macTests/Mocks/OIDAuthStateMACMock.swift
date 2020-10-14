@@ -13,11 +13,11 @@
 import XCTest
 @testable import OktaOidc
 
-class OIDAuthStateMACMock: OIDAuthState {
-    class override func authState(byPresenting authorizationRequest: OIDAuthorizationRequest,
-                                  externalUserAgent: OIDExternalUserAgent,
+class OKTAuthStateMACMock: OKTAuthState {
+    class override func authState(byPresenting authorizationRequest: OKTAuthorizationRequest,
+                                  externalUserAgent: OKTExternalUserAgent,
                                   delegate: OktaNetworkRequestCustomizationDelegate?,
-                                  callback: @escaping OIDAuthStateAuthorizationCallback) -> OIDExternalUserAgentSession {
+                                  callback: @escaping OKTAuthStateAuthorizationCallback) -> OKTExternalUserAgentSession {
         DispatchQueue.main.async {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
             if authorizationRequest.redirectURL?.absoluteString != "http://127.0.0.1:60000/" {
@@ -34,6 +34,6 @@ class OIDAuthStateMACMock: OIDAuthState {
                 task.resume()
             }
         }
-        return OIDExternalUserAgentSessionMock(signCallback: callback, signOutCallback: nil)
+        return OKTExternalUserAgentSessionMock(signCallback: callback, signOutCallback: nil)
     }
 }

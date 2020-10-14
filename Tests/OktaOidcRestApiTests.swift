@@ -20,7 +20,7 @@ class OktaOidcRestApiTests: XCTestCase {
     override func setUp() {
         super.setUp()
         sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
+        OKTURLSessionProvider.setSession(sessionMock)
     }
 
     func testFireRequest_DelegateNotNil() {

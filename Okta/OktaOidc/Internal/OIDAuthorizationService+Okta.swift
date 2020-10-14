@@ -11,12 +11,12 @@
  */
 
 // Okta Extension of OIDAuthorizationService
-extension OIDAuthorizationService {
+extension OKTAuthorizationService {
 
     static func perform(
-        authRequest: OIDAuthorizationRequest,
+        authRequest: OKTAuthorizationRequest,
         delegate: OktaNetworkRequestCustomizationDelegate? = nil,
-        callback: @escaping OIDAuthorizationCallback
+        callback: @escaping OKTAuthorizationCallback
     ) {
         var urlRequest = URLRequest(url: authRequest.externalUserAgentRequestURL())
         urlRequest.httpMethod = "GET"
@@ -26,7 +26,7 @@ extension OIDAuthorizationService {
         ]
         let customizedRequest = delegate?.customizableURLRequest(urlRequest) ?? urlRequest
 
-        let session = OIDURLSessionProvider.session()
+        let session = OKTURLSessionProvider.session()
         session.dataTask(with: customizedRequest) { [weak delegate] (data, response, error) in
 
             delegate?.didReceive(response)
@@ -56,7 +56,7 @@ extension OIDAuthorizationService {
                 }
             }
 
-            let authResponse = OIDAuthorizationResponse(request: authRequest, parameters: parameters)
+            let authResponse = OKTAuthorizationResponse(request: authRequest, parameters: parameters)
             callback(authResponse, error)
         }.resume()
     }

@@ -14,11 +14,11 @@ import Foundation
 
 public class OktaRedirectServer {
 
-    var redirectHandler: OIDRedirectHTTPHandler
+    var redirectHandler: OKTRedirectHTTPHandler
     let port: UInt16
 
     public init(successURL: URL?, port: UInt16 = 0) {
-        redirectHandler = OIDRedirectHTTPHandler(successURL: successURL)
+        redirectHandler = OKTRedirectHTTPHandler(successURL: successURL)
         self.port = port
     }
 

@@ -14,17 +14,17 @@ import XCTest
 @testable import OktaOidc
 
 class OktaOidcBrowserTaskIOSMock: OktaOidcBrowserTaskIOS {
-    override func authStateClass() -> OIDAuthState.Type {
-        return OIDAuthStateMock.self
+    override func authStateClass() -> OKTAuthState.Type {
+        return OKTAuthStateMock.self
     }
 
-    override func authorizationServiceClass() -> OIDAuthorizationService.Type {
-        return OIDAuthorizationServiceMock.self
+    override func authorizationServiceClass() -> OKTAuthorizationService.Type {
+        return OKTAuthorizationServiceMock.self
     }
 
-    override func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+    override func downloadOidcConfiguration(callback: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
         DispatchQueue.main.async {
-            let oidConfig = OIDServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
+            let oidConfig = OKTServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
                                                     tokenEndpoint: URL(string: "https://test.okta.com")!,
                                                     issuer: URL(string: "https://test.okta.com")!,
                                                     registrationEndpoint: URL(string: "https://test.okta.com")!,

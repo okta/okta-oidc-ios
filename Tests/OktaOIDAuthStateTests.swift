@@ -13,21 +13,21 @@
 import XCTest
 @testable import OktaOidc
 
-class OktaOIDAuthStateTests: XCTestCase {
-    var requestMock: OIDAuthorizationRequest!
+class OktaOKTAuthStateTests: XCTestCase {
+    var requestMock: OKTAuthorizationRequest!
     
     override func setUp() {
         super.setUp()
         
         let testUrl = URL(string: TestUtils.mockIssuer)!
-        let testConfig = OIDServiceConfiguration(authorizationEndpoint: testUrl, tokenEndpoint: testUrl, issuer: testUrl)
-        requestMock = OIDAuthorizationRequest(
+        let testConfig = OKTServiceConfiguration(authorizationEndpoint: testUrl, tokenEndpoint: testUrl, issuer: testUrl)
+        requestMock = OKTAuthorizationRequest(
             configuration: testConfig,
             clientId: TestUtils.mockClientId,
             clientSecret: nil,
             scopes: ["openid", "email"],
             redirectURL: testUrl,
-            responseType: OIDResponseTypeCode,
+            responseType: OKTResponseTypeCode,
             additionalParameters: nil
         )
     }
@@ -35,7 +35,7 @@ class OktaOIDAuthStateTests: XCTestCase {
     func testFireRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
         let authStateExpectation = expectation(description: "Get auth state completed!")
-        OIDAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (state, error) in
+        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (state, error) in
             authStateExpectation.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
