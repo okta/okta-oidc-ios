@@ -18,7 +18,7 @@ class OktaOidcBrowserTaskMACUnitMock: OktaOidcBrowserTaskMAC {
     var signOutCalled = false
     var error: OktaOidcError?
     
-    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
+    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         DispatchQueue.main.async {
             self.signInCalled = true
             if let error = self.error {
@@ -43,17 +43,17 @@ class OktaOidcBrowserTaskMACUnitMock: OktaOidcBrowserTaskMAC {
 }
 
 class OktaOidcBrowserTaskMACFunctionalMock: OktaOidcBrowserTaskMAC {
-    override func authStateClass() -> OIDAuthState.Type {
-        return OIDAuthStateMACMock.self
+    override func authStateClass() -> OKTAuthState.Type {
+        return OKTAuthStateMACMock.self
     }
 
-    override func authorizationServiceClass() -> OIDAuthorizationService.Type {
-        return OIDAuthorizationServiceMACMock.self
+    override func authorizationServiceClass() -> OKTAuthorizationService.Type {
+        return OKTAuthorizationServiceMACMock.self
     }
 
-    override func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+    override func downloadOidcConfiguration(callback: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
         DispatchQueue.main.async {
-            let oidConfig = OIDServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
+            let oidConfig = OKTServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
                                                     tokenEndpoint: URL(string: "https://test.okta.com")!,
                                                     issuer: URL(string: "https://test.okta.com")!,
                                                     registrationEndpoint: URL(string: "https://test.okta.com")!,

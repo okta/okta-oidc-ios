@@ -16,9 +16,9 @@ import XCTest
 class OktaOidcBrowserTaskMACPartialMock: OktaOidcBrowserTaskMAC {
     var downloadOidcConfigCalled = false
 
-    override func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+    override func downloadOidcConfiguration(callback: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
         downloadOidcConfigCalled = true
-        let oidConfig = OIDServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
+        let oidConfig = OKTServiceConfiguration(authorizationEndpoint: URL(string: "https://test.okta.com")!,
                                                 tokenEndpoint: URL(string: "https://test.okta.com")!,
                                                 issuer: URL(string: "https://test.okta.com")!,
                                                 registrationEndpoint: URL(string: "https://test.okta.com")!,
@@ -26,9 +26,9 @@ class OktaOidcBrowserTaskMACPartialMock: OktaOidcBrowserTaskMAC {
         callback(oidConfig, nil)
     }
 
-    override func externalUserAgent() -> OIDExternalUserAgent? {
+    override func externalUserAgent() -> OKTExternalUserAgent? {
         let redirectURLString = self.redirectURL!.absoluteURL
-        return OIDExternalUserAgentMacMock(with: URL(string: "\(redirectURLString)")!)
+        return OKTExternalUserAgentMacMock(with: URL(string: "\(redirectURLString)")!)
     }
 }
 
@@ -125,7 +125,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
                                                  redirectServerConfiguration: OktaRedirectServerConfiguration.default)
         let externalUserAgent = browserTask.externalUserAgent()
         XCTAssertNotNil(externalUserAgent)
-        XCTAssertNotNil(externalUserAgent as? OIDExternalUserAgentMac)
+        XCTAssertNotNil(externalUserAgent as? OKTExternalUserAgentMac)
     }
 
     func createTestConfig() -> OktaOidcConfig? {

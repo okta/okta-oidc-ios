@@ -11,16 +11,16 @@
  */
 
 // Okta Extension of OIDAuthState
-extension OIDAuthState {
+extension OKTAuthState {
 
-    static func getState(withAuthRequest authRequest: OIDAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping (OIDAuthState?, OktaOidcError?) -> Void ) {
+    static func getState(withAuthRequest authRequest: OKTAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping (OKTAuthState?, OktaOidcError?) -> Void ) {
         
-        let finalize: ((OIDAuthState?, OktaOidcError?) -> Void) = { state, error in
+        let finalize: ((OKTAuthState?, OktaOidcError?) -> Void) = { state, error in
             callback(state, error)
         }
 
         // Make authCode request
-        OIDAuthorizationService.perform(authRequest: authRequest, delegate: delegate, callback: { authResponse, error in
+        OKTAuthorizationService.perform(authRequest: authRequest, delegate: delegate, callback: { authResponse, error in
             guard let authResponse = authResponse else {
                 finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
@@ -33,14 +33,14 @@ extension OIDAuthState {
             }
 
             // Make token request
-            OIDAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, delegate: delegate, callback:
+            OKTAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, delegate: delegate, callback:
             { tokenResponse, error in
                 guard let tokenResponse = tokenResponse else {
                     finalize(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                     return
                 }
 
-                let authState = OIDAuthState(authorizationResponse: authResponse, tokenResponse: tokenResponse)
+                let authState = OKTAuthState(authorizationResponse: authResponse, tokenResponse: tokenResponse)
                 finalize(authState, nil)
             })
         })

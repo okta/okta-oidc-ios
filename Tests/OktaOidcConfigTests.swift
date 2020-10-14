@@ -177,12 +177,12 @@ class OktaOidcConfigTests: XCTestCase {
                 let config = try OktaOidcConfig.default()
                 var oidc = OktaOidcBrowserTaskIOS(presenter: UIViewController(), config: config, oktaAPI: OktaOidcRestApi())
                 var externalUA = oidc.externalUserAgent()
-                XCTAssertTrue(externalUA is OIDExternalUserAgentIOS)
+                XCTAssertTrue(externalUA is OKTExternalUserAgentIOS)
 
                 config.noSSO = true
                 oidc = OktaOidcBrowserTaskIOS(presenter: UIViewController(), config: config, oktaAPI: OktaOidcRestApi())
                 externalUA = oidc.externalUserAgent()
-                XCTAssertTrue(externalUA is OIDExternalUserAgentNoSsoIOS)
+                XCTAssertTrue(externalUA is OKTExternalUserAgentNoSsoIOS)
             }
         } catch let error {
             XCTAssertEqual(

@@ -53,11 +53,11 @@ class OktaRedirectServerTests: XCTestCase {
 
     func createRedirectServer(successURL: URL?, port: UInt16 = 0) -> OktaRedirectServer {
         let server = OktaRedirectServer(successURL: nil, port: port)
-        server.redirectHandler = OIDRedirectHTTPHandlerMock()
+        server.redirectHandler = OKTRedirectHTTPHandlerMock()
         return server
     }
 
-    func mockedRedirectHTTPHandler(for server: OktaRedirectServer) -> OIDRedirectHTTPHandlerMock {
-        return server.redirectHandler as! OIDRedirectHTTPHandlerMock
+    func mockedRedirectHTTPHandler(for server: OktaRedirectServer) -> OKTRedirectHTTPHandlerMock {
+        return server.redirectHandler as! OKTRedirectHTTPHandlerMock
     }
 }

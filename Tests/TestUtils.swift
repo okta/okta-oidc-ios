@@ -36,14 +36,14 @@ struct TestUtils {
     static func setupMockAuthState(issuer: String,
                                    clientId: String,
                                    expiresIn: TimeInterval = 300,
-                                   skipTokenResponse: Bool = false) -> OIDAuthState {
+                                   skipTokenResponse: Bool = false) -> OKTAuthState {
         // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
-        let mockServiceConfig = OIDServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
+        let mockServiceConfig = OKTServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
         
-        let mockTokenRequest = OIDTokenRequest(
+        let mockTokenRequest = OKTTokenRequest(
                    configuration: mockServiceConfig,
-                       grantType: OIDGrantTypeRefreshToken,
+                       grantType: OKTGrantTypeRefreshToken,
                authorizationCode: nil,
                      redirectURL: fooURL,
                         clientID: "nil",
@@ -54,25 +54,25 @@ struct TestUtils {
             additionalParameters: nil
         )
 
-        let mockAuthRequest = OIDAuthorizationRequest(
+        let mockAuthRequest = OKTAuthorizationRequest(
                    configuration: mockServiceConfig,
                         clientId: clientId,
                     clientSecret: nil,
                           scopes: ["openid", "email"],
                      redirectURL: fooURL,
-                    responseType: OIDResponseTypeCode,
+                    responseType: OKTResponseTypeCode,
             additionalParameters: nil
         )
 
-        let mockAuthResponse = OIDAuthorizationResponse(
+        let mockAuthResponse = OKTAuthorizationResponse(
                request: mockAuthRequest,
             parameters: ["code": "mockAuthCode" as NSCopying & NSObjectProtocol]
         )
 
         if skipTokenResponse {
-            return OIDAuthState(authorizationResponse: mockAuthResponse)
+            return OKTAuthState(authorizationResponse: mockAuthResponse)
         } else {
-            let mockTokenResponse = OIDTokenResponse(
+            let mockTokenResponse = OKTTokenResponse(
                 request: mockTokenRequest,
                 parameters: [
                     "access_token": mockAccessToken as NSCopying & NSObjectProtocol,
@@ -84,7 +84,7 @@ struct TestUtils {
                 ]
             )
 
-            return OIDAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
+            return OKTAuthState(authorizationResponse: mockAuthResponse, tokenResponse: mockTokenResponse)
         }
     }
 

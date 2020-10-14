@@ -40,13 +40,13 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         NSAppleEventManager.shared().removeEventHandler(forEventClass: AEEventClass(kInternetEventClass), andEventID: AEEventID(kAEGetURL))
     }
 
-    override var userAgentSession: OIDExternalUserAgentSession? {
+    override var userAgentSession: OKTExternalUserAgentSession? {
         didSet {
             self.redirectServer?.redirectHandler.currentAuthorizationFlow = userAgentSession
         }
     } 
 
-    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
+    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         if let redirectServer = self.redirectServer {
             do {
                 redirectURL = try redirectServer.startListener(with: domainName)
@@ -84,8 +84,8 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         return redirectURL
     }
 
-    override func externalUserAgent() -> OIDExternalUserAgent? {
-        return OIDExternalUserAgentMac()
+    override func externalUserAgent() -> OKTExternalUserAgent? {
+        return OKTExternalUserAgentMac()
     }
     
     @objc func handleEvent(_ event: NSAppleEventDescriptor!, withReplyEvent: NSAppleEventDescriptor!) {

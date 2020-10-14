@@ -13,21 +13,21 @@
 import XCTest
 @testable import OktaOidc
 
-class OIDAuthorizationServiceOktaTests: XCTestCase {
+class OKTAuthorizationServiceOktaTests: XCTestCase {
 
     var sessionMock: URLSessionMock!
 
     override func setUp() {
         super.setUp()
         sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
+        OKTURLSessionProvider.setSession(sessionMock)
     }
 
     func testPerformAuthRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
-        OIDAuthorizationService.perform(
+        OKTAuthorizationService.perform(
             authRequest: mockAuthRequest,
             delegate: delegateMock
         ) { (_, _) in
@@ -44,7 +44,7 @@ class OIDAuthorizationServiceOktaTests: XCTestCase {
         delegateMock.customizedRequest = nil
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
-        OIDAuthorizationService.perform(
+        OKTAuthorizationService.perform(
             authRequest: mockAuthRequest, 
             delegate: delegateMock
         ) { (_, _) in
@@ -58,7 +58,7 @@ class OIDAuthorizationServiceOktaTests: XCTestCase {
 
     func testPerformAuthRequest_DelegateIsNil() {
         let requestCompleteExpectation = expectation(description: "Request completed!")
-        OIDAuthorizationService.perform(authRequest: mockAuthRequest) { (_, _) in
+        OKTAuthorizationService.perform(authRequest: mockAuthRequest) { (_, _) in
             requestCompleteExpectation.fulfill()
         }
 
@@ -67,18 +67,18 @@ class OIDAuthorizationServiceOktaTests: XCTestCase {
     }
 }
 
-private extension OIDAuthorizationServiceOktaTests {
+private extension OKTAuthorizationServiceOktaTests {
 
-    var mockAuthRequest: OIDAuthorizationRequest {
+    var mockAuthRequest: OKTAuthorizationRequest {
         let testUrl = URL(string: TestUtils.mockIssuer)!
-        let testConfig = OIDServiceConfiguration(authorizationEndpoint: testUrl, tokenEndpoint: testUrl, issuer: testUrl)
+        let testConfig = OKTServiceConfiguration(authorizationEndpoint: testUrl, tokenEndpoint: testUrl, issuer: testUrl)
         return .init(
             configuration: testConfig,
             clientId: TestUtils.mockClientId,
             clientSecret: nil,
             scopes: ["openid", "email"],
             redirectURL: testUrl,
-            responseType: OIDResponseTypeCode,
+            responseType: OKTResponseTypeCode,
             additionalParameters: nil
         )
     }

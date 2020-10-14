@@ -19,7 +19,7 @@ class OktaOidcTask {
         self.oktaAPI = oktaAPI
     }
 
-    func downloadOidcConfiguration(callback: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+    func downloadOidcConfiguration(callback: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
         guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
             DispatchQueue.main.async {
                 callback(nil, OktaOidcError.noDiscoveryEndpoint)
@@ -28,12 +28,12 @@ class OktaOidcTask {
         }
 
         oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
-            guard let dictResponse = response, let oidConfig = try? OIDServiceDiscovery(dictionary: dictResponse) else {
+            guard let dictResponse = response, let oidConfig = try? OKTServiceDiscovery(dictionary: dictResponse) else {
                 callback(nil, OktaOidcError.parseFailure)
                 return
             }
 
-            callback(OIDServiceConfiguration(discoveryDocument: oidConfig), nil)
+            callback(OKTServiceConfiguration(discoveryDocument: oidConfig), nil)
         }, onError: { error in
             let responseError =
                 "Error returning discovery document: \(error.localizedDescription). Please" +

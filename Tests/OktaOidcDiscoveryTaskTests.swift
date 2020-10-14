@@ -28,7 +28,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     }
     
     func testRunSucceeded() {
-        apiMock.configure(response: self.validOIDConfigDictionary)
+        apiMock.configure(response: self.validOKTConfigDictionary)
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(error)
@@ -63,7 +63,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     }
     
     func testRunDiscoveryEndpointURL() {
-        apiMock.configure(response: validOIDConfigDictionary) { request in
+        apiMock.configure(response: validOKTConfigDictionary) { request in
             XCTAssertEqual(
                 "http://test.issuer.com/oauth2/default/.well-known/openid-configuration",
                 request.url?.absoluteString
@@ -79,7 +79,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     // MARK: - Utils
     
     private func runAndWaitDiscovery(config: OktaOidcConfig,
-                                      validationHandler: @escaping (OIDServiceConfiguration?, OktaOidcError?) -> Void) {
+                                      validationHandler: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
         let ex = expectation(description: "User Info should be called!")
         DispatchQueue.global().async {
             OktaOidcTask(config: config, oktaAPI: self.apiMock).downloadOidcConfiguration() { oidConfig, error in
@@ -100,7 +100,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
         ])
     }
     
-    private var validOIDConfigDictionary: [String:Any] {
+    private var validOKTConfigDictionary: [String:Any] {
         return [
             "issuer" : "http://test.issuer.com/oauth2/default",
             "authorization_endpoint" : "http://test.issuer.com/oauth2/authorize",

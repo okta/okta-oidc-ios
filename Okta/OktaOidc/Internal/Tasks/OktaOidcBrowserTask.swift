@@ -14,10 +14,10 @@ import Foundation
 
 class OktaOidcBrowserTask: OktaOidcTask {
 
-    var userAgentSession: OIDExternalUserAgentSession?
+    var userAgentSession: OKTExternalUserAgentSession?
     
     func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil,
-                callback: @escaping ((OIDAuthState?, OktaOidcError?) -> Void)) {
+                callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfiguration = oidConfig else {
                 callback(nil, error)
@@ -29,11 +29,11 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 return
             }
 
-            let request = OIDAuthorizationRequest(configuration: oidConfiguration,
+            let request = OKTAuthorizationRequest(configuration: oidConfiguration,
                                                   clientId: self.config.clientId,
                                                   scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
                                                   redirectURL: successRedirectURL,
-                                                  responseType: OIDResponseTypeCode,
+                                                  responseType: OKTResponseTypeCode,
                                                   additionalParameters: self.config.additionalParams)
             guard let externalUserAgent = self.externalUserAgent() else {
                 callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
@@ -68,7 +68,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 return
             }
 
-            let request = OIDEndSessionRequest(configuration: oidConfig,
+            let request = OKTEndSessionRequest(configuration: oidConfig,
                                                idTokenHint: idToken,
                                                postLogoutRedirectURL: successRedirectURL,
                                                additionalParameters: self.config.additionalParams)
@@ -108,16 +108,16 @@ class OktaOidcBrowserTask: OktaOidcTask {
         return self.config.logoutRedirectUri
     }
 
-    func externalUserAgent() -> OIDExternalUserAgent? {
+    func externalUserAgent() -> OKTExternalUserAgent? {
         // override
         return nil
     }
 
-    func authStateClass() -> OIDAuthState.Type {
-        return OIDAuthState.self
+    func authStateClass() -> OKTAuthState.Type {
+        return OKTAuthState.self
     }
 
-    func authorizationServiceClass() -> OIDAuthorizationService.Type {
-        return OIDAuthorizationService.self
+    func authorizationServiceClass() -> OKTAuthorizationService.Type {
+        return OKTAuthorizationService.self
     }
 }

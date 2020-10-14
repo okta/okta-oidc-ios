@@ -13,21 +13,21 @@
 import XCTest
 @testable import OktaOidc
 
-class OIDAuthorizationServiceRequestDelegateTests: XCTestCase {
+class OKTAuthorizationServiceRequestDelegateTests: XCTestCase {
 
     var sessionMock: URLSessionMock!
 
     override func setUp() {
         super.setUp()
         sessionMock = URLSessionMock()
-        OIDURLSessionProvider.setSession(sessionMock)
+        OKTURLSessionProvider.setSession(sessionMock)
     }
 
     func testPerformTokenRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
-        OIDAuthorizationService.perform(mockTokenRequest, delegate: delegateMock) { _, _ in
+        OKTAuthorizationService.perform(mockTokenRequest, delegate: delegateMock) { _, _ in
             requestCompleteExpectation.fulfill()
         }
 
@@ -40,7 +40,7 @@ class OIDAuthorizationServiceRequestDelegateTests: XCTestCase {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
-        OIDAuthorizationService.perform(mockRegistrationRequest, delegate: delegateMock) { _, _ in
+        OKTAuthorizationService.perform(mockRegistrationRequest, delegate: delegateMock) { _, _ in
             requestCompleteExpectation.fulfill()
         }
 
@@ -50,20 +50,20 @@ class OIDAuthorizationServiceRequestDelegateTests: XCTestCase {
     }
 }
 
-private extension OIDAuthorizationServiceRequestDelegateTests {
+private extension OKTAuthorizationServiceRequestDelegateTests {
 
     var testUrl: URL {
         return URL(string: TestUtils.mockIssuer)!
     }
 
-    var mockServiceConfig: OIDServiceConfiguration {
+    var mockServiceConfig: OKTServiceConfiguration {
         return .init(authorizationEndpoint: testUrl, tokenEndpoint: testUrl, issuer: testUrl)
     }
 
-    var mockTokenRequest: OIDTokenRequest {
+    var mockTokenRequest: OKTTokenRequest {
         return .init(
             configuration: mockServiceConfig,
-            grantType: OIDGrantTypeRefreshToken,
+            grantType: OKTGrantTypeRefreshToken,
             authorizationCode: nil,
             redirectURL: testUrl,
             clientID: "nil",
@@ -75,7 +75,7 @@ private extension OIDAuthorizationServiceRequestDelegateTests {
         )
     }
 
-    var mockRegistrationRequest: OIDRegistrationRequest {
+    var mockRegistrationRequest: OKTRegistrationRequest {
         return .init(
             configuration: mockServiceConfig,
             redirectURIs: [testUrl],

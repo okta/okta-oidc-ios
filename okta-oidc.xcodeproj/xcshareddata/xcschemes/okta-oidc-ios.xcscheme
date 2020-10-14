@@ -63,6 +63,9 @@
                <Test
                   Identifier = "OIDRPProfileCode">
                </Test>
+               <Test
+                  Identifier = "OKTRPProfileCode">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>

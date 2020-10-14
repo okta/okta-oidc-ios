@@ -13,10 +13,10 @@
 import Foundation
 @testable import OktaOidc
 
-class OIDAuthorizationServiceMACMock: OIDAuthorizationService {
-    override class func present(_ request: OIDEndSessionRequest,
-                                externalUserAgent: OIDExternalUserAgent,
-                                callback: @escaping OIDEndSessionCallback) -> OIDExternalUserAgentSession {
+class OKTAuthorizationServiceMACMock: OKTAuthorizationService {
+    override class func present(_ request: OKTEndSessionRequest,
+                                externalUserAgent: OKTExternalUserAgent,
+                                callback: @escaping OKTEndSessionCallback) -> OKTExternalUserAgentSession {
         DispatchQueue.main.async {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
             if request.postLogoutRedirectURL?.absoluteString != "http://127.0.0.1:60000/" {
@@ -25,7 +25,7 @@ class OIDAuthorizationServiceMACMock: OIDAuthorizationService {
                     if let error = error {
                         callback(nil, error)
                     } else {
-                        let endSessionResponse = OIDEndSessionResponse(request: request, parameters: [:])
+                        let endSessionResponse = OKTEndSessionResponse(request: request, parameters: [:])
                         callback(endSessionResponse, nil)
                     }
                 }
@@ -33,6 +33,6 @@ class OIDAuthorizationServiceMACMock: OIDAuthorizationService {
                 task.resume()
             }
         }
-        return OIDExternalUserAgentSessionMock(signCallback: nil, signOutCallback: callback)
+        return OKTExternalUserAgentSessionMock(signCallback: nil, signOutCallback: callback)
     }
 }
