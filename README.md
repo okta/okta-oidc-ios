@@ -495,3 +495,4 @@ Known iOS issue where iOS doesn't provide any good ways to terminate active auth
 You can also consider the following workarounds:
 - Use `noSSO` option in OIDC configuration object if you don't need SSO capabilites. Also note that this option works only on iOS 13+ versions
 - Fork repository and change user-agent implementation(`OIDExternalUserAgentIOS.m`) to use `SFSafariViewController` only. Some pitfalls of this approach described [here](https://github.com/okta/okta-oidc-ios/issues/181)
+
