@@ -50,7 +50,7 @@
 #import "OKTExternalUserAgentIOS.h"
 #import "OKTExternalUserAgentNoSsoIOS.h"
 #import "OKTExternalUserAgentIOSCustomBrowser.h"
-#elif TARGET_OS_MAC
+#elif TARGET_OS_OSX
 #import "OKTAuthState+Mac.h"
 #import "OKTAuthorizationService+Mac.h"
 #import "OKTExternalUserAgentMac.h"
