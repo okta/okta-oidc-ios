@@ -12,18 +12,7 @@
 
 import Foundation
 
-#if os(iOS)
-import UIKit
-
-@objc public protocol OktaOidcBrowserProtocolIOS {
-    func signInWithBrowser(from presenter: UIViewController,
-                           callback: @escaping ((OktaOidcStateManager?, Error?) -> Void))
-    func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
-                       from presenter: UIViewController,
-                       callback: @escaping ((Error?) -> Void))
-    func cancelBrowserSession(completion: (()-> Void)?)
-}
-#elseif os(macOS)
+#if os(macOS)
 import AppKit
 
 @objc public protocol OktaOidcBrowserProtocolMAC {
