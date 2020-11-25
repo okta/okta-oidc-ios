@@ -10,7 +10,13 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+#if os(macOS)
+
 import Foundation
+
+#if SWIFT_PACKAGE
+@testable import OktaOidc_AppAuth
+#endif
 
 public class OktaRedirectServer {
 
@@ -38,3 +44,5 @@ public class OktaRedirectServer {
         return try redirectHandler.startHTTPListener(domainName)
     }
 }
+
+#endif
