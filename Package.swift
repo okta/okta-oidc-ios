@@ -40,6 +40,9 @@ let package = Package(
                         "OktaOidc_AppAuth",
                         "OktaOidc",
                         "TestCommon"
+                    ],
+                    exclude: [
+                        "OKTRPProfileCode.m"
                     ]),
         .testTarget(name: "OktaOidcTests",
                     dependencies: [

@@ -3,7 +3,7 @@ osx_image: xcode11.5
 jobs:
   include:
     - stage: Unit test Swift Package Manager
-      name: Universal
+      name: MacOS
       script:
       - swift test
     - stage: Unit tests iOS
