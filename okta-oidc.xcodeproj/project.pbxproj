@@ -41,9 +41,7 @@
 		9601C355256DD14900C084F5 /* OktaOIDAuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */; };
 		9601C356256DD14900C084F5 /* OIDExternalUserAgentNoSsoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10FA55524B6310400E00620 /* OIDExternalUserAgentNoSsoTests.swift */; };
 		9601C357256DD14900C084F5 /* OktaOidcEndpointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CBE6229D4CF8003A6768 /* OktaOidcEndpointTests.swift */; };
-		9601C358256DD14900C084F5 /* OktaOidcStateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CC0A229D4CF8003A6768 /* OktaOidcStateManagerTests.swift */; };
 		9601C359256DD14900C084F5 /* OIDAuthorizationServiceOktaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE10BAB1250A5CAF00655FF8 /* OIDAuthorizationServiceOktaTests.swift */; };
-		9601C35A256DD14900C084F5 /* OktaOidcConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CC10229D4CF8003A6768 /* OktaOidcConfigTests.swift */; };
 		9601C35B256DD14900C084F5 /* OktaOidcBrowserTaskIOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A16788B524367F5500D1651D /* OktaOidcBrowserTaskIOSTests.swift */; };
 		9601C35C256DD14900C084F5 /* OIDAuthorizationServiceRequestDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */; };
 		9601C35D256DD14900C084F5 /* OktaOidcDiscoveryTaskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CC0D229D4CF8003A6768 /* OktaOidcDiscoveryTaskTests.swift */; };
@@ -1508,10 +1506,8 @@
 				9601C35F256DD14900C084F5 /* OktaOidcUtilsTests.swift in Sources */,
 				9601C37B256DD25A00C084F5 /* OktaNetworkRequestCustomizationDelegateMock.swift in Sources */,
 				9601C35D256DD14900C084F5 /* OktaOidcDiscoveryTaskTests.swift in Sources */,
-				9601C35A256DD14900C084F5 /* OktaOidcConfigTests.swift in Sources */,
 				9601C355256DD14900C084F5 /* OktaOIDAuthStateTests.swift in Sources */,
 				9601C35B256DD14900C084F5 /* OktaOidcBrowserTaskIOSTests.swift in Sources */,
-				9601C358256DD14900C084F5 /* OktaOidcStateManagerTests.swift in Sources */,
 				A16788C72436B8DB00D1651D /* OktaOidcBrowserTests.swift in Sources */,
 				9601C357256DD14900C084F5 /* OktaOidcEndpointTests.swift in Sources */,
 				A16788AA2435285900D1651D /* OktaOidcMacMock.swift in Sources */,
