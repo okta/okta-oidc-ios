@@ -55,6 +55,12 @@ class OktaUITests: XCTestCase {
             return
         }
 
+        guard testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 1) != "SDK is not configured!" else {
+            continueAfterFailure = false
+            XCTFail("SDK is not configured")
+            return
+        }
+
         app.buttons["SignIn"].tap()
 
         // Sign In
