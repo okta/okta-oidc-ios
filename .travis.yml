@@ -2,6 +2,10 @@ language: objective-c
 osx_image: xcode11.5
 jobs:
   include:
+    - stage: Unit test Swift Package Manager
+      name: Universal
+      script:
+      - swift test
     - stage: Unit tests iOS
       name: iOS
       script:

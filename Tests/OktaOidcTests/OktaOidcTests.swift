@@ -59,6 +59,8 @@ class OktaOidcTests: XCTestCase {
         authStateManager.restAPI = apiMock
     }
     
+    #if !SWIFT_PACKAGE
+    /// **Note:** Tests run in Swift Package Manager do not have access to a common application host, so the Okta.plist file is not accessible.
     func testCreationWithNil() {
         // Depends on whether Okta.plist is configured or not
         if let defaultConfig = try? OktaOidcConfig.default() {
@@ -74,6 +76,7 @@ class OktaOidcTests: XCTestCase {
             }
         }
     }
+    #endif
     
     func testCreationWithEnvConfig() {
         guard let envConfig = envConfig else {
