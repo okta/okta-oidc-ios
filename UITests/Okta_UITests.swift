@@ -25,8 +25,11 @@ class OktaUITests: XCTestCase {
     var testUtils: UITestUtils!
     var app: XCUIApplication!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        
+        try XCTSkipIf(clientID.count == 0 || password.count == 0,
+                      "Cannot run UI tests without CLIENT_ID or PASSWORD environment variables")
         
         app = XCUIApplication()
         app.launchEnvironment = [
