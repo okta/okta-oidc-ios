@@ -12,6 +12,18 @@
 
 import Foundation
 
+class URLSessionDataTaskMock: URLSessionDataTask {
+    private let completion: () -> Void
+
+    init(completion: @escaping () -> Void) {
+        self.completion = completion
+    }
+
+    override func resume() {
+        completion()
+    }
+}
+
 class URLSessionMock: URLSession {
 
     var request: URLRequest? = nil
@@ -24,7 +36,8 @@ class URLSessionMock: URLSession {
             httpVersion: nil,
             headerFields: nil
         )
-        completionHandler(Data(), response, nil)
-        return URLSessionDataTask()
+        return URLSessionDataTaskMock() {
+            completionHandler(Data(), response, nil)
+        }
     }
 }
