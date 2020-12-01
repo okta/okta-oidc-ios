@@ -65,6 +65,15 @@ public struct UITestUtils {
         let usernameFrame = uiElementUsername.frame
 
         uiElementUsername.tap()
+        
+        // If the "Swipe-to-type" keyboard is shown (e.g. this is the first launch of the
+        // device after an Erase & Restart), dismiss the keyboard onboarding view to reveal
+        // the regular software keyboard.
+        let continueButton = testApp.buttons["Continue"]
+        if continueButton.exists {
+            continueButton.tap()
+        }
+
         uiElementUsername.typeText(username)
 
         let nextButton = testApp.toolbars["Toolbar"].buttons["Next"]
