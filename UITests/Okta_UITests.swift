@@ -25,8 +25,11 @@ class OktaUITests: XCTestCase {
     var testUtils: UITestUtils!
     var app: XCUIApplication!
 
-    override func setUp() {
-        super.setUp()
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        
+        try XCTSkipIf(clientID.count == 0 || password.count == 0,
+                      "Cannot run UI tests without CLIENT_ID or PASSWORD environment variables")
         
         app = XCUIApplication()
         app.launchEnvironment = [
@@ -52,6 +55,12 @@ class OktaUITests: XCTestCase {
 
         guard testUtils.waitForElement(app.textViews["tokenView"], timeout: 5.0) else {
             XCTFail("Cannot start the app!")
+            return
+        }
+
+        guard testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 1) != "SDK is not configured!" else {
+            continueAfterFailure = false
+            XCTFail("SDK is not configured")
             return
         }
 

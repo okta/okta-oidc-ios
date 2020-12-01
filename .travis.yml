@@ -14,3 +14,15 @@ jobs:
       name: iOS
       script:
       - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test
+    - stage: Swift Package Manager validation
+      name: MacOS
+      script:
+      - swift test
+    - stage: Cocoapods validation
+      name: iOS
+      script:
+      - pod lib lint --allow-warnings
+    - stage: Carthage validation
+      name: iOS
+      script:
+      - carthage build --no-skip-current

@@ -67,8 +67,9 @@ public struct UITestUtils {
         uiElementUsername.tap()
         uiElementUsername.typeText(username)
 
-        if webViewsQuery.buttons["Next"].exists {
-            webViewsQuery.buttons["Next"].firstMatch.tap()
+        let nextButton = testApp.toolbars["Toolbar"].buttons["Next"]
+        if nextButton.exists {
+            nextButton.tap()
         }
 
         let uiElementPasswordDetectExistence = webViewsQuery.secureTextFields.element(boundBy: 0)
@@ -82,6 +83,13 @@ public struct UITestUtils {
 
         uiElementPassword.tap()
         uiElementPassword.typeText(password)
+        
+        // Dismiss the keyboard to prevent the keyboard from intercepting the tap inadvertently
+        // when the "Sign In" button is tapped.
+        let doneButton = testApp.toolbars["Toolbar"].buttons["Done"]
+        if doneButton.exists {
+            doneButton.tap()
+        }
 
         if webViewsQuery.buttons["Verify"].exists {
             webViewsQuery.buttons["Verify"].firstMatch.tap()

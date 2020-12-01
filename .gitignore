@@ -9,7 +9,8 @@ xcuserdata
 project.xcworkspace
 Okta.xcworkspace/
 DerivedData
-
+/.build
+/.swiftpm
 
 # Examples
 Example/Podfile.lock
