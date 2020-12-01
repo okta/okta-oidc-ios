@@ -63,6 +63,15 @@ Okta OIDC supports macOS (OS X) 10.10 and above. Library supports both custom sc
 
 ## Install
 
+### Swift Package Manager
+
+Add the following to the `dependencies` attribute defined in your `Package.swift` file. You can select the version using the `majorVersion` and `minor` parameters. For example:
+```
+    dependencies: [
+        .Package(url: "https://github.com/okta/okta-oidc-ios.git", majorVersion: <majorVersion>, minor: <minor>)
+    ]
+```
+
 ### Cocoapods
 
 Simply add the following line to your `Podfile`:
