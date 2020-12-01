@@ -21,7 +21,7 @@ public struct UITestUtils {
     }
 
     func allowBrowserLaunch() {
-        let allowButton = springboard.buttons["Continue"].firstMatch
+        let allowButton = springboard.buttons["Continue"]
         if allowButton.waitForExistence(timeout: 5) {
             allowButton.tap()
         } else {
