@@ -21,7 +21,7 @@ public struct UITestUtils {
     }
 
     func allowBrowserLaunch() {
-        let allowButton = springboard.buttons["Continue"].firstMatch
+        let allowButton = springboard.buttons["Continue"]
         if allowButton.waitForExistence(timeout: 5) {
             allowButton.tap()
         } else {
@@ -66,6 +66,14 @@ public struct UITestUtils {
 
         uiElementUsername.tap()
         uiElementUsername.typeText(username)
+
+        // If the "Swipe-to-type" keyboard is shown (e.g. this is the first launch of the
+        // device after an Erase & Restart), dismiss the keyboard onboarding view to reveal
+        // the regular software keyboard.
+        let continueButton = testApp.buttons["Continue"]
+        if continueButton.exists {
+            continueButton.tap()
+        }
 
         let nextButton = testApp.toolbars["Toolbar"].buttons["Next"]
         if nextButton.exists {
