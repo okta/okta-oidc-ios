@@ -53,6 +53,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithSuccessURL:(nullable NSURL *)successURL;
 
+/*! @brief Sets the success URL for current loopback HTTP redirect URI handler.
+    @param successURL The URL that the user is redirected to after the external user-agent request flow completes
+        either with a result of success or error. The contents of this page should instruct the user
+        to return to the app.
+    @discussion This function will be used if SuccessURL to be changed between different flows.
+ */
+- (void)setSuccessURL:(nullable NSURL *)successURL
+
 /*! @brief Starts listening on the loopback interface on a specified port, and returns a URL
         with the base address. Use the returned redirect URI to build a @c OKTExternalUserAgentRequest,
         and once you initiate the request, set the resulting @c OKTExternalUserAgentSession to

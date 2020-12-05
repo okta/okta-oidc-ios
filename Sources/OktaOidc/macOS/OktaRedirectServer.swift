@@ -20,11 +20,21 @@ import Foundation
 
 public class OktaRedirectServer {
 
-    var redirectHandler: OKTRedirectHTTPHandler
-    let port: UInt16
+    static let shared = OKTRedirectHTTPHandler(successURL: nil)
 
-    public init(successURL: URL?, port: UInt16 = 0) {
+    let redirectHandler: OKTRedirectHTTPHandler
+    var port: UInt16
+
+    private init(successURL: URL?, port: UInt16 = 0) {
         redirectHandler = OKTRedirectHTTPHandler(successURL: successURL)
+        self.port = port
+    }
+
+    public func setSuccessURL(successURL: URL?) {
+        redirectHandler.setSuccessURL(successURL: successURL)
+    }
+
+    public func setPort(port: UInt16 = 0) {
         self.port = port
     }
 

@@ -68,6 +68,12 @@ static NSString *const kHTMLErrorRedirectNotValid =
   return self;
 }
 
+- (void)setSuccessURL:(nullable NSURL *)successURL {
+    if (self) {
+      _successURL = [successURL copy];
+    }
+}
+
 - (NSURL *)startHTTPListener:(NSString *)domain withPort:(uint16_t)port error:(NSError **)returnError  {
   // Cancels any pending requests.
   [self cancelHTTPListener];

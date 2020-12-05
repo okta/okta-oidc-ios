@@ -29,8 +29,9 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
          oktaAPI: OktaOidcHttpApiProtocol,
          redirectServerConfiguration: OktaRedirectServerConfiguration? = nil) {
         if let redirectServerConfiguration = redirectServerConfiguration {
-            redirectServer = OktaRedirectServer(successURL: redirectServerConfiguration.successRedirectURL,
-                                                port: redirectServerConfiguration.port ?? 0)
+            redirectServer = OktaRedirectServer.shared
+            redirectServer?.setSuccessURL(successURL: redirectServerConfiguration.successRedirectURL)
+            redirectServer?.setPort(port: redirectServerConfiguration.port ?? 0)
         }
         self.domainName = redirectServerConfiguration?.domainName
         self.redirectServerConfiguration = redirectServerConfiguration
