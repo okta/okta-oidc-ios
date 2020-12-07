@@ -31,18 +31,31 @@ class OktaOidcTask {
             return
         }
 
-        oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
-            guard let dictResponse = response, let oidConfig = try? OKTServiceDiscovery(dictionary: dictResponse) else {
+        let onSuccess: ([String: Any]) -> Void = { dictResponse in
+            guard let oidConfig = try? OKTServiceDiscovery(dictionary: dictResponse) else {
                 callback(nil, OktaOidcError.parseFailure)
                 return
             }
 
             callback(OKTServiceConfiguration(discoveryDocument: oidConfig), nil)
-        }, onError: { error in
-            let responseError =
-                "Error returning discovery document: \(error.localizedDescription). Please" +
-                " check your PList configuration"
-            callback(nil, OktaOidcError.APIError(responseError))
-        })
+        }
+
+        if let openidConfig = config.openidServerConfig {
+            onSuccess(openidConfig)
+        } else {
+            oktaAPI.get(configUrl, headers: nil, onSuccess: { response in
+                guard let dictResponse = response else {
+                    callback(nil, OktaOidcError.parseFailure)
+                    return
+                }
+
+                onSuccess(dictResponse)
+            }, onError: { error in
+                let responseError =
+                    "Error returning discovery document: \(error.localizedDescription). Please" +
+                    " check your PList configuration"
+                callback(nil, OktaOidcError.APIError(responseError))
+            })
+        }
     }
 }

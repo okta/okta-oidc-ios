@@ -24,6 +24,7 @@ public class OktaOidcConfig: NSObject {
     @objc public let scopes: String
     @objc public let redirectUri: URL
     @objc public let logoutRedirectUri: URL?
+    @objc public var openidServerConfig: [String: Any]?
 
     /*!
      Set the request customization delegate if you want to track and modify network
