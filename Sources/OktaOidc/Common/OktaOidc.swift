@@ -77,7 +77,7 @@ public class OktaOidc: NSObject {
 
     func signOutWithBrowserTask(_ task: OktaOidcBrowserTask,
                                 idToken: String,
-                               callback: @escaping ((Error?) -> Void)) {
+                                callback: @escaping ((Error?) -> Void)) {
         currentUserSessionTask = task
 
         task.signOutWithIdToken(idToken: idToken) { [weak self] _, error in

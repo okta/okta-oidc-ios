@@ -19,9 +19,23 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
 
     @objc public func signInWithBrowser(from presenter: UIViewController,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        signInWithBrowser(from: presenter, payload: [:], callback: callback)
+    }
+    
+    @objc public func signInWithBrowser(from presenter: UIViewController,
+                                        payload: [String:String],
+                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        let config: OktaOidcConfig
+        do {
+            config = try configuration.configuration(withAdditionalParams: payload)
+        } catch {
+            callback(nil, error)
+            return
+        }
+            
         let oktaAPI = OktaOidcRestApi()
-        oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
-        let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: oktaAPI)
+        oktaAPI.requestCustomizationDelegate = config.requestCustomizationDelegate
+        let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: config, oktaAPI: oktaAPI)
         signInWithBrowserTask(signInTask, callback: callback)
     }
 

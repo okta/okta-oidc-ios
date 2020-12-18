@@ -19,7 +19,23 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
 
     @objc public func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        let signInTask = OktaOidcBrowserTaskMAC(config: configuration,
+        signInWithBrowser(redirectServerConfiguration: redirectServerConfiguration,
+                          payload: [:],
+                          callback: callback)
+    }
+    
+    @objc public func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
+                                        payload: [String:String],
+                                        callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        let config: OktaOidcConfig
+        do {
+            config = try configuration.configuration(withAdditionalParams: payload)
+        } catch {
+            callback(nil, error)
+            return
+        }
+            
+        let signInTask = OktaOidcBrowserTaskMAC(config: config,
                                                 oktaAPI: OktaOidcRestApi(),
                                                 redirectServerConfiguration: redirectServerConfiguration)
         signInWithBrowserTask(signInTask) { stateManager, error in
