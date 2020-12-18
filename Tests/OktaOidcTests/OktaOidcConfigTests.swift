@@ -13,6 +13,10 @@
 import XCTest
 @testable import OktaOidc
 
+#if SWIFT_PACKAGE
+@testable import TestCommon
+#endif
+
 class OktaOidcConfigTests: XCTestCase {
     
     func testCreation() {
