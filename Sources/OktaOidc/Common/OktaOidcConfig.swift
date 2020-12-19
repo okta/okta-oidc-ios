@@ -54,7 +54,7 @@ public class OktaOidcConfig: NSObject {
         self.scopes = scopes
         self.redirectUri = redirectUri
         
-        if  let logoutRedirectUriString = dict["logoutRedirectUri"] {
+        if let logoutRedirectUriString = dict["logoutRedirectUri"] {
             logoutRedirectUri = URL(string: logoutRedirectUriString)
         } else {
             logoutRedirectUri = nil
@@ -115,6 +115,29 @@ public class OktaOidcConfig: NSObject {
             delegateQueue: .main)
         
         OKTURLSessionProvider.setSession(session)
+    }
+    
+    public func configuration(withAdditionalParams config: [String: String]) throws -> OktaOidcConfig {
+        guard config.count > 0 else { return self }
+
+        var dict: [String:String] = additionalParams?.merging(config, uniquingKeysWith: { (_, new) -> String in
+            return new
+        }) ?? config
+        
+        dict["issuer"] = issuer
+        dict["clientId"] = clientId
+        dict["redirectUri"] = redirectUri.absoluteString
+        dict["scopes"] = scopes
+        if let logoutRedirectUri = logoutRedirectUri {
+            dict["logoutRedirectUri"] = logoutRedirectUri.absoluteString
+        }
+        
+        let result = try OktaOidcConfig(with: dict)
+        result.requestCustomizationDelegate = requestCustomizationDelegate
+        if #available(iOS 13.0, *) {
+            result.noSSO = noSSO
+        }
+        return result
     }
 
     private static func extractAdditionalParams(_ config: [String: String]) -> [String: String]? {

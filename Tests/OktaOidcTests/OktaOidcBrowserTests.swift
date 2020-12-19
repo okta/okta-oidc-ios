@@ -20,8 +20,11 @@ import XCTest
 #if os(iOS)
 
 class OktaOidcPartialMock: OktaOidc {
+    var originalBrowserTask: OktaOidcBrowserTask? = nil
+    
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        originalBrowserTask = task
         DispatchQueue.main.async {
             let browserTaskIOS = task as! OktaOidcBrowserTaskIOS
             let task = OktaOidcBrowserTaskIOSMock(presenter: browserTaskIOS.presenter,
@@ -32,6 +35,7 @@ class OktaOidcPartialMock: OktaOidc {
     }
 
     override func signOutWithBrowserTask(_ task: OktaOidcBrowserTask, idToken: String, callback: @escaping ((Error?) -> Void)) {
+        originalBrowserTask = task
         DispatchQueue.main.async {
             let browserTaskIOS = task as! OktaOidcBrowserTaskIOS
             let task = OktaOidcBrowserTaskIOSMock(presenter: browserTaskIOS.presenter,
@@ -59,6 +63,25 @@ class OktaOidcBrowserTests: XCTestCase {
             signInExpectation.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)
+    }
+
+    func testSignInSuccessFlowWithAdditionalParams() {
+        guard let oidc = try? OktaOidcPartialMock(configuration: createTestConfig()) else {
+            XCTFail("Failed to create oidc object")
+            return
+        }
+        
+        let signInExpectation = expectation(description: "Completion should be called!")
+        oidc.signInWithBrowser(from: UIViewController(), additionalParameters: ["additional": "param"]) { stateManager, error in
+            XCTAssertNotNil(stateManager)
+            XCTAssertNotNil(stateManager?.accessToken)
+            XCTAssertNotNil(stateManager?.refreshToken)
+            XCTAssertNil(error)
+            signInExpectation.fulfill()
+        }
+        waitForExpectations(timeout: 5.0, handler: nil)
+        
+        XCTAssertEqual(oidc.originalBrowserTask?.config.additionalParams, ["additional": "param"])
     }
 
     func testSignInFailureFlow() {

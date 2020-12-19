@@ -135,11 +135,11 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     }
     
     @objc public func introspect(token: String?, callback: @escaping ([String : Any]?, Error?) -> Void) {
-        perfromRequest(to: .introspection, token: token, callback: callback)
+        performRequest(to: .introspection, token: token, callback: callback)
     }
 
     @objc public func revoke(_ token: String?, callback: @escaping (Bool, Error?) -> Void) {
-        perfromRequest(to: .revocation, token: token) { payload, error in
+        performRequest(to: .revocation, token: token) { payload, error in
             if let error = error {
                 callback(false, error)
                 return
@@ -168,7 +168,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
         let headers = ["Authorization": "Bearer \(token)"]
         
-        perfromRequest(to: .userInfo, headers: headers, callback: callback)
+        performRequest(to: .userInfo, headers: headers, callback: callback)
     }
 }
 
@@ -234,7 +234,7 @@ private extension OktaOidcStateManager {
     }
 
     
-    func perfromRequest(to endpoint: OktaOidcEndpoint,
+    func performRequest(to endpoint: OktaOidcEndpoint,
                         token: String?,
                         callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
         guard let token = token else {
@@ -246,10 +246,10 @@ private extension OktaOidcStateManager {
         
         let postString = "token=\(token)&client_id=\(clientId)"
         
-        perfromRequest(to: endpoint, postString: postString, callback: callback)
+        performRequest(to: endpoint, postString: postString, callback: callback)
     }
     
-    func perfromRequest(to endpoint: OktaOidcEndpoint,
+    func performRequest(to endpoint: OktaOidcEndpoint,
                         headers: [String: String]? = nil,
                         postString: String? = nil,
                         callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {

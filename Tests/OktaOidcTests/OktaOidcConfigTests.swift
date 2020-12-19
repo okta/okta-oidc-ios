@@ -13,6 +13,10 @@
 import XCTest
 @testable import OktaOidc
 
+#if SWIFT_PACKAGE
+@testable import TestCommon
+#endif
+
 class OktaOidcConfigTests: XCTestCase {
     
     func testCreation() {
@@ -110,6 +114,38 @@ class OktaOidcConfigTests: XCTestCase {
             XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
             return
         }
+    }
+    
+    func testCloningConfigWithAdditionalParams() throws {
+        let dict = [
+            "clientId" : "test_client_id",
+            "issuer" : "http://example.com",
+            "scopes" : "test_scope",
+            "redirectUri" : "com.test:/callback",
+            "logoutRedirectUri" : "com.test:/logout"
+        ]
+        
+        let delegate = OktaNetworkRequestCustomizationDelegateMock()
+        
+        let configOrig = try OktaOidcConfig(with: dict)
+        configOrig.requestCustomizationDelegate = delegate
+        XCTAssertNotNil(configOrig)
+        XCTAssertEqual(true, configOrig.additionalParams?.isEmpty)
+
+        let configCopy1 = try configOrig.configuration(withAdditionalParams: ["additional": "param"])
+        XCTAssertNotNil(configCopy1)
+        XCTAssertEqual(configCopy1.additionalParams, ["additional": "param"])
+        XCTAssertEqual(configOrig.clientId, configCopy1.clientId)
+        XCTAssertEqual(configOrig.issuer, configCopy1.issuer)
+        XCTAssertEqual(configOrig.scopes, configCopy1.scopes)
+        XCTAssertEqual(configOrig.redirectUri, configCopy1.redirectUri)
+        XCTAssertEqual(configOrig.logoutRedirectUri, configCopy1.logoutRedirectUri)
+        XCTAssertEqual(configOrig.requestCustomizationDelegate as! OktaNetworkRequestCustomizationDelegateMock,
+                       configCopy1.requestCustomizationDelegate as! OktaNetworkRequestCustomizationDelegateMock)
+        XCTAssertEqual(configOrig.clientId, configCopy1.clientId)
+
+        let configCopy2 = try configCopy1.configuration(withAdditionalParams: ["more": "params"])
+        XCTAssertEqual(configCopy2.additionalParams, ["additional": "param", "more": "params"])
     }
     
     #if !SWIFT_PACKAGE

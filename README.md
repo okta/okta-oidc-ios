@@ -188,11 +188,13 @@ To use this SDK in Objective-C project, you should do the following:
 
 ### signInWithBrowser
 
-Start the authorization flow by simply calling `signIn`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
+Start the authorization flow by simply calling `signInWithBrowser`. In case of successful authorization, this operation will return valid `OktaOidcStateManager` in its callback. Clients are responsible for further storage and maintenance of the manager.
+
+**Note**: IDP can be passed by specifying an argument with the idp parameter.
 
 #### iOS
 ```swift
-oktaOidc.signInWithBrowser(from: viewController) { stateManager, error in
+oktaOidc.signInWithBrowser(from: viewController, additionalParameters: ["idp": "your_idp_here"]) { stateManager, error in
   if let error = error {
     // Error
     return
@@ -210,7 +212,7 @@ Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sig
 // Create redirect server configuration and start local HTTP server if you don't want to use custom schemes
 let serverConfig = OktaRedirectServerConfiguration.default
 serverConfig.port = 63875
-oktaOidc.signInWithBrowser(redirectServerConfiguration: serverConfig) { stateManager, error in
+oktaOidc.signInWithBrowser(redirectServerConfiguration: serverConfig, additionalParameters: ["idp": "your_idp_here"]) { stateManager, error in
   if let error = error {
     // Error
     return
