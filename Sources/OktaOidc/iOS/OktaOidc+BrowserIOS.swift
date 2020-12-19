@@ -19,15 +19,15 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
 
     @objc public func signInWithBrowser(from presenter: UIViewController,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
-        signInWithBrowser(from: presenter, payload: [:], callback: callback)
+        signInWithBrowser(from: presenter, additionalParameters: [:], callback: callback)
     }
     
     @objc public func signInWithBrowser(from presenter: UIViewController,
-                                        payload: [String:String],
+                                        additionalParameters: [String:String],
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let config: OktaOidcConfig
         do {
-            config = try configuration.configuration(withAdditionalParams: payload)
+            config = try configuration.configuration(withAdditionalParams: additionalParameters)
         } catch {
             callback(nil, error)
             return

@@ -72,7 +72,7 @@ class OktaOidcBrowserTests: XCTestCase {
         }
         
         let signInExpectation = expectation(description: "Completion should be called!")
-        oidc.signInWithBrowser(from: UIViewController(), payload: ["additional": "param"]) { stateManager, error in
+        oidc.signInWithBrowser(from: UIViewController(), additionalParameters: ["additional": "param"]) { stateManager, error in
             XCTAssertNotNil(stateManager)
             XCTAssertNotNil(stateManager?.accessToken)
             XCTAssertNotNil(stateManager?.refreshToken)
