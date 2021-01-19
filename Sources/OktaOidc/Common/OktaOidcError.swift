@@ -31,6 +31,7 @@ public enum OktaOidcError: Error {
     case parseFailure
     case missingIdToken
     case unexpectedAuthCodeResponse
+    case userCancelledAuthorizationFlow
     case unableToGetAuthCode
     case redirectServerError(String)
 }
@@ -75,6 +76,8 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("ID token needed to fulfill this operation.", comment: "")
         case .unexpectedAuthCodeResponse:
             return NSLocalizedString("Unexpected response format while retrieving authorization code.", comment: "")
+        case .userCancelledAuthorizationFlow:
+            return NSLocalizedString("User cancelled current session", comment: "")
         case .unableToGetAuthCode:
             return NSLocalizedString("Unable to get authorization code.", comment: "")
         case .redirectServerError(error: let error):
