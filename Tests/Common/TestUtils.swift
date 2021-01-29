@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -33,13 +33,17 @@ struct TestUtils {
     static var authStateManager = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId) }
     static var authStateManagerWithExpiration = { return TestUtils.setupMockAuthStateManager(issuer: mockIssuer, clientId: mockClientId, expiresIn: 5) }
     
+    static func makeMockServiceConfig(issuer: URL) -> OKTServiceConfiguration {
+        OKTServiceConfiguration(authorizationEndpoint: issuer, tokenEndpoint: issuer, issuer: issuer)
+    }
+    
     static func setupMockAuthState(issuer: String,
                                    clientId: String,
                                    expiresIn: TimeInterval = 300,
                                    skipTokenResponse: Bool = false) -> OKTAuthState {
         // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
-        let mockServiceConfig = OKTServiceConfiguration(authorizationEndpoint: fooURL, tokenEndpoint: fooURL, issuer: fooURL)
+        let mockServiceConfig = makeMockServiceConfig(issuer: fooURL)
         
         let mockTokenRequest = OKTTokenRequest(
                    configuration: mockServiceConfig,

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -95,7 +95,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will succeed with payload.")
         
-        authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
+        authStateManager.revoke(authStateManager.accessToken) { isRevoked, error in
             XCTAssertEqual(true, isRevoked)
             XCTAssertNil(error)
             
@@ -111,7 +111,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
-        authStateManager.revoke(nil){ isRevoked, error in
+        authStateManager.revoke(nil) { isRevoked, error in
             XCTAssertFalse(isRevoked)
             XCTAssertEqual(
                 OktaOidcError.noBearerToken.localizedDescription,
@@ -130,7 +130,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
-        authStateManager.revoke(authStateManager.accessToken){ isRevoked, error in
+        authStateManager.revoke(authStateManager.accessToken) { isRevoked, error in
             XCTAssertFalse(isRevoked)
             XCTAssertEqual(
                 OktaOidcError.APIError("Test Error").localizedDescription,
@@ -149,7 +149,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     
         let userInfoExpectation = expectation(description: "Will succeed with payload.")
     
-        authStateManager.getUser() { payload, error in
+        authStateManager.getUser { payload, error in
             XCTAssertEqual("test", payload?["username"] as? String)
             XCTAssertNil(error)
             
@@ -165,7 +165,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         
         let userInfoExpectation = expectation(description: "Will fail with error.")
         
-        authStateManager.getUser(){ payload, error in
+        authStateManager.getUser { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
                 OktaOidcError.APIError("Test Error").localizedDescription,
@@ -176,6 +176,25 @@ class OktaOidcStateManagerTests: XCTestCase {
         }
         
         waitForExpectations(timeout: 5.0)
+    }
+    
+    func testGetUserFailedNoAccessToken() {
+        // Mock REST API calls
+        apiMock.configure(response: ["username" : "test"])
+        authStateManager.authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId, skipTokenResponse: true)
+        let userInfoExpectation = expectation(description: "Will fail with error.")
+        
+        authStateManager.getUser { payload, error in
+            XCTAssertNil(payload)
+            XCTAssertEqual(
+                OktaOidcError.noBearerToken.localizedDescription,
+                error?.localizedDescription
+            )
+            
+            userInfoExpectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5)
     }
     
     func testIdTokenDecode() {
@@ -190,10 +209,106 @@ class OktaOidcStateManagerTests: XCTestCase {
         
         do {
             let response = try OktaOidcStateManager.decodeJWT(idToken)
-            XCTAssertNotNil(response)
+            XCTAssertFalse(response.isEmpty)
         } catch let error {
             XCTFail("Unexpected error: \(error)")
         }
+    }
+    
+    func testJWTFailedDecode() {
+        let invalidIdToken = """
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.\
+        InvalidJSON_eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.\
+        SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        """
+        
+        XCTAssertThrowsError(try OktaOidcStateManager.decodeJWT(invalidIdToken))
+    }
+    
+    func testJWTEmptyDecode() {
+        // Expect that a provided token is parseable
+        let invalidIdToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+        
+        XCTAssertTrue(try OktaOidcStateManager.decodeJWT(invalidIdToken).isEmpty)
+    }
+    
+    func testTokenRefresh() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(shouldFailRefresh: false)
+        
+        let userInfoExpectation = expectation(description: "Will succeed to refresh token.")
+        let oldRefreshToken = self.authStateManager.refreshToken
+    
+        // when
+        authStateManager.renew { [unowned self] stateManager, error in
+            // then
+            XCTAssertNotNil(stateManager)
+            XCTAssertTrue(stateManager! === self.authStateManager)
+            XCTAssertEqual(self.authStateManager.refreshToken, self.authStateManager.authState.refreshToken)
+            XCTAssertNotEqual(oldRefreshToken, self.authStateManager.authState.refreshToken)
+            XCTAssertNil(error)
+            
+            userInfoExpectation.fulfill()
+        }
+    
+        waitForExpectations(timeout: 5)
+    }
+    
+    func testTokenRefreshFailed() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(shouldFailRefresh: true)
+        
+        let userInfoExpectation = expectation(description: "Will fail to refresh token.")
+    
+        // when
+        authStateManager.renew { [unowned self] stateManager, error in
+            // then
+            XCTAssertNil(stateManager)
+            XCTAssertNotNil(error)
+            XCTAssertTrue(self.authStateManager.refreshToken == authStateManager.authState.refreshToken)
+
+            if case OktaOidcError.errorFetchingFreshTokens = error! {
+                userInfoExpectation.fulfill()
+            } else {
+                XCTFail()
+            }
+        }
+    
+        waitForExpectations(timeout: 5)
+    }
+    
+    func testAccessToken() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(expiresIn: 5)
+        // then
+        XCTAssertNotNil(authStateManager.accessToken)
+        XCTAssertEqual(authStateManager.accessToken, authStateManager.authState.lastTokenResponse?.accessToken)
+    }
+    
+    func testExpiredAccessToken() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(expiresIn: 0.5)
+        sleep(2)
+        
+        // then
+        XCTAssertNil(authStateManager.accessToken)
+        XCTAssertNotEqual(authStateManager.accessToken, authStateManager.authState.lastTokenResponse?.accessToken)
+    }
+    
+    func testIdToken() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(expiredIDToken: false)
+        // then
+        XCTAssertNotNil(authStateManager.idToken)
+        XCTAssertEqual(authStateManager.idToken, authStateManager.authState.lastTokenResponse?.idToken)
+    }
+    
+    func testIdTokenFailed() {
+        // given
+        authStateManager.authState = OKTTokensAuthMock.makeDefault(expiredIDToken: true)
+        // then
+        XCTAssertNil(authStateManager.idToken)
+        XCTAssertNotEqual(authStateManager.idToken, authStateManager.authState.lastTokenResponse?.idToken)
     }
     
     #if !SWIFT_PACKAGE

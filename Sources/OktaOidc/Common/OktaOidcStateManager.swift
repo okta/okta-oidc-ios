@@ -25,31 +25,25 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
-        get {
-            guard let tokenResponse = self.authState.lastTokenResponse,
-                  let token = tokenResponse.accessToken,
-                  let tokenExp = tokenResponse.accessTokenExpirationDate,
-                  tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
-                    return nil
-            }
-            return token
+        guard let tokenResponse = self.authState.lastTokenResponse,
+              let token = tokenResponse.accessToken,
+              let tokenExp = tokenResponse.accessTokenExpirationDate,
+              tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
+            return nil
         }
+        
+        return token
     }
 
     @objc open var idToken: String? {
         // Return the known idToken if it is valid
-        get {
-            guard let tokenResponse = self.authState.lastTokenResponse,
-                let token = tokenResponse.idToken else {
-                    return nil
-            }
-
-            if let _ = validateToken(idToken: token) {
-                return nil
-            }
-
-            return token
+        guard let tokenResponse = self.authState.lastTokenResponse,
+              let token = tokenResponse.idToken,
+              validateToken(idToken: token) == nil else {
+            return nil
         }
+        
+        return token
     }
 
     @objc open var refreshToken: String? {
@@ -124,14 +118,14 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc public func renew(callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         authState.setNeedsTokenRefresh()
-        authState.performAction(freshTokens: { accessToken, idToken, error in
-            if error != nil {
-                callback(nil, OktaOidcError.errorFetchingFreshTokens(error!.localizedDescription))
+        authState.performAction { accessToken, idToken, error in
+            if let error = error {
+                callback(nil, OktaOidcError.errorFetchingFreshTokens(error.localizedDescription))
                 return
             }
             
             callback(self, nil)
-        })
+        }
     }
     
     @objc public func introspect(token: String?, callback: @escaping ([String : Any]?, Error?) -> Void) {
