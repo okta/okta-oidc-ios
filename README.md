@@ -522,4 +522,17 @@ The reason is that Xcode 12 introduced support of the Apple Silicon and Xcode ge
 
 ##### Workaround
 
-Launch Carthage via [the script](/scripts/carthage-xcode-12.sh), it will remove duplicated architectures and produce working frameworks. For more details, follow [official Carthage documentation](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md#workaround).
+Launch Carthage via [the script](/scripts/carthage-xcode-12.sh), it will remove duplicated architectures and produce working frameworks.
+
+1. Put the script somewhere to your `PATH` (e.g.: `/usr/local/bin/carthage.sh`).
+2. Make the script executable, so open your Terminal and execute:
+```sh
+chmod +x /{path_to_script_folder}/carthage.sh
+```
+
+3. Run the script whenewher you want to use Carthage:
+```sh
+carthage.sh update
+```
+
+For more information, follow [official Carthage documentation](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md#workaround).
