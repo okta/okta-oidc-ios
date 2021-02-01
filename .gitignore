@@ -10,14 +10,36 @@ project.xcworkspace
 Okta.xcworkspace/
 DerivedData
 /.build
-/.swiftpm
 
 # Examples
 Example/Podfile.lock
 Example/Pods
 Example/build/
 
-
-# IDEs
+# Xcode
 *.xccheckout
-.idea/
+
+## Obj-C/Swift specific
+*.hmap
+
+## App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+Packages/
+Package.pins
+Package.resolved
+/.swiftpm
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Checkouts
+Carthage/Build/

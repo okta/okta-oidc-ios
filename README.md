@@ -506,3 +506,20 @@ Known iOS issue where iOS doesn't provide any good ways to terminate active auth
 You can also consider the following workarounds:
 - Use `noSSO` option in OIDC configuration object if you don't need SSO capabilites. Also note that this option works only on iOS 13+ versions
 - Fork repository and change user-agent implementation(`OIDExternalUserAgentIOS.m`) to use `SFSafariViewController` only. Some pitfalls of this approach described [here](https://github.com/okta/okta-oidc-ios/issues/181)
+
+### Carthage fails on Xcode 12 
+Carthage throws the error when you install the dependencies with the command `carthage update`. The issue happens only on Xcode 12 and higher versions:
+
+```powershell
+Build Failed
+	Task failed with exit code 1:
+	/usr/bin/xcrun lipo -create /Users/user/Library/Caches/org.carthage.CarthageKit/DerivedData/12.4_12D4e/okta-oidc-ios/3.10.1/Build/Intermediates.noindex/ArchiveIntermediates/okta-oidc/IntermediateBuildFilesPath/UninstalledProducts/iphoneos/OktaOidc.framework/OktaOidc /Users/user/Library/Caches/org.carthage.CarthageKit/DerivedData/12.4_12D4e/okta-oidc-ios/3.10.1/Build/Products/Release-iphonesimulator/OktaOidc.framework/OktaOidc -output /Users/user/{ProjectName}/Carthage/Build/iOS/OktaOidc.framework/OktaOidc
+
+This usually indicates that project itself failed to compile. Please check the xcodebuild log for more details: /var/folders/2x/q10zv0gx4112thm7dd13szmm0000gn/T/carthage-xcodebuild.YaJjLW.log
+```
+
+The reason is that Xcode 12 introduced support of the Apple Silicon and Xcode generates duplicated architectures in frameworks. XCFrameworks are still not supported by Carthage, therefore a workaround should be used.
+
+##### Workaround
+
+Launch Carthage via [the script](/scripts/carthage-xcode-12.sh), it will remove duplicated architectures and produce working frameworks. For more details, follow [official Carthage documentation](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md#workaround).

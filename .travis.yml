@@ -25,4 +25,6 @@ jobs:
     - stage: Carthage validation
       name: iOS
       script:
-      - carthage build --no-skip-current
+      # Until XCFramework is not supported.
+      # https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md 
+      - ./scripts/carthage-xcode-12.sh build --no-skip-current
