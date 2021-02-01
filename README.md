@@ -530,7 +530,7 @@ Launch Carthage via [the script](/scripts/carthage-xcode-12.sh), it will remove 
 chmod +x /{path_to_script_folder}/carthage.sh
 ```
 
-3. Run the script whenewher you want to use Carthage:
+3. Run the script whenever you want to use Carthage:
 ```sh
 carthage.sh update
 ```
