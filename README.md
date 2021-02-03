@@ -1,7 +1,7 @@
 ![iOS_14 ready](https://img.shields.io/badge/iOS%2014-IN%20PROGRESS-green?style=for-the-badge&logo=apple)
 
 [<img src="https://aws1.discourse-cdn.com/standard14/uploads/oktadev/original/1X/0c6402653dfb70edc661d4976a43a46f33e5e919.png" align="right" width="256px"/>](https://devforum.okta.com/)
-[![CI Status](http://img.shields.io/travis/okta/okta-oidc-ios.svg?style=flat)](https://travis-ci.org/okta/okta-oidc-ios)
+[![CI Status](http://img.shields.io/travis/okta/okta-oidc-ios.svg?style=flat)](https://travis-ci.com/okta/okta-oidc-ios)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Version](https://img.shields.io/cocoapods/v/OktaOidc.svg?style=flat)](http://cocoapods.org/pods/OktaOidc)
 [![License](https://img.shields.io/cocoapods/l/OktaOidc.svg?style=flat)](http://cocoapods.org/pods/OktaOidc)
@@ -506,3 +506,52 @@ Known iOS issue where iOS doesn't provide any good ways to terminate active auth
 You can also consider the following workarounds:
 - Use `noSSO` option in OIDC configuration object if you don't need SSO capabilites. Also note that this option works only on iOS 13+ versions
 - Fork repository and change user-agent implementation(`OIDExternalUserAgentIOS.m`) to use `SFSafariViewController` only. Some pitfalls of this approach described [here](https://github.com/okta/okta-oidc-ios/issues/181)
+
+### Carthage fails on Xcode 12 
+Carthage throws the error when you install the dependencies with the command `carthage update`. The issue happens only on Xcode 12 and higher versions:
+
+```bash
+Build Failed
+	Task failed with exit code 1:
+	/usr/bin/xcrun lipo -create /Users/user/Library/Caches/org.carthage.CarthageKit/DerivedData/12.4_12D4e/okta-oidc-ios/3.10.1/Build/Intermediates.noindex/ArchiveIntermediates/okta-oidc/IntermediateBuildFilesPath/UninstalledProducts/iphoneos/OktaOidc.framework/OktaOidc /Users/user/Library/Caches/org.carthage.CarthageKit/DerivedData/12.4_12D4e/okta-oidc-ios/3.10.1/Build/Products/Release-iphonesimulator/OktaOidc.framework/OktaOidc -output /Users/user/{ProjectName}/Carthage/Build/iOS/OktaOidc.framework/OktaOidc
+
+This usually indicates that project itself failed to compile. Please check the xcodebuild log for more details: /var/folders/2x/q10zv0gx4112thm7dd13szmm0000gn/T/carthage-xcodebuild.YaJjLW.log
+```
+
+The reason is that Xcode 12 introduced support of the Apple Silicon and Xcode generates duplicated architectures in frameworks. XCFrameworks are still not supported by Carthage, therefore a workaround should be used.
+
+##### Solution #1: XCFrameworks
+
+You should update Carthage to the version 0.37.0 or higher. 
+
+1. Run in Terminal the following command:
+```bash
+brew upgrade carthage
+```
+2. Make sure the version is correct: 
+```bash
+carthage version
+```
+3. Navigate through Terminal to project folder and run: 
+```bash
+carthage update --use-xcframeworks
+```
+4. Open `General` settings tab in Xcode, in the `Frameworks, Libraries, and Embedded Content` section, drag and drop each XCFramework you want to use from the `Carthage/Build` folder.
+
+> If your existing project is based on discrete framework bundles and you may want to migrate to XCFrameworks, then follow [Carthage migration documentation](https://github.com/Carthage/Carthage#migrating-a-project-from-framework-bundles-to-xcframeworks).
+
+##### Solution #2: Workaround script
+
+Launch Carthage via [the script](/scripts/carthage-xcode-12.sh), it will remove duplicated architectures and produce correct framework bundles.
+
+1. Put the script somewhere to your `PATH` (e.g.: `/usr/local/bin/carthage.sh`).
+2. Make the script executable, so open your Terminal and execute:
+```sh
+chmod +x /{path_to_script_folder}/carthage.sh
+```
+3. Run the script whenever you want to use Carthage:
+```sh
+carthage.sh update
+```
+
+For more information, follow [official Carthage documentation](https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md#workaround).
