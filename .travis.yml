@@ -1,5 +1,9 @@
 language: objective-c
 osx_image: xcode12.2
+before_install:
+  - gem install cocoapods
+  - brew update
+  - brew outdated carthage || brew upgrade carthage
 jobs:
   include:
     - stage: Unit tests iOS
@@ -25,6 +29,7 @@ jobs:
     - stage: Carthage validation
       name: iOS
       script:
-      # Until XCFramework is not supported.
-      # https://github.com/Carthage/Carthage/blob/master/Documentation/Xcode12Workaround.md 
+      # Test two workarounds 
+      # https://github.com/Carthage/Carthage#getting-started
       - ./scripts/carthage-xcode-12.sh build --no-skip-current
+      - carthage build --use-xcframeworks --no-skip-current
