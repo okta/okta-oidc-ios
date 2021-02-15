@@ -27,15 +27,17 @@ func handle(response: Response)
 2.3. Choose clarity over brevity. 
 2.4. Name booleans like `isAuthenticated` instead of `authenticated`. 
 2.5. Name function parameters. 
+2.6. The protocols that describe ***what something is*** should read as nouns (e.g. `Iterator`, `Collection`).
+2.7. The protocols that describe ***a capability*** should end in `-able` or `-ible` (e.g. `Comparable`, `Hashable`, `Codable`)
 
 #### 3. Coding style
 
-3.1. Avoid writing `self.` unless it is required.
+3.1. Avoid writing `self.` unless it is required by compiler or for readability purposes.
 3.2. Use `let` over `var` whenever possible.
 3.3. Mark types, functions, properties, constants, variables with `private` where it is applicable. 
 3.4. Use `private(set)` for properties to make them readonly (e.g. `IBOutlet`).
 3.5. Avoid `internal` access modifier keyword since it is declared by default.
-3.6. Use `final` when a class must not (or is not designed to) be overridden.
+3.6. Use `final` when a class must not (or is not designed to) be inherited (e.g. singleton).
 3.7. Omit unnecessary parentheses.
 
 **Preferred:**
@@ -52,9 +54,7 @@ switch (tokenType) { ... }
 let formattedTokens = tokens.map() { $0 + "\\" }
 tokens.forEach { (number) in print(number) }
 ```
-3.8. The protocols that describe ***what something is*** should read as nouns (e.g. `Iterator`, `Collection`).
-3.9. The protocols that describe ***a capability*** should end in `-able` or `-ible` (e.g. `Comparable`, `Hashable`, `Codable`)
-3.10. Use compiler inferred context.
+3.8. Use compiler inferred context.
 
 **Preferred:**
 ```swift
@@ -70,8 +70,8 @@ let customView = UIView(frame: CGRect.zero)
 let selector = #selector(MyViewController.viewDidLoad)
 let message: String = "Hello Okta!"
 ```
-3.11. Name unused closure parameters as underscores `_`.
-3.12. Avoid nested `if/else` statements. Use `Happy Path` rule. 
+3.9. Name unused closure parameters as underscores `_`.
+3.10. Avoid nested `if/else` statements. Use `Happy Path` rule. 
 
 **Preferred:**
 ```swift
@@ -104,7 +104,7 @@ func message(from response: Response) -> String? {
 }
 ```
 
-3.13. Use trailing closure syntax when **single** closure parameter.
+3.11. Use trailing closure syntax when **single** closure parameter.
 **Preferred:**
 ```swift
 sendRequest(request) { response, error in
@@ -118,7 +118,7 @@ sendRequest(request, completion: { response, error in
 })
 ```
 
-3.14. Use Multi-line string literal.
+3.12. Use Multi-line string literal.
 
 **Preferred:**
 ```swift
@@ -130,7 +130,7 @@ let testOktaToken = """
     """
 ```
 
-3.15. Use [XCTUnwrap](https://developer.apple.com/documentation/xctest/3380195-xctunwrap) instead of forced unwrapping in tests.
+3.13. Use [XCTUnwrap](https://developer.apple.com/documentation/xctest/3380195-xctunwrap) instead of forced unwrapping in tests.
 
 #### 4. Don'ts
 
