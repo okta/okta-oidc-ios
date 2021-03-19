@@ -26,7 +26,22 @@ func handle(response: Response)
 2.2. Start factory methods with word `make`.
 2.3. Choose clarity over brevity. 
 2.4. Name booleans like `isAuthenticated` instead of `authenticated`. 
-2.5. Name function parameters. 
+2.5. Name function parameters where it is appropriate. 
+
+**Preferred:**
+```swift
+func move(from start: Point, to end: Point)
+func makeRequest(withTimeout timeout: TimeInterval, headers: [String: String])
+func handleEvents(_ events: [Event])
+func compare(_ firstDate: Date, _ secondDate: Date) -> DateResult
+```
+**Not preferred:**
+```swift
+func move(_ start: Point, _ end: Point)
+func makeRequest(withTimeout timeout: TimeInterval, headers: [String: String])
+func handleEvents(events: [Event])
+func compare(firstDate: Date, secondDate: Date) -> DateResult
+```
 2.6. The protocols that describe ***what something is*** should read as nouns (e.g. `Iterator`, `Collection`).
 2.7. The protocols that describe ***a capability*** should end in `-able` or `-ible` (e.g. `Comparable`, `Hashable`, `Codable`)
 
@@ -118,7 +133,7 @@ sendRequest(request, completion: { response, error in
 })
 ```
 
-3.12. Use Multi-line string literal.
+3.12. Use multi-line string literal.
 
 **Preferred:**
 ```swift
@@ -130,14 +145,36 @@ let testOktaToken = """
     """
 ```
 
-3.13. Use [XCTUnwrap](https://developer.apple.com/documentation/xctest/3380195-xctunwrap) instead of forced unwrapping in tests.
+3.13. Use multi-line `guard` statements.
+
+**Preferred:**
+```swift
+guard let user = response["user"] as? User,
+      let username = user.username
+else {
+    return
+}
+```
+**Not preferred:**
+```swift
+guard let user = response["user"] as? User, let username = user.username else {
+    return
+}
+
+guard let user = response["user"] as? User,
+      let username = user.username else {
+    return
+}
+```
+
+3.14. Use [XCTUnwrap](https://developer.apple.com/documentation/xctest/3380195-xctunwrap) instead of forced unwrapping in tests.
 
 #### 4. Don'ts
 
 4.1. Don't use `fatalError` or `precondition`. Prefer `assert` if it is recoverable case. If not, handle it in proper way. 
 4.2. Avoid implicit unwrapping unless you're 100% sure that a value exists. Implicit unwrapping causes crash if a value is `nil`. Therefore, handle unsuccess paths in code (e.g. logging, return an error etc.).  
-4.3. Don't leave unused (dead) code.
-4.3. Don't leave commented code.
+4.3. Don't leave unused or dead code.
+4.3. Don't leave commented out code.
 4.4. Don't use `DispatchQueue.main.asyncAfter` to fix the issues via delays.
 4.5. Don't include your name into source code. Use common copyrigth header. 
 ```swift
@@ -153,3 +190,7 @@ let testOktaToken = """
  * See the License for the specific language governing permissions and limitations under the License.
  */
 ```
+
+### Contribution
+
+The style guide is not set in stone. This document should evolve along with Swift. So feel free to add new items.
