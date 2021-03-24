@@ -38,7 +38,7 @@ func compare(_ firstDate: Date, _ secondDate: Date) -> DateResult
 **Not preferred:**
 ```swift
 func move(_ start: Point, _ end: Point)
-func makeRequest(withTimeout timeout: TimeInterval, headers: [String: String])
+func makeRequest(_ timeout: TimeInterval, dict: [String: String])
 func handleEvents(events: [Event])
 func compare(firstDate: Date, secondDate: Date) -> DateResult
 ```
