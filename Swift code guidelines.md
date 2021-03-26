@@ -172,7 +172,7 @@ guard let user = response["user"] as? User,
 #### 4. Don'ts
 
 4.1. Don't use `fatalError` or `precondition`. Prefer `assert` if it is recoverable case. If not, handle it in proper way. 
-4.2. Avoid implicit unwrapping unless you're 100% sure that a value exists. Implicit unwrapping causes crash if a value is `nil`. Therefore, handle unsuccess paths in code (e.g. logging, return an error etc.).  
+4.2. Avoid implicit unwrapping (`!`), as this will cause a crash if a value is `nil`. Unwrap using `guard let` or `if let` and handle error cases in code as appropriate (e.g. logging, return an error etc.).  
 4.3. Don't leave unused or dead code.
 4.3. Don't leave commented out code.
 4.4. Don't use `DispatchQueue.main.asyncAfter` to fix the issues via delays.
