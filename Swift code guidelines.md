@@ -176,7 +176,7 @@ guard let user = response["user"] as? User,
 4.3. Don't leave unused or dead code.
 4.3. Don't leave commented out code.
 4.4. Don't use `DispatchQueue.main.asyncAfter` to fix the issues via delays.
-4.5. Don't include your name into source code. Use common copyrigth header. 
+4.5. Don't include your name in source code. Use the common copyright header. 
 ```swift
 /*
  * Copyright (c) 2021, Okta, Inc. and/or its affiliates. All rights reserved.
