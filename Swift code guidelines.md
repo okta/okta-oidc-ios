@@ -18,7 +18,7 @@ let testValue: Double
 func handle(response: Response)
 ```
 1.4. No semicolons at the end of line.
-1.5. Use Xcode indentation (`Command-A`, `Command-I`).
+1.5. Use Xcode indentation (`Command-A`, `Control-I`).
 
 #### 2. Naming
 
