@@ -194,8 +194,6 @@ class OktaScenarios: XCTestCase {
         XCTAssertTrue(tokenTextView.waitForExistence(timeout: .minimal))
         XCTAssertNotEqual(tokenTextView.value as? String, "SDK is not configured!")
         
-        signInButton.tap()
-        
         // Sign In
         signIn(username: username, password: password)
         
@@ -234,6 +232,8 @@ class OktaScenarios: XCTestCase {
     }
     
     private func signIn(username: String, password: String) {
+        signInButton.tap()
+        
         allowBrowserLaunch()
         
         let webView = app.webViews
@@ -288,7 +288,7 @@ class OktaScenarios: XCTestCase {
 }
 
 extension TimeInterval {
-    
-    static let minimal: TimeInterval = 5
+
     static let testing: TimeInterval = 30
+    static let minimal: TimeInterval = testing / 2
 }
