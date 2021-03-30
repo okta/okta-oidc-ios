@@ -124,7 +124,7 @@ class OktaScenarios: XCTestCase {
         )
         // then
         pressGetUserButton()
-                pressIntrospectButton(expectedValue: "true")
+        pressIntrospectButton(expectedValue: "true")
         pressRevokeButton()
     }
     
@@ -288,7 +288,7 @@ class OktaScenarios: XCTestCase {
 }
 
 extension TimeInterval {
-
+    
     static let testing: TimeInterval = 30
     static let minimal: TimeInterval = testing / 2
 }
