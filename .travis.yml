@@ -30,6 +30,11 @@ jobs:
       - pod lib lint --allow-warnings
     - stage: Dependency Manager Validation
       name: Carthage
+      addons:
+        homebrew:
+          packages:
+          - carthage
+          update: true
       script:
       # Test two workarounds 
       # https://github.com/Carthage/Carthage#getting-started
