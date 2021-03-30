@@ -162,6 +162,13 @@ class OktaScenarios: XCTestCase {
         
         XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: .testing))
         XCTAssertTrue(tokenTextView.waitForExistence(timeout: .minimal))
+        
+        XCTAssertTrue(
+            tokenTextView.waitForText(
+                predicate: { $0 != nil && $0 == "" },
+                timeout: .minimal
+            )
+        )
     }
     
     func testAuthenticateWithInvalidSessionToken() throws {

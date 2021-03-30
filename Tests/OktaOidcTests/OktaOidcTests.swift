@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -48,6 +48,8 @@ class OktaOidcTests: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
+        continueAfterFailure = false
+        
         try XCTSkipIf(issuer == nil || clientId == nil || redirectUri == nil || logoutRedirectUri == nil,
                       "OAuth app settings not configured")
         
@@ -55,7 +57,7 @@ class OktaOidcTests: XCTestCase {
         authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
         )
-        
+
         authStateManager.restAPI = apiMock
     }
     
@@ -126,6 +128,39 @@ extension OktaOidcTests {
             XCTFail("Unexpected progress step")
         },
         completionHandler: { result, failedOptions in
+            XCTAssertTrue(result)
+            XCTAssertTrue(failedOptions.isEmpty)
+        })
+    }
+    
+    func testSignOutWithoutRefreshToken() throws {
+        // given
+        let oktaOidc = createDummyOidcObject()
+        authStateManager.authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId, refreshToken: "", skipTokenResponse: false)
+        
+        var numberOfRevokes = 0
+        apiMock.configure(response: [:]) { urlRequest in
+            let url = urlRequest.url!
+            XCTAssertTrue(url.absoluteString.contains("/oauth2/default/v1/revoke"), "Wrong endpoint has been called")
+            numberOfRevokes += 1
+        }
+        
+        let viewController = UIViewController(nibName: nil, bundle: nil)
+        let options: OktaSignOutOptions = .revokeTokensOptions
+        var currentStep = 1
+        
+        // when
+        oktaOidc?.signOut(with: options, authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+            XCTAssertFalse(currentStep == 1 && !currentOption.contains(.revokeAccessToken), "Expected revoke acces token step")
+            XCTAssertFalse(currentStep == 2 && !currentOption.contains(.revokeRefreshToken), "Expected revoke refresh token step")
+            XCTAssertFalse(currentOption.contains(.removeTokensFromStorage) || currentOption.contains(.signOutFromOkta), "Unexpected progress step")
+            
+            currentStep += 1
+        },
+        completionHandler: { result, failedOptions in
+            // then
+            XCTAssertEqual(currentStep, 3)
+            XCTAssertEqual(numberOfRevokes, 1)
             XCTAssertTrue(result)
             XCTAssertTrue(failedOptions.isEmpty)
         })
