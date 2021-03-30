@@ -1,33 +1,34 @@
 language: objective-c
+os: osx
 osx_image: xcode12.2
+
 before_install:
   - gem install cocoapods
-  - brew update
   - brew outdated carthage || brew upgrade carthage
 jobs:
   include:
-    - stage: Unit tests iOS
+    - stage: Unit Tests
       name: iOS
       script:
       - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test
-    - stage: Unit tests MacOS
+    - stage: Unit Tests
       name: MacOS
       script:
       - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-mac" -destination "platform=macOS" clean test
-    - stage: UI tests iOS
+    - stage: UI tests
       name: iOS
       script:
       - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test
-    - stage: Swift Package Manager validation
-      name: MacOS
+    - stage: Dependency Manager Validation
+      name: SPM
       script:
       - swift test
-    - stage: Cocoapods validation
-      name: iOS
+    - stage: Dependency Manager Validation
+      name: CocoaPods
       script:
       - pod lib lint --allow-warnings
-    - stage: Carthage validation
-      name: iOS
+    - stage: Dependency Manager Validation
+      name: Carthage
       script:
       # Test two workarounds 
       # https://github.com/Carthage/Carthage#getting-started
