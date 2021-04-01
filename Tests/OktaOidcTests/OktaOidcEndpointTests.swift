@@ -23,7 +23,7 @@ class OktaOidcEndpointTests: XCTestCase {
         let expectedEndpointBasedOnIssuer = testIssuer + "/oauth2/v1/" + "introspect"
     
         XCTAssertNil(OktaOidcEndpoint.introspection.getURL(discoveredMetadata: nil, issuer: nil))
-        XCTAssertNil(OktaOidcEndpoint.introspection.getURL(discoveredMetadata: ["invalidKey" : testEndpoint], issuer: nil))
+        XCTAssertNil(OktaOidcEndpoint.introspection.getURL(discoveredMetadata: ["invalidKey": testEndpoint], issuer: nil))
         
         XCTAssertEqual(
             URL(string: testEndpoint),
@@ -59,7 +59,7 @@ class OktaOidcEndpointTests: XCTestCase {
         let expectedEndpointBasedOnIssuer = testIssuer + "/oauth2/v1/" + "revoke"
     
         XCTAssertNil(OktaOidcEndpoint.revocation.getURL(discoveredMetadata: nil, issuer: nil))
-        XCTAssertNil(OktaOidcEndpoint.revocation.getURL(discoveredMetadata: ["invalidKey" : testEndpoint], issuer: nil))
+        XCTAssertNil(OktaOidcEndpoint.revocation.getURL(discoveredMetadata: ["invalidKey": testEndpoint], issuer: nil))
         
         XCTAssertEqual(
             URL(string: testEndpoint),
@@ -95,7 +95,7 @@ class OktaOidcEndpointTests: XCTestCase {
         let expectedEndpointBasedOnIssuer = testIssuer + "/oauth2/v1/" + "userinfo"
     
         XCTAssertNil(OktaOidcEndpoint.userInfo.getURL(discoveredMetadata: nil, issuer: nil))
-        XCTAssertNil(OktaOidcEndpoint.userInfo.getURL(discoveredMetadata: ["invalidKey" : testEndpoint], issuer: nil))
+        XCTAssertNil(OktaOidcEndpoint.userInfo.getURL(discoveredMetadata: ["invalidKey": testEndpoint], issuer: nil))
         
         XCTAssertEqual(
             URL(string: testEndpoint),

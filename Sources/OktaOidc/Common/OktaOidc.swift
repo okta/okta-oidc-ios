@@ -80,7 +80,7 @@ public class OktaOidc: NSObject {
                                 callback: @escaping ((Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
+        task.signOutWithIdToken(idToken: idToken) { [weak self] error in
             defer { self?.currentUserSessionTask = nil }
             callback(error)
         }

@@ -112,7 +112,7 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
                      onSuccess: @escaping OktaApiSuccessCallback,
                      onError: @escaping OktaApiErrorCallback) {
         let customizedRequest = requestCustomizationDelegate?.customizableURLRequest(request) ?? request
-        let task = OKTURLSessionProvider.session().dataTask(with: customizedRequest){ data, response, error in
+        let task = OKTURLSessionProvider.session().dataTask(with: customizedRequest) { data, response, error in
             self.requestCustomizationDelegate?.didReceive(response)
             guard let data = data,
                   error == nil,

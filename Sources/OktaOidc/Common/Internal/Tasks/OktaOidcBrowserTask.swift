@@ -46,8 +46,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
 
             let userAgentSession = self.authStateClass().authState(byPresenting: request,
                                                                    externalUserAgent: externalUserAgent,
-                                                                   delegate: delegate)
-            { authorizationResponse, error in
+                                                                   delegate: delegate) { authorizationResponse, error in
                 defer { self.userAgentSession = nil }
 
                 guard let authResponse = authorizationResponse else {
@@ -67,15 +66,15 @@ class OktaOidcBrowserTask: OktaOidcTask {
     }
     
     func signOutWithIdToken(idToken: String,
-                            callback: @escaping (Void?, OktaOidcError?) -> Void) {
-        self.downloadOidcConfiguration() { oidConfig, error in
+                            callback: @escaping (OktaOidcError?) -> Void) {
+        downloadOidcConfiguration { oidConfig, error in
             guard let oidConfig = oidConfig else {
-                callback(nil, error)
+                callback(error)
                 return
             }
 
             guard let successRedirectURL = self.signOutRedirectUri() else {
-                callback(nil, .missingConfigurationValues)
+                callback(.missingConfigurationValues)
                 return
             }
 
@@ -84,11 +83,10 @@ class OktaOidcBrowserTask: OktaOidcTask {
                                                postLogoutRedirectURL: successRedirectURL,
                                                additionalParameters: self.config.additionalParams)
             guard let externalUserAgent = self.externalUserAgent() else {
-                callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                callback(OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
                 return
             }
-            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) {
-                response, responseError in
+            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) { response, responseError in
                 
                 self.userAgentSession = nil
                 
@@ -97,7 +95,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                     error = OktaOidcError.APIError("Sign Out Error: \(responseError.localizedDescription)")
                 }
                 
-                callback((), error)
+                callback(error)
             }
             self.userAgentSession = userAgentSession
         }

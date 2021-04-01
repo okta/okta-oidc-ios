@@ -37,7 +37,7 @@ class OktaOidcApiMock: OktaOidcHttpApiProtocol {
         }
     }
     
-     func configure(response: [String:Any]?, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
+     func configure(response: [String: Any]?, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
         requestHandler = { request, onSuccess, onError in
             requestValidationBlock?(request)
             onSuccess(response)

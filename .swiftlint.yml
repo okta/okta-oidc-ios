@@ -1,0 +1,22 @@
+only_rules:
+  # Spacing
+  - opening_brace
+  - closing_brace
+  - closure_spacing
+  - comma
+  - colon
+
+# Spacing
+opening_brace:
+  severity: error
+closing_brace:
+  severity: error
+closure_spacing:
+  severity: error
+comma:
+  severity: error
+colon:
+  severity: error
+# Paths to ignore
+excluded:
+- Pods

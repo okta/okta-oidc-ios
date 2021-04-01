@@ -31,7 +31,7 @@ final class ViewController: UIViewController {
     }
     
     private var testConfig: OktaOidcConfig? {
-        return try? OktaOidcConfig(with:[
+        return try? OktaOidcConfig(with: [
             "issuer": ProcessInfo.processInfo.environment["ISSUER"]!,
             "clientId": ProcessInfo.processInfo.environment["CLIENT_ID"]!,
             "redirectUri": ProcessInfo.processInfo.environment["REDIRECT_URI"]!,

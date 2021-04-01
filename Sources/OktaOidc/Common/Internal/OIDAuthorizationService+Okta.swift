@@ -47,12 +47,12 @@ extension OKTAuthorizationService {
                     return
             }
         
-            var parameters = [String : NSString]()
+            var parameters = [String: NSString]()
             queryItems.forEach({ item in
                 parameters[item.name] = item.value as NSString?
             })
 
-            if let allHeaderFields = response.allHeaderFields as? [String : String],
+            if let allHeaderFields = response.allHeaderFields as? [String: String],
                let url = response.url {
                 let httpCookies = HTTPCookie.cookies(withResponseHeaderFields: allHeaderFields, for: url)
                 for cookie in httpCookies {

@@ -33,7 +33,7 @@ class OktaOidcTests: XCTestCase {
             return nil
         }
         
-        return try? OktaOidcConfig(with:[
+        return try? OktaOidcConfig(with: [
             "issuer": issuer!,
             "clientId": clientId!,
             "redirectUri": redirectUri!,
@@ -107,7 +107,7 @@ class OktaOidcTests: XCTestCase {
     }
 
     func createDummyConfig() -> OktaOidcConfig? {
-        return try? OktaOidcConfig(with: ["issuer" : TestUtils.mockIssuer, "clientId" : TestUtils.mockClientId, "scopes" : "id_token", "redirectUri" : "com.example:/callback"])
+        return try? OktaOidcConfig(with: ["issuer": TestUtils.mockIssuer, "clientId": TestUtils.mockClientId, "scopes": "id_token", "redirectUri": "com.example:/callback"])
     }
 
     func createDummyOidcObject() -> OktaOidc? {
