@@ -86,7 +86,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 callback(nil, OktaOidcError.APIError("Authorization Error: \(error?.localizedDescription ?? "No external User Agent.")"))
                 return
             }
-            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) { response, responseError in
+            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) { _, responseError in
                 
                 self.userAgentSession = nil
                 

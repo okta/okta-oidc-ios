@@ -42,7 +42,7 @@ public class OktaOidcConfig: NSObject {
 
     @objc public init(with dict: [String: String]) throws {
         guard let clientId = dict["clientId"], !clientId.isEmpty,
-              let issuer = dict["issuer"], let _ = URL(string: issuer),
+              let issuer = dict["issuer"], URL(string: issuer) != nil,
               let scopes = dict["scopes"], !scopes.isEmpty,
               let redirectUriString = dict["redirectUri"],
               let redirectUri = URL(string: redirectUriString) else {

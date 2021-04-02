@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 class OKTAuthStateMACMock: OKTAuthState {
     override class func authState(byPresenting authorizationRequest: OKTAuthorizationRequest,
@@ -26,7 +26,7 @@ class OKTAuthStateMACMock: OKTAuthState {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
             if authorizationRequest.redirectURL?.absoluteString != "http://127.0.0.1:60000/" {
                 // hit loopback server
-                let task = URLSession.shared.dataTask(with: authorizationRequest.redirectURL!) {(data, response, error) in
+                let task = URLSession.shared.dataTask(with: authorizationRequest.redirectURL!) { (_, _, error) in
                     if let error = error {
                         callback(nil, error)
                     } else {

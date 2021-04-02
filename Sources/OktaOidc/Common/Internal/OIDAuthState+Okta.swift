@@ -30,7 +30,7 @@ extension OKTAuthState {
                 return
             }
 
-            guard let _ = authResponse.authorizationCode,
+            guard authResponse.authorizationCode != nil,
                   let tokenRequest = authResponse.tokenExchangeRequest() else {
                     finalize(nil, OktaOidcError.unableToGetAuthCode)
                     return

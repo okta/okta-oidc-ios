@@ -31,7 +31,7 @@ extension OKTAuthorizationService {
         let customizedRequest = delegate?.customizableURLRequest(urlRequest) ?? urlRequest
 
         let session = OKTURLSessionProvider.session()
-        session.dataTask(with: customizedRequest) { [weak delegate] (data, response, error) in
+        session.dataTask(with: customizedRequest) { [weak delegate] (_, response, error) in
 
             delegate?.didReceive(response)
             guard let response = response as? HTTPURLResponse else {

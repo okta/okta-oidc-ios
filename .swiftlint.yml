@@ -11,6 +11,7 @@ only_rules:
   - operator_whitespace
   - operator_usage_whitespace
   - return_arrow_whitespace
+  - no_space_in_method_call
   # Empty
   - empty_collection_literal
   - empty_count
@@ -35,7 +36,20 @@ only_rules:
   - anyobject_protocol
   - class_delegate_protocol
   - cyclomatic_complexity
-
+  - array_init
+  - block_based_kvo
+  - sorted_imports
+  - redundant_nil_coalescing
+  - compiler_protocol_init
+  # Unused
+  - unused_capture_list
+  - unused_closure_parameter
+  - unused_declaration
+  - unused_enumerated
+  - unused_optional_binding
+  - unused_setter_value
+  # Custom
+  - custom_rules
 
 # Spacing
 opening_brace:
@@ -100,3 +114,27 @@ file_header:
                    \* See the License for the specific language governing permissions and limitations under the License.
 excluded:
 - Pods
+
+custom_rules:
+  explicit_failure:
+      name: "Avoid failure"
+      regex: '(assert(.*\)|preconditionFailure\(.*\)|precondition\(.*\)|fatalError\(.*\))'
+      message: Use `assertionFailure`.
+      severity: warning
+  multiple_empty_lines:
+      name: "Multiple Empty Lines"
+      regex: '((?:\s*\n){3,})'
+      message: "There are too many line breaks"
+      severity: error
+  double_space:
+      include: "*.swift"
+      name: "Double space are disabled"
+      regex: '([a-z,A-Z] \s+)'
+      message: "Double space between keywords"
+      match_kinds: keyword
+      severity: error
+  empty_line_after_super:
+      name: "Empty Line After Super"
+      regex: '(^ *super\.[ a-zA-Z0-9=?.\(\)\{\}:,><!]*\n *(?!(?:\}|return))\S+)'
+      message: "There should be an empty line after super"
+      severity: error      

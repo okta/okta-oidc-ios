@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 import OktaOidc
+import XCTest
 
 class OktaUITests: XCTestCase {
     // Update these values along with your Plist config
@@ -74,7 +74,7 @@ class OktaUITests: XCTestCase {
         testUtils.signIn(username: username, password: password)
 
         // Wait for app to redirect back (Granting 5 second delay)
-        guard let _ = testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
+        guard testUtils.getTextViewValueWithDelay(label: "tokenView", delay: 5) != nil else {
             XCTFail("Unable to redirect back from browser")
             return
         }
@@ -148,7 +148,7 @@ class OktaUITests: XCTestCase {
         app.tap()
 		
         // Wait for browser to dismiss
-        guard let _ = testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5) else {
+        guard testUtils?.getTextViewValueWithDelay(label: "tokenView", delay: 5) != nil else {
             XCTFail("Should return to main screen!")
             return
         }

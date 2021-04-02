@@ -25,7 +25,7 @@ class OKTAuthorizationServiceMACMock: OKTAuthorizationService {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
             if request.postLogoutRedirectURL?.absoluteString != "http://127.0.0.1:60000/" {
                 // hit loopback server
-                let task = URLSession.shared.dataTask(with: request.postLogoutRedirectURL!) {(data, response, error) in
+                let task = URLSession.shared.dataTask(with: request.postLogoutRedirectURL!) { (_, _, error) in
                     if let error = error {
                         callback(nil, error)
                     } else {

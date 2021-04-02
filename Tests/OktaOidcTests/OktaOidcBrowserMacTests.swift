@@ -10,9 +10,9 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import OktaOidc
 @testable import TestCommon
+import XCTest
 
 #if os(macOS)
 
@@ -91,7 +91,7 @@ class OktaOidcBrowserTests: XCTestCase {
 
         let signInExpectation = expectation(description: "Completion should be called!")
         let serverConfiguration = OktaRedirectServerConfiguration(successRedirectURL: nil, port: 60000, domainName: nil)
-        oidc.signInWithBrowser(redirectServerConfiguration: serverConfiguration) { stateManager, error in
+        oidc.signInWithBrowser(redirectServerConfiguration: serverConfiguration) { _, error in
             XCTAssertNotNil(error)
             XCTAssertEqual(error?.localizedDescription, "Authorization Error: Authorization flow was cancelled.")
             signInExpectation.fulfill()

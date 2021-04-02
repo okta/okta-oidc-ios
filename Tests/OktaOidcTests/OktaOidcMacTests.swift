@@ -14,9 +14,9 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
 @testable import TestCommon
+import XCTest
 
 #if os(macOS)
 
@@ -129,9 +129,9 @@ class OktaOidcMacTests: XCTestCase {
         let authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
         )
-        oidc.signOut(with: .signOutFromOkta, authStateManager: authStateManager, progressHandler: { options in
+        oidc.signOut(with: .signOutFromOkta, authStateManager: authStateManager, progressHandler: { _ in
             progressExpectation.fulfill()
-        }) { result, options in
+        }) { _, _ in
             signOutExpectation.fulfill()
         }
 
@@ -146,7 +146,7 @@ class OktaOidcMacTests: XCTestCase {
             } else if options == .revokeRefreshToken {
                 revokeRefreshTokenExpectation.fulfill()
             }
-        }) { result, options in
+        }) { _, _ in
             signOutExpectation.fulfill()
         }
 

@@ -70,10 +70,10 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
                         from presenter: UIViewController,
                         progressHandler: @escaping ((OktaSignOutOptions) -> Void),
                         completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        let  signOutHandler: OktaOidcSignOutHandlerIOS = OktaOidcSignOutHandlerIOS(presenter: presenter,
-                                                                                   options: options,
-                                                                                   oidcClient: self,
-                                                                                   authStateManager: authStateManager)
+        let signOutHandler: OktaOidcSignOutHandlerIOS = OktaOidcSignOutHandlerIOS(presenter: presenter,
+                                                                                  options: options,
+                                                                                  oidcClient: self,
+                                                                                  authStateManager: authStateManager)
         signOutHandler.signOut(with: options,
                                failedOptions: [],
                                progressHandler: progressHandler,

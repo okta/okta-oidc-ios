@@ -29,7 +29,7 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
                 return
             }
 
-            guard  200 ..< 300 ~= httpResponse.statusCode else {
+            guard 200 ..< 300 ~= httpResponse.statusCode else {
                 DispatchQueue.main.async {
                     onError(OktaOidcError.APIError(HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode)))
                 }

@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -43,7 +43,7 @@ class OktaOKTAuthStateTests: XCTestCase {
     func testFireRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
         let authStateExpectation = expectation(description: "Get auth state completed!")
-        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (state, error) in
+        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (_, _) in
             authStateExpectation.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)

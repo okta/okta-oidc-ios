@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -28,6 +28,7 @@ class OktaOidcStateManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        
         apiMock = OktaOidcApiMock()
         authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)

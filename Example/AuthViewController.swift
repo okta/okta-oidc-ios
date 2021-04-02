@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import UIKit
 import OktaOidc
+import UIKit
 
 class AuthViewController: UIViewController {
     
@@ -31,6 +31,7 @@ class AuthViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         hideProgress()
         clearMessageView()
     }

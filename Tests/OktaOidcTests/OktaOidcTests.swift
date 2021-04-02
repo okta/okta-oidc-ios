@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -126,7 +126,7 @@ extension OktaOidcTests {
     func testSignOutWithEmptyOptions() {
         let oktaOidc = createDummyOidcObject()
         let viewController = UIViewController(nibName: nil, bundle: nil)
-        oktaOidc?.signOut(with: [], authStateManager: authStateManager, from: viewController, progressHandler: { currentOption in
+        oktaOidc?.signOut(with: [], authStateManager: authStateManager, from: viewController, progressHandler: { _ in
             XCTFail("Unexpected progress step")
         },
         completionHandler: { result, failedOptions in
@@ -178,7 +178,7 @@ extension OktaOidcTests {
         let viewController = UIViewController(nibName: nil, bundle: nil)
         let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
         authStateManager.writeToSecureStorage()
-        guard let _ = OktaOidcStateManager.readFromSecureStorage(for: createDummyConfig()!) else {
+        guard OktaOidcStateManager.readFromSecureStorage(for: createDummyConfig()!) != nil else {
             XCTFail("Failed to read from secure storage")
             return
         }

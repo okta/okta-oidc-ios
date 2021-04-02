@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -80,7 +80,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         var browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                             oktaAPI: OktaOidcApiMock(),
                                                             redirectServerConfiguration: OktaRedirectServerConfiguration.default)
-        browserTask.signIn { authState, error in
+        browserTask.signIn { _, _ in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }
@@ -90,7 +90,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         signInExpectation = expectation(description: "Completion should be called!")
         browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                         oktaAPI: OktaOidcApiMock())
-        browserTask.signIn { authState, error in
+        browserTask.signIn { _, _ in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }
@@ -107,7 +107,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         var browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                             oktaAPI: OktaOidcApiMock(),
                                                             redirectServerConfiguration: OktaRedirectServerConfiguration.default)
-        browserTask.signOutWithIdToken(idToken: "token") { authState, error in
+        browserTask.signOutWithIdToken(idToken: "token") { _, _ in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }
@@ -117,7 +117,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         signInExpectation = expectation(description: "Completion should be called!")
         browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                         oktaAPI: OktaOidcApiMock())
-        browserTask.signOutWithIdToken(idToken: "token") { authState, error in
+        browserTask.signOutWithIdToken(idToken: "token") { _, _ in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }

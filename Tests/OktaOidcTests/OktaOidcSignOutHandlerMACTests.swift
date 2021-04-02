@@ -10,8 +10,8 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -54,7 +54,7 @@ class OktaOidcSignOutHandlerMACTests: XCTestCase {
             progressHandler: { signOutOptions in
                 XCTAssertEqual(.signOutFromOkta, signOutOptions)
                 progressExpectation.fulfill()
-            }) { result, signOutOptions in
+            }) { _, _ in
             completionExpectation.fulfill()
         }
 

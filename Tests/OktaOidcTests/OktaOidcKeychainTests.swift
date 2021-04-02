@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if !SWIFT_PACKAGE || !os(iOS)
 
@@ -27,6 +27,7 @@ class OktaKeychainTests: XCTestCase {
 
     override func tearDown() {
         super.tearDown()
+        
         OktaOidcKeychain.clearAll()
     }
 

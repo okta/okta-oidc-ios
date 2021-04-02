@@ -34,13 +34,12 @@ class OktaOidcSignOutHandlerIOS: OktaOidcSignOutHandler {
         progressHandler(.signOutFromOkta)
         oidcClient.signOutOfOkta(authStateManager, from: presenter) { error in
             notFinishedOptions.remove(.signOutFromOkta)
-            if let _ = error {
+            
+            if error != nil {
                 failedOptions.insert(.signOutFromOkta)
             }
-            super.signOut(with: notFinishedOptions,
-                          failedOptions: failedOptions,
-                          progressHandler: progressHandler,
-                          completionHandler: completionHandler)
+            
+            super.signOut(with: notFinishedOptions, failedOptions: failedOptions, progressHandler: progressHandler, completionHandler: completionHandler)
         }
     }
 }

@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -27,6 +27,7 @@ class OKTAuthorizationServiceOktaTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        
         sessionMock = URLSessionMock()
         OKTURLSessionProvider.setSession(sessionMock)
     }
@@ -53,7 +54,7 @@ class OKTAuthorizationServiceOktaTests: XCTestCase {
 
         let requestCompleteExpectation = expectation(description: "Request completed!")
         OKTAuthorizationService.perform(
-            authRequest: mockAuthRequest, 
+            authRequest: mockAuthRequest,
             delegate: delegateMock
         ) { (_, _) in
             requestCompleteExpectation.fulfill()

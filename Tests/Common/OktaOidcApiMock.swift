@@ -31,14 +31,14 @@ class OktaOidcApiMock: OktaOidcHttpApiProtocol {
     }
     
     func configure(error: OktaOidcError, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
-        requestHandler = { request, onSuccess, onError in
+        requestHandler = { request, _, onError in
             requestValidationBlock?(request)
             onError(error)
         }
     }
     
      func configure(response: [String: Any]?, requestValidationBlock: ((URLRequest) -> Void)? = nil) {
-        requestHandler = { request, onSuccess, onError in
+        requestHandler = { request, onSuccess, _ in
             requestValidationBlock?(request)
             onSuccess(response)
         }
