@@ -31,7 +31,7 @@ public struct UITestUtils {
 
     func findPasswordField(app: XCUIApplication, usernameFieldFrame: CGRect) -> XCUIElement? {
         let secureTextFields = app.webViews.secureTextFields
-        guard !secureTextFields.isEmpty else {
+        guard secureTextFields.count > 0 else { // swiftlint:disable:this empty_count
             return nil
         }
 
