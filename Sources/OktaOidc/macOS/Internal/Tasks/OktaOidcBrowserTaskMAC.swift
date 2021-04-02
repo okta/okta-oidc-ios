@@ -69,12 +69,12 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         super.signIn(callback: callback)
     }
 
-    override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
+    override func signOutWithIdToken(idToken: String, callback: @escaping (OktaOidcError?) -> Void) {
         if let redirectServer = self.redirectServer {
             do {
                 redirectURL = try redirectServer.startListener(with: domainName)
             } catch(let error) {
-                callback(nil, OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
+                callback(OktaOidcError.redirectServerError("Redirect server error: \(error.localizedDescription)"))
                 return
             }
         } else {

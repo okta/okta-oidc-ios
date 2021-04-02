@@ -32,13 +32,13 @@ class OktaOidcBrowserTaskMACUnitMock: OktaOidcBrowserTaskMAC {
         }
     }
 
-    override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
+    override func signOutWithIdToken(idToken: String, callback: @escaping (OktaOidcError?) -> Void) {
         DispatchQueue.main.async {
             self.signOutCalled = true
             if let error = self.error {
-                callback(nil, error)
+                callback(error)
             } else {
-                callback((), nil)
+                callback(nil)
             }
         }
     }

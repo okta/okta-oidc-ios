@@ -103,7 +103,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         var browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                             oktaAPI: OktaOidcApiMock(),
                                                             redirectServerConfiguration: OktaRedirectServerConfiguration.default)
-        browserTask.signOutWithIdToken(idToken: "token") { authState, error in
+        browserTask.signOutWithIdToken(idToken: "token") { error in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }
@@ -113,7 +113,7 @@ class OktaOidcBrowserTaskMACTests: XCTestCase {
         signInExpectation = expectation(description: "Completion should be called!")
         browserTask = OktaOidcBrowserTaskMACPartialMock(config: config,
                                                         oktaAPI: OktaOidcApiMock())
-        browserTask.signOutWithIdToken(idToken: "token") { authState, error in
+        browserTask.signOutWithIdToken(idToken: "token") { error in
             XCTAssertTrue(browserTask.downloadOidcConfigCalled)
             signInExpectation.fulfill()
         }
