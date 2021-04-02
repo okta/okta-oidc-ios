@@ -103,13 +103,13 @@ final class OktaScenarios: XCTestCase {
         // given
         signInAndWait()
         
-        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .minimal)
+        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .testing)
         
         // when
         app.terminate()
         app.launch()
         // then
-        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .minimal)
+        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .testing)
 
         // then
         pressGetUserButton()
@@ -150,7 +150,7 @@ final class OktaScenarios: XCTestCase {
         continueSpringboardButton.tap()
         
         XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: .testing))
-        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .minimal))
+        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .testing))
 
         waitForText(predicate: "== ''", object: tokenTextView, timeout: .minimal)
     }
@@ -172,7 +172,7 @@ final class OktaScenarios: XCTestCase {
         let messageView = app.textViews["MessageView"]
         XCTAssertTrue(messageView.waitForExistence(timeout: .testing))
         
-        waitForText(predicate: "CONTAINS 'Error'", object: messageView, timeout: .testing)
+        waitForText(predicate: "CONTAINS 'Error'", object: messageView, timeout: .minimal)
     }
     
     // MARK: - Private
@@ -203,7 +203,7 @@ final class OktaScenarios: XCTestCase {
         // when
         revokeButton.tap()
         // then
-        waitForText(predicate: "CONTAINS 'AccessToken was revoked'", object: tokenTextView, timeout: .minimal)
+        waitForText(predicate: "CONTAINS 'AccessToken was revoked'", object: tokenTextView, timeout: .testing)
     }
     
     private func signIn(username: String, password: String) {
