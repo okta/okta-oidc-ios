@@ -34,6 +34,8 @@
 		2F32CCA3229D6801003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA4229D6A4E003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		922628792617553F002F6BC4 /* OktaOidcHttpApiProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */; };
+		9226287A2617553F002F6BC4 /* OktaOidcHttpApiProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */; };
 		92B62A2D25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
 		92B62A2E25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
 		9601C34C256DD14800C084F5 /* OktaRedirectServerConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */; };
@@ -371,6 +373,7 @@
 		2F32CC8A229D4FCD003A6768 /* Okta_UITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Okta_UITests.swift; sourceTree = "<group>"; };
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F32CC8C229D4FCD003A6768 /* UITestUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UITestUtils.swift; sourceTree = "<group>"; };
+		922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcHttpApiProtocol.swift; sourceTree = "<group>"; };
 		92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKTTokensAuthMock.swift; sourceTree = "<group>"; };
 		960961F925672EC40077978A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		9671A102256F153900D0B03F /* OktaOidcBrowserProtocolIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserProtocolIOS.swift; path = Internal/OktaOidcBrowserProtocolIOS.swift; sourceTree = "<group>"; };
@@ -953,6 +956,7 @@
 				A17E39C62357DB0F00837873 /* OIDAuthorizationService+Okta.swift */,
 				A17E39CB2357DB0F00837873 /* OIDAuthState+Okta.swift */,
 				A17E39C92357DB0F00837873 /* OktaOidcEndpoint.swift */,
+				922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */,
 				A17E39C52357DB0F00837873 /* OktaOidcRestApi.swift */,
 				A17E39CA2357DB0F00837873 /* OktaOidcSignOutHandler.swift */,
 			);
@@ -1357,6 +1361,7 @@
 				A17E387B234CFEED00837873 /* OKTAuthState.m in Sources */,
 				A10798962322DB8700327ED9 /* OktaSignOutOptions.swift in Sources */,
 				A17E388D234CFEED00837873 /* OKTScopeUtilities.m in Sources */,
+				922628792617553F002F6BC4 /* OktaOidcHttpApiProtocol.swift in Sources */,
 				A17E39CE2357DB0F00837873 /* OIDAuthorizationService+Okta.swift in Sources */,
 				A17E39D22357DB1000837873 /* OktaUserAgent.m in Sources */,
 				A17E3888234CFEED00837873 /* OKTTokenResponse.m in Sources */,
@@ -1491,6 +1496,7 @@
 				A17E39DD2357DB4E00837873 /* OktaOidcSignOutHandlerMAC.swift in Sources */,
 				A17E3935234D2E7100837873 /* OKTGrantTypes.m in Sources */,
 				A17E3936234D2E7100837873 /* OKTRegistrationRequest.m in Sources */,
+				9226287A2617553F002F6BC4 /* OktaOidcHttpApiProtocol.swift in Sources */,
 				A17E3937234D2E7100837873 /* OKTRegistrationResponse.m in Sources */,
 				A17E39A22351540000837873 /* OktaRedirectServerConfiguration.swift in Sources */,
 				A17E3938234D2E7100837873 /* OKTResponseTypes.m in Sources */,

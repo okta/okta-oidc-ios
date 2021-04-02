@@ -61,7 +61,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         super.init()
     }
 
-    @objc required public convenience init?(coder decoder: NSCoder) {
+    @objc public required convenience init?(coder decoder: NSCoder) {
         guard let state = decoder.decodeObject(forKey: "authState") as? OKTAuthState else {
             return nil
         }
