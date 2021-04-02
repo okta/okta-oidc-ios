@@ -25,7 +25,7 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
     }
     
     @objc public func signInWithBrowser(redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
-                                        additionalParameters: [String:String],
+                                        additionalParameters: [String: String],
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let config: OktaOidcConfig
         do {

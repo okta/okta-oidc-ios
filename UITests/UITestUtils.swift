@@ -29,7 +29,7 @@ public struct UITestUtils {
         }
     }
 
-    func findPasswordField(app:XCUIApplication, usernameFieldFrame: CGRect) -> XCUIElement? {
+    func findPasswordField(app: XCUIApplication, usernameFieldFrame: CGRect) -> XCUIElement? {
         let secureTextFields = app.webViews.secureTextFields
         guard secureTextFields.count > 0 else {
             return nil

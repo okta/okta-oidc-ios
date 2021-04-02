@@ -23,7 +23,7 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
     }
     
     @objc public func signInWithBrowser(from presenter: UIViewController,
-                                        additionalParameters: [String:String],
+                                        additionalParameters: [String: String],
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let config: OktaOidcConfig
         do {

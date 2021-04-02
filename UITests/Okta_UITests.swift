@@ -37,7 +37,7 @@ class OktaUITests: XCTestCase {
             "ISSUER": issuer,
             "CLIENT_ID": clientID,
             "REDIRECT_URI": redirectURI,
-            "LOGOUT_REDIRECT_URI" : logoutRedirectURI
+            "LOGOUT_REDIRECT_URI": logoutRedirectURI
         ]
         
         testUtils = UITestUtils(app)
@@ -91,7 +91,7 @@ class OktaUITests: XCTestCase {
         XCTAssertNotEqual(tokenValues, "")
     }
 
-    func testAuthCodeFlowAndUserInfo(){
+    func testAuthCodeFlowAndUserInfo() {
         signInAndWait()
 
         // Get User info

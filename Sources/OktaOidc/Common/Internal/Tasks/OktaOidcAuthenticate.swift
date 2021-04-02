@@ -30,7 +30,7 @@ class OktaOidcAuthenticateTask: OktaOidcTask {
             let codeVerifier = OKTAuthorizationRequest.generateCodeVerifier()
             let codeChallenge = OKTAuthorizationRequest.codeChallengeS256(forVerifier: codeVerifier)
             let state = OKTAuthorizationRequest.generateState()
-            var additionalParameters = self.config.additionalParams ?? [String : String]()
+            var additionalParameters = self.config.additionalParams ?? [String: String]()
             additionalParameters["sessionToken"] = sessionToken
             
             let request = OKTAuthorizationRequest(

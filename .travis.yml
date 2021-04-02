@@ -6,6 +6,15 @@ before_install:
   - brew outdated carthage || brew upgrade carthage
 jobs:
   include:
+    - stage: Linting
+      name: SwiftLint
+      addons:
+        homebrew:
+          packages:
+          - swiftlint
+          update: true
+      script:
+      - swiftlint
     - stage: Unit tests iOS
       name: iOS
       script:

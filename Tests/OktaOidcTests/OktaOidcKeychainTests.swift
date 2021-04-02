@@ -15,7 +15,7 @@ import XCTest
 
 #if !SWIFT_PACKAGE || !os(iOS)
 
-class OktaKeychainTests : XCTestCase {
+class OktaKeychainTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
