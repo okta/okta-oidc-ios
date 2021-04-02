@@ -19,8 +19,12 @@ import XCTest
 fileprivate class OktaOidcPartialMock: OktaOidc {
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        guard let macTask = task as? OktaOidcBrowserTaskMAC else {
+            assertionFailure("Expected \(OktaOidcBrowserTaskMAC.self) type.")
+            return
+        }
+        
         DispatchQueue.main.async {
-            let macTask = task as! OktaOidcBrowserTaskMAC
             let task = OktaOidcBrowserTaskMACFunctionalMock(config: self.configuration,
                                                             oktaAPI: OktaOidcApiMock(),
                                                             redirectServerConfiguration: macTask.redirectServerConfiguration)
@@ -29,8 +33,12 @@ fileprivate class OktaOidcPartialMock: OktaOidc {
     }
 
     override func signOutWithBrowserTask(_ task: OktaOidcBrowserTask, idToken: String, callback: @escaping ((Error?) -> Void)) {
+        guard let macTask = task as? OktaOidcBrowserTaskMAC else {
+            assertionFailure("Expected \(OktaOidcBrowserTaskMAC.self) type.")
+            return
+        }
+        
         DispatchQueue.main.async {
-            let macTask = task as! OktaOidcBrowserTaskMAC
             let task = OktaOidcBrowserTaskMACFunctionalMock(config: self.configuration,
                                                             oktaAPI: OktaOidcApiMock(),
                                                             redirectServerConfiguration: macTask.redirectServerConfiguration)

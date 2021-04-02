@@ -13,6 +13,10 @@
 import UIKit
 import OktaOidc
 
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+// swiftlint:disable force_unwrapping
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var tokenView: UITextView!

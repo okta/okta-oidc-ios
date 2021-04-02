@@ -40,7 +40,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                                                   responseType: OKTResponseTypeCode,
                                                   additionalParameters: self.config.additionalParams)
             guard let externalUserAgent = self.externalUserAgent() else {
-                callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                callback(nil, OktaOidcError.APIError("Authorization Error: \(error?.localizedDescription ?? "No external User Agent.")"))
                 return
             }
 
@@ -83,11 +83,10 @@ class OktaOidcBrowserTask: OktaOidcTask {
                                                postLogoutRedirectURL: successRedirectURL,
                                                additionalParameters: self.config.additionalParams)
             guard let externalUserAgent = self.externalUserAgent() else {
-                callback(nil, OktaOidcError.APIError("Authorization Error: \(error!.localizedDescription)"))
+                callback(nil, OktaOidcError.APIError("Authorization Error: \(error?.localizedDescription ?? "No external User Agent.")"))
                 return
             }
-            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) {
-                response, responseError in
+            let userAgentSession = self.authorizationServiceClass().present(request, externalUserAgent: externalUserAgent) { response, responseError in
                 
                 self.userAgentSession = nil
                 

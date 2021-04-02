@@ -54,7 +54,7 @@ class OktaOidcSignOutHandlerMACTests: XCTestCase {
             progressHandler: { signOutOptions in
                 XCTAssertEqual(.signOutFromOkta, signOutOptions)
                 progressExpectation.fulfill()
-        }) { result, signOutOptions in
+            }) { result, signOutOptions in
             completionExpectation.fulfill()
         }
 

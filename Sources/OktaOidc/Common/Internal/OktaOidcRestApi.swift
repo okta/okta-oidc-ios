@@ -55,7 +55,7 @@ extension OktaOidcHttpApiProtocol {
               onSuccess: @escaping OktaApiSuccessCallback,
               onError: @escaping OktaApiErrorCallback) {
         // Generic POST API wrapper for data passed in as a String
-        let data = postString != nil ? postString!.data(using: .utf8) : nil
+        let data = postString?.data(using: .utf8)
         return self.post(url, headers: headers, postData: data, onSuccess: onSuccess, onError: onError)
     }
 
@@ -117,7 +117,7 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
             guard let data = data,
                   error == nil,
                   let httpResponse = response as? HTTPURLResponse else {
-                let errorMessage = error != nil ? error!.localizedDescription : "No response data"
+                let errorMessage = error?.localizedDescription ?? "No response data"
                 DispatchQueue.main.async {
                     onError(OktaOidcError.APIError(errorMessage))
                 }
