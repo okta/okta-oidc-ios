@@ -18,6 +18,7 @@ import XCTest
 
 fileprivate class OktaOidcPartialMock: OktaOidc {
     var error: Error?
+    
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         DispatchQueue.main.async {

@@ -21,7 +21,7 @@ import AppKit
     func signOutOfOkta(authStateManager: OktaOidcStateManager,
                        redirectServerConfiguration: OktaRedirectServerConfiguration?,
                        callback: @escaping ((Error?) -> Void))
-    func cancelBrowserSession(completion: (()-> Void)?)
+    func cancelBrowserSession(completion: (() -> Void)?)
 }
 
 public extension OktaOidcBrowserProtocolMAC {
@@ -37,7 +37,7 @@ public extension OktaOidcBrowserProtocolMAC {
                       redirectServerConfiguration: redirectServerConfiguration,
                       callback: callback)
     }
-    func cancelBrowserSession(completion: (()-> Void)? = nil) {
+    func cancelBrowserSession(completion: (() -> Void)? = nil) {
         cancelBrowserSession(completion: completion)
     }
 }

@@ -5,6 +5,12 @@ only_rules:
   - closure_spacing
   - comma
   - colon
+  # Whitespace (Xcode configuration)
+  - leading_whitespace
+  - let_var_whitespace
+  - operator_whitespace
+  - operator_usage_whitespace
+  - return_arrow_whitespace
 
 # Spacing
 opening_brace:
@@ -17,6 +23,16 @@ comma:
   severity: error
 colon:
   severity: error
-# Paths to ignore
+# Whitespace
+leading_whitespace:
+  severity: error
+let_var_whitespace:
+  severity: error
+operator_whitespace:
+  severity: error
+operator_usage_whitespace:
+  severity: error
+return_arrow_whitespace:
+  severity: error
 excluded:
 - Pods
