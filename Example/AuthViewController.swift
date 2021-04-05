@@ -13,7 +13,7 @@
 import UIKit
 import OktaOidc
 
-final class AuthViewController : UIViewController {
+final class AuthViewController: UIViewController {
     
     @IBOutlet private weak var tokenTextView: UITextView!
     @IBOutlet private weak var authenticateButton: UIButton!

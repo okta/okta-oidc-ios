@@ -46,8 +46,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
 
             let userAgentSession = self.authStateClass().authState(byPresenting: request,
                                                                    externalUserAgent: externalUserAgent,
-                                                                   delegate: delegate)
-            { authorizationResponse, error in
+                                                                   delegate: delegate) { authorizationResponse, error in
                 defer { self.userAgentSession = nil }
 
                 guard let authResponse = authorizationResponse else {

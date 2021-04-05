@@ -34,7 +34,7 @@ public class OktaOidcConfig: NSObject {
     @available(iOS 13.0, *)
     @objc public lazy var noSSO: Bool = false
     
-    @objc public let additionalParams: [String:String]?
+    @objc public let additionalParams: [String: String]?
 
     @objc public static func `default`() throws -> OktaOidcConfig {
         return try OktaOidcConfig(fromPlist: defaultPlistName)
@@ -107,7 +107,7 @@ public class OktaOidcConfig: NSObject {
         */
         let config = URLSessionConfiguration.default
         config.httpShouldSetCookies = false
-        config.httpAdditionalHeaders = [[OktaUserAgent.userAgentHeaderKey()] : [OktaUserAgent.userAgentHeaderValue()]]
+        config.httpAdditionalHeaders = [[OktaUserAgent.userAgentHeaderKey()]: [OktaUserAgent.userAgentHeaderValue()]]
 
         let session = URLSession(
             configuration: config,
@@ -120,7 +120,7 @@ public class OktaOidcConfig: NSObject {
     public func configuration(withAdditionalParams config: [String: String]) throws -> OktaOidcConfig {
         guard config.count > 0 else { return self }
 
-        var dict: [String:String] = additionalParams?.merging(config, uniquingKeysWith: { (_, new) -> String in
+        var dict: [String: String] = additionalParams?.merging(config, uniquingKeysWith: { (_, new) -> String in
             return new
         }) ?? config
         

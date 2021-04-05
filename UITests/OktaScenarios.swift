@@ -88,7 +88,7 @@ final class OktaScenarios: XCTestCase {
             "ISSUER": issuer,
             "CLIENT_ID": clientID,
             "REDIRECT_URI": redirectURI,
-            "LOGOUT_REDIRECT_URI" : logoutRedirectURI
+            "LOGOUT_REDIRECT_URI": logoutRedirectURI
         ]
         
         continueAfterFailure = false

@@ -40,7 +40,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testIntrospectSucceeded() {
         // Mock REST API calls
-        apiMock.configure(response: ["active" : true])
+        apiMock.configure(response: ["active": true])
         
         let introspectExpectation = expectation(description: "Will succeed with payload.")
         
@@ -55,7 +55,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testIntrospectNoBearerToken() {
         // Mock REST API calls
-        apiMock.configure(response: ["active" : true])
+        apiMock.configure(response: ["active": true])
         
         let introspectExpectation = expectation(description: "Will succeed with payload.")
         
@@ -145,7 +145,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testGetUserSucceeded() {
         // Mock REST API calls
-        apiMock.configure(response: ["username" : "test"])
+        apiMock.configure(response: ["username": "test"])
     
         let userInfoExpectation = expectation(description: "Will succeed with payload.")
     
@@ -180,7 +180,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testGetUserFailedNoAccessToken() {
         // Mock REST API calls
-        apiMock.configure(response: ["username" : "test"])
+        apiMock.configure(response: ["username": "test"])
         authStateManager.authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId, skipTokenResponse: true)
         let userInfoExpectation = expectation(description: "Will fail with error.")
         
@@ -315,10 +315,10 @@ class OktaOidcStateManagerTests: XCTestCase {
     /// **Note:** Unit tests in Swift Package Manager do not support tests run from a host application, meaning some iOS features are unavailable.
     func testReadWriteToSecureStorage() {
         guard let testConfig1 = try? OktaOidcConfig(with: [
-            "clientId" : TestUtils.mockClientId,
-            "issuer" : TestUtils.mockIssuer,
-            "scopes" : "test",
-            "redirectUri" : "http://test"
+            "clientId": TestUtils.mockClientId,
+            "issuer": TestUtils.mockIssuer,
+            "scopes": "test",
+            "redirectUri": "http://test"
         ]) else {
             XCTFail("Unable to create test config")
             return
@@ -327,10 +327,10 @@ class OktaOidcStateManagerTests: XCTestCase {
         self.runTestReadWriteToSecureStorage(with: testConfig1)
 
         guard let testConfig2 = try? OktaOidcConfig(with: [
-            "clientId" : "0oa2p7eq7uDmZY4sJ0g70oa2p7eq7uDmZY4sJ0g7",
-            "issuer" : "https://long-long-long-long-long-long-url.trexcloud.com/oauth2/default",
-            "scopes" : "test",
-            "redirectUri" : "http://test"
+            "clientId": "0oa2p7eq7uDmZY4sJ0g70oa2p7eq7uDmZY4sJ0g7",
+            "issuer": "https://long-long-long-long-long-long-url.trexcloud.com/oauth2/default",
+            "scopes": "test",
+            "redirectUri": "http://test"
             ]) else {
                 XCTFail("Unable to create test config")
                 return
@@ -340,7 +340,7 @@ class OktaOidcStateManagerTests: XCTestCase {
     }
 
     func runTestReadWriteToSecureStorage(with config: OktaOidcConfig) {
-        let manager = TestUtils.setupMockAuthStateManager(issuer: config.issuer, clientId: config.clientId,  expiresIn: 5)
+        let manager = TestUtils.setupMockAuthStateManager(issuer: config.issuer, clientId: config.clientId, expiresIn: 5)
         
         XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
         

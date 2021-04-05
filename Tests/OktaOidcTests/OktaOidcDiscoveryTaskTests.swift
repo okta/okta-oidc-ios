@@ -55,7 +55,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     }
     
     func testRunParseError() {
-        apiMock.configure(response: ["invalidKey" : ""])
+        apiMock.configure(response: ["invalidKey": ""])
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
@@ -97,22 +97,22 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     
     private var validConfig: OktaOidcConfig {
         return try! OktaOidcConfig(with: [
-            "issuer" : "http://test.issuer.com/oauth2/default",
-            "clientId" : "test_client",
-            "scopes" : "test",
-            "redirectUri" : "test:/callback"
+            "issuer": "http://test.issuer.com/oauth2/default",
+            "clientId": "test_client",
+            "scopes": "test",
+            "redirectUri": "test:/callback"
         ])
     }
     
-    private var validOKTConfigDictionary: [String:Any] {
+    private var validOKTConfigDictionary: [String: Any] {
         return [
-            "issuer" : "http://test.issuer.com/oauth2/default",
-            "authorization_endpoint" : "http://test.issuer.com/oauth2/authorize",
-            "token_endpoint" : "http://test.issuer.com/oauth2/token",
-            "jwks_uri" : "http://test.issuer.com/oauth2/default/v1/keys",
-            "response_types_supported" : ["code"],
-            "subject_types_supported" : ["public"],
-            "id_token_signing_alg_values_supported" : ["RS256"]
+            "issuer": "http://test.issuer.com/oauth2/default",
+            "authorization_endpoint": "http://test.issuer.com/oauth2/authorize",
+            "token_endpoint": "http://test.issuer.com/oauth2/token",
+            "jwks_uri": "http://test.issuer.com/oauth2/default/v1/keys",
+            "response_types_supported": ["code"],
+            "subject_types_supported": ["public"],
+            "id_token_signing_alg_values_supported": ["RS256"]
         ]
     }
 }
