@@ -10,6 +10,10 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+// swiftlint:disable force_unwrapping
+
 import XCTest
 import OktaOidc
 
@@ -79,7 +83,7 @@ final class OktaScenarios: XCTestCase {
     override func setUpWithError() throws {
         try super.setUpWithError()
         
-        try XCTSkipIf(clientID.count == 0 || password.count == 0,
+        try XCTSkipIf(clientID.isEmpty || password.isEmpty,
                       "Cannot run UI tests without CLIENT_ID or PASSWORD environment variables")
         
         app = XCUIApplication()
