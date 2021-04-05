@@ -101,7 +101,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         let revokeExpectation = expectation(description: "Will succeed with payload.")
         
         authStateManager.revoke(authStateManager.accessToken) { isRevoked, error in
-            XCTAssertEqual(true, isRevoked)
+            XCTAssertTrue(isRevoked)
             XCTAssertNil(error)
             
             revokeExpectation.fulfill()
@@ -275,7 +275,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             if case OktaOidcError.errorFetchingFreshTokens = error! {
                 userInfoExpectation.fulfill()
             } else {
-                XCTFail()
+                XCTFail("Refresh Token succeeded.")
             }
         }
     

@@ -30,7 +30,7 @@ class URLSessionDataTaskMock: URLSessionDataTask {
 
 class URLSessionMock: URLSession {
 
-    var request: URLRequest? = nil
+    var request: URLRequest?
 
     override func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         self.request = request

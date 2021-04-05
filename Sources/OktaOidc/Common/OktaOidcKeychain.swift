@@ -87,7 +87,7 @@ public class OktaOidcKeychain: NSObject {
             kSecAttrAccount as String: key
         ] as CFDictionary
         
-        var ref: AnyObject? = nil
+        var ref: AnyObject?
         
         let sanityCheck = SecItemCopyMatching(q, &ref)
         guard sanityCheck == noErr else {

@@ -90,7 +90,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 
                 self.userAgentSession = nil
                 
-                var error: OktaOidcError? = nil
+                var error: OktaOidcError?
                 if let responseError = responseError {
                     error = OktaOidcError.APIError("Sign Out Error: \(responseError.localizedDescription)")
                 }

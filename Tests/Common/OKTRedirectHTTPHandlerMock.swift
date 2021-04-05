@@ -17,8 +17,8 @@ import Foundation
 
 class OKTRedirectHTTPHandlerMock: OKTRedirectHTTPHandler {
 
-    var startCalled: Bool = false
-    var cancelCalled: Bool = false
+    var startCalled = false
+    var cancelCalled = false
     
     override func startHTTPListener(_ domain: String?) throws -> URL {
         startCalled = true

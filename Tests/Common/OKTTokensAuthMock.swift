@@ -24,7 +24,7 @@ import Foundation
 
 final class OKTTokensAuthMock: OKTAuthState {
     
-    private var shouldFailRefresh: Bool = false
+    private var shouldFailRefresh = false
     
     static func makeDefault(expiresIn: TimeInterval = 10, expiredIDToken: Bool = false, shouldFailRefresh: Bool = false) -> OKTAuthState {
         let issuer = URL(string: TestUtils.mockIssuer)!

@@ -32,7 +32,7 @@ public class OktaOidcConfig: NSObject {
     @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
 
     @available(iOS 13.0, *)
-    @objc public lazy var noSSO: Bool = false
+    @objc public lazy var noSSO = false
     
     @objc public let additionalParams: [String: String]?
 

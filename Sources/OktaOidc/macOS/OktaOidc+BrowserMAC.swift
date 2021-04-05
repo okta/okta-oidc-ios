@@ -77,9 +77,9 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
                         redirectServerConfiguration: OktaRedirectServerConfiguration? = nil,
                         progressHandler: @escaping ((OktaSignOutOptions) -> Void),
                         completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
-        let signOutHandler: OktaOidcSignOutHandlerMAC = OktaOidcSignOutHandlerMAC(options: options,
-                                                                                  oidcClient: self,
-                                                                                  authStateManager: authStateManager)
+        let signOutHandler = OktaOidcSignOutHandlerMAC(options: options,
+                                                       oidcClient: self,
+                                                       authStateManager: authStateManager)
         signOutHandler.signOut(with: options,
                                failedOptions: [],
                                progressHandler: progressHandler,

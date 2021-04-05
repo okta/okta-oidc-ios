@@ -8,7 +8,9 @@
 #### 1. Code Formatting
 
 1.1 Use 4 spaces to indent lines.
+
 1.2. Trim trailing whitespaces (`Xcode` -> `Preferences` -> `Text Editing` -> `Automatically trim trailing whitespace` + `Including whitespace-only lines`).
+
 1.3. No space before colon and one space after it. Exceptions are the ternary operator `? :`, empty dictionary `[:]` and `#selector` syntax `addTarget(_:action:)`.
 
 **Preferred:**
@@ -18,14 +20,19 @@ let testValue: Double
 func handle(response: Response)
 ```
 1.4. No semicolons at the end of line.
+
 1.5. Use Xcode indentation (`Command-A`, `Control-I`).
 
 #### 2. Naming
 
 2.1. Use `CamelCase` for types and protocols; `lowerCamelCase` for everything else (function, method, property, constant, variable, argument names, enum case).
+
 2.2. Start factory methods with word `make`.
+
 2.3. Choose clarity over brevity. 
+
 2.4. Name booleans like `isAuthenticated` instead of `authenticated`. 
+
 2.5. Name function parameters where it is appropriate. 
 
 **Preferred:**
@@ -43,16 +50,23 @@ func handleEvents(events: [Event])
 func compare(firstDate: Date, secondDate: Date) -> DateResult
 ```
 2.6. The protocols that describe ***what something is*** should read as nouns (e.g. `Iterator`, `Collection`).
+
 2.7. The protocols that describe ***a capability*** should end in `-able` or `-ible` (e.g. `Comparable`, `Hashable`, `Codable`)
 
 #### 3. Coding style
 
 3.1. Avoid writing `self.` unless it is required by compiler or for readability purposes.
+
 3.2. Use `let` over `var` whenever possible.
+
 3.3. Mark types, functions, properties, constants, variables with `private` where it is applicable. 
+
 3.4. Use `private(set)` for properties to make them readonly (e.g. `IBOutlet`).
+
 3.5. Avoid `internal` access modifier keyword since it is declared by default.
+
 3.6. Use `final` when a class must not (or is not designed to) be inherited (e.g. singleton).
+
 3.7. Omit unnecessary parentheses.
 
 **Preferred:**
@@ -86,6 +100,7 @@ let selector = #selector(MyViewController.viewDidLoad)
 let message: String = "Hello Okta!"
 ```
 3.9. Name unused closure parameters as underscores `_`.
+
 3.10. Avoid nested `if/else` statements. Use `Happy Path` rule. 
 
 **Preferred:**
@@ -102,6 +117,7 @@ func message(from response: Response) -> String? {
 
   return "User is authenticated"
 }
+
 ```
 **Not preferred:**
 ```swift
@@ -120,6 +136,7 @@ func message(from response: Response) -> String? {
 ```
 
 3.11. Use trailing closure syntax when **single** closure parameter.
+
 **Preferred:**
 ```swift
 sendRequest(request) { response, error in
@@ -172,14 +189,20 @@ guard let user = response["user"] as? User,
 #### 4. Don'ts
 
 4.1. Don't use `fatalError` or `precondition`. Prefer `assert` if it is recoverable case. If not, handle it in proper way. 
+
 4.2. Avoid implicit unwrapping (`!`), as this will cause a crash if a value is `nil`. Unwrap using `guard let` or `if let` and handle error cases in code as appropriate (e.g. logging, return an error etc.).  
+
 4.3. Don't leave unused or dead code.
+
 4.3. Don't leave commented out code.
+
 4.4. Don't use `DispatchQueue.main.asyncAfter` to fix the issues via delays.
+
 4.5. Don't include your name in source code. Use the common copyright header. 
+
 ```swift
 /*
- * Copyright (c) 2021, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.

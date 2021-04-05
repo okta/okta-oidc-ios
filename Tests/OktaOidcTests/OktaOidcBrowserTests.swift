@@ -24,7 +24,7 @@ import XCTest
 #if os(iOS)
 
 class OktaOidcPartialMock: OktaOidc {
-    var originalBrowserTask: OktaOidcBrowserTask? = nil
+    var originalBrowserTask: OktaOidcBrowserTask?
     
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
