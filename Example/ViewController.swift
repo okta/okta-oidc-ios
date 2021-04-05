@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -17,10 +17,10 @@ import OktaOidc
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
 
-    @IBOutlet weak var tokenView: UITextView!
-    @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet private weak var tokenView: UITextView!
+    @IBOutlet private weak var signInButton: UIButton!
     
     private var oktaAppAuth: OktaOidc?
     private var authStateManager: OktaOidcStateManager? {
@@ -88,6 +88,9 @@ class ViewController: UIViewController {
 
     @IBAction func clearTokens(_ sender: Any) {
         authStateManager?.clear()
+        try? authStateManager?.removeFromSecureStorage()
+        authStateManager = nil
+        
         self.buildTokenTextView()
     }
 

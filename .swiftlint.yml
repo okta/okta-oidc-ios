@@ -24,7 +24,6 @@ only_rules:
   - closure_end_indentation
   - closure_parameter_position
 
-
 # Spacing
 opening_brace:
   severity: error
@@ -63,5 +62,6 @@ closure_end_indentation:
 closure_parameter_position:
   severity: error
 
+# Paths to ignore
 excluded:
 - Pods
