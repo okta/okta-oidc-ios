@@ -151,8 +151,6 @@ final class ViewController: UIViewController {
                 self.updateUI(updateText: "Revoking tokens...")
             case .signOutFromOkta:
                 self.updateUI(updateText: "Signing out from Okta...")
-            case .allOptions:
-                break
             default:
                 break
             }
