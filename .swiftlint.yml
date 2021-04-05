@@ -34,5 +34,7 @@ operator_usage_whitespace:
   severity: error
 return_arrow_whitespace:
   severity: error
+
+# Paths to ignore
 excluded:
 - Pods
