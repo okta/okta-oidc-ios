@@ -17,6 +17,7 @@ import Foundation
 
 class OKTExternalUserAgentMacMock: OKTExternalUserAgentMac {
     let responseURL: URL
+    
     init(with responseURL: URL) {
         self.responseURL = responseURL
     }

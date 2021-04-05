@@ -86,7 +86,7 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
                                completionHandler: completionHandler)
     }
 
-    @objc public func cancelBrowserSession(completion: (()-> Void)? = nil) {
+    @objc public func cancelBrowserSession(completion: (() -> Void)? = nil) {
         guard let userAgentSession = currentUserSessionTask?.userAgentSession else {
             completion?()
             return
