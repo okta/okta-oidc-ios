@@ -14,33 +14,13 @@ import XCTest
 
 extension XCUIElement {
     
-    var stringValue: String? {
+    @objc var stringValue: String? {
         value as? String
-    }
-    
-    func waitForText(predicate: @escaping (String?) -> Bool, timeout: TimeInterval) -> Bool {
-        var result = false
-        var secondsToInvalidate = timeout
-        
-        let semaphore = DispatchSemaphore(value: 1)
-        
-        while !secondsToInvalidate.isLessThanOrEqualTo(.zero) && !result {
-            if predicate(self.stringValue) {
-                result = true
-                semaphore.signal()
-                break
-            }
-            
-            secondsToInvalidate -= 1
-            _ = semaphore.wait(timeout: .now() + 1)
-        }
-        
-        return result
     }
     
     func clearText(app: XCUIApplication? = nil) {
         guard let stringValue = value as? String else {
-            XCTFail("Tried to clear and enter text into a non string value")
+            XCTFail("Tried to clear and enter text into a non string value.")
             return
         }
         

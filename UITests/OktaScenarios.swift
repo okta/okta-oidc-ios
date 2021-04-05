@@ -13,7 +13,7 @@
 import XCTest
 import OktaOidc
 
-class OktaScenarios: XCTestCase {
+final class OktaScenarios: XCTestCase {
     // Update these values along with your Plist config
     var username = ProcessInfo.processInfo.environment["USERNAME"]!
     var password = ProcessInfo.processInfo.environment["PASSWORD"]!
@@ -99,29 +99,18 @@ class OktaScenarios: XCTestCase {
         }
     }
     
-    override func tearDown() {
-        super.tearDown()
-    }
-    
     func testAuthCodeFlow() {
         // given
         signInAndWait()
-        
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0 != nil && $0?.contains("Access Token") == true },
-                timeout: .minimal)
-        )
+    
+        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .testing)
         
         // when
         app.terminate()
         app.launch()
         // then
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0 != nil && $0?.contains("Access Token") == true },
-                timeout: .minimal)
-        )
+        waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .testing)
+
         // then
         pressGetUserButton()
         pressIntrospectButton(expectedValue: "true")
@@ -161,14 +150,9 @@ class OktaScenarios: XCTestCase {
         continueSpringboardButton.tap()
         
         XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: .testing))
-        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .minimal))
-        
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0 != nil && $0 == "" },
-                timeout: .minimal
-            )
-        )
+        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .testing))
+
+        waitForText(predicate: "== ''", object: tokenTextView, timeout: .minimal)
     }
     
     func testAuthenticateWithInvalidSessionToken() throws {
@@ -188,11 +172,7 @@ class OktaScenarios: XCTestCase {
         let messageView = app.textViews["MessageView"]
         XCTAssertTrue(messageView.waitForExistence(timeout: .testing))
         
-        XCTAssertTrue(
-            messageView.waitForText(
-                predicate: { $0?.contains("Error") == true },
-                timeout: .testing)
-        )
+        waitForText(predicate: "CONTAINS 'Error'", object: messageView, timeout: .minimal)
     }
     
     // MARK: - Private
@@ -210,32 +190,20 @@ class OktaScenarios: XCTestCase {
     private func pressGetUserButton() {
         getUserButton.tap()
         // then
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0?.contains(self.username) == true },
-                timeout: .testing)
-        )
+        waitForText(predicate: "CONTAINS '\(username)'", object: tokenTextView, timeout: .testing)
     }
     
     private func pressIntrospectButton(expectedValue: String) {
         introspectButton.tap()
         // then
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0?.contains(expectedValue) == true },
-                timeout: .testing)
-        )
+        waitForText(predicate: "CONTAINS '\(expectedValue)'", object: tokenTextView, timeout: .testing)
     }
     
     private func pressRevokeButton() {
         // when
         revokeButton.tap()
         // then
-        XCTAssertTrue(
-            tokenTextView.waitForText(
-                predicate: { $0?.contains("AccessToken was revoked") == true },
-                timeout: .testing)
-        )
+        waitForText(predicate: "CONTAINS 'AccessToken was revoked'", object: tokenTextView, timeout: .testing)
     }
     
     private func signIn(username: String, password: String) {
