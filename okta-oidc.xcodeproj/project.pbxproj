@@ -34,7 +34,7 @@
 		2F32CCA4229D6A4E003A6768 /* OktaOidc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; };
 		2F32CCA8229D6B59003A6768 /* OktaOidc.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2F32CA1E229D38D4003A6768 /* OktaOidc.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9226284326171FD3002F6BC4 /* XCTestCase+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9226284226171FD3002F6BC4 /* XCTestCase+Utils.swift */; };
-		928D75352611DB7500019837 /* XCUIElement+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928D75342611DB7500019837 /* XCUIElement+Utils.swift */; };
+		922628DB261B1F90002F6BC4 /* XCUIElement+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922628DA261B1F90002F6BC4 /* XCUIElement+Utils.swift */; };
 		92B62A2D25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
 		92B62A2E25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
 		9601C34C256DD14800C084F5 /* OktaRedirectServerConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */; };
@@ -372,7 +372,7 @@
 		2F32CC8A229D4FCD003A6768 /* OktaScenarios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaScenarios.swift; sourceTree = "<group>"; };
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9226284226171FD3002F6BC4 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
-		928D75342611DB7500019837 /* XCUIElement+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Utils.swift"; sourceTree = "<group>"; };
+		922628DA261B1F90002F6BC4 /* XCUIElement+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Utils.swift"; sourceTree = "<group>"; };
 		92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKTTokensAuthMock.swift; sourceTree = "<group>"; };
 		960961F925672EC40077978A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		9671A102256F153900D0B03F /* OktaOidcBrowserProtocolIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserProtocolIOS.swift; path = Internal/OktaOidcBrowserProtocolIOS.swift; sourceTree = "<group>"; };
@@ -723,8 +723,8 @@
 		9226284926171FFD002F6BC4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				928D75342611DB7500019837 /* XCUIElement+Utils.swift */,
 				9226284226171FD3002F6BC4 /* XCTestCase+Utils.swift */,
+				922628DA261B1F90002F6BC4 /* XCUIElement+Utils.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1460,7 +1460,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F32CC90229D4FD4003A6768 /* OktaScenarios.swift in Sources */,
-				928D75352611DB7500019837 /* XCUIElement+Utils.swift in Sources */,
+				922628DB261B1F90002F6BC4 /* XCUIElement+Utils.swift in Sources */,
 				9226284326171FD3002F6BC4 /* XCTestCase+Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

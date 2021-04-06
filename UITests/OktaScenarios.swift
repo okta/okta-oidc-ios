@@ -102,7 +102,7 @@ final class OktaScenarios: XCTestCase {
     func testAuthCodeFlow() {
         // given
         signInAndWait()
-        
+    
         waitForText(predicate: "CONTAINS 'Access Token'", object: tokenTextView, timeout: .testing)
         
         // when

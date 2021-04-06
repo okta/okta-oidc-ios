@@ -146,12 +146,13 @@ final class ViewController: UIViewController {
         guard let authStateManager = authStateManager else { return }
         
         oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
-            if currentOption.contains(.revokeAccessToken) {
+            switch currentOption {
+            case .revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage, .revokeTokensOptions:
                 self.updateUI(updateText: "Revoking tokens...")
-            } else if currentOption.contains(.revokeRefreshToken) {
-                self.updateUI(updateText: "Revoking tokens...")
-            } else if currentOption.contains(.signOutFromOkta) {
+            case .signOutFromOkta:
                 self.updateUI(updateText: "Signing out from Okta...")
+            default:
+                break
             }
         }, completionHandler: { success, failedOptions in
             if success {
@@ -164,7 +165,7 @@ final class ViewController: UIViewController {
     }
 
     func updateUI(updateText: String) {
-        DispatchQueue.main.async { self.tokenView.text = updateText }
+        tokenView.text = updateText
     }
 
     func buildTokenTextView() {
