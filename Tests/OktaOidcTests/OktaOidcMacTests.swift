@@ -18,6 +18,7 @@ import XCTest
 
 fileprivate class OktaOidcPartialMock: OktaOidc {
     var error: Error?
+    
     override func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         DispatchQueue.main.async {
@@ -232,11 +233,11 @@ class OktaOidcMacTests: XCTestCase {
 
     func createTestConfig() -> OktaOidcConfig? {
         let dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "test_issuer",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback",
-            "logoutRedirectUri" : "com.test:/logout"
+            "clientId": "test_client_id",
+            "issuer": "test_issuer",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback",
+            "logoutRedirectUri": "com.test:/logout"
         ]
 
         do {

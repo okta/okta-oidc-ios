@@ -21,11 +21,11 @@ class OktaOidcConfigTests: XCTestCase {
     
     func testCreation() {
         let dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "test_issuer",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback",
-            "logoutRedirectUri" : "com.test:/logout"
+            "clientId": "test_client_id",
+            "issuer": "test_issuer",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback",
+            "logoutRedirectUri": "com.test:/logout"
         ]
         
         let config: OktaOidcConfig
@@ -46,12 +46,12 @@ class OktaOidcConfigTests: XCTestCase {
     
     func testCreationWithAdditionalParams() {
         let dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "test_issuer",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback",
-            "logoutRedirectUri" : "com.test:/logout",
-            "additionalParam" : "test_param",
+            "clientId": "test_client_id",
+            "issuer": "test_issuer",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback",
+            "logoutRedirectUri": "com.test:/logout",
+            "additionalParam": "test_param",
         ]
         
         let config: OktaOidcConfig
@@ -74,10 +74,10 @@ class OktaOidcConfigTests: XCTestCase {
 
     func testCreationWithInvalidConfig() {
         var dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback"
+            "clientId": "test_client_id",
+            "issuer": "",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback"
         ]
 
         do {
@@ -88,10 +88,10 @@ class OktaOidcConfigTests: XCTestCase {
         }
 
         dict = [
-            "clientId" : "",
-            "issuer" : "http://www.test.com",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback"
+            "clientId": "",
+            "issuer": "http://www.test.com",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback"
         ]
         
         do {
@@ -102,10 +102,10 @@ class OktaOidcConfigTests: XCTestCase {
         }
 
         dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "http://www.test.com",
-            "scopes" : "test_scope",
-            "redirectUri" : ""
+            "clientId": "test_client_id",
+            "issuer": "http://www.test.com",
+            "scopes": "test_scope",
+            "redirectUri": ""
         ]
         
         do {
@@ -118,11 +118,11 @@ class OktaOidcConfigTests: XCTestCase {
     
     func testCloningConfigWithAdditionalParams() throws {
         let dict = [
-            "clientId" : "test_client_id",
-            "issuer" : "http://example.com",
-            "scopes" : "test_scope",
-            "redirectUri" : "com.test:/callback",
-            "logoutRedirectUri" : "com.test:/logout"
+            "clientId": "test_client_id",
+            "issuer": "http://example.com",
+            "scopes": "test_scope",
+            "redirectUri": "com.test:/callback",
+            "logoutRedirectUri": "com.test:/logout"
         ]
         
         let delegate = OktaNetworkRequestCustomizationDelegateMock()

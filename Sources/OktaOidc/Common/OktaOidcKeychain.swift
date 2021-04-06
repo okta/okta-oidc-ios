@@ -45,7 +45,7 @@ public class OktaOidcKeychain: NSObject {
             kSecValueData as String: data,
             kSecAttrAccount as String: key,
             kSecAttrAccessible as String: accessibility ?? kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        ] as [String : Any]
+        ] as [String: Any]
         
         if let accessGroup = accessGroup {
             q[kSecAttrAccessGroup as String] = accessGroup
@@ -136,7 +136,7 @@ public class OktaOidcKeychain: NSObject {
         ]
         
         for secItemClass in secItemClasses {
-            let dictionary = [ kSecClass as String:secItemClass ] as CFDictionary
+            let dictionary = [ kSecClass as String: secItemClass ] as CFDictionary
             SecItemDelete(dictionary)
         }
     }

@@ -15,6 +15,7 @@ import Foundation
 public struct OktaSignOutOptions: OptionSet {
     
     public let rawValue: Int
+    
     public init(rawValue: Int) {
         self.rawValue = rawValue
     }

@@ -23,7 +23,7 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
     }
     
     @objc public func signInWithBrowser(from presenter: UIViewController,
-                                        additionalParameters: [String:String],
+                                        additionalParameters: [String: String],
                                         callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         let config: OktaOidcConfig
         do {
@@ -80,7 +80,7 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
                                completionHandler: completionHandler)
     }
 
-    @objc public func cancelBrowserSession(completion: (()-> Void)? = nil) {
+    @objc public func cancelBrowserSession(completion: (() -> Void)? = nil) {
         guard let userAgentSession = currentUserSessionTask?.userAgentSession else {
             completion?()
             return

@@ -21,6 +21,6 @@ import UIKit
     func signOutOfOkta(_ authStateManager: OktaOidcStateManager,
                        from presenter: UIViewController,
                        callback: @escaping ((Error?) -> Void))
-    func cancelBrowserSession(completion: (()-> Void)?)
+    func cancelBrowserSession(completion: (() -> Void)?)
 }
 #endif

@@ -47,6 +47,6 @@ class OKTExternalUserAgentSessionMock: NSObject, OKTExternalUserAgentSession {
     }
 
     private func error() -> NSError {
-        return NSError(domain: "useragent.mock", code: -999, userInfo: [NSLocalizedDescriptionKey : "Authorization flow was cancelled."])
+        return NSError(domain: "useragent.mock", code: -999, userInfo: [NSLocalizedDescriptionKey: "Authorization flow was cancelled."])
     }
 }

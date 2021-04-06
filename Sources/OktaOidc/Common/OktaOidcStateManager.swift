@@ -128,7 +128,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         }
     }
     
-    @objc public func introspect(token: String?, callback: @escaping ([String : Any]?, Error?) -> Void) {
+    @objc public func introspect(token: String?, callback: @escaping ([String: Any]?, Error?) -> Void) {
         performRequest(to: .introspection, token: token, callback: callback)
     }
 
@@ -140,7 +140,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
             }            
 
             // Token is considered to be revoked if there is no payload.
-            callback(payload?.isEmpty ?? true , nil)
+            callback(payload?.isEmpty ?? true, nil)
         }
     }
 
@@ -152,7 +152,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         OktaOidcKeychain.clearAll()
     }
     
-    @objc public func getUser(_ callback: @escaping ([String:Any]?, Error?) -> Void) {
+    @objc public func getUser(_ callback: @escaping ([String: Any]?, Error?) -> Void) {
         guard let token = accessToken else {
             DispatchQueue.main.async {
                 callback(nil, OktaOidcError.noBearerToken)
@@ -230,7 +230,7 @@ private extension OktaOidcStateManager {
     
     func performRequest(to endpoint: OktaOidcEndpoint,
                         token: String?,
-                        callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
+                        callback: @escaping ([String: Any]?, OktaOidcError?) -> Void) {
         guard let token = token else {
             DispatchQueue.main.async {
                 callback(nil, OktaOidcError.noBearerToken)
@@ -246,7 +246,7 @@ private extension OktaOidcStateManager {
     func performRequest(to endpoint: OktaOidcEndpoint,
                         headers: [String: String]? = nil,
                         postString: String? = nil,
-                        callback: @escaping ([String : Any]?, OktaOidcError?) -> Void) {
+                        callback: @escaping ([String: Any]?, OktaOidcError?) -> Void) {
         guard let endpointURL = endpoint.getURL(discoveredMetadata: discoveryDictionary, issuer: issuer) else {
             DispatchQueue.main.async {
                 callback(nil, endpoint.noEndpointError)
