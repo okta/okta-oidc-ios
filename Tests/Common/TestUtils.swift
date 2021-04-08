@@ -44,6 +44,7 @@ struct TestUtils {
     static func setupMockAuthState(issuer: String,
                                    clientId: String,
                                    expiresIn: TimeInterval = 300,
+                                   refreshToken: String = Self.mockRefreshToken,
                                    skipTokenResponse: Bool = false) -> OKTAuthState {
         // Creates a mock Okta Auth State Manager object
         let fooURL = URL(string: issuer)!
@@ -87,7 +88,7 @@ struct TestUtils {
                     "expires_in": expiresIn as NSCopying & NSObjectProtocol,
                     "token_type": "Bearer" as NSCopying & NSObjectProtocol,
                     "id_token": mockIdToken as NSCopying & NSObjectProtocol,
-                    "refresh_token": mockRefreshToken as NSCopying & NSObjectProtocol,
+                    "refresh_token": refreshToken as NSCopying & NSObjectProtocol,
                     "scope": mockScopes as NSCopying & NSObjectProtocol
                 ]
             )
