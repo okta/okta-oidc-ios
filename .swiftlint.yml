@@ -11,6 +11,18 @@ only_rules:
   - operator_whitespace
   - operator_usage_whitespace
   - return_arrow_whitespace
+  # Empty
+  - empty_collection_literal
+  - empty_count
+  - empty_string
+  # Force
+  - force_cast
+  - force_try
+  - force_unwrapping
+  # Closures
+  - closure_body_length
+  - closure_end_indentation
+  - closure_parameter_position
 
 # Spacing
 opening_brace:
@@ -33,6 +45,21 @@ operator_whitespace:
 operator_usage_whitespace:
   severity: error
 return_arrow_whitespace:
+  severity: error
+# Empty
+empty_collection_literal:
+  severity: error
+empty_count:
+  severity: error
+empty_string:
+  severity: error
+# Closures
+closure_body_length:
+  warning: 50
+  error: 100
+closure_end_indentation:
+  severity: error
+closure_parameter_position:
   severity: error
 
 # Paths to ignore

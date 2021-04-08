@@ -41,9 +41,9 @@ public class OktaOidcConfig: NSObject {
     }
 
     @objc public init(with dict: [String: String]) throws {
-        guard let clientId = dict["clientId"], clientId.count > 0,
+        guard let clientId = dict["clientId"], !clientId.isEmpty,
               let issuer = dict["issuer"], let _ = URL(string: issuer),
-              let scopes = dict["scopes"], scopes.count > 0,
+              let scopes = dict["scopes"], !scopes.isEmpty,
               let redirectUriString = dict["redirectUri"],
               let redirectUri = URL(string: redirectUriString) else {
                 throw OktaOidcError.missingConfigurationValues
@@ -118,7 +118,9 @@ public class OktaOidcConfig: NSObject {
     }
     
     public func configuration(withAdditionalParams config: [String: String]) throws -> OktaOidcConfig {
-        guard config.count > 0 else { return self }
+        guard !config.isEmpty else {
+            return self
+        }
 
         var dict: [String: String] = additionalParams?.merging(config, uniquingKeysWith: { (_, new) -> String in
             return new

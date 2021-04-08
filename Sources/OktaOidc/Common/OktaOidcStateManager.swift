@@ -68,7 +68,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         
         self.init(
             authState: state,
-            accessibility: decoder.decodeObject(forKey: "accessibility") as! CFString
+            accessibility: decoder.decodeObject(forKey: "accessibility") as! CFString // swiftlint:disable:this force_cast
         )
     }
 

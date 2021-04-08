@@ -17,7 +17,12 @@ import OktaOidc
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static var shared: AppDelegate {
-        return UIApplication.shared.delegate as! AppDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            assertionFailure("Expected \(AppDelegate.self) type.")
+            return AppDelegate()
+        }
+        
+        return appDelegate
     }
 
     var window: UIWindow?
