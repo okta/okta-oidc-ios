@@ -67,7 +67,7 @@ class OktaOidcSignOutHandler {
                 return
             }
             
-            authStateManager.revoke(refreshToken) { (success, error) in
+            authStateManager.revoke(refreshToken) { (success, _) in
                 notFinishedOptions.remove(.revokeRefreshToken)
                 if !success {
                     failedOptions.insert(.revokeRefreshToken)
