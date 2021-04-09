@@ -14,14 +14,15 @@
 
 import UIKit
 
-class OktaOidcSignOutHandlerIOS: OktaOidcSignOutHandler {
+final class OktaOidcSignOutHandlerIOS: OktaOidcSignOutHandler {
     
-    var presenter: UIViewController
+    let presenter: UIViewController
     let oidcClient: OktaOidcBrowserProtocolIOS
     
     init(presenter: UIViewController, options: OktaSignOutOptions, oidcClient: OktaOidcBrowserProtocolIOS, authStateManager: OktaOidcStateManager) {
         self.presenter = presenter
         self.oidcClient = oidcClient
+        
         super.init(options: options, authStateManager: authStateManager)
     }
 
@@ -32,9 +33,10 @@ class OktaOidcSignOutHandlerIOS: OktaOidcSignOutHandler {
         var notFinishedOptions: OktaSignOutOptions = options
         var failedOptions: OktaSignOutOptions = failedOptions
         progressHandler(.signOutFromOkta)
+        
         oidcClient.signOutOfOkta(authStateManager, from: presenter) { error in
             notFinishedOptions.remove(.signOutFromOkta)
-            
+
             if error != nil {
                 failedOptions.insert(.signOutFromOkta)
             }

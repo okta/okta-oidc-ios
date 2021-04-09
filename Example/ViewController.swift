@@ -17,10 +17,14 @@ import UIKit
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-class ViewController: UIViewController {
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+// swiftlint:disable force_unwrapping
 
-    @IBOutlet weak var tokenView: UITextView!
-    @IBOutlet weak var signInButton: UIButton!
+final class ViewController: UIViewController {
+
+    @IBOutlet private weak var tokenView: UITextView!
+    @IBOutlet private weak var signInButton: UIButton!
     
     private var oktaAppAuth: OktaOidc?
     private var authStateManager: OktaOidcStateManager? {
@@ -91,6 +95,9 @@ class ViewController: UIViewController {
 
     @IBAction func clearTokens(_ sender: Any) {
         authStateManager?.clear()
+        try? authStateManager?.removeFromSecureStorage()
+        authStateManager = nil
+        
         self.buildTokenTextView()
     }
 
@@ -150,12 +157,13 @@ class ViewController: UIViewController {
         guard let authStateManager = authStateManager else { return }
         
         oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
-            if currentOption.contains(.revokeAccessToken) {
+            switch currentOption {
+            case .revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage, .revokeTokensOptions:
                 self.updateUI(updateText: "Revoking tokens...")
-            } else if currentOption.contains(.revokeRefreshToken) {
-                self.updateUI(updateText: "Revoking tokens...")
-            } else if currentOption.contains(.signOutFromOkta) {
+            case .signOutFromOkta:
                 self.updateUI(updateText: "Signing out from Okta...")
+            default:
+                break
             }
         }, completionHandler: { success, _ in
             if success {
@@ -168,7 +176,7 @@ class ViewController: UIViewController {
     }
 
     func updateUI(updateText: String) {
-        DispatchQueue.main.async { self.tokenView.text = updateText }
+        tokenView.text = updateText
     }
 
     func buildTokenTextView() {

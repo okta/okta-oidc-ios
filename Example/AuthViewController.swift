@@ -13,14 +13,14 @@
 import OktaOidc
 import UIKit
 
-class AuthViewController: UIViewController {
+final class AuthViewController: UIViewController {
     
-    @IBOutlet var tokenTextView: UITextView!
-    @IBOutlet var authenticateButton: UIButton!
-    @IBOutlet var messageView: UITextView!
+    @IBOutlet private weak var tokenTextView: UITextView!
+    @IBOutlet private weak var authenticateButton: UIButton!
+    @IBOutlet private weak var messageView: UITextView!
     
-    @IBOutlet var progessOverlay: UIView!
-    @IBOutlet var progessIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var progessOverlay: UIView!
+    @IBOutlet private weak var progessIndicator: UIActivityIndicatorView!
     
     var oktaAppAuth: OktaOidc?
     var onAuthenticated: ((OktaOidcStateManager?) -> Void)?

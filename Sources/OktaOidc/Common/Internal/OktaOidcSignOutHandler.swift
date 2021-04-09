@@ -21,11 +21,11 @@ class OktaOidcSignOutHandler {
         self.options = options
         self.authStateManager = authStateManager
     }
-
-    func signOut(with options: OktaSignOutOptions,
-                 failedOptions: OktaSignOutOptions,
-                 progressHandler: @escaping ((OktaSignOutOptions) -> Void),
-                 completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
+    
+    final func signOut(with options: OktaSignOutOptions,
+                       failedOptions: OktaSignOutOptions,
+                       progressHandler: @escaping ((OktaSignOutOptions) -> Void),
+                       completionHandler: @escaping ((Bool, OktaSignOutOptions) -> Void)) {
         if options.isEmpty {
             completionHandler(failedOptions.isEmpty, failedOptions)
             return
@@ -33,6 +33,8 @@ class OktaOidcSignOutHandler {
         
         var notFinishedOptions: OktaSignOutOptions = options
         var failedOptions: OktaSignOutOptions = failedOptions
+        
+        // Access Token
         if options.contains(.revokeAccessToken) {
             progressHandler(.revokeAccessToken)
             authStateManager.revoke(authStateManager.accessToken) { (success, _) in
@@ -40,53 +42,72 @@ class OktaOidcSignOutHandler {
                 if !success {
                     failedOptions.insert(.revokeAccessToken)
                 }
+                
                 self.signOut(with: notFinishedOptions,
                              failedOptions: failedOptions,
                              progressHandler: progressHandler,
                              completionHandler: completionHandler)
             }
+            
             return
         }
         
+        // Refresh Token
         if options.contains(.revokeRefreshToken) {
             progressHandler(.revokeRefreshToken)
-            authStateManager.revoke(authStateManager.refreshToken) { (success, _) in
+            
+            // Refresh token is not required in Admin panel
+            guard let refreshToken = authStateManager.refreshToken, !refreshToken.isEmpty  else {
+                notFinishedOptions.remove(.revokeRefreshToken)
+                signOut(with: notFinishedOptions,
+                        failedOptions: failedOptions,
+                        progressHandler: progressHandler,
+                        completionHandler: completionHandler)
+                
+                return
+            }
+            
+            authStateManager.revoke(refreshToken) { (success, error) in
                 notFinishedOptions.remove(.revokeRefreshToken)
                 if !success {
                     failedOptions.insert(.revokeRefreshToken)
                 }
+                
                 self.signOut(with: notFinishedOptions,
                              failedOptions: failedOptions,
                              progressHandler: progressHandler,
                              completionHandler: completionHandler)
             }
+            
             return
         }
-
+        
+        // Sign out
         if options.contains(.signOutFromOkta) {
-            self.signOutOfOkta(with: notFinishedOptions,
-                               failedOptions: failedOptions,
-                               progressHandler: progressHandler,
-                               completionHandler: completionHandler)
+            signOutOfOkta(with: notFinishedOptions,
+                          failedOptions: failedOptions,
+                          progressHandler: progressHandler,
+                          completionHandler: completionHandler)
             return
         }
-
+        
+        // Remove cached tokens
         if options.contains(.removeTokensFromStorage) {
             notFinishedOptions.remove(.removeTokensFromStorage)
             if failedOptions.isEmpty {
                 progressHandler(.removeTokensFromStorage)
                 try? authStateManager.removeFromSecureStorage()
             }
-
-            self.signOut(with: notFinishedOptions,
-                         failedOptions: failedOptions,
-                         progressHandler: progressHandler,
-                         completionHandler: completionHandler)
+            
+            signOut(with: notFinishedOptions,
+                    failedOptions: failedOptions,
+                    progressHandler: progressHandler,
+                    completionHandler: completionHandler)
             
             return
         }
     }
-
+    
     func signOutOfOkta(with options: OktaSignOutOptions,
                        failedOptions: OktaSignOutOptions,
                        progressHandler: @escaping ((OktaSignOutOptions) -> Void),
@@ -95,9 +116,10 @@ class OktaOidcSignOutHandler {
         var notFinishedOptions: OktaSignOutOptions = options
         notFinishedOptions.remove(.signOutFromOkta)
         progressHandler(.signOutFromOkta)
-        self.signOut(with: notFinishedOptions,
-                     failedOptions: failedOptions,
-                     progressHandler: progressHandler,
-                     completionHandler: completionHandler)
+        
+        signOut(with: notFinishedOptions,
+                failedOptions: failedOptions,
+                progressHandler: progressHandler,
+                completionHandler: completionHandler)
     }
 }

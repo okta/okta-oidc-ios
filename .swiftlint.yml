@@ -119,7 +119,6 @@ closure_end_indentation:
   severity: error
 closure_parameter_position:
   severity: error
-
 collection_alignment:
   severity: error
 control_statement:
@@ -145,8 +144,6 @@ file_header:
                    \* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
                    \*
                    \* See the License for the specific language governing permissions and limitations under the License.
-excluded:
-- Pods
 
 custom_rules:
   multiple_empty_lines:
@@ -154,15 +151,12 @@ custom_rules:
       regex: '((?:\s*\n){3,})'
       message: "There are too many line breaks"
       severity: error
-  double_space:
-      include: "*.swift"
-      name: "Double space are disabled"
-      regex: '([a-z,A-Z] \s+)'
-      message: "Double space between keywords"
-      match_kinds: keyword
-      severity: error
   empty_line_after_super:
       name: "Empty Line After Super"
       regex: '(^ *super\.[ a-zA-Z0-9=?.\(\)\{\}:,><!]*\n *(?!(?:\}|return))\S+)'
       message: "There should be an empty line after super"
       severity: error      
+
+# Paths to ignore
+excluded:
+- Pods

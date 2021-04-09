@@ -14,6 +14,10 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+// swiftlint:disable force_unwrapping
+
 import Foundation
 @testable import OktaOidc
 
