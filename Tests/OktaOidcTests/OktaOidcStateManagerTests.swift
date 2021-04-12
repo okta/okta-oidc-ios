@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -28,6 +28,7 @@ class OktaOidcStateManagerTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        
         apiMock = OktaOidcApiMock()
         authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
@@ -100,7 +101,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         let revokeExpectation = expectation(description: "Will succeed with payload.")
         
         authStateManager.revoke(authStateManager.accessToken) { isRevoked, error in
-            XCTAssertEqual(true, isRevoked)
+            XCTAssertTrue(isRevoked)
             XCTAssertNil(error)
             
             revokeExpectation.fulfill()
@@ -274,7 +275,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             if case OktaOidcError.errorFetchingFreshTokens = error! {
                 userInfoExpectation.fulfill()
             } else {
-                XCTFail()
+                XCTFail("Refresh Token succeeded.")
             }
         }
     

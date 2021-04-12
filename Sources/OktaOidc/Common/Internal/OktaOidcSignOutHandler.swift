@@ -37,7 +37,7 @@ class OktaOidcSignOutHandler {
         // Access Token
         if options.contains(.revokeAccessToken) {
             progressHandler(.revokeAccessToken)
-            authStateManager.revoke(authStateManager.accessToken) { (success, error) in
+            authStateManager.revoke(authStateManager.accessToken) { (success, _) in
                 notFinishedOptions.remove(.revokeAccessToken)
                 if !success {
                     failedOptions.insert(.revokeAccessToken)
@@ -67,7 +67,7 @@ class OktaOidcSignOutHandler {
                 return
             }
             
-            authStateManager.revoke(refreshToken) { (success, error) in
+            authStateManager.revoke(refreshToken) { (success, _) in
                 notFinishedOptions.remove(.revokeRefreshToken)
                 if !success {
                     failedOptions.insert(.revokeRefreshToken)

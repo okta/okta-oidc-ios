@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -27,6 +27,7 @@ class OktaOidcRestApiTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        
         sessionMock = URLSessionMock()
         OKTURLSessionProvider.setSession(sessionMock)
     }
@@ -42,7 +43,7 @@ class OktaOidcRestApiTests: XCTestCase {
             onSuccess: { _ in
                 requestCompleteExpectation.fulfill()
             },
-            onError: { _ in 
+            onError: { _ in
                 requestCompleteExpectation.fulfill()
                 XCTFail("Request should be completed successfully")
             }
@@ -65,7 +66,7 @@ class OktaOidcRestApiTests: XCTestCase {
             onSuccess: { _ in
                 requestCompleteExpectation.fulfill()
             },
-            onError: { _ in 
+            onError: { _ in
                 requestCompleteExpectation.fulfill()
                 XCTFail("Request should be completed successfully")
             }
@@ -85,7 +86,7 @@ class OktaOidcRestApiTests: XCTestCase {
             onSuccess: { _ in
                 requestCompleteExpectation.fulfill()
             },
-            onError: { _ in 
+            onError: { _ in
                 requestCompleteExpectation.fulfill()
                 XCTFail("Request should be completed successfully")
             }

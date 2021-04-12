@@ -10,8 +10,12 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-import UIKit
 import OktaOidc
+import UIKit
+
+// swiftlint:disable force_try
+// swiftlint:disable force_cast
+// swiftlint:disable force_unwrapping
 
 // swiftlint:disable force_try
 // swiftlint:disable force_cast
@@ -46,6 +50,7 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let configuration = try? OktaOidcConfig.default()
         configuration?.requestCustomizationDelegate = self
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
@@ -58,7 +63,8 @@ final class ViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let _ = oktaAppAuth else {
+        
+        guard oktaAppAuth != nil else {
             self.updateUI(updateText: "SDK is not configured!")
             return
         }
@@ -68,6 +74,7 @@ final class ViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
+        
         guard let authViewController = segue.destination as? AuthViewController else {
             return
         }
@@ -127,7 +134,7 @@ final class ViewController: UIViewController {
         // Get current accessToken
         guard let accessToken = authStateManager?.accessToken else { return }
 
-        authStateManager?.revoke(accessToken) { response, error in
+        authStateManager?.revoke(accessToken) { _, error in
             if error != nil { self.updateUI(updateText: "Error: \(error!)") }
             self.updateUI(updateText: "AccessToken was revoked")
         }
@@ -158,7 +165,7 @@ final class ViewController: UIViewController {
             default:
                 break
             }
-        }, completionHandler: { success, failedOptions in
+        }, completionHandler: { success, _ in
             if success {
                 self.authStateManager = nil
                 self.buildTokenTextView()

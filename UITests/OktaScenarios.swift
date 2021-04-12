@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 import OktaOidc
+import XCTest
 
 final class OktaScenarios: XCTestCase {
     // Update these values along with your Plist config

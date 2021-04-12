@@ -97,7 +97,6 @@ struct TestUtils {
         }
     }
 
-
     static func setupMockAuthStateManager(issuer: String, clientId: String, expiresIn: TimeInterval = 300) -> OktaOidcStateManager {
         let tempAuthState = setupMockAuthState(issuer: issuer, clientId: clientId, expiresIn: expiresIn)
         return OktaOidcStateManager(authState: tempAuthState)

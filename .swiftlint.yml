@@ -5,16 +5,19 @@ only_rules:
   - closure_spacing
   - comma
   - colon
+  - comment_spacing
   # Whitespace (Xcode configuration)
   - leading_whitespace
   - let_var_whitespace
   - operator_whitespace
   - operator_usage_whitespace
   - return_arrow_whitespace
+  - no_space_in_method_call
   # Empty
   - empty_collection_literal
   - empty_count
   - empty_string
+  - empty_xctest_method
   # Force
   - force_cast
   - force_try
@@ -23,6 +26,61 @@ only_rules:
   - closure_body_length
   - closure_end_indentation
   - closure_parameter_position
+  # Style
+  - collection_alignment
+  - control_statement
+  - file_header
+  - discouraged_assert
+  - discouraged_optional_boolean
+  - implicit_getter
+  - prefer_zero_over_explicit_init
+  - statement_position
+  - unavailable_function
+  - unneeded_break_in_switch
+  - void_return
+  - xct_specific_matcher
+  - xctfail_message
+  - sorted_imports
+  - prefer_self_type_over_type_of_self
+  - syntactic_sugar
+  - explicit_init
+  # - unneeded_parentheses_in_closure_argument - to discuss
+  # Order
+  - file_types_order
+  - modifier_order
+  - protocol_property_accessors_order
+  - computed_accessors_order
+  # Lint
+  - anyobject_protocol
+  - class_delegate_protocol
+  - cyclomatic_complexity
+  - block_based_kvo
+  - compiler_protocol_init
+  - deployment_target
+  - overridden_super_call
+  # Collections
+  - array_init
+  - first_where
+  - last_where
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  # Redundant
+  - redundant_discardable_let
+  - redundant_optional_initialization
+  - redundant_set_access_control
+  - redundant_type_annotation
+  - redundant_void_return
+  - redundant_nil_coalescing
+  # Unused
+  - unused_capture_list
+  - unused_closure_parameter
+  - unused_declaration
+  - unused_enumerated
+  - unused_optional_binding
+  - unused_setter_value
+  # Custom
+  - custom_rules
 
 # Spacing
 opening_brace:
@@ -61,6 +119,38 @@ closure_end_indentation:
   severity: error
 closure_parameter_position:
   severity: error
+collection_alignment:
+  severity: error
+control_statement:
+  severity: error
+anyobject_protocol:
+  severity: error
+class_delegate_protocol:
+  severity: error
+cyclomatic_complexity:
+  severity: error
+syntactic_sugar :
+  severity: error
+file_header:
+  severity: error
+  required_pattern: |
+                  \/\*
+                   \* Copyright \(c\) \d{4}(-Present)?, Okta, Inc. and\/or its affiliates\. All rights reserved\.
+                   \* The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 \(the "License."\)
+                   \*
+                   \* You may obtain a copy of the License at http:\/\/www.apache.org\/licenses\/LICENSE-2.0.
+                   \* Unless required by applicable law or agreed to in writing, software
+                   \* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+                   \* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+                   \*
+                   \* See the License for the specific language governing permissions and limitations under the License.
+
+custom_rules:
+  multiple_empty_lines:
+      name: "Multiple Empty Lines"
+      regex: '((?:\s*\n){3,})'
+      message: "There are too many line breaks"
+      severity: error   
 
 # Paths to ignore
 excluded:

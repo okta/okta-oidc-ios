@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Okta, Inc. and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019-Present, Okta, Inc. and/or its affiliates. All rights reserved.
  * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
  *
  * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
@@ -14,8 +14,8 @@
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
+import XCTest
 
 #if SWIFT_PACKAGE
 @testable import TestCommon
@@ -85,7 +85,7 @@ class OktaOidcConfigTests: XCTestCase {
         ]
 
         do {
-            let _ = try OktaOidcConfig(with: dict)
+            _ = try OktaOidcConfig(with: dict)
         } catch let error {
             XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
             return
@@ -99,7 +99,7 @@ class OktaOidcConfigTests: XCTestCase {
         ]
         
         do {
-            let _ = try OktaOidcConfig(with: dict)
+            _ = try OktaOidcConfig(with: dict)
         } catch let error {
             XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
             return
@@ -113,7 +113,7 @@ class OktaOidcConfigTests: XCTestCase {
         ]
         
         do {
-            let _ = try OktaOidcConfig(with: dict)
+            _ = try OktaOidcConfig(with: dict)
         } catch let error {
             XCTAssertTrue(error.localizedDescription == OktaOidcError.missingConfigurationValues.errorDescription)
             return
@@ -156,7 +156,7 @@ class OktaOidcConfigTests: XCTestCase {
     /// **Note:** Unit tests in Swift Package Manager do not support tests run from a host application, meaning some iOS features are unavailable.
     func testDefaultConfig() {
         do {
-            let _ = try OktaOidcConfig.default()
+            _ = try OktaOidcConfig.default()
         } catch let error {
             XCTAssertEqual(
                 OktaOidcError.missingConfigurationValues.localizedDescription,
@@ -167,7 +167,7 @@ class OktaOidcConfigTests: XCTestCase {
     
     func testOktaPlist() {
         do {
-            let _ = try OktaOidcConfig(fromPlist: "Okta")
+            _ = try OktaOidcConfig(fromPlist: "Okta")
         } catch let error {
             XCTAssertEqual(
                 OktaOidcError.missingConfigurationValues.localizedDescription,
@@ -179,7 +179,7 @@ class OktaOidcConfigTests: XCTestCase {
     func testPListParseFailure() {
         // Info.plist does not correspond to expected structure of Okta file
         let plistName = "Info"
-        var config: OktaOidcConfig? = nil
+        var config: OktaOidcConfig?
         do {
             config = try OktaOidcConfig(fromPlist: plistName)
         } catch let error {
@@ -196,7 +196,7 @@ class OktaOidcConfigTests: XCTestCase {
     func testNoPListGiven() {
         // name of file which does not exists
         let plistName = UUID().uuidString
-        var config: OktaOidcConfig? = nil
+        var config: OktaOidcConfig?
         do {
            config = try OktaOidcConfig(fromPlist: plistName)
         } catch let error {

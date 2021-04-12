@@ -61,7 +61,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         super.init()
     }
 
-    @objc required public convenience init?(coder decoder: NSCoder) {
+    @objc public required convenience init?(coder decoder: NSCoder) {
         guard let state = decoder.decodeObject(forKey: "authState") as? OKTAuthState else {
             return nil
         }
@@ -118,7 +118,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
     @objc public func renew(callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         authState.setNeedsTokenRefresh()
-        authState.performAction { accessToken, idToken, error in
+        authState.performAction { _, _, error in
             if let error = error {
                 callback(nil, OktaOidcError.errorFetchingFreshTokens(error.localizedDescription))
                 return
@@ -227,7 +227,6 @@ private extension OktaOidcStateManager {
         return authState.lastAuthorizationResponse.request.clientID
     }
 
-    
     func performRequest(to endpoint: OktaOidcEndpoint,
                         token: String?,
                         callback: @escaping ([String: Any]?, OktaOidcError?) -> Void) {

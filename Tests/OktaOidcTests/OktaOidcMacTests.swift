@@ -1,22 +1,22 @@
 /*
-* Copyright (c) 2020, Okta, Inc. and/or its affiliates. All rights reserved.
-* The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
-*
-* You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-* WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-*
-* See the License for the specific language governing permissions and limitations under the License.
-*/
+ * Copyright (c) 2020-Present, Okta, Inc. and/or its affiliates. All rights reserved.
+ * The Okta software accompanied by this notice is provided pursuant to the Apache License, Version 2.0 (the "License.")
+ *
+ * You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *
+ * See the License for the specific language governing permissions and limitations under the License.
+ */
 
 // swiftlint:disable force_try
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
 
-import XCTest
 @testable import OktaOidc
 @testable import TestCommon
+import XCTest
 
 #if os(macOS)
 
@@ -129,9 +129,9 @@ class OktaOidcMacTests: XCTestCase {
         let authStateManager = OktaOidcStateManager(
             authState: TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)
         )
-        oidc.signOut(with: .signOutFromOkta, authStateManager: authStateManager, progressHandler: { options in
+        oidc.signOut(with: .signOutFromOkta, authStateManager: authStateManager, progressHandler: { _ in
             progressExpectation.fulfill()
-        }) { result, options in
+        }) { _, _ in
             signOutExpectation.fulfill()
         }
 
@@ -146,7 +146,7 @@ class OktaOidcMacTests: XCTestCase {
             } else if options == .revokeRefreshToken {
                 revokeRefreshTokenExpectation.fulfill()
             }
-        }) { result, options in
+        }) { _, _ in
             signOutExpectation.fulfill()
         }
 
