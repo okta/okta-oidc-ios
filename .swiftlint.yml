@@ -150,12 +150,7 @@ custom_rules:
       name: "Multiple Empty Lines"
       regex: '((?:\s*\n){3,})'
       message: "There are too many line breaks"
-      severity: error
-  empty_line_after_super:
-      name: "Empty Line After Super"
-      regex: '(^ *super\.[ a-zA-Z0-9=?.\(\)\{\}:,><!]*\n *(?!(?:\}|return))\S+)'
-      message: "There should be an empty line after super"
-      severity: error      
+      severity: error   
 
 # Paths to ignore
 excluded:

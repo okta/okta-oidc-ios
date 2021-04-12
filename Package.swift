@@ -1,4 +1,5 @@
 // swift-tools-version:5.1
+// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
  * Copyright (c) 2020-Present, Okta, Inc. and/or its affiliates. All rights reserved.
@@ -11,8 +12,6 @@
  *
  * See the License for the specific language governing permissions and limitations under the License.
  */
-
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 

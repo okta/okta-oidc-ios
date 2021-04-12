@@ -17,7 +17,6 @@
 @testable import OktaOidc
 
 struct TestUtils {
-    
     static let mockIssuer = "https://demo-org.oktapreview.com/oauth2/default"
     static let mockClientId = "0oae1enia6od2nlz00h7"
     static let mockRedirectUri = "com.okta.example:/callback"

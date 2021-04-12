@@ -43,7 +43,10 @@ class OktaOidcSignOutHandlerMAC: OktaOidcSignOutHandler {
                 failedOptions.insert(.signOutFromOkta)
             }
             
-            super.signOut(with: notFinishedOptions, failedOptions: failedOptions, progressHandler: progressHandler, completionHandler: completionHandler)
+            super.signOut(with: notFinishedOptions,
+                          failedOptions: failedOptions,
+                          progressHandler: progressHandler,
+                          completionHandler: completionHandler)
         }
     }
 }
