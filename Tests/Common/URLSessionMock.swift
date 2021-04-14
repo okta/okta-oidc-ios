@@ -32,7 +32,7 @@ class URLSessionMock: URLSession {
     
     struct Response {
         var statusCode: Int = 200
-        var headerFields: [String : String]?
+        var headerFields: [String: String]?
         var data = Data()
     }
 
