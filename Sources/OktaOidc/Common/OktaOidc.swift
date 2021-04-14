@@ -46,7 +46,7 @@ public class OktaOidc: NSObject {
 
                 let authStateManager = OktaOidcStateManager(authState: authState)
                 if let delegate = self.configuration.requestCustomizationDelegate {
-                    authStateManager.restAPI.requestCustomizationDelegate = delegate
+                    authStateManager.requestCustomizationDelegate = delegate
                 }
                 callback(authStateManager, nil)
             })
@@ -69,7 +69,7 @@ public class OktaOidc: NSObject {
             
             let authStateManager = OktaOidcStateManager(authState: authState)
             if let delegate = self?.configuration.requestCustomizationDelegate {
-                authStateManager.restAPI.requestCustomizationDelegate = delegate
+                authStateManager.requestCustomizationDelegate = delegate
             }
             callback(authStateManager, nil)
         }

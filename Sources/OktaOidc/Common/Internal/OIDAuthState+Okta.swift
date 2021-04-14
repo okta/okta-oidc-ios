@@ -43,7 +43,10 @@ extension OKTAuthState {
                     return
                 }
 
-                let authState = OKTAuthState(authorizationResponse: authResponse, tokenResponse: tokenResponse)
+                let authState = OKTAuthState(authorizationResponse: authResponse,
+                                             tokenResponse: tokenResponse,
+                                             registrationResponse: nil,
+                                             delegate: delegate)
                 finalize(authState, nil)
             })
         })

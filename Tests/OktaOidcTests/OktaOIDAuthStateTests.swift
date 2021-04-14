@@ -43,7 +43,17 @@ class OktaOKTAuthStateTests: XCTestCase {
     func testFireRequest_DelegateNotNil() {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
         let authStateExpectation = expectation(description: "Get auth state completed!")
-        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (_, _) in
+        let networkMock = URLSessionMock()
+        networkMock.responses = [
+            .init(statusCode: 302,
+                  headerFields: ["Location": "https://example.com/redirect?code=deadbeef"]),
+            .init(data: "{}".data(using: .utf8)!)
+        ]
+
+        OKTURLSessionProvider.setSession(networkMock)
+        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (state, _) in
+            let stateDelegate = state?.value(forKey: "delegate")
+            XCTAssertEqual(stateDelegate as! OktaNetworkRequestCustomizationDelegateMock, delegateMock)
             authStateExpectation.fulfill()
         }
         waitForExpectations(timeout: 5.0, handler: nil)

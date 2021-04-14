@@ -29,19 +29,28 @@ class URLSessionDataTaskMock: URLSessionDataTask {
 }
 
 class URLSessionMock: URLSession {
+    
+    struct Response {
+        var statusCode: Int = 200
+        var headerFields: [String : String]?
+        var data = Data()
+    }
 
     var request: URLRequest?
-
+    var responses: [Response]?
+    
     override func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         self.request = request
+        let responseData = responses?.removeFirst() ?? Response()
+        
         let response = HTTPURLResponse(
             url: request.url!,
-            statusCode: 200,
+            statusCode: responseData.statusCode,
             httpVersion: nil,
-            headerFields: nil
+            headerFields: responseData.headerFields
         )
         return URLSessionDataTaskMock() {
-            completionHandler(Data(), response, nil)
+            completionHandler(responseData.data, response, nil)
         }
     }
 }

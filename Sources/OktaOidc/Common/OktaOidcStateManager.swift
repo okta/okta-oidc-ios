@@ -23,6 +23,15 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     @objc open var authState: OKTAuthState
     @objc open var accessibility: CFString
 
+    @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate? {
+        get {
+            restAPI.requestCustomizationDelegate
+        }
+        set {
+            restAPI.requestCustomizationDelegate = newValue
+        }
+    }
+
     @objc open var accessToken: String? {
         // Return the known accessToken if it hasn't expired
         guard let tokenResponse = self.authState.lastTokenResponse,

@@ -316,6 +316,14 @@ class OktaOidcStateManagerTests: XCTestCase {
         XCTAssertNotEqual(authStateManager.idToken, authStateManager.authState.lastTokenResponse?.idToken)
     }
     
+    func testSetDelegate() {
+        let authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId, skipTokenResponse: true)
+        let stateManager = OktaOidcStateManager(authState: authState)
+        let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
+        stateManager.requestCustomizationDelegate = delegateMock
+        XCTAssertEqual(stateManager.restAPI.requestCustomizationDelegate as? OktaNetworkRequestCustomizationDelegateMock, delegateMock)
+    }
+
     #if !SWIFT_PACKAGE
     /// **Note:** Unit tests in Swift Package Manager do not support tests run from a host application, meaning some iOS features are unavailable.
     func testReadWriteToSecureStorage() {
