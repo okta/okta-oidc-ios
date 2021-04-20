@@ -18,12 +18,11 @@ import PackageDescription
 let package = Package(
     name: "OktaOidc",
     platforms: [
-        .macOS(.v10_10),
+        .macOS(.v10_14),
         .iOS(.v11)
     ],
     products: [
         .library(name: "OktaOidc",
-                 type: .dynamic,
                  targets: [
                     "OktaOidc",
                     "OktaOidc_AppAuth"
