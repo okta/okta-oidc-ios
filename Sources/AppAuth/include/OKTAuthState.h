@@ -107,6 +107,11 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
  */
 @property(nonatomic, readonly) BOOL isAuthorized;
 
+/*! @brief The @c OktaNetworkRequestCustomizationDelegate delegate.
+    @discussion Use the delegate to modify network requests and receive responses.
+ */
+@property(nonatomic, weak, nullable)id<OktaNetworkRequestCustomizationDelegate> delegate;
+
 /*! @brief The @c OKTAuthStateChangeDelegate delegate.
     @discussion Use the delegate to observe state changes (and update storage) as well as error
         states.

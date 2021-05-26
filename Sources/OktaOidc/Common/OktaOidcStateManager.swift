@@ -29,6 +29,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         }
         set {
             restAPI.requestCustomizationDelegate = newValue
+            authState.delegate = newValue
         }
     }
 
