@@ -322,6 +322,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         let delegateMock = OktaNetworkRequestCustomizationDelegateMock()
         stateManager.requestCustomizationDelegate = delegateMock
         XCTAssertEqual(stateManager.restAPI.requestCustomizationDelegate as? OktaNetworkRequestCustomizationDelegateMock, delegateMock)
+        XCTAssertTrue(stateManager.authState.delegate === stateManager.restAPI.requestCustomizationDelegate)
     }
 
     #if !SWIFT_PACKAGE

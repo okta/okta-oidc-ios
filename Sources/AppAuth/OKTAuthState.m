@@ -104,8 +104,6 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 @property(nonatomic, readonly, nullable) NSString *idToken;
 
-@property(nonatomic, weak, nullable)id<OktaNetworkRequestCustomizationDelegate> delegate;
-
 /*! @brief Private method, called when the internal state changes.
  */
 - (void)didChangeState;

@@ -58,6 +58,7 @@ final class ViewController: UIViewController {
         
         if let config = oktaAppAuth?.configuration {
             authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
+            authStateManager?.requestCustomizationDelegate = self
         }
     }
 
