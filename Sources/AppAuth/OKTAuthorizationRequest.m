@@ -78,6 +78,10 @@ static NSString *const kCodeChallengeMethodKey = @"code_challenge_method";
  */
 static NSString *const kAdditionalParametersKey = @"additionalParameters";
 
+/*! @brief Key used to extract the URL to set a session cookie before redirecting to the authorizationEndpoint
+ */
+static NSString *const kSessionCookieURL = @"sessionCookieURL";
+
 /*! @brief Number of random bytes generated for the @ state.
  */
 static NSUInteger const kStateSizeBytes = 32;
