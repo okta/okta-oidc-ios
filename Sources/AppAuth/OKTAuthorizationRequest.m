@@ -312,9 +312,15 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
   // Required parameters.
   [query addParameter:kResponseTypeKey value:_responseType];
   [query addParameter:kClientIDKey value:_clientID];
+    
+  NSString *sessionCookieURLString = _additionalParameters[kSessionCookieURL];
+  NSURL *sessionCookieURL = [NSURL URLWithString:sessionCookieURLString];
+  NSMutableDictionary *additionalParameters = [_additionalParameters mutableCopy];
+    
+  [additionalParameters removeObjectForKey:kSessionCookieURL];
 
   // Add any additional parameters the client has specified.
-  [query addParameters:_additionalParameters];
+  [query addParameters:additionalParameters];
 
   // Add optional parameters, as applicable.
   if (_redirectURL) {
@@ -334,6 +340,16 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
   }
   if (_codeChallengeMethod) {
     [query addParameter:kCodeChallengeMethodKey value:_codeChallengeMethod];
+  }
+    
+  if(sessionCookieURL) {
+    OKTURLQueryComponent *sessionCookieQuery = [[OKTURLQueryComponent alloc] initWithURL:sessionCookieURL];
+
+    NSURL *discoveryRequest = [query URLByReplacingQueryInURL:_configuration.authorizationEndpoint];
+
+    [sessionCookieQuery addParameter:@"redirect_uri" value:discoveryRequest.absoluteString];
+
+    return [sessionCookieQuery URLByReplacingQueryInURL:sessionCookieURL];
   }
 
   // Construct the URL:
