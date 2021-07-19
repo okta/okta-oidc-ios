@@ -160,7 +160,7 @@ NS_ASSUME_NONNULL_BEGIN
   dispatch_group_t group = dispatch_group_create();
   
   dispatch_group_enter(group);
-  [[UIApplication sharedApplication] openURL:_appStoreURL options:@{} completionHandler:^(BOOL success) {
+  [[UIApplication sharedApplication] openURL:requestURL options:@{} completionHandler:^(BOOL success) {
       openedInBrowser = success;
       dispatch_group_leave(group);
   }];
