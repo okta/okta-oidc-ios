@@ -21,6 +21,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     public static var supportsSecureCoding = true
 
     @objc open var authState: OKTAuthState
+    @objc open var nativeSSODomain: String
     @objc open var accessibility: CFString
 
     @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate? {
@@ -60,12 +61,18 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         return self.authState.refreshToken
     }
     
+    @objc open var deviceSecret: String? {
+        return self.authState.deviceSecret
+    }
+    
     var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
 
     @objc public init(authState: OKTAuthState,
+                      nativeSSODomain: String,
                       accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
         self.authState = authState
         self.accessibility = accessibility
+        self.nativeSSODomain = nativeSSODomain
         OktaOidcConfig.setupURLSession()
         
         super.init()
@@ -78,12 +85,14 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         
         self.init(
             authState: state,
+            nativeSSODomain: decoder.decodeObject(forKey: "nativeSSODomain") as! String,
             accessibility: decoder.decodeObject(forKey: "accessibility") as! CFString // swiftlint:disable:this force_cast
         )
     }
 
     @objc public func encode(with coder: NSCoder) {
         coder.encode(self.authState, forKey: "authState")
+        coder.encode(self.nativeSSODomain, forKey: "nativeSSODomain")
         coder.encode(self.accessibility, forKey: "accessibility")
     }
 
@@ -155,11 +164,24 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     }
 
     @objc public func removeFromSecureStorage() throws {
-        try OktaOidcKeychain.remove(key: self.clientId)
+        try OktaOidcKeychain.remove(key: self.nativeSSODomain)
     }
     
     @objc public func clear() {
-        OktaOidcKeychain.clearAll()
+        clear(allData: false)
+    }
+    
+    @objc public func clear(allData: Bool) {
+        if(allData) {
+            OktaOidcKeychain.clearAll()
+        }
+        else {
+            do {
+                try OktaOidcKeychain.remove(key:self.clientId)
+            } catch let error {
+                print("Error: \(error)")
+            }
+        }
     }
     
     @objc public func getUser(_ callback: @escaping ([String: Any]?, Error?) -> Void) {
@@ -187,6 +209,10 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         return readFromSecureStorage(forKey: config.clientId)
     }
     
+    @objc class func readNativeSSOFromSecureStorage(for config: OktaOidcConfig) -> OKTNativeSSOData? {
+        return readNativeSSOFromSecureStorage(forKey: config.nativeSSODomain)
+    }
+    
     @objc func writeToSecureStorage() {
         let authStateData: Data
         do {
@@ -195,7 +221,8 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
             } else {
                 authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
             }
-
+            
+            //The auth state data will remain in the application's private storage (not accessible to the other app)
             try OktaOidcKeychain.set(
                 key: self.clientId,
                 data: authStateData,
@@ -203,6 +230,28 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
             )
         } catch let error {
             print("Error: \(error)")
+        }
+        
+        //Write out our native SSO parameters if they exist!
+        if let _ = self.authState.getNativeSSOParameters() {
+            let encodedNativeSSOData: Data
+            do {
+                if #available(iOS 11, OSX 10.14, *) {
+                    encodedNativeSSOData = try NSKeyedArchiver.archivedData(withRootObject: self.authState.getNativeSSOParameters(), requiringSecureCoding: false)
+                } else {
+                    encodedNativeSSOData = NSKeyedArchiver.archivedData(withRootObject: self.authState.getNativeSSOParameters())
+                }
+                let appIdentifierPrefix = Bundle.main.infoDictionary!["AppIdentifierPrefix"] as! String
+                //The nativeSSO parameters will be put into a shared access group so authorized applications can read from it!
+                try OktaOidcKeychain.set(
+                    key: self.nativeSSODomain,
+                    data: encodedNativeSSOData,
+                    accessGroup: (appIdentifierPrefix + self.nativeSSODomain),
+                    accessibility: self.accessibility
+                )
+            } catch let error {
+                print("Error: \(error)")
+            }
         }
     }
     
@@ -220,21 +269,36 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
         return state
     }
+    
+    private class func readNativeSSOFromSecureStorage(forKey secureStorageKey: String) -> OKTNativeSSOData? {
+        guard let encodedNativeSSOData: Data = try? OktaOidcKeychain.get(key: secureStorageKey) else {
+            return nil
+        }
+
+        let nativeSSOData: OKTNativeSSOData?
+        if #available(iOS 11, OSX 10.14, *) {
+            nativeSSOData = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedNativeSSOData)) as? OKTNativeSSOData
+        } else {
+            nativeSSOData = NSKeyedUnarchiver.unarchiveObject(with: encodedNativeSSOData) as? OKTNativeSSOData
+        }
+
+        return nativeSSOData
+    }
 }
 
 internal extension OktaOidcStateManager {
     var discoveryDictionary: [String: Any]? {
-        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
+        return authState.lastTokenResponse?.request.configuration.discoveryDocument?.discoveryDictionary
     }
 }
 
 private extension OktaOidcStateManager {
     var issuer: String? {
-        return authState.lastAuthorizationResponse.request.configuration.issuer?.absoluteString
+        return authState.lastTokenResponse!.request.configuration.issuer?.absoluteString
     }
     
     var clientId: String {
-        return authState.lastAuthorizationResponse.request.clientID
+        return authState.clientId!
     }
 
     func performRequest(to endpoint: OktaOidcEndpoint,

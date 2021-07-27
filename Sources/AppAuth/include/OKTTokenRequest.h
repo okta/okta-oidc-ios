@@ -93,6 +93,36 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, readonly, nullable) NSString *codeVerifier;
 
+
+//NATIVE SSO STUFF
+/*! @brief The device_secret given to us previously in the native  SSO flow.
+    @remarks actor_token
+ */
+@property(nonatomic, readonly, nullable) NSString *actorToken;
+
+/*! @brief The id_token given to us previously in the native  SSO flow.
+    @remarks subject_token
+ */
+@property(nonatomic, readonly, nullable) NSString *subjectToken;
+
+/*! @brief The audience  of the authz server to be used for native  SSO flow.
+    @remarks audience
+ */
+@property(nonatomic, readonly, nullable) NSString *audience;
+
+/*! @brief The actor token type- this is really just a hardcoded value
+    @remarks urn:x-oath:params:oauth:token-type:device-secret
+ */
+@property(nonatomic, readonly, nullable) NSString *actorTokenType;
+
+/*! @brief The subject token type- this is really just a hardcoded value
+    @remarks urn:ietf:params:oauth:token-type:id_token
+ */
+@property(nonatomic, readonly, nullable) NSString *subjectTokenType;
+
+
+
+
 /*! @brief The client's additional token request parameters.
  */
 @property(nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *additionalParameters;
@@ -151,8 +181,23 @@ NS_ASSUME_NONNULL_BEGIN
                    scope:(nullable NSString *)scope
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+              actorToken:(nullable NSString *)actorToken
+          actorTokenType:(nullable NSString *)actorTokenType
+            subjectToken:(nullable NSString *)subjectToken
+        subjectTokenType:(nullable NSString *)subjectTokenType
+                audience:(nullable NSString *)audience
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters
     NS_DESIGNATED_INITIALIZER;
+
+
+//NATIVE SSO CTOR!
+- (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
+                clientID:(NSString *)clientID
+                  scopes:(nullable NSArray<NSString *> *)scopes
+              actorToken:(NSString *)actorToken
+            subjectToken:(NSString *)subjectToken
+                audience:(NSString *)audience
+    additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
 /*! @brief Constructs an @c NSURLRequest representing the token request.
     @return An @c NSURLRequest representing the token request.

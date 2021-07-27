@@ -124,6 +124,7 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
          || [responseType isEqualToString:idTokenCode];
 }
 
+
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
                 clientId:(NSString *)clientID
             clientSecret:(nullable NSString *)clientSecret
@@ -160,6 +161,28 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
   }
   return self;
 }
+
+//NATIVE SSO - DANC
+- (instancetype) initWithConfiguration:(OKTServiceConfiguration *)configuration
+                 clientId:(NSString *)clientID
+                 deviceSecret:(nullable NSString *)deviceSecret
+                 idToken: (nullable NSString *)idToken
+                 scope:(nullable NSString *)scope
+{
+    self = [super init];
+    if (self) {
+      _configuration = [configuration copy];
+      _clientID = [clientID copy];
+      _deviceSecret = [deviceSecret copy];
+      _idToken = [idToken copy];
+      _scope = [scope copy];
+      _responseType = @"";
+      
+    }
+    return self;
+    
+}
+
 
 - (instancetype)
    initWithConfiguration:(OKTServiceConfiguration *)configuration

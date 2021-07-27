@@ -20,6 +20,7 @@ public class OktaOidcConfig: NSObject {
     @objc public static let defaultPlistName = "Okta"
     
     @objc public let clientId: String
+    @objc public let nativeSSODomain: String
     @objc public let issuer: String
     @objc public let scopes: String
     @objc public let redirectUri: URL
@@ -42,6 +43,7 @@ public class OktaOidcConfig: NSObject {
 
     @objc public init(with dict: [String: String]) throws {
         guard let clientId = dict["clientId"], !clientId.isEmpty,
+              let nativeSSODomain = dict["nativeSSODomain"], !nativeSSODomain.isEmpty,
               let issuer = dict["issuer"], URL(string: issuer) != nil,
               let scopes = dict["scopes"], !scopes.isEmpty,
               let redirectUriString = dict["redirectUri"],
@@ -50,6 +52,7 @@ public class OktaOidcConfig: NSObject {
         }
         
         self.clientId = clientId
+        self.nativeSSODomain = nativeSSODomain
         self.issuer = issuer
         self.scopes = scopes
         self.redirectUri = redirectUri
@@ -128,6 +131,7 @@ public class OktaOidcConfig: NSObject {
         
         dict["issuer"] = issuer
         dict["clientId"] = clientId
+        dict["nativeSSODomain"] = nativeSSODomain
         dict["redirectUri"] = redirectUri.absoluteString
         dict["scopes"] = scopes
         if let logoutRedirectUri = logoutRedirectUri {
@@ -148,6 +152,7 @@ public class OktaOidcConfig: NSObject {
         
         // Remove "issuer", "clientId", "redirectUri", "scopes" and "logoutRedirectUri"
         configCopy.removeValue(forKey: "issuer")
+        configCopy.removeValue(forKey: "nativeSSODomain")
         configCopy.removeValue(forKey: "clientId")
         configCopy.removeValue(forKey: "redirectUri")
         configCopy.removeValue(forKey: "scopes")

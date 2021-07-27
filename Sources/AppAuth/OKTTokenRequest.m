@@ -65,6 +65,13 @@ static NSString *const kRefreshTokenKey = @"refresh_token";
  */
 static NSString *const kCodeVerifierKey = @"code_verifier";
 
+//NATIVE SSO STUFF
+static NSString *const kActorTokenKey = @"actor_token";
+static NSString *const kActorTokenTypeKey = @"actor_token_type";
+static NSString *const kSubjectTokenKey = @"subject_token";
+static NSString *const kSubjectTokenTypeKey = @"subject_token_type";
+static NSString *const kAudienceKey = @"audience";
+
 /*! @brief Key used to encode the @c additionalParameters property for
         @c NSSecureCoding
  */
@@ -105,7 +112,38 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                scope:[OKTScopeUtilities scopesWithArray:scopes]
                         refreshToken:refreshToken
                         codeVerifier:(NSString *)codeVerifier
+                          actorToken:nil
+                      actorTokenType:nil
+                        subjectToken:nil
+                    subjectTokenType:nil
+                            audience:nil
                 additionalParameters:additionalParameters];
+}
+
+
+//NATIVE SSO VERSION
+- (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
+                clientID:(NSString *)clientID
+                  scopes:(nullable NSArray<NSString *> *)scopes
+              actorToken:(NSString *)actorToken
+            subjectToken:(NSString *)subjectToken
+                audience:(NSString *)audience
+    additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
+  return [self initWithConfiguration:configuration
+                           grantType:@"urn:ietf:params:oauth:grant-type:token-exchange"
+                   authorizationCode:nil
+                         redirectURL:nil
+                            clientID:clientID
+                        clientSecret:nil
+                               scope:[OKTScopeUtilities scopesWithArray:scopes]
+                        refreshToken:nil
+                        codeVerifier:nil
+                        actorToken:actorToken
+                        actorTokenType:@"urn:x-oath:params:oauth:token-type:device-secret"
+                        subjectToken:subjectToken
+                        subjectTokenType:@"urn:ietf:params:oauth:token-type:id_token"
+                        audience:audience
+                        additionalParameters:additionalParameters];
 }
 
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
@@ -117,6 +155,11 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                    scope:(nullable NSString *)scope
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+              actorToken:(nullable NSString *)actorToken
+          actorTokenType:(nullable NSString *)actorTokenType
+            subjectToken:(nullable NSString *)subjectToken
+        subjectTokenType:(nullable NSString *)subjectTokenType
+                audience:(nullable NSString *)audience
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
   self = [super init];
   if (self) {
@@ -129,6 +172,11 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
     _scope = [scope copy];
     _refreshToken = [refreshToken copy];
     _codeVerifier = [codeVerifier copy];
+    _actorToken = [actorToken copy];
+    _actorTokenType = [actorTokenType copy];
+    _subjectToken = [subjectToken copy];
+    _subjectTokenType = [subjectTokenType copy];
+    _audience = [audience copy];
     _additionalParameters =
         [[NSDictionary alloc] initWithDictionary:additionalParameters copyItems:YES];
     
@@ -172,6 +220,14 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   NSString *scope = [aDecoder decodeObjectOfClass:[NSString class] forKey:kScopeKey];
   NSString *refreshToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kRefreshTokenKey];
   NSString *codeVerifier = [aDecoder decodeObjectOfClass:[NSString class] forKey:kCodeVerifierKey];
+    
+//NATIVE SSO STUFF
+  NSString *actorToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kActorTokenKey];
+  NSString *actorTokenType = [aDecoder decodeObjectOfClass:[NSString class] forKey:kActorTokenTypeKey];
+  NSString *subjectToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kSubjectTokenKey];
+  NSString *subjectTokenType = [aDecoder decodeObjectOfClass:[NSString class] forKey:kSubjectTokenTypeKey];
+  NSString *audience = [aDecoder decodeObjectOfClass:[NSString class] forKey:kAudienceKey];
+    
   NSURL *redirectURL = [aDecoder decodeObjectOfClass:[NSURL class] forKey:kRedirectURLKey];
   NSSet *additionalParameterCodingClasses = [NSSet setWithArray:@[
     [NSDictionary class],
@@ -189,6 +245,11 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                scope:scope
                         refreshToken:refreshToken
                         codeVerifier:codeVerifier
+                          actorToken:actorToken
+                      actorTokenType:actorTokenType
+                        subjectToken:subjectToken
+                    subjectTokenType:subjectTokenType
+                            audience:audience
                 additionalParameters:additionalParameters];
   return self;
 }
@@ -203,6 +264,14 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   [aCoder encodeObject:_scope forKey:kScopeKey];
   [aCoder encodeObject:_refreshToken forKey:kRefreshTokenKey];
   [aCoder encodeObject:_codeVerifier forKey:kCodeVerifierKey];
+    
+//NATIVE SSO STUFF
+    [aCoder encodeObject:_actorToken forKey:kActorTokenKey];
+    [aCoder encodeObject:_actorTokenType forKey:kActorTokenTypeKey];
+    [aCoder encodeObject:_subjectToken forKey:kSubjectTokenKey];
+    [aCoder encodeObject:_subjectTokenType forKey:kSubjectTokenTypeKey];
+    [aCoder encodeObject:_audience forKey:kAudienceKey];
+    
   [aCoder encodeObject:_additionalParameters forKey:kAdditionalParametersKey];
 }
 
@@ -255,6 +324,23 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   }
   if (_codeVerifier) {
     [query addParameter:kCodeVerifierKey value:_codeVerifier];
+  }
+    
+//NATIVE SSO STUFF
+  if (_audience) {
+      [query addParameter:kAudienceKey value:_audience];
+  }
+  if (_actorToken) {
+      [query addParameter:kActorTokenKey value:_actorToken];
+  }
+  if (_actorTokenType) {
+      [query addParameter:kActorTokenTypeKey value:_actorTokenType];
+  }
+  if (_subjectToken) {
+      [query addParameter:kSubjectTokenKey value:_subjectToken];
+  }
+  if (_subjectTokenType) {
+      [query addParameter:kSubjectTokenTypeKey value:_subjectTokenType];
   }
 
   // Add any additional parameters the client has specified.

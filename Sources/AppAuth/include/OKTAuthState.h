@@ -25,6 +25,7 @@
 @class OKTRegistrationResponse;
 @class OKTTokenResponse;
 @class OKTTokenRequest;
+@class OKTNativeSSOData;
 @protocol OKTAuthStateChangeDelegate;
 @protocol OKTAuthStateErrorDelegate;
 @protocol OKTExternalUserAgent;
@@ -63,6 +64,14 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
     @see https://tools.ietf.org/html/rfc6749#section-5.1
  */
 @property(nonatomic, readonly, nullable) NSString *refreshToken;
+
+//NATIVE SSO
+@property(nonatomic, nullable) NSString *clientId;
+
+/*! @brief The device secret to be used in native SSO token exchange
+    @remarks device_secret
+ */
+@property(nonatomic, readonly, nullable) NSString *deviceSecret;
 
 /*! @brief The scope of the current authorization grant.
     @discussion This represents the latest scope returned by the server and may be a subset of the
@@ -143,6 +152,14 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
                             externalUserAgent:(id<OKTExternalUserAgent>)externalUserAgent
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                                      callback:(OKTAuthStateAuthorizationCallback)callback;
+
+//NATIVE SSO STUFF
+/*! @brief Creates an auth state from a token request.
+    @param tokenRequest The token request
+ */
++ (void)initWithTokenRequest:(OKTTokenRequest *)tokenRequest
+                    callback:(OKTAuthStateAuthorizationCallback)callback;
+
 
 /*! @internal
     @brief Unavailable. Please use @c initWithAuthorizationResponse:.
@@ -278,6 +295,8 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
  */
 - (nullable OKTTokenRequest *)tokenRefreshRequestWithAdditionalParameters:
     (nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
+
+- (nullable OKTNativeSSOData *)getNativeSSOParameters;
 
 @end
 

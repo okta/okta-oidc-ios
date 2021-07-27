@@ -44,12 +44,31 @@ public class OktaOidc: NSObject {
                     return
                 }
 
-                let authStateManager = OktaOidcStateManager(authState: authState)
+                let authStateManager = OktaOidcStateManager(authState: authState, nativeSSODomain: self.configuration.nativeSSODomain)
                 if let delegate = self.configuration.requestCustomizationDelegate {
                     authStateManager.requestCustomizationDelegate = delegate
                 }
                 callback(authStateManager, nil)
             })
+    }
+    
+    //NATIVE SSO STUFF
+    @objc public func signInWithNativeSSO(idToken: String, deviceSecret: String,
+                                          callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+        let oktaAPI = OktaOidcRestApi()
+        let task = OktaOidcNativeSSOTask(config: self.configuration, oktaAPI: oktaAPI)
+        task.signIn(
+            idToken: idToken,
+            deviceSecret: deviceSecret,
+            callback: { (authState, error) in
+                guard let authState = authState else {
+                    callback(nil, error)
+                    return
+                }
+                let authStateManager = OktaOidcStateManager(authState: authState, nativeSSODomain: self.configuration.nativeSSODomain)
+                callback(authStateManager, nil)
+            }
+        )
     }
 
     @objc public func hasActiveBrowserSession() -> Bool {
@@ -67,7 +86,7 @@ public class OktaOidc: NSObject {
                 return
             }
             
-            let authStateManager = OktaOidcStateManager(authState: authState)
+            let authStateManager = OktaOidcStateManager(authState: authState, nativeSSODomain: self!.configuration.nativeSSODomain)
             if let delegate = self?.configuration.requestCustomizationDelegate {
                 authStateManager.requestCustomizationDelegate = delegate
             }

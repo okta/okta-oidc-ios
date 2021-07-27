@@ -32,10 +32,21 @@
 #import "OKTTokenRequest.h"
 #import "OKTTokenResponse.h"
 #import "OKTTokenUtilities.h"
+#import "OKTNativeSSOData.h"
 
 /*! @brief Key used to encode the @c refreshToken property for @c NSSecureCoding.
  */
 static NSString *const kRefreshTokenKey = @"refreshToken";
+
+//NATIVE SSO STUFF
+/*! @brief Key used to encode the @c deviceSecret property for @c NSSecureCoding.
+ */
+static NSString *const kDeviceSecretKey = @"deviceSecret";
+
+/*! @brief Key used to encode the @c clientID property for @c NSSecureCoding.
+ */
+static NSString *const kClientIdKey = @"clientId";
+
 
 /*! @brief Key used to encode the @c needsTokenRefresh property for @c NSSecureCoding.
  */
@@ -159,6 +170,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                                 authorizationResponse
                                                 tokenResponse:tokenResponse];
                                  }
+                                   authState.clientId = authorizationRequest.clientID;
                                  callback(authState, tokenError);
                                }];
                              } else {
@@ -171,6 +183,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                //    c_hash before calling the token endpoint
                                OKTAuthState *authState = [[OKTAuthState alloc]
                                    initWithAuthorizationResponse:authorizationResponse];
+                                 authState.clientId = authorizationRequest.clientID;
                                callback(authState, authorizationError);
                              }
                            } else {
@@ -192,7 +205,6 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   return [self initWithAuthorizationResponse:authorizationResponse tokenResponse:nil];
 }
 
-
 /*! @brief Designated initializer.
     @param authorizationResponse The authorization response.
     @discussion Creates an auth state from an authorization response and token response.
@@ -211,6 +223,29 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                           registrationResponse:registrationResponse
                                       delegate:nil];
 }
+
+//NATIVE SSO STUFF
+/*! @brief Creates an auth state from a token request.
+    @param tokenRequest The token request
+ */
++ (void)initWithTokenRequest:(OKTTokenRequest *)tokenRequest
+                    callback:(OKTAuthStateAuthorizationCallback)callback {
+    
+    [OKTAuthorizationService performTokenRequest:tokenRequest
+                   originalAuthorizationResponse:nil
+                                        delegate:nil
+                                        callback:^(OKTTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
+      OKTAuthState *authState;
+      if (tokenResponse) {
+        authState = [[OKTAuthState alloc]
+                     initWithAuthorizationResponse:nil
+                     tokenResponse:tokenResponse];
+      }
+        authState.clientId = tokenRequest.clientID;
+        callback(authState, nil);
+    }];
+}
+
 
 - (instancetype)initWithAuthorizationResponse:
     (nullable OKTAuthorizationResponse *)authorizationResponse
@@ -244,6 +279,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                      "scope: \"%@\", accessToken: \"%@\", "
                                      "accessTokenExpirationDate: %@, idToken: \"%@\", "
                                      "lastAuthorizationResponse: %@, lastTokenResponse: %@, "
+                                     "deviceSecret: \"%@\", clientId: %@, "
                                      "lastRegistrationResponse: %@, authorizationError: %@>",
                                     NSStringFromClass([self class]),
                                     (void *)self,
@@ -255,6 +291,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                     [OKTTokenUtilities redact:self.idToken],
                                     _lastAuthorizationResponse,
                                     _lastTokenResponse,
+                                    _deviceSecret,
+                                    _clientId,
                                     _lastRegistrationResponse,
                                     _authorizationError];
 }
@@ -277,6 +315,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
         [aDecoder decodeObjectOfClass:[NSError class] forKey:kAuthorizationErrorKey];
     _scope = [aDecoder decodeObjectOfClass:[NSString class] forKey:kScopeKey];
     _refreshToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kRefreshTokenKey];
+    _deviceSecret = [aDecoder decodeObjectOfClass:[NSString class] forKey:kDeviceSecretKey];
+    _clientId = [aDecoder decodeObjectOfClass:[NSString class] forKey:kClientIdKey];
     _needsTokenRefresh = [aDecoder decodeBoolForKey:kNeedsTokenRefreshKey];
   }
   return self;
@@ -293,7 +333,9 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   }
   [aCoder encodeObject:_scope forKey:kScopeKey];
   [aCoder encodeObject:_refreshToken forKey:kRefreshTokenKey];
+  [aCoder encodeObject:_deviceSecret forKey:kDeviceSecretKey];
   [aCoder encodeBool:_needsTokenRefresh forKey:kNeedsTokenRefreshKey];
+  [aCoder encodeObject:_clientId forKey:kClientIdKey];
 }
 
 #pragma mark - Private convenience getters
@@ -341,6 +383,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
 - (void)updateWithRegistrationResponse:(OKTRegistrationResponse *)registrationResponse {
   _lastRegistrationResponse = registrationResponse;
   _refreshToken = nil;
+  _deviceSecret = nil;
   _scope = nil;
   _lastAuthorizationResponse = nil;
   _lastTokenResponse = nil;
@@ -365,6 +408,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   // that is no longer relevant
   _lastTokenResponse = nil;
   _refreshToken = nil;
+  _deviceSecret = nil;
   _authorizationError = nil;
 
   // if the response's scope is nil, it means that it equals that of the request
@@ -410,7 +454,10 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   if (tokenResponse.refreshToken) {
     _refreshToken = tokenResponse.refreshToken;
   }
-
+    if (tokenResponse.additionalParameters.count > 0) {
+        _deviceSecret = (NSString *)tokenResponse.additionalParameters[@"device_secret"];
+    }
+//PUT STUFF HERE!!!
   [self didChangeState];
 }
 
@@ -446,6 +493,11 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
+                 actorToken:nil
+             actorTokenType:nil
+               subjectToken:nil
+           subjectTokenType:nil
+                   audience:nil
        additionalParameters:additionalParameters];
 }
 
@@ -570,6 +622,17 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   return tokenFresh;
 }
 
+- (nullable OKTNativeSSOData *)getNativeSSOParameters {
+    if (_deviceSecret) {
+        return [[OKTNativeSSOData alloc]
+            initWithDeviceSecret:_deviceSecret
+                         idToken:self.idToken];
+    }
+    else {
+        return nil;
+    }
+
+}
 @end
 
 

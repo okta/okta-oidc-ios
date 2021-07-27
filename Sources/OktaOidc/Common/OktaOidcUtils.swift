@@ -35,6 +35,11 @@ open class OktaOidcUtils: NSObject {
 
         return scrubbedScopes
     }
+    
+    internal class func scrubNativeSSOScopes(_ scopes: String?) -> [String] {
+        let returnScopes = OktaOidcUtils.scrubScopes(scopes).filter {$0 != "device_sso"}
+        return returnScopes
+    }
 
     internal class func removeTrailingSlash(_ val: String) -> String {
         // Removes the URLs trailing slash if it exists

@@ -64,6 +64,9 @@ extern NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256;
  */
 @property(nonatomic, readonly) NSString *clientID;
 
+//DANC NATIVE SSO
+@property(nonatomic, readonly) NSString *deviceSecret;
+@property(nonatomic, readonly) NSString *idToken;
 /*! @brief The client secret.
     @remarks client_secret
     @discussion The client secret is used to prove that identity of the client when exchaning an
@@ -181,6 +184,14 @@ extern NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256;
               redirectURL:(NSURL *)redirectURL
              responseType:(NSString *)responseType
      additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
+
+//USED FOR NATIVE SSO - DANC
+- (instancetype)
+    initWithConfiguration:(OKTServiceConfiguration *)configuration
+                 clientId:(NSString *)clientID
+             deviceSecret:(nullable NSString *)deviceSecret
+             idToken: (nullable NSString *)idToken
+             scopes:(nullable NSArray<NSString *> *)scopes;
 
 /*! @brief Designated initializer.
     @param configuration The service's configuration.

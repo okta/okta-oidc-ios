@@ -10,6 +10,8 @@
 	<string>{clientId}</string>
 	<key>issuer</key>
 	<string>https://{yourOktaDomain}/oauth2/default</string>
+	<key>nativeSSODomain</key>
+	<string>example_shared_space</string>
 	<key>logoutRedirectUri</key>
 	<string>{scheme}:/logout</string>
 </dict>
