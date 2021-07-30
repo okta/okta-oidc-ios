@@ -461,7 +461,7 @@
 		A17E38B3234CFF1E00837873 /* OKTAuthState+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OKTAuthState+IOS.h"; path = "../include/OKTAuthState+IOS.h"; sourceTree = "<group>"; };
 		A17E38B4234CFF1E00837873 /* OKTExternalUserAgentIOSCustomBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTExternalUserAgentIOSCustomBrowser.h; path = ../include/OKTExternalUserAgentIOSCustomBrowser.h; sourceTree = "<group>"; };
 		A17E38B5234CFF1E00837873 /* OKTAuthorizationService+IOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OKTAuthorizationService+IOS.h"; path = "../include/OKTAuthorizationService+IOS.h"; sourceTree = "<group>"; };
-		A17E38B6234CFF1E00837873 /* OKTExternalUserAgentIOSCustomBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OKTExternalUserAgentIOSCustomBrowser.m; sourceTree = "<group>"; };
+		A17E38B6234CFF1E00837873 /* OKTExternalUserAgentIOSCustomBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = OKTExternalUserAgentIOSCustomBrowser.m; sourceTree = "<group>"; tabWidth = 2; };
 		A17E38B7234CFF1E00837873 /* OKTAuthorizationService+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OKTAuthorizationService+IOS.m"; sourceTree = "<group>"; };
 		A17E38B8234CFF1E00837873 /* OKTExternalUserAgentIOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OKTExternalUserAgentIOS.m; sourceTree = "<group>"; };
 		A17E38B9234CFF1E00837873 /* OKTAuthState+IOS.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OKTAuthState+IOS.m"; sourceTree = "<group>"; };
@@ -598,7 +598,9 @@
 				2F32CA1F229D38D4003A6768 /* Products */,
 				2F32CBD2229D42D0003A6768 /* Frameworks */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		2F32CA1F229D38D4003A6768 /* Products */ = {
 			isa = PBXGroup;
@@ -1742,6 +1744,7 @@
 		2F32CA27229D38D4003A6768 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1771,6 +1774,7 @@
 		2F32CA28229D38D4003A6768 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
@@ -1917,6 +1921,7 @@
 		A17E38EE234D2DF800837873 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -1943,6 +1948,7 @@
 		A17E38EF234D2DF800837873 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;

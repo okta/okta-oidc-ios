@@ -163,18 +163,6 @@ NS_ASSUME_NONNULL_BEGIN
       openedUserAgent = YES;
     }
   }
-  // iOS 8 and earlier, use mobile Safari
-  if (!openedUserAgent){
-    dispatch_group_t group = dispatch_group_create();
-  
-    dispatch_group_enter(group);
-    [[UIApplication sharedApplication] openURL:requestURL options:@{} completionHandler:^(BOOL success) {
-      openedUserAgent = success;
-      dispatch_group_leave(group);
-    }];
-  
-    dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
-  }
 
   if (!openedUserAgent) {
     [self cleanUp];
