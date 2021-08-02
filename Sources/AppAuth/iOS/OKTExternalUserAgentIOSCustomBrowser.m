@@ -131,7 +131,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (BOOL)presentExternalUserAgentRequest:(nonnull id<OKTExternalUserAgentRequest>)request
-                                session:(nonnull id<OKTExternalUserAgentSession>)session {
+                                session:(nonnull id<OKTExternalUserAgentSession>)session NS_EXTENSION_UNAVAILABLE_IOS("") {
   // If the app store URL is set, checks if the app is installed and if not opens the app store.
   if (_appStoreURL && _canOpenURLScheme) {
     // Verifies existence of LSApplicationQueriesSchemes Info.plist key.
