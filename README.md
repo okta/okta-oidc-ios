@@ -54,6 +54,8 @@ You'll also need:
 - An Okta account, called an _organization_ (sign up for a free [developer organization](https://developer.okta.com/signup/) if you need one).
 - An Okta Application, configured as a Native App. This is done from the Okta Developer Console and you can find instructions [here](https://developer.okta.com/authentication-guide/implementing-authentication/auth-code-pkce). When following the wizard, use the default properties. They are designed to work with our sample applications.
 
+**Note:** If you would like to use your own in-app user interface instead of the web browser, you can do so by using our [Swift Authentication SDK](https://github.com/okta/okta-auth-swift).
+
 ## Supported Platforms
 
 ### iOS
