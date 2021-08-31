@@ -446,7 +446,9 @@ Sample app [example](https://github.com/okta/samples-ios/blob/master/browser-sig
 #### clear
 
 Removes the local authentication state by removing cached tokens in the keychain.
-**Note:** SDK deletes all keychain items accessible to an application.
+
+
+**Warning:** SDK deletes all keychain items accessible to an application.
 
 ```swift
 stateManager.clear()
