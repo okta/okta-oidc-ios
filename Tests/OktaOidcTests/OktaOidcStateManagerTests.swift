@@ -370,8 +370,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             storedManager?.authState.lastAuthorizationResponse.idToken,
             manager.authState.lastAuthorizationResponse.idToken
         )
-        
-        manager.clear()
+
         XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
     }
     #endif

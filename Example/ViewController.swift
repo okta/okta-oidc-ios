@@ -29,7 +29,6 @@ final class ViewController: UIViewController {
     private var oktaAppAuth: OktaOidc?
     private var authStateManager: OktaOidcStateManager? {
         didSet {
-            oldValue?.clear()
             authStateManager?.writeToSecureStorage()
         }
     }
@@ -95,7 +94,6 @@ final class ViewController: UIViewController {
     }
 
     @IBAction func clearTokens(_ sender: Any) {
-        authStateManager?.clear()
         try? authStateManager?.removeFromSecureStorage()
         authStateManager = nil
         

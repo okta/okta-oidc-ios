@@ -158,6 +158,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         try OktaOidcKeychain.remove(key: self.clientId)
     }
     
+    @available(*, deprecated, message: "This method deletes all keychain items accessible to an application. Use `removeFromSecureStorage` to remove Okta items.")
     @objc public func clear() {
         OktaOidcKeychain.clearAll()
     }
