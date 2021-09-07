@@ -25,7 +25,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.okta.erikmanor</string>
+				<string>com.okta.example</string>
 			</array>
 		</dict>
 	</array>
