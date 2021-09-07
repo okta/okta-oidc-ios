@@ -206,6 +206,8 @@ static NSString *const kTokenExchangeRequestException =
                                                   scope:nil
                                            refreshToken:nil
                                            codeVerifier:_request.codeVerifier
+                                           deviceSecret:nil
+                                           subjectToken:nil
                                    additionalParameters:additionalParameters];
 }
 

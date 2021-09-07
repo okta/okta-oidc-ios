@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>scopes</key>
-	<string>openid profile offline_access</string>
+	<string>openid profile offline_access device_sso</string>
 	<key>redirectUri</key>
-	<string>{scheme}:/callback</string>
+	<string>com.okta.erikmanor:/callback</string>
 	<key>clientId</key>
-	<string>{clientId}</string>
+	<string>0oa1ghpsx6FRoW5205d7</string>
 	<key>issuer</key>
-	<string>https://{yourOktaDomain}/oauth2/default</string>
+	<string>https://erikmanor.okta.com/oauth2/aus1ghptecZi9Lv0U5d7</string>
 	<key>logoutRedirectUri</key>
-	<string>{scheme}:/logout</string>
+	<string>com.okta.erikmanor:/logout</string>
+	<key>audience</key>
+	<string>http://sso</string>
 </dict>
 </plist>

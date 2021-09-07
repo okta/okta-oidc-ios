@@ -42,6 +42,10 @@ static NSString *const kPostLogoutRedirectURLKey = @"post_logout_redirect_uri";
  */
 static NSString *const kIdTokenHintKey = @"id_token_hint";
 
+/*! @brief Key used to encode the @c deviceSecret property for @c NSSecureCoding, and on the URL request.
+ */
+static NSString *const kDeviceSecretKey = @"device_secret";
+
 /*! @brief Key used to encode the @c additionalParameters property for @c NSSecureCoding
  */
 static NSString *const kAdditionalParametersKey = @"additionalParameters";
@@ -61,12 +65,14 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
     OKT_UNAVAILABLE_USE_INITIALIZER(
         @selector(initWithConfiguration:
                             idTokenHint:
+                           deviceSecret:
                   postLogoutRedirectURL:
                    additionalParameters:)
     )
 
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
                           idTokenHint:(NSString *)idTokenHint
+                         deviceSecret:(NSString *)deviceSecret
                 postLogoutRedirectURL:(NSURL *)postLogoutRedirectURL
                                 state:(NSString *)state
                  additionalParameters:(NSDictionary<NSString *,NSString *> *)additionalParameters
@@ -75,6 +81,7 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
   if (self) {
       _configuration = [configuration copy];
       _idTokenHint = [idTokenHint copy];
+      _deviceSecret = [deviceSecret copy];
       _postLogoutRedirectURL = [postLogoutRedirectURL copy];
       _state = [state copy];
       _additionalParameters =
@@ -85,11 +92,13 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
 
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
                           idTokenHint:(NSString *)idTokenHint
+                         deviceSecret:(NSString *)deviceSecret
                 postLogoutRedirectURL:(NSURL *)postLogoutRedirectURL
                  additionalParameters:(NSDictionary<NSString *,NSString *> *)additionalParameters
 {
   return [self initWithConfiguration:configuration
                          idTokenHint:idTokenHint
+                        deviceSecret:deviceSecret
                postLogoutRedirectURL:postLogoutRedirectURL
                                state:[[self class] generateState]
                 additionalParameters:additionalParameters];
@@ -114,6 +123,7 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
   OKTServiceConfiguration *configuration = [aDecoder decodeObjectOfClass:[OKTServiceConfiguration class] forKey:kConfigurationKey];
 
   NSString *idTokenHint = [aDecoder decodeObjectOfClass:[NSString class] forKey:kIdTokenHintKey];
+  NSString *deviceSecret = [aDecoder decodeObjectOfClass:[NSString class] forKey:kDeviceSecretKey];
   NSURL *postLogoutRedirectURL = [aDecoder decodeObjectOfClass:[NSURL class] forKey:kPostLogoutRedirectURLKey];
   NSString *state = [aDecoder decodeObjectOfClass:[NSString class] forKey:kStateKey];
   NSSet *additionalParameterCodingClasses = [NSSet setWithArray:@[
@@ -125,6 +135,7 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
 
   self = [self initWithConfiguration:configuration
                          idTokenHint:idTokenHint
+                        deviceSecret:deviceSecret
                postLogoutRedirectURL:postLogoutRedirectURL
                                state:state
                 additionalParameters:additionalParameters];
@@ -134,6 +145,7 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
 - (void)encodeWithCoder:(NSCoder *)aCoder {
   [aCoder encodeObject:_configuration forKey:kConfigurationKey];
   [aCoder encodeObject:_idTokenHint forKey:kIdTokenHintKey];
+  [aCoder encodeObject:_deviceSecret forKey:kDeviceSecretKey];
   [aCoder encodeObject:_postLogoutRedirectURL forKey:kPostLogoutRedirectURLKey];
   [aCoder encodeObject:_state forKey:kStateKey];
   [aCoder encodeObject:_additionalParameters forKey:kAdditionalParametersKey];
@@ -173,6 +185,10 @@ static NSString *const OKTMissingEndSessionEndpointMessage =
   // Add optional parameters, as applicable.
   if (_idTokenHint) {
     [query addParameter:kIdTokenHintKey value:_idTokenHint];
+  }
+  
+  if (_deviceSecret && ![_deviceSecret  isEqual: @""]) {
+    [query addParameter:kDeviceSecretKey value:_deviceSecret];
   }
 
   if (_postLogoutRedirectURL) {

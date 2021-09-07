@@ -437,15 +437,20 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     [OKTErrorUtilities raiseException:kRefreshTokenRequestException];
   }
   return [[OKTTokenRequest alloc]
-      initWithConfiguration:_lastAuthorizationResponse.request.configuration
+      initWithConfiguration:_lastAuthorizationResponse.request.configuration ? _lastAuthorizationResponse.request.configuration
+                                                                             : _lastTokenResponse.request.configuration
                   grantType:OKTGrantTypeRefreshToken
           authorizationCode:nil
                 redirectURL:nil
-                   clientID:_lastAuthorizationResponse.request.clientID
-               clientSecret:_lastAuthorizationResponse.request.clientSecret
+          clientID:_lastAuthorizationResponse.request.clientID ? _lastAuthorizationResponse.request.clientID
+                                                               : _lastTokenResponse.request.clientID
+          clientSecret:_lastAuthorizationResponse.request.clientSecret ? _lastAuthorizationResponse.request.clientSecret
+                                                                       : _lastTokenResponse.request.clientSecret
                       scope:nil
                refreshToken:_refreshToken
                codeVerifier:nil
+               deviceSecret:nil
+               subjectToken:nil
        additionalParameters:additionalParameters];
 }
 

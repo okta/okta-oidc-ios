@@ -51,6 +51,30 @@ public class OktaOidc: NSObject {
                 callback(authStateManager, nil)
             })
     }
+  
+    @objc public func signInWithDeviceSecret(withDeviceSecret deviceSecret: String, idToken: String,
+                                     callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
+          let oktaAPI = OktaOidcRestApi()
+          oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
+
+          let task = OktaOidcDeviceSecretTask(config: configuration, oktaAPI: oktaAPI)
+          task.signInWithDeviceSecret(
+            deviceSecret: deviceSecret,
+            subjectToken: idToken,
+            delegate: configuration.requestCustomizationDelegate,
+            callback: { (authState, error) in
+              guard let authState = authState else {
+                  callback(nil, error)
+                  return
+              }
+
+              let authStateManager = OktaOidcStateManager(authState: authState)
+              if let delegate = self.configuration.requestCustomizationDelegate {
+                  authStateManager.requestCustomizationDelegate = delegate
+              }
+              callback(authStateManager, nil)
+          })
+    }
 
     @objc public func hasActiveBrowserSession() -> Bool {
         return currentUserSessionTask != nil
@@ -77,13 +101,14 @@ public class OktaOidc: NSObject {
 
     func signOutWithBrowserTask(_ task: OktaOidcBrowserTask,
                                 idToken: String,
+                                deviceSecret: String? = nil,
                                 callback: @escaping ((Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signOutWithIdToken(idToken: idToken) { [weak self] _, error in
+        task.signOutWithIdToken(idToken: idToken, deviceSecret: deviceSecret, callback: { [weak self] _, error in
             defer { self?.currentUserSessionTask = nil }
             callback(error)
-        }
+        })
     }
 
     // Holds the browser session

@@ -40,3 +40,8 @@ extern NSString *const OKTGrantTypePassword;
     @see https://tools.ietf.org/html/rfc6749#section-4.4.2
  */
 extern NSString *const OKTGrantTypeClientCredentials;
+
+/*! @brief For obtaining an access token from the token endpoint using client credentials.
+    @see https://datatracker.ietf.org/doc/html/rfc8693
+ */
+extern NSString *const OKTGrantTypeDeviceSecret;

@@ -48,6 +48,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, readonly, nullable) NSString *idTokenHint;
 
+/*! @brief Previously issued Device Secret passed to the end session endpoint to logout of all applications relying on  it
+    @remarks device_secret
+    @see http://openid.net/specs/openid-connect-session-1_0.html#RPLogout
+ */
+@property(nonatomic, readonly, nullable) NSString *deviceSecret;
+
 /*! @brief An opaque value used by the client to maintain state between the request and callback.
     @remarks state
     @discussion If this value is not explicitly set, this library will automatically add state and
@@ -78,6 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)
     initWithConfiguration:(OKTServiceConfiguration *)configuration
               idTokenHint:(NSString *)idTokenHint
+             deviceSecret:(NSString *)deviceSecret
     postLogoutRedirectURL:(NSURL *)postLogoutRedirectURL
      additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
@@ -92,6 +99,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)
     initWithConfiguration:(OKTServiceConfiguration *)configuration
               idTokenHint:(NSString *)idTokenHint
+             deviceSecret:(NSString *)deviceSecret
     postLogoutRedirectURL:(NSURL *)postLogoutRedirectURL
                     state:(NSString *)state
      additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters

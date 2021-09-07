@@ -63,6 +63,8 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                               scopes:scopesArray
                                         refreshToken:kRefreshTokenTestValue
                                         codeVerifier:authResponse.request.codeVerifier
+                                        deviceSecret:nil
+                                             idToken:nil
                                 additionalParameters:additionalParameters];
   return request;
 }
@@ -83,6 +85,8 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                               scopes:scopesArray
                                         refreshToken:kRefreshTokenTestValue
                                         codeVerifier:authResponse.request.codeVerifier
+                                        deviceSecret:nil
+                                             idToken:nil
                                 additionalParameters:additionalParameters];
   return request;
 }
@@ -103,6 +107,8 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                               scopes:scopesArray
                                         refreshToken:kRefreshTokenTestValue
                                         codeVerifier:authResponse.request.codeVerifier
+                                        deviceSecret:nil
+                                             idToken:nil
                                 additionalParameters:additionalParameters];
   return request;
 }
@@ -123,6 +129,8 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                               scopes:scopesArray
                                         refreshToken:kRefreshTokenTestValue
                                         codeVerifier:authResponse.request.codeVerifier
+                                        deviceSecret:nil
+                                             idToken:nil
                                 additionalParameters:additionalParameters];
   return request;
 }
@@ -254,6 +262,8 @@ static NSString *const kTestAdditionalParameterValue = @"1";
                                                           scopes:scopesArray
                                                     refreshToken:kRefreshTokenTestValue
                                                     codeVerifier:authResponse.request.codeVerifier
+                                                    deviceSecret:nil
+                                                         idToken:nil
                                             additionalParameters:additionalParameters], @"");
 }
 

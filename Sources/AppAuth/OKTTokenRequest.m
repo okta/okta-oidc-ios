@@ -65,6 +65,16 @@ static NSString *const kRefreshTokenKey = @"refresh_token";
  */
 static NSString *const kCodeVerifierKey = @"code_verifier";
 
+/*! @brief Key used to encode the @c deviceSecret property for @c NSSecureCoding and to build the
+        request URL.
+ */
+static NSString *const kDeviceSecretKey = @"actor_token";
+
+/*! @brief Key used to encode the @c subjectToken property for @c NSSecureCoding and to build the
+        request URL.
+ */
+static NSString *const kSubjectTokenKey = @"subject_token";
+
 /*! @brief Key used to encode the @c additionalParameters property for
         @c NSSecureCoding
  */
@@ -95,6 +105,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                   scopes:(nullable NSArray<NSString *> *)scopes
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+            deviceSecret:(nullable NSString *)deviceSecret
+            subjectToken:(nullable NSString *)subjectToken
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
   return [self initWithConfiguration:configuration
                            grantType:grantType
@@ -105,6 +117,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                scope:[OKTScopeUtilities scopesWithArray:scopes]
                         refreshToken:refreshToken
                         codeVerifier:(NSString *)codeVerifier
+                        deviceSecret:deviceSecret
+                        subjectToken:subjectToken
                 additionalParameters:additionalParameters];
 }
 
@@ -117,6 +131,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                    scope:(nullable NSString *)scope
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+            deviceSecret:(nullable NSString *)deviceSecret
+            subjectToken:(nullable NSString *)subjectToken
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
   self = [super init];
   if (self) {
@@ -129,6 +145,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
     _scope = [scope copy];
     _refreshToken = [refreshToken copy];
     _codeVerifier = [codeVerifier copy];
+    _deviceSecret = [deviceSecret copy];
+    _subjectToken = [subjectToken copy];
     _additionalParameters =
         [[NSDictionary alloc] initWithDictionary:additionalParameters copyItems:YES];
     
@@ -141,6 +159,7 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
 
       }
     }
+    // @erik todo if device secret grant verify device secret and id token Maybe
   }
   return self;
 }
@@ -172,6 +191,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   NSString *scope = [aDecoder decodeObjectOfClass:[NSString class] forKey:kScopeKey];
   NSString *refreshToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kRefreshTokenKey];
   NSString *codeVerifier = [aDecoder decodeObjectOfClass:[NSString class] forKey:kCodeVerifierKey];
+  NSString *deviceSecret = [aDecoder decodeObjectOfClass:[NSString class] forKey:kDeviceSecretKey];
+  NSString *subjectToken = [aDecoder decodeObjectOfClass:[NSString class] forKey:kSubjectTokenKey];
   NSURL *redirectURL = [aDecoder decodeObjectOfClass:[NSURL class] forKey:kRedirectURLKey];
   NSSet *additionalParameterCodingClasses = [NSSet setWithArray:@[
     [NSDictionary class],
@@ -189,6 +210,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                scope:scope
                         refreshToken:refreshToken
                         codeVerifier:codeVerifier
+                        deviceSecret:deviceSecret
+                        subjectToken:subjectToken
                 additionalParameters:additionalParameters];
   return self;
 }
@@ -203,6 +226,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   [aCoder encodeObject:_scope forKey:kScopeKey];
   [aCoder encodeObject:_refreshToken forKey:kRefreshTokenKey];
   [aCoder encodeObject:_codeVerifier forKey:kCodeVerifierKey];
+  [aCoder encodeObject:_deviceSecret forKey:kDeviceSecretKey];
+  [aCoder encodeObject:_subjectToken forKey:kSubjectTokenKey];
   [aCoder encodeObject:_additionalParameters forKey:kAdditionalParametersKey];
 }
 
@@ -255,6 +280,12 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
   }
   if (_codeVerifier) {
     [query addParameter:kCodeVerifierKey value:_codeVerifier];
+  }
+  if (_deviceSecret) {
+    [query addParameter:kDeviceSecretKey value:_deviceSecret];
+  }
+  if (_subjectToken) {
+    [query addParameter:kSubjectTokenKey value:_subjectToken];
   }
 
   // Add any additional parameters the client has specified.

@@ -51,4 +51,24 @@ extension OKTAuthState {
             })
         })
     }
+  
+    static func getState(withTokenRequest tokenRequest: OKTTokenRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping (OKTAuthState?, OktaOidcError?) -> Void ) {
+        
+        let finalize: ((OKTAuthState?, OktaOidcError?) -> Void) = { state, error in
+            callback(state, error)
+        }
+            // Make token request
+            OKTAuthorizationService.perform(tokenRequest, delegate: delegate, callback: { tokenResponse, error in
+                guard let tokenResponse = tokenResponse else {
+                    finalize(nil, OktaOidcError.APIError("Authorization Error: \(error?.localizedDescription ?? "No token response.")"))
+                    return
+                }
+              
+                let authState = OKTAuthState(authorizationResponse: nil,
+                                             tokenResponse: tokenResponse,
+                                             registrationResponse: nil,
+                                             delegate: delegate)
+                finalize(authState, nil)
+            })
+    }
 }

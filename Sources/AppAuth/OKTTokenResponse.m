@@ -53,6 +53,11 @@ static NSString *const kIDTokenKey = @"id_token";
  */
 static NSString *const kRefreshTokenKey = @"refresh_token";
 
+/*! @brief The key for the @c deviceSecret property in the incoming parameters and for
+        @c NSSecureCoding.
+ */
+static NSString *const kDeviceSecretKey = @"device_secret";
+
 /*! @brief The key for the @c scope property in the incoming parameters and for @c NSSecureCoding.
  */
 static NSString *const kScopeKey = @"scope";
@@ -85,6 +90,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
         [[OKTFieldMapping alloc] initWithName:@"_refreshToken" type:[NSString class]];
     fieldMap[kScopeKey] =
         [[OKTFieldMapping alloc] initWithName:@"_scope" type:[NSString class]];
+    fieldMap[kDeviceSecretKey] =
+        [[OKTFieldMapping alloc] initWithName:@"_deviceSecret" type:[NSString class]];
   });
   return fieldMap;
 }
@@ -147,7 +154,7 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
 - (NSString *)description {
   return [NSString stringWithFormat:@"<%@: %p, accessToken: \"%@\", accessTokenExpirationDate: %@, "
                                      "tokenType: %@, idToken: \"%@\", refreshToken: \"%@\", "
-                                     "scope: \"%@\", additionalParameters: %@, request: %@>",
+                                     "deviceSecret: \"%@\", scope: \"%@\", additionalParameters: %@, request: %@>",
                                     NSStringFromClass([self class]),
                                     (void *)self,
                                     [OKTTokenUtilities redact:_accessToken],
@@ -155,6 +162,7 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                     _tokenType,
                                     [OKTTokenUtilities redact:_idToken],
                                     [OKTTokenUtilities redact:_refreshToken],
+                                    [OKTTokenUtilities redact:_deviceSecret],
                                     _scope,
                                     _additionalParameters,
                                     _request];

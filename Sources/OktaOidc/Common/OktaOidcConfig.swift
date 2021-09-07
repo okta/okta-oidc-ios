@@ -24,6 +24,7 @@ public class OktaOidcConfig: NSObject {
     @objc public let scopes: String
     @objc public let redirectUri: URL
     @objc public let logoutRedirectUri: URL?
+//    @objc public let audience: String?
 
     /*!
      Set the request customization delegate if you want to track and modify network
@@ -45,7 +46,9 @@ public class OktaOidcConfig: NSObject {
               let issuer = dict["issuer"], URL(string: issuer) != nil,
               let scopes = dict["scopes"], !scopes.isEmpty,
               let redirectUriString = dict["redirectUri"],
-              let redirectUri = URL(string: redirectUriString) else {
+              let redirectUri = URL(string: redirectUriString)
+//              let audience = dict["audience"]
+              else {
                 throw OktaOidcError.missingConfigurationValues
         }
         
@@ -53,6 +56,7 @@ public class OktaOidcConfig: NSObject {
         self.issuer = issuer
         self.scopes = scopes
         self.redirectUri = redirectUri
+//        self.audience = audience
         
         if let logoutRedirectUriString = dict["logoutRedirectUri"] {
             logoutRedirectUri = URL(string: logoutRedirectUriString)

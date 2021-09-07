@@ -79,6 +79,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, readonly, nullable) NSString *refreshToken;
 
+/*! @brief The device secret which can be used to obtain tokens for another client by
+        passing it along with the id token
+    @remarks device_secret
+    @see https://datatracker.ietf.org/doc/html/rfc8693
+ */
+@property(nonatomic, readonly, nullable) NSString *deviceSecret;
+
 /*! @brief The scope of the access token. OPTIONAL, if identical to the scopes requested, otherwise,
         REQUIRED.
     @remarks scope

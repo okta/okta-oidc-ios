@@ -51,7 +51,10 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
         let oktaAPI = OktaOidcRestApi()
         oktaAPI.requestCustomizationDelegate = configuration.requestCustomizationDelegate
         let signOutTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: configuration, oktaAPI: oktaAPI)
-        signOutWithBrowserTask(signOutTask, idToken: idToken, callback: callback)
+        signOutWithBrowserTask(signOutTask,
+                               idToken: idToken,
+                               deviceSecret: authStateManager.authState.lastTokenResponse?.deviceSecret,
+                               callback: callback)
     }
     
     public func signOut(authStateManager: OktaOidcStateManager,

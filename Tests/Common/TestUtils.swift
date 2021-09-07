@@ -60,6 +60,8 @@ struct TestUtils {
                            scope: nil,
                     refreshToken: nil,
                     codeVerifier: nil,
+                    deviceSecret: nil,
+                        idToken: nil,
             additionalParameters: nil
         )
 

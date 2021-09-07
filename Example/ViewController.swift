@@ -13,6 +13,8 @@
 import OktaOidc
 import UIKit
 
+import Security
+
 // swiftlint:disable force_try
 // swiftlint:disable force_cast
 // swiftlint:disable force_unwrapping
@@ -25,6 +27,7 @@ final class ViewController: UIViewController {
 
     @IBOutlet private weak var tokenView: UITextView!
     @IBOutlet private weak var signInButton: UIButton!
+    @IBOutlet private weak var signInDeviceSecretButton: UIButton!
     
     private var oktaAppAuth: OktaOidc?
     private var authStateManager: OktaOidcStateManager? {
@@ -88,6 +91,10 @@ final class ViewController: UIViewController {
     @IBAction func signInButton(_ sender: Any) {
         self.signInWithBrowser()
     }
+  
+    @IBAction func signInDeviceSecretButton(_ sender: Any) {
+      self.signInWithDeviceSecret()
+    }
     
     @IBAction func signOutButton(_ sender: Any) {
         self.signOut()
@@ -124,7 +131,7 @@ final class ViewController: UIViewController {
                 self.updateUI(updateText: "Error: \(error?.localizedDescription ?? "Unknown")")
                 return
             }
-            
+
             self.updateUI(updateText: "Is the AccessToken valid? - \(isValid)")
         })
     }
@@ -148,13 +155,44 @@ final class ViewController: UIViewController {
             }
             
             self.authStateManager = authStateManager
-            self.buildTokenTextView()
+          
+          // if device secret was returned save it to keychain
+          if let deviceSecret = authStateManager?.deviceSecret,
+             let idToken = authStateManager?.idToken {
+            print("Device Secret From Swift: " + deviceSecret)
+            print("idToken From Swift: " + idToken)
+            self.saveDeviceSecret(deviceSecret: deviceSecret, idToken: idToken)
+          }
+          
+          self.buildTokenTextView()
         }
+    }
+  
+    func signInWithDeviceSecret() {
+      if let tokens = self.getDeviceSecret(), tokens.count == 2 {
+        oktaAppAuth?.signInWithDeviceSecret(
+          withDeviceSecret: tokens[0],
+          idToken: tokens[1],
+          callback: { authStateManager, error in
+            if let error = error {
+                self.authStateManager = nil
+                self.updateUI(updateText: "Error: \(error)")
+                return
+            }
+            print(authStateManager.debugDescription)
+            print(authStateManager?.authState)
+            
+            self.authStateManager = authStateManager
+            self.buildTokenTextView()
+        })
+      } else {
+        self.updateUI(updateText: "Error: Login with Browser first with scope device_sso to save device secret")
+      }
     }
     
     func signOut() {
         guard let authStateManager = authStateManager else { return }
-        
+      
         oktaAppAuth?.signOut(authStateManager: authStateManager, from: self, progressHandler: { currentOption in
             switch currentOption {
             case .revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage, .revokeTokensOptions:
@@ -198,6 +236,60 @@ final class ViewController: UIViewController {
         }
 
         self.updateUI(updateText: tokenString)
+    }
+  
+    func saveDeviceSecret(deviceSecret: String, idToken: String) {
+      do {
+        let secKey = "deviceSecret"
+        let secVal = (deviceSecret + " " + idToken).data(using: .utf8)
+        var attributes: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: secKey,
+            kSecValueData as String: secVal as Any,
+        ]
+        
+        if SecItemAdd(attributes as CFDictionary, nil) == noErr {
+            print("Device Secret saved successfully in the keychain")
+        } else {
+//            print("Something went wrong trying to save the Device Secret in the keychain")
+            attributes.removeValue(forKey: kSecClass as String)
+            attributes.removeValue(forKey: kSecAttrAccount as String)
+          
+            let query: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrAccount as String: secKey,
+            ]
+            if SecItemUpdate(query as CFDictionary, attributes as CFDictionary) == noErr {
+                print("Device Secret updated successfully in the keychain")
+            } else {
+                print("Something went wrong trying to save the Device Secret to the Keychain")
+            }
+        }
+      }
+    }
+  
+    func getDeviceSecret() -> [String]? {
+      var secVal: String?
+      let query: [String: Any] = [
+          kSecClass as String: kSecClassGenericPassword,
+          kSecAttrAccount as String: "deviceSecret",
+          kSecMatchLimit as String: kSecMatchLimitOne,
+          kSecReturnAttributes as String: true,
+          kSecReturnData as String: true,
+      ]
+      var item: CFTypeRef?
+      
+      if SecItemCopyMatching(query as CFDictionary, &item) == noErr {
+          // Extract result
+          if let existingItem = item as? [String: Any],
+             let val = existingItem[kSecValueData as String] as? Data
+          {
+            secVal = String(data: val, encoding: .utf8)
+          }
+      } else {
+          print("Something went wrong trying to find the user in the keychain")
+      }
+      return secVal?.components(separatedBy: " ")
     }
 }
 

@@ -56,7 +56,9 @@ extension OktaOidc: OktaOidcBrowserProtocolMAC {
         let signOutTask = OktaOidcBrowserTaskMAC(config: configuration,
                                                  oktaAPI: OktaOidcRestApi(),
                                                  redirectServerConfiguration: redirectServerConfiguration)
-        signOutWithBrowserTask(signOutTask, idToken: idToken) { error in
+        signOutWithBrowserTask(signOutTask,
+                               idToken: idToken,
+                               deviceSecret: authStateManager.authState.lastTokenResponse?.deviceSecret) { error in
             NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
             callback(error)
         }

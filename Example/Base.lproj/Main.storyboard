@@ -20,16 +20,16 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="UQ8-c7-4jx">
-                                <rect key="frame" x="20" y="51.999999999999972" width="388" height="507.33333333333326"/>
+                                <rect key="frame" x="20" y="52" width="388" height="537.33333333333337"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
-                                        <rect key="frame" x="0.0" y="0.0" width="388" height="178.33333333333334"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="1UI-fm-Y5s">
+                                        <rect key="frame" x="0.0" y="0.0" width="388" height="208.33333333333334"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="w7b-5e-G99">
                                                 <rect key="frame" x="0.0" y="0.0" width="388" height="64.333333333333329"/>
                                             </imageView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SjY-rT-EIm">
-                                                <rect key="frame" x="0.0" y="72.333333333333329" width="388" height="30"/>
+                                                <rect key="frame" x="0.0" y="70.333333333333329" width="388" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <accessibility key="accessibilityConfiguration" hint="SignIn" identifier="SignIn" label="SignIn"/>
                                                 <state key="normal" title="Sign In with Browser">
@@ -44,8 +44,24 @@
                                                     <action selector="signInButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="HIy-Xk-tcf"/>
                                                 </connections>
                                             </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M66-gm-eS2">
+                                                <rect key="frame" x="0.0" y="106.33333333333334" width="388" height="30"/>
+                                                <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <accessibility key="accessibilityConfiguration" hint="SignIn" identifier="SignIn" label="SignIn"/>
+                                                <state key="normal" title="Sign In with Device Secret">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="10"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="signInDeviceSecretButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ZNM-Mk-Bsl"/>
+                                                </connections>
+                                            </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h30-Kg-tkQ" userLabel="Resume Session">
-                                                <rect key="frame" x="0.0" y="110.33333333333334" width="388" height="30"/>
+                                                <rect key="frame" x="0.0" y="142.33333333333334" width="388" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <accessibility key="accessibilityConfiguration" hint="Authenticate" identifier="Authenticate" label="Authenticate"/>
                                                 <state key="normal" title="Authenticate">
@@ -61,7 +77,7 @@
                                                 </connections>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="hZp-HF-Wta">
-                                                <rect key="frame" x="0.0" y="148.33333333333334" width="388" height="30"/>
+                                                <rect key="frame" x="0.0" y="178.33333333333334" width="388" height="30"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eoU-d4-kH8">
                                                         <rect key="frame" x="0.0" y="0.0" width="125.33333333333333" height="30"/>
@@ -115,7 +131,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="YO7-Wr-HVG">
-                                        <rect key="frame" x="0.0" y="178.33333333333337" width="388" height="329"/>
+                                        <rect key="frame" x="0.0" y="208.33333333333331" width="388" height="328.99999999999994"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xho-P4-zw2">
                                                 <rect key="frame" x="0.0" y="0.0" width="388" height="259"/>
@@ -128,7 +144,7 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8iA-Y3-h2v">
-                                                <rect key="frame" x="0.0" y="264" width="388" height="30"/>
+                                                <rect key="frame" x="0.0" y="264.00000000000006" width="388" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="Clear">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -143,7 +159,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xi2-qn-che">
-                                                <rect key="frame" x="0.0" y="299" width="388" height="30"/>
+                                                <rect key="frame" x="0.0" y="299.00000000000006" width="388" height="30"/>
                                                 <color key="backgroundColor" red="0.88809448479999997" green="0.15274015069999999" blue="0.39826655389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <accessibility key="accessibilityConfiguration" hint="SignOutOkta" identifier="SignOutOkta" label="SignOutOkta"/>
                                                 <state key="normal" title="Sign Out">
@@ -173,12 +189,13 @@
                     </view>
                     <connections>
                         <outlet property="signInButton" destination="SjY-rT-EIm" id="Vzo-a2-OAh"/>
+                        <outlet property="signInDeviceSecretButton" destination="M66-gm-eS2" id="XKo-Jg-KsB"/>
                         <outlet property="tokenView" destination="xho-P4-zw2" id="2Yt-Jc-3c0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="117.59999999999999" y="102.99850074962519"/>
+            <point key="canvasLocation" x="116.35514018691588" y="102.3758099352052"/>
         </scene>
         <!--Auth View Controller-->
         <scene sceneID="zNv-bR-Tlh">

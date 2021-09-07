@@ -81,6 +81,36 @@ class OktaOidcSignOutHandler {
             
             return
         }
+      
+        // Device Secret
+        if options.contains(.revokeDeviceSecret) {
+            progressHandler(.revokeDeviceSecret)
+            
+            // Device Secret is not a required scope
+          guard let deviceSecret = authStateManager.deviceSecret, !deviceSecret.isEmpty  else {
+                notFinishedOptions.remove(.revokeDeviceSecret)
+                signOut(with: notFinishedOptions,
+                        failedOptions: failedOptions,
+                        progressHandler: progressHandler,
+                        completionHandler: completionHandler)
+                
+                return
+            }
+            
+            authStateManager.revoke(deviceSecret) { (success, _) in
+                notFinishedOptions.remove(.revokeDeviceSecret)
+                if !success {
+                    failedOptions.insert(.revokeDeviceSecret)
+                }
+                
+                self.signOut(with: notFinishedOptions,
+                             failedOptions: failedOptions,
+                             progressHandler: progressHandler,
+                             completionHandler: completionHandler)
+            }
+            
+            return
+        }
         
         // Sign out
         if options.contains(.signOutFromOkta) {

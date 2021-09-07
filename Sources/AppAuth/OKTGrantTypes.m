@@ -27,3 +27,5 @@ NSString *const OKTGrantTypeRefreshToken = @"refresh_token";
 NSString *const OKTGrantTypePassword = @"password";
 
 NSString *const OKTGrantTypeClientCredentials = @"client_credentials";
+
+NSString *const OKTGrantTypeDeviceSecret = @"urn:ietf:params:oauth:grant-type:token-exchange";

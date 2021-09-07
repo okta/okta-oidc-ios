@@ -61,6 +61,11 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     }
     
     var restAPI: OktaOidcHttpApiProtocol = OktaOidcRestApi()
+  
+    @objc open var deviceSecret: String? {
+        // Return the known deviceSecret if it is valid
+        return self.authState.lastTokenResponse?.deviceSecret
+    }
 
     @objc public init(authState: OKTAuthState,
                       accessibility: CFString = kSecAttrAccessibleWhenUnlockedThisDeviceOnly) {
@@ -138,12 +143,12 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         }
     }
     
-    @objc public func introspect(token: String?, callback: @escaping ([String: Any]?, Error?) -> Void) {
-        performRequest(to: .introspection, token: token, callback: callback)
+    @objc public func introspect(token: String?, clientIdOverride clientId: String? = nil, callback: @escaping ([String: Any]?, Error?) -> Void) {
+        performRequest(to: .introspection, token: token, clientId: clientId, callback: callback)
     }
 
-    @objc public func revoke(_ token: String?, callback: @escaping (Bool, Error?) -> Void) {
-        performRequest(to: .revocation, token: token) { payload, error in
+    @objc public func revoke(_ token: String?, clientIdOverride clientId: String? = nil, callback: @escaping (Bool, Error?) -> Void) {
+        performRequest(to: .revocation, token: token, clientId: clientId) { payload, error in
             if let error = error {
                 callback(false, error)
                 return
@@ -225,21 +230,31 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
 internal extension OktaOidcStateManager {
     var discoveryDictionary: [String: Any]? {
-        return authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary
+      // with device secret flow there will be no lastAuthorizationResponse
+      guard let discoveryDictionary = authState.lastAuthorizationResponse.request.configuration.discoveryDocument?.discoveryDictionary else {
+        return authState.lastTokenResponse?.request.configuration.discoveryDocument?.discoveryDictionary
+      }
+      return discoveryDictionary
     }
 }
 
 private extension OktaOidcStateManager {
     var issuer: String? {
-        return authState.lastAuthorizationResponse.request.configuration.issuer?.absoluteString
+      return authState.lastAuthorizationResponse.request.configuration.issuer != nil ?
+        authState.lastAuthorizationResponse.request.configuration.issuer?.absoluteString :
+        authState.lastTokenResponse?.request.configuration.issuer?.absoluteString
     }
     
     var clientId: String {
+      guard let clientId = authState.lastTokenResponse?.request.clientID else {
         return authState.lastAuthorizationResponse.request.clientID
+      }
+      return clientId
     }
 
     func performRequest(to endpoint: OktaOidcEndpoint,
                         token: String?,
+                        clientId: String? = nil,
                         callback: @escaping ([String: Any]?, OktaOidcError?) -> Void) {
         guard let token = token else {
             DispatchQueue.main.async {
@@ -248,8 +263,7 @@ private extension OktaOidcStateManager {
             return
         }
         
-        let postString = "token=\(token)&client_id=\(clientId)"
-        
+        let postString = "token=\(token)&client_id=\(clientId != nil ? clientId! : self.clientId)"
         performRequest(to: endpoint, postString: postString, callback: callback)
     }
     

@@ -280,6 +280,8 @@
 		DEBFB8E62507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */; };
 		DEBFB8E82507C53600A27026 /* URLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E72507C53600A27026 /* URLSessionMock.swift */; };
 		DEE37AD125065C7300318DC3 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E159AC8A26E55804002B372B /* OktaOidcDeviceSecretTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E159AC8926E55804002B372B /* OktaOidcDeviceSecretTask.swift */; };
+		E159AC8B26E55804002B372B /* OktaOidcDeviceSecretTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = E159AC8926E55804002B372B /* OktaOidcDeviceSecretTask.swift */; };
 		E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6026625104F3000492BEC /* OktaOIDAuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */; };
 		E2FB61302536779800D26EDC /* OKTAuthorizationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -530,6 +532,7 @@
 		DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceRequestDelegateTests.swift; sourceTree = "<group>"; };
 		DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaNetworkRequestCustomizationDelegateMock.swift; sourceTree = "<group>"; };
 		DEBFB8E72507C53600A27026 /* URLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionMock.swift; sourceTree = "<group>"; };
+		E159AC8926E55804002B372B /* OktaOidcDeviceSecretTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcDeviceSecretTask.swift; sourceTree = "<group>"; };
 		E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OktaNetworkRequestCustomizationDelegate.h; path = include/OktaNetworkRequestCustomizationDelegate.h; sourceTree = "<group>"; };
 		E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOIDAuthStateTests.swift; sourceTree = "<group>"; };
 		E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTAuthorizationRequest.h; path = include/OKTAuthorizationRequest.h; sourceTree = "<group>"; };
@@ -641,6 +644,7 @@
 				A17E39DF2357DB6800837873 /* OktaOidcAuthenticate.swift */,
 				A17E39E02357DB6800837873 /* OktaOidcBrowserTask.swift */,
 				A17E39DE2357DB6800837873 /* OktaOidcTask.swift */,
+				E159AC8926E55804002B372B /* OktaOidcDeviceSecretTask.swift */,
 			);
 			path = Tasks;
 			sourceTree = "<group>";
@@ -1350,6 +1354,7 @@
 				A17E39D82357DB1000837873 /* OIDAuthState+Okta.swift in Sources */,
 				A17E38A0234CFEED00837873 /* OKTAuthorizationResponse.m in Sources */,
 				A17E39DB2357DB3B00837873 /* OktaOidcSignOutHandlerIOS.swift in Sources */,
+				E159AC8A26E55804002B372B /* OktaOidcDeviceSecretTask.swift in Sources */,
 				9671A105256F153900D0B03F /* OktaOidc+BrowserIOS.swift in Sources */,
 				A17E3899234CFEED00837873 /* OKTError.m in Sources */,
 				A17E38BE234CFF1E00837873 /* OKTExternalUserAgentIOSCustomBrowser.m in Sources */,
@@ -1479,6 +1484,7 @@
 				A17E399C234E665D00837873 /* OKTIDToken.m in Sources */,
 				A17E39D32357DB1000837873 /* OktaUserAgent.m in Sources */,
 				A17E3975234D2EBE00837873 /* OKTLoopbackHTTPServer.m in Sources */,
+				E159AC8B26E55804002B372B /* OktaOidcDeviceSecretTask.swift in Sources */,
 				A17E39D92357DB1000837873 /* OIDAuthState+Okta.swift in Sources */,
 				A17E3976234D2EBE00837873 /* OKTAuthorizationService+Mac.m in Sources */,
 				A17E3977234D2EBE00837873 /* OKTAuthState+Mac.m in Sources */,

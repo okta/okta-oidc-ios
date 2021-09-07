@@ -93,6 +93,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, readonly, nullable) NSString *codeVerifier;
 
+/*! @brief The device secret which can be used to obtain tokens for another client by
+      passing it along with the id token
+    @remarks device_secret
+    @see https://datatracker.ietf.org/doc/html/rfc8693
+ */
+@property(nonatomic, readonly, nullable) NSString *deviceSecret;
+
+/*! @brief The subject token which can be used to obtain tokens for another client by
+      passing it along with the device secret
+    @remarks subject_token
+    @see https://datatracker.ietf.org/doc/html/rfc8693
+ */
+@property(nonatomic, readonly, nullable) NSString *subjectToken;
+
 /*! @brief The client's additional token request parameters.
  */
 @property(nonatomic, readonly, nullable) NSDictionary<NSString *, NSString *> *additionalParameters;
@@ -114,6 +128,8 @@ NS_ASSUME_NONNULL_BEGIN
     @param scopes An array of scopes to combine into a single scope string per the OAuth2 spec.
     @param refreshToken The refresh token.
     @param codeVerifier The PKCE code verifier.
+    @param deviceSecret The device secret.
+    @param subjectToken The subjectToken (id token).
     @param additionalParameters The client's additional token request parameters.
  */
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
@@ -125,6 +141,8 @@ NS_ASSUME_NONNULL_BEGIN
                   scopes:(nullable NSArray<NSString *> *)scopes
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+            deviceSecret:(nullable NSString *)deviceSecret
+            subjectToken:(nullable NSString *)subjectToken
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
 /*! @brief Designated initializer.
@@ -140,6 +158,8 @@ NS_ASSUME_NONNULL_BEGIN
         case-sensitive strings.
     @param refreshToken The refresh token.
     @param codeVerifier The PKCE code verifier.
+    @param deviceSecret The device secret.
+    @param subjectToken The subjectToken (id token).
     @param additionalParameters The client's additional token request parameters.
  */
 - (instancetype)initWithConfiguration:(OKTServiceConfiguration *)configuration
@@ -151,6 +171,8 @@ NS_ASSUME_NONNULL_BEGIN
                    scope:(nullable NSString *)scope
             refreshToken:(nullable NSString *)refreshToken
             codeVerifier:(nullable NSString *)codeVerifier
+            deviceSecret:(nullable NSString *)deviceSecret
+            subjectToken:(nullable NSString *)subjectToken
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters
     NS_DESIGNATED_INITIALIZER;
 

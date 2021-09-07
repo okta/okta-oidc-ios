@@ -64,6 +64,7 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
  */
 @property(nonatomic, readonly, nullable) NSString *refreshToken;
 
+
 /*! @brief The scope of the current authorization grant.
     @discussion This represents the latest scope returned by the server and may be a subset of the
         scope that was initially granted.
