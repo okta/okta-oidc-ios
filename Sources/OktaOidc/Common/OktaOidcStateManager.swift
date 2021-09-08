@@ -256,15 +256,14 @@ private extension OktaOidcStateManager {
                         token: String?,
                         clientId: String? = nil,
                         callback: @escaping ([String: Any]?, OktaOidcError?) -> Void) {
-        guard let token = token else {
-            DispatchQueue.main.async {
-                callback(nil, OktaOidcError.noBearerToken)
-            }
-            return
+      guard let token = token else {
+        DispatchQueue.main.async {
+          callback(nil, OktaOidcError.noBearerToken)
         }
-        
-        let postString = "token=\(token)&client_id=\(clientId != nil ? clientId! : self.clientId)"
-        performRequest(to: endpoint, postString: postString, callback: callback)
+        return
+      }
+      let postString = "token=\(token)&client_id=\(clientId ?? self.clientId)"
+      performRequest(to: endpoint, postString: postString, callback: callback)
     }
     
     func performRequest(to endpoint: OktaOidcEndpoint,

@@ -180,11 +180,10 @@ final class ViewController: UIViewController {
                 return
             }
             print(authStateManager.debugDescription)
-            print(authStateManager?.authState)
             
             self.authStateManager = authStateManager
             self.buildTokenTextView()
-        })
+          })
       } else {
         self.updateUI(updateText: "Error: Login with Browser first with scope device_sso to save device secret")
       }
@@ -282,8 +281,7 @@ final class ViewController: UIViewController {
       if SecItemCopyMatching(query as CFDictionary, &item) == noErr {
           // Extract result
           if let existingItem = item as? [String: Any],
-             let val = existingItem[kSecValueData as String] as? Data
-          {
+             let val = existingItem[kSecValueData as String] as? Data {
             secVal = String(data: val, encoding: .utf8)
           }
       } else {

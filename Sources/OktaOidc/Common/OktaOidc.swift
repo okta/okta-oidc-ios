@@ -73,7 +73,7 @@ public class OktaOidc: NSObject {
                   authStateManager.requestCustomizationDelegate = delegate
               }
               callback(authStateManager, nil)
-          })
+            })
     }
 
     @objc public func hasActiveBrowserSession() -> Bool {
