@@ -1936,7 +1936,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.10.6;
+				MARKETING_VERSION = 3.10.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
@@ -1963,7 +1963,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.10.6;
+				MARKETING_VERSION = 3.10.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
