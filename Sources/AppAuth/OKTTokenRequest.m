@@ -93,6 +93,8 @@ static NSString *const kAdditionalParametersKey = @"additionalParameters";
                                   scope:
                            refreshToken:
                            codeVerifier:
+                           deviceSecret:
+                           subjectToken:
                    additionalParameters:)
     )
 

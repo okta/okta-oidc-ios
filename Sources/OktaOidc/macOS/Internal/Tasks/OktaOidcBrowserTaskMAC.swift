@@ -69,7 +69,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         super.signIn(callback: callback)
     }
 
-    override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
+    override func signOutWithIdToken(idToken: String, deviceSecret: String?, callback: @escaping (Void?, OktaOidcError?) -> Void) {
         if let redirectServer = self.redirectServer {
             do {
                 redirectURL = try redirectServer.startListener(with: domainName)
@@ -81,7 +81,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
             redirectURL = self.config.logoutRedirectUri
         }
 
-        super.signOutWithIdToken(idToken: idToken, callback: callback)
+        super.signOutWithIdToken(idToken: idToken, deviceSecret: deviceSecret, callback: callback)
     }
 
     override func signInRedirectUri() -> URL? {
