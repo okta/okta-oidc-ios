@@ -214,6 +214,18 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
         let state: OktaOidcStateManager?
         if #available(iOS 11, OSX 10.14, *) {
+          let classes = [OKTAuthorizationRequest.self, OKTAuthorizationResponse.self,
+                         OKTAuthState.self, OKTEndSessionRequest.self,
+                         OKTEndSessionResponse.self, OKTRegistrationRequest.self,
+                         OKTRegistrationResponse.self, OKTServiceConfiguration.self,
+                         OKTServiceDiscovery.self, OKTTokenRequest.self,
+                         OKTTokenResponse.self]
+          
+          for archivedClass in classes {
+            let className = "\(archivedClass)".replacingOccurrences(of: "OKT", with: "OID")
+            NSKeyedUnarchiver.setClass(archivedClass, forClassName: className)
+          }
+
             state = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState)) as? OktaOidcStateManager
         } else {
             state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager
