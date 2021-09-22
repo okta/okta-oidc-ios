@@ -191,6 +191,8 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
     @objc func writeToSecureStorage() {
         let authStateData: Data
         do {
+            prepareKeyedArchiver()
+          
             if #available(iOS 11, OSX 10.14, *) {
                 authStateData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
             } else {
@@ -214,24 +216,28 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 
         let state: OktaOidcStateManager?
         if #available(iOS 11, OSX 10.14, *) {
-          let classes = [OKTAuthorizationRequest.self, OKTAuthorizationResponse.self,
-                         OKTAuthState.self, OKTEndSessionRequest.self,
-                         OKTEndSessionResponse.self, OKTRegistrationRequest.self,
-                         OKTRegistrationResponse.self, OKTServiceConfiguration.self,
-                         OKTServiceDiscovery.self, OKTTokenRequest.self,
-                         OKTTokenResponse.self]
-          
-          for archivedClass in classes {
-            let className = "\(archivedClass)".replacingOccurrences(of: "OKT", with: "OID")
-            NSKeyedUnarchiver.setClass(archivedClass, forClassName: className)
-          }
-
             state = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState)) as? OktaOidcStateManager
         } else {
             state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager
         }
 
         return state
+    }
+  
+    /// This method can be removed in the future with release 4.0.0 or higher.
+    /// Resolves OKTA-427089
+    private func prepareKeyedArchiver() {
+        let classes = [OKTAuthorizationRequest.self, OKTAuthorizationResponse.self,
+                       OKTAuthState.self, OKTEndSessionRequest.self,
+                       OKTEndSessionResponse.self, OKTRegistrationRequest.self,
+                       OKTRegistrationResponse.self, OKTServiceConfiguration.self,
+                       OKTServiceDiscovery.self, OKTTokenRequest.self,
+                       OKTTokenResponse.self]
+        
+        for archivedClass in classes {
+            let className = "\(archivedClass)".replacingOccurrences(of: "OKT", with: "OID")
+            NSKeyedUnarchiver.setClass(archivedClass, forClassName: className)
+        }
     }
 }
 
