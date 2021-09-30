@@ -5,7 +5,6 @@ osx_image: xcode12.5
 before_install:
   - gem install xcpretty
   - gem install cocoapods
-  - set -eo pipefail
 jobs:
   include:
     - stage: Linting
@@ -20,15 +19,15 @@ jobs:
     - stage: Unit Tests
       name: iOS
       script:
-      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+      - set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
     - stage: Unit Tests
       name: MacOS
       script:
-      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-mac" -destination "platform=macOS" clean test | xcpretty
+      - set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-mac" -destination "platform=macOS" clean test | xcpretty
     - stage: UI tests
       name: iOS
       script:
-      - xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+      - set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
     - stage: Dependency Manager Validation
       name: SPM
       script:
