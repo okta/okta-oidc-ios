@@ -332,7 +332,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             "clientId": TestUtils.mockClientId,
             "issuer": TestUtils.mockIssuer,
             "scopes": "test",
-            "redirectUri": "http://test"
+            "redirectUri": "com.okta.sample:/test"
         ]) else {
             XCTFail("Unable to create test config")
             return
@@ -344,7 +344,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             "clientId": "0oa2p7eq7uDmZY4sJ0g70oa2p7eq7uDmZY4sJ0g7",
             "issuer": "https://long-long-long-long-long-long-url.trexcloud.com/oauth2/default",
             "scopes": "test",
-            "redirectUri": "http://test"
+            "redirectUri": "com.okta.sample:/test"
             ]) else {
                 XCTFail("Unable to create test config")
                 return
@@ -371,6 +371,7 @@ class OktaOidcStateManagerTests: XCTestCase {
             manager.authState.lastAuthorizationResponse.idToken
         )
 
+        XCTAssertNoThrow(try manager.removeFromSecureStorage())
         XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
     }
     #endif
