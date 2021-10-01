@@ -82,15 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
     // ASWebAuthenticationSession doesn't work with guided access (rdar://40809553)
     if (!UIAccessibilityIsGuidedAccessEnabled()) {
       __weak OKTExternalUserAgentNoSsoIOS *weakSelf = self;
-      
-      NSString *redirectScheme;
-      
-      if (@available(iOS 14.5, *)) {
-        redirectScheme = [request.redirectScheme stringByAddingPercentEncodingWithAllowedCharacters: NSCharacterSet.URLHostAllowedCharacterSet];
-      } else {
-        redirectScheme = request.redirectScheme;
-        
-      }
+      NSString *redirectScheme = request.redirectScheme;
       ASWebAuthenticationSession *authenticationVC =
           [[ASWebAuthenticationSession alloc] initWithURL:requestURL
                                         callbackURLScheme:redirectScheme
