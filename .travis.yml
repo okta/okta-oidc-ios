@@ -36,6 +36,7 @@ jobs:
       name: CocoaPods
       script:
       - pod lib lint --allow-warnings
+    # Takes too much time on CI
     # - stage: Dependency Manager Validation
     #   name: Carthage
     #   addons:
