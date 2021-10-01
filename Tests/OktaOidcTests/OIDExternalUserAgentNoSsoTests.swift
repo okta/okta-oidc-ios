@@ -23,7 +23,7 @@ class OKTExternalUserAgentRequestMock: OKTExternalUserAgentRequest {
     }
     
     func redirectScheme() -> String! {
-        return "com.okta.callback://oauth/callback"
+      NSURL(string: "com.okta.callback://oauth.callback")!.scheme
     }
 }
 
