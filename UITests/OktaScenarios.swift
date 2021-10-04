@@ -119,6 +119,8 @@ final class OktaScenarios: XCTestCase {
         pressGetUserButton()
         pressIntrospectButton(expectedValue: "true")
         pressRevokeButton()
+        
+        signOut()
     }
     
     func testAuthCodeFlowAndUserInfo() throws {
@@ -126,6 +128,8 @@ final class OktaScenarios: XCTestCase {
         signInAndWait()
         // then
         pressGetUserButton()
+        
+        signOut()
     }
     
     func testAuthCodeFlowIntrospectAndRevoke() throws {
@@ -133,6 +137,8 @@ final class OktaScenarios: XCTestCase {
         signInAndWait()
         // then
         pressIntrospectButton(expectedValue: "true")
+        
+        signOut()
     }
     
     func testAuthCodeFlowRevokeAndIntrospect() throws {
@@ -141,22 +147,8 @@ final class OktaScenarios: XCTestCase {
         // then
         pressRevokeButton()
         pressIntrospectButton(expectedValue: "false")
-    }
-    
-    func testSignOutFlow() {
-        // given
-        signInAndWait()
-        // when
-        signOutButton.tap()
         
-        // then
-        XCTAssertTrue(continueSpringboardButton.waitForExistence(timeout: .minimal))
-        continueSpringboardButton.tap()
-        
-        XCTAssertTrue(app.webViews.firstMatch.waitForExistence(timeout: .testing))
-        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .testing))
-
-        waitForText(predicate: "== ''", object: tokenTextView, timeout: .minimal)
+        signOut()
     }
     
     func testAuthenticateWithInvalidSessionToken() throws {
@@ -260,6 +252,21 @@ final class OktaScenarios: XCTestCase {
         }
     }
     
+    private func signOut() {
+        signOutButton.tap()
+        
+        // then
+        XCTAssertTrue(continueSpringboardButton.waitForExistence(timeout: .minimal))
+        continueSpringboardButton.tap()
+        
+        // Allows the browser open and close immediately.
+        sleep(5)
+        
+        XCTAssertTrue(tokenTextView.waitForExistence(timeout: .testing))
+        
+        waitForText(predicate: "== ''", object: tokenTextView, timeout: .minimal)
+    }
+  
     private func allowBrowserLaunch() {
         XCTAssertTrue(browserContinueButton.waitForExistence(timeout: .minimal))
         browserContinueButton.tap()
