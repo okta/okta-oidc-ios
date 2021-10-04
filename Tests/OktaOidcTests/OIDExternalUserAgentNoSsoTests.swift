@@ -22,8 +22,8 @@ class OKTExternalUserAgentRequestMock: OKTExternalUserAgentRequest {
         return URL(string: "https://tenant.okta.com")!
     }
     
-    func redirectScheme() -> String! {
-        return "com.okta.callback://oauth/callback"
+    func redirectScheme() -> String {
+      "com.okta.callback"
     }
 }
 
