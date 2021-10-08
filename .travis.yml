@@ -6,12 +6,10 @@ jobs:
   include:
     - stage: Linting
       name: SwiftLint
-      addons:
-        homebrew:
-          packages:
-          - swiftlint
-          update: true
+      before_install:
+        brew upgrade swiftlint
       script:
+      - swiftlint version
       - swiftlint
     - stage: Unit Tests
       name: iOS
