@@ -2,19 +2,14 @@ language: objective-c
 os: osx
 osx_image: xcode12.5
 
-before_install:
-  - gem install xcpretty
-  - gem install cocoapods
 jobs:
   include:
     - stage: Linting
       name: SwiftLint
-      addons:
-        homebrew:
-          packages:
-          - swiftlint
-          update: true
+      before_install:
+        brew upgrade swiftlint
       script:
+      - swiftlint version
       - swiftlint
     - stage: Unit Tests
       name: iOS
