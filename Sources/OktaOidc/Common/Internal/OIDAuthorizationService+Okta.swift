@@ -35,15 +35,15 @@ extension OKTAuthorizationService {
 
             delegate?.didReceive(response)
             guard let response = response as? HTTPURLResponse else {
-                callback(nil, error)
+                callback(nil, error ?? OktaOidcError.APIError("Authentication Error: No response"))
                 return
             }
             
             guard response.statusCode == 302,
                   let locationHeader = response.allHeaderFields["Location"] as? String,
-                  let urlComonents = URLComponents(string: locationHeader),
-                  let queryItems = urlComonents.queryItems else {
-                    callback(nil, OktaOidcError.unexpectedAuthCodeResponse)
+                  let urlComponents = URLComponents(string: locationHeader),
+                  let queryItems = urlComponents.queryItems else {
+                      callback(nil, OktaOidcError.unexpectedAuthCodeResponse(statusCode: response.statusCode))
                     return
             }
         
