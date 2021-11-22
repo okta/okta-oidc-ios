@@ -39,9 +39,7 @@ class OktaOidcTask {
 
             callback(OKTServiceConfiguration(discoveryDocument: oidConfig), nil)
         }, onError: { error in
-            let responseError =
-                "Error returning discovery document: \(error.localizedDescription). Please" +
-                " check your PList configuration"
+            let responseError = "Configuration Error: Cannot retrieve the discovery configuration. \(error.localizedDescription)."
             callback(nil, OktaOidcError.APIError(responseError))
         })
     }

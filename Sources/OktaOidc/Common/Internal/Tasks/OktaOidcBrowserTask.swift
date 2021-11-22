@@ -49,17 +49,22 @@ class OktaOidcBrowserTask: OktaOidcTask {
                                                                    delegate: delegate) { authorizationResponse, error in
                 defer { self.userAgentSession = nil }
 
-                guard let authResponse = authorizationResponse else {
-                    guard let error = error else {
-                        return callback(nil, OktaOidcError.APIError("Authorization Error"))
-                    }
-                    if (error as NSError).code == OKTErrorCode.userCanceledAuthorizationFlow.rawValue {
-                        return callback(nil, OktaOidcError.userCancelledAuthorizationFlow)
-                    } else {
-                        return callback(nil, OktaOidcError.APIError("Authorization Error: \(error.localizedDescription)"))
-                    }
+                if let authResponse = authorizationResponse {
+                    callback(authResponse, nil)
+                    return
                 }
-                callback(authResponse, nil)
+                
+                guard let error = error else {
+                    callback(nil, OktaOidcError.APIError("Authorization Error: No authorization response"))
+                    return
+                }
+                
+                if (error as NSError).code == OKTErrorCode.userCanceledAuthorizationFlow.rawValue {
+                    callback(nil, OktaOidcError.userCancelledAuthorizationFlow)
+                    return
+                }
+                
+                return callback(nil, OktaOidcError.APIError("Authorization Error: \(error.localizedDescription)"))
             }
             self.userAgentSession = userAgentSession
         }
