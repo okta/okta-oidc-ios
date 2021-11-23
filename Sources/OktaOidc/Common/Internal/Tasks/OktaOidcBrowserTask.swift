@@ -55,7 +55,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 }
                 
                 guard let error = error else {
-                    callback(nil, OktaOidcError.api(message: "Authorization Error: No authorization response", underlyingError: error))
+                    callback(nil, OktaOidcError.api(message: "Authorization Error: No authorization response", underlyingError: nil))
                     return
                 }
                 
@@ -64,7 +64,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
                     return
                 }
                 
-                return callback(nil, OktaOidcError.api(message: "Authorization Error: \(error.localizedDescription)", underlyingError: nil))
+                return callback(nil, OktaOidcError.api(message: "Authorization Error: \(error.localizedDescription)", underlyingError: error))
             }
             self.userAgentSession = userAgentSession
         }
