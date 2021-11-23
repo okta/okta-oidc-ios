@@ -13,7 +13,8 @@
 import Foundation
 
 public enum OktaOidcError: Error {
-    case APIError(String)
+    
+    case api(message: String, underlineError: Error?)
     case errorFetchingFreshTokens(String)
     case JWTDecodeError
     case JWTValidationError(String)
@@ -39,8 +40,8 @@ public enum OktaOidcError: Error {
 extension OktaOidcError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .APIError(error: let error):
-            return NSLocalizedString(error, comment: "")
+        case let .api(message, _):
+            return NSLocalizedString(message, comment: "")
         case .errorFetchingFreshTokens(error: let error):
             return NSLocalizedString("Error fetching fresh tokens: \(error)", comment: "")
         case .JWTDecodeError:

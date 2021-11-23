@@ -48,7 +48,7 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     }
     
     func testRunApiError() {
-        apiMock.configure(error: OktaOidcError.APIError("Test Error"))
+        apiMock.configure(error: OktaOidcError.api(message: "Test Error", underlineError: nil))
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)

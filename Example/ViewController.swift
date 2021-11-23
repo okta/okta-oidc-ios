@@ -143,7 +143,7 @@ final class ViewController: UIViewController {
         oktaAppAuth?.signInWithBrowser(from: self) { authStateManager, error in
             if let error = error {
                 self.authStateManager = nil
-                self.updateUI(updateText: "Error: \(error)")
+                self.updateUI(updateText: "Error: \(error.localizedDescription)")
                 return
             }
             
