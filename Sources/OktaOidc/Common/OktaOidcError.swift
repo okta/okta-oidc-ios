@@ -14,7 +14,7 @@ import Foundation
 
 public enum OktaOidcError: Error {
     
-    case api(message: String, underlineError: Error?)
+    case api(message: String, underlyingError: Error?)
     case errorFetchingFreshTokens(String)
     case JWTDecodeError
     case JWTValidationError(String)

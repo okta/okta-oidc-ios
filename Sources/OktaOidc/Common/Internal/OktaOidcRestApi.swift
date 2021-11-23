@@ -28,14 +28,14 @@ class OktaOidcRestApi: OktaOidcHttpApiProtocol {
                   let httpResponse = response as? HTTPURLResponse else {
                 let errorMessage = error?.localizedDescription ?? "No response data"
                 DispatchQueue.main.async {
-                    onError(OktaOidcError.api(message: errorMessage, underlineError: error))
+                    onError(OktaOidcError.api(message: errorMessage, underlyingError: error))
                 }
                 return
             }
 
             guard 200 ..< 300 ~= httpResponse.statusCode else {
                 DispatchQueue.main.async {
-                    onError(OktaOidcError.api(message: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode), underlineError: nil))
+                    onError(OktaOidcError.api(message: HTTPURLResponse.localizedString(forStatusCode: httpResponse.statusCode), underlyingError: nil))
                 }
                 return
             }
