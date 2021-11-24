@@ -35,6 +35,9 @@ public enum OktaOidcError: Error {
     case userCancelledAuthorizationFlow
     case unableToGetAuthCode
     case redirectServerError(String)
+    /// See [RFC6749 Error Response](https://tools.ietf.org/html/rfc6749#section-4.1.2.1).
+    case authorization(error: String, description: String?)
+    case noLocationHeader
 }
 
 extension OktaOidcError: LocalizedError {
@@ -83,6 +86,10 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("Unable to get authorization code.", comment: "")
         case .redirectServerError(error: let error):
             return NSLocalizedString(error, comment: "")
+        case let .authorization(error, description):
+            return NSLocalizedString("The authorization request failed due to \(error): \(description ?? "")", comment: "")
+        case .noLocationHeader:
+            return NSLocalizedString("Unable to get location header.", comment: "")
         }
     }
 }

@@ -39,29 +39,39 @@ extension OKTAuthorizationService {
                 return
             }
             
-            guard response.statusCode == 302,
-                  let locationHeader = response.allHeaderFields["Location"] as? String,
+            guard response.statusCode == 302 else {
+                callback(nil, OktaOidcError.unexpectedAuthCodeResponse(statusCode: response.statusCode))
+                return
+            }
+            
+            guard let locationHeader = response.allHeaderFields["Location"] as? String,
                   let urlComponents = URLComponents(string: locationHeader),
                   let queryItems = urlComponents.queryItems else {
-                      callback(nil, OktaOidcError.unexpectedAuthCodeResponse(statusCode: response.statusCode))
-                    return
-            }
+                      callback(nil, OktaOidcError.noLocationHeader)
+                      return
+                  }
         
-            var parameters = [String: NSString]()
-            queryItems.forEach({ item in
+            var parameters: [String: NSString] = [:]
+            queryItems.forEach { item in
                 parameters[item.name] = item.value as NSString?
-            })
-
-            if let allHeaderFields = response.allHeaderFields as? [String: String],
-               let url = response.url {
-                let httpCookies = HTTPCookie.cookies(withResponseHeaderFields: allHeaderFields, for: url)
-                for cookie in httpCookies {
-                    HTTPCookieStorage.shared.setCookie(cookie)
-                }
             }
-
+            
             let authResponse = OKTAuthorizationResponse(request: authRequest, parameters: parameters)
+            
+            setCookie(from: response)
+            
             callback(authResponse, error)
         }.resume()
+    }
+    
+    private static func setCookie(from response: HTTPURLResponse) {
+        guard let allHeaderFields = response.allHeaderFields as? [String: String],
+              let url = response.url else {
+                  return
+              }
+        
+        HTTPCookie.cookies(withResponseHeaderFields: allHeaderFields, for: url).forEach {
+            HTTPCookieStorage.shared.setCookie($0)
+        }
     }
 }
