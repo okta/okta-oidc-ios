@@ -44,6 +44,12 @@ extension OKTAuthState {
                     finalize(nil, OktaOidcError.api(message: "Authorization Error: \(error?.localizedDescription ?? "No token response.")", underlyingError: error))
                     return
                 }
+                
+                if let oauthError = tokenResponse.additionalParameters?[OKTOAuthErrorFieldError] as? String {
+                    let oauthErrorDescription = tokenResponse.additionalParameters?[OKTOAuthErrorFieldErrorDescription] as? String
+                    finalize(nil, .authorization(error: oauthError, description: oauthErrorDescription))
+                    return
+                }
 
                 let authState = OKTAuthState(authorizationResponse: authResponse,
                                              tokenResponse: tokenResponse,
