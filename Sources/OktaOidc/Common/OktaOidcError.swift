@@ -12,7 +12,7 @@
 
 import Foundation
 
-public enum OktaOidcError: Error {
+public enum OktaOidcError: CustomNSError {
     
     case api(message: String, underlyingError: Error?)
     case errorFetchingFreshTokens(String)
@@ -38,6 +38,35 @@ public enum OktaOidcError: Error {
     /// See [RFC6749 Error Response](https://tools.ietf.org/html/rfc6749#section-4.1.2.1).
     case authorization(error: String, description: String?)
     case noLocationHeader
+    
+    public static var errorDomain: String = "\(Self.self)"
+    
+    public static let generalErrorCode = -1012009
+    
+    public var errorCode: Int {
+        switch self {
+        case let .api(_, underlyingError):
+            return (underlyingError as NSError?)?.code ?? Self.generalErrorCode
+            
+        case let .unexpectedAuthCodeResponse(statusCode):
+            return statusCode
+        default:
+            return Self.generalErrorCode
+        }
+    }
+    
+    public var errorUserInfo: [String: Any] {
+        var result: [String: Any] = [:]
+        result[NSLocalizedDescriptionKey] = errorDescription
+        
+        switch self {
+        case let .api(_, underlyingError):
+            result[NSUnderlyingErrorKey] = underlyingError
+            return result
+        default:
+            return result
+        }
+    }
 }
 
 extension OktaOidcError: LocalizedError {
