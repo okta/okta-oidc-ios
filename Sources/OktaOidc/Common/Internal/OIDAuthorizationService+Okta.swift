@@ -35,7 +35,7 @@ extension OKTAuthorizationService {
 
             delegate?.didReceive(response)
             guard let response = response as? HTTPURLResponse else {
-                callback(nil, OktaOidcError.api(message: "Authentication Error: No response", underlyingError: nil))
+                callback(nil, OktaOidcError.api(message: "Authentication Error: No response", underlyingError: error))
                 return
             }
             
