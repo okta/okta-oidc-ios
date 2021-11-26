@@ -14,10 +14,16 @@ import Foundation
 
 public enum OktaOidcError: CustomNSError {
     
+    /// See [RFC6749 Error Response](https://tools.ietf.org/html/rfc6749#section-4.1.2.1).
+    case authorization(error: String, description: String?)
+    
     case api(message: String, underlyingError: Error?)
+    case unexpectedAuthCodeResponse(statusCode: Int)
     case errorFetchingFreshTokens(String)
-    case JWTDecodeError
     case JWTValidationError(String)
+    case redirectServerError(String)
+    case JWTDecodeError
+    case noLocationHeader
     case missingConfigurationValues
     case noBearerToken
     case noDiscoveryEndpoint
@@ -31,16 +37,14 @@ public enum OktaOidcError: CustomNSError {
     case noUserInfoEndpoint
     case parseFailure
     case missingIdToken
-    case unexpectedAuthCodeResponse(statusCode: Int)
     case userCancelledAuthorizationFlow
     case unableToGetAuthCode
-    case redirectServerError(String)
-    /// See [RFC6749 Error Response](https://tools.ietf.org/html/rfc6749#section-4.1.2.1).
-    case authorization(error: String, description: String?)
-    case noLocationHeader
     
     public static var errorDomain: String = "\(Self.self)"
     
+    /// Most of errors returns the general error code.
+    /// Error like `api`, `unexpectedAuthCodeResponse` return specific error code.
+    /// `api` returns the general error code if `underlyingError` is absent. 
     public static let generalErrorCode = -1012009
     
     public var errorCode: Int {
@@ -66,6 +70,12 @@ public enum OktaOidcError: CustomNSError {
         default:
             return result
         }
+    }
+}
+
+extension OktaOidcError: Equatable {
+    public static func == (lhs: OktaOidcError, rhs: OktaOidcError) -> Bool {
+        lhs as NSError == rhs as NSError
     }
 }
 

@@ -48,14 +48,12 @@ class OktaOidcDiscoveryTaskTests: XCTestCase {
     }
     
     func testRunApiError() {
-        apiMock.configure(error: OktaOidcError.api(message: "Test Error", underlyingError: nil))
+        let mockError = OktaOidcError.api(message: "Test Error", underlyingError: nil)
+        apiMock.configure(error: mockError)
         
         runAndWaitDiscovery(config: validConfig) { oidConfig, error in
             XCTAssertNil(oidConfig)
-            XCTAssertEqual(
-                "Error returning discovery document: Test Error. Please check your PList configuration",
-                error?.localizedDescription
-            )
+            XCTAssertEqual(mockError, error as OktaOidcError?)
         }
     }
     
