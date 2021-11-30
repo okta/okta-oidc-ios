@@ -48,7 +48,7 @@ final class AuthViewController: UIViewController {
             self.hideProgress()
             
             if let error = error {
-                self.showError(error)
+                self.showMessage(error)
                 return
             }
             
@@ -57,9 +57,9 @@ final class AuthViewController: UIViewController {
         }
     }
     
-    func showError(_ error: Error) {
+    func showMessage(_ error: Error) {
         if let oidcError = error as? OktaOidcError {
-            messageView.text = UIViewController.displayErrorMessage(oidcError)
+            messageView.text = oidcError.displayMessage
         } else {
             messageView.text = error.localizedDescription
         }
