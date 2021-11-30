@@ -103,7 +103,7 @@ final class ViewController: UIViewController {
     @IBAction func userInfoButton(_ sender: Any) {
         authStateManager?.getUser() { response, error in
             if let error = error {
-                self.updateUI(updateText: "Error: \(error)")
+                self.showError(error)
                 return
             }
 
@@ -173,9 +173,17 @@ final class ViewController: UIViewController {
             }
         })
     }
-
+    
     func updateUI(updateText: String) {
         tokenView.text = updateText
+    }
+    
+    func showError(_ error: Error) {
+        if let oidcError = error as? OktaOidcError {
+            tokenView.text = UIViewController.displayErrorMessage(oidcError)
+        } else {
+            tokenView.text = error.localizedDescription
+        }
     }
 
     func buildTokenTextView() {
@@ -212,6 +220,33 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
     func didReceive(_ response: URLResponse?) {
         if let response = response {
             print("response: \(response)")
+        }
+    }
+}
+
+extension UIViewController {
+    static func displayErrorMessage(_ error: OktaOidcError) -> String {
+        switch error {
+        case let .api(message, _):
+            switch (error as NSError).code {
+            case NSURLErrorNotConnectedToInternet,
+                NSURLErrorNetworkConnectionLost,
+                NSURLErrorCannotLoadFromNetwork,
+                NSURLErrorCancelled:
+                return "No Internet Connection"
+            case NSURLErrorTimedOut:
+                return "Connection timed out"
+            default:
+                break
+            }
+            
+            return "API Error occurred: \(message)"
+        case let .authorization(error, _):
+            return "Authorization error: \(error)"
+        case let .unexpectedAuthCodeResponse(statusCode):
+            return "Authorization failed due to incorrect status code: \(statusCode)"
+        default:
+            return error.localizedDescription
         }
     }
 }

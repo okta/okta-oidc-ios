@@ -38,6 +38,7 @@ You can learn more on the [Okta + iOS](https://developer.okta.com/code/ios/) pag
 - [Development](#development)
   - [Running Tests](#running-tests)
 - [Modify network requests](#modify-network-requests)
+- [Migration](#migration)
 - [Known issues](#known-issues)
 - [Contributing](#contributing)
 
@@ -506,6 +507,20 @@ extension SomeNSObject: OktaNetworkRequestCustomizationDelegate {
 ```
 
 ***Note:*** It is highly recommended to copy all of the existing parameters from the original URLRequest object to modified request without any changes. Altering of this data could lead network request to fail. If `customizableURLRequest(_:)` method returns `nil` default request will be used.
+
+## Migration
+
+### Migrating from 3.10.x to 3.11.x
+
+The SDK `okta-oidc-ios` has a major changes in error handling. Consider these guidelines to update your code.
+
+- `APIError` is renamed as `api`.
+- `api` error has the additional parameter `underlyingError`, it's an optional and indicates the origin of the error.
+- Introduced a new error `authorization(error:description:)`.
+- `authorization` error appears when authorization server fails due to errors during authorization.
+- `unexpectedAuthCodeResponse(statusCode:)` has an error code parameter.
+- `OktaOidcError` conforms to `CustomNSError` protocol. It means you can convert the error to `NSError` and get `code`, `userInfo`, `domain`, `underlyingErrors`.
+- `OktaOidcError` conforms to `Equatable` protocol. The errors can be compared for equality using the operator `==` or inequality using the operator `!=`.
 
 ## Known issues
 
