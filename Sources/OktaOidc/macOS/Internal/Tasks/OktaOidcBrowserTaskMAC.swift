@@ -13,6 +13,7 @@
 #if os(macOS)
 
 import Foundation
+import ApplicationServices
 
 #if SWIFT_PACKAGE
 @testable import OktaOidc_AppAuth
