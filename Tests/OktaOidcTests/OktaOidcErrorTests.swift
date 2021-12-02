@@ -31,7 +31,7 @@ final class OktaOidcErrorTests: XCTestCase {
         XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, error.localizedDescription)
         XCTAssertNil(error.userInfo[NSUnderlyingErrorKey] as? NSError)
         
-        if #available(iOS 14.5, *) {
+        if #available(iOS 14.5, macOS 11.3, *) {
             XCTAssertTrue(error.underlyingErrors.isEmpty)
         }
     }
@@ -47,7 +47,7 @@ final class OktaOidcErrorTests: XCTestCase {
         XCTAssertEqual(error.userInfo[NSUnderlyingErrorKey] as! NSError, underlyingError)
         XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, error.localizedDescription)
         
-        if #available(iOS 14.5, *) {
+        if #available(iOS 14.5, macOS 11.3, *) {
             XCTAssertEqual(error.underlyingErrors.first! as NSError, underlyingError)
         }
     }
@@ -60,7 +60,7 @@ final class OktaOidcErrorTests: XCTestCase {
         XCTAssertNil(error.userInfo[NSUnderlyingErrorKey] as? NSError)
         XCTAssertEqual(error.userInfo[NSLocalizedDescriptionKey] as! String, error.localizedDescription)
         
-        if #available(iOS 14.5, *) {
+        if #available(iOS 14.5, macOS 11.3, *) {
             XCTAssertTrue(error.underlyingErrors.isEmpty)
         }
     }
