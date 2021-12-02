@@ -78,16 +78,19 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testIntrospectFailed() {
         // Mock REST API calls
-        apiMock.configure(error: .APIError("Test Error"))
+        let underlyingError = NSError(domain: NSURLErrorDomain,
+                                      code: NSURLErrorNetworkConnectionLost,
+                                      userInfo: [NSLocalizedDescriptionKey: "Localization error description"])
+        let mockError = OktaOidcError.api(message: "Test Error", underlyingError: underlyingError)
+        apiMock.configure(error: mockError)
         
         let introspectExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.introspect(token: authStateManager.accessToken) { payload, error in
             XCTAssertNil(payload)
-            XCTAssertEqual(
-                OktaOidcError.APIError("Test Error").localizedDescription,
-                error?.localizedDescription
-            )
+            
+            XCTAssertEqual(mockError, error as? OktaOidcError)
+            
             introspectExpectation.fulfill()
         }
         
@@ -112,16 +115,19 @@ class OktaOidcStateManagerTests: XCTestCase {
 
     func testRevokeNoBearerToken() {
         // Mock REST API calls
-        apiMock.configure(error: .APIError("Test Error"))
+        let underlyingError = NSError(domain: NSURLErrorDomain,
+                                      code: NSURLErrorNetworkConnectionLost,
+                                      userInfo: [NSLocalizedDescriptionKey: "Localization error description"])
+        
+        let mockError = OktaOidcError.api(message: "Test Error", underlyingError: underlyingError)
+        apiMock.configure(error: mockError)
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.revoke(nil) { isRevoked, error in
             XCTAssertFalse(isRevoked)
-            XCTAssertEqual(
-                OktaOidcError.noBearerToken.localizedDescription,
-                error?.localizedDescription
-            )
+            
+            XCTAssertEqual(OktaOidcError.noBearerToken, error as? OktaOidcError)
             
             revokeExpectation.fulfill()
         }
@@ -131,16 +137,18 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testRevokeFailed() {
         // Mock REST API calls
-        apiMock.configure(error: .APIError("Test Error"))
+        let underlyingError = NSError(domain: NSURLErrorDomain,
+                                      code: NSURLErrorNetworkConnectionLost,
+                                      userInfo: [NSLocalizedDescriptionKey: "Localization error description"])
+        
+        let mockError = OktaOidcError.api(message: "Test Error", underlyingError: underlyingError)
+        apiMock.configure(error: mockError)
         
         let revokeExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.revoke(authStateManager.accessToken) { isRevoked, error in
             XCTAssertFalse(isRevoked)
-            XCTAssertEqual(
-                OktaOidcError.APIError("Test Error").localizedDescription,
-                error?.localizedDescription
-            )
+            XCTAssertEqual(mockError, error as? OktaOidcError)
             
             revokeExpectation.fulfill()
         }
@@ -166,16 +174,18 @@ class OktaOidcStateManagerTests: XCTestCase {
     
     func testGetUserFailed() {
         // Mock REST API calls
-        apiMock.configure(error: .APIError("Test Error"))
+        let underlyingError = NSError(domain: NSURLErrorDomain,
+                                      code: NSURLErrorNetworkConnectionLost,
+                                      userInfo: [NSLocalizedDescriptionKey: "Localization error description"])
+        
+        let mockError = OktaOidcError.api(message: "Test Error", underlyingError: underlyingError)
+        apiMock.configure(error: mockError)
         
         let userInfoExpectation = expectation(description: "Will fail with error.")
         
         authStateManager.getUser { payload, error in
             XCTAssertNil(payload)
-            XCTAssertEqual(
-                OktaOidcError.APIError("Test Error").localizedDescription,
-                error?.localizedDescription
-            )
+            XCTAssertEqual(mockError, error as? OktaOidcError)
             
             userInfoExpectation.fulfill()
         }
@@ -192,8 +202,8 @@ class OktaOidcStateManagerTests: XCTestCase {
         authStateManager.getUser { payload, error in
             XCTAssertNil(payload)
             XCTAssertEqual(
-                OktaOidcError.noBearerToken.localizedDescription,
-                error?.localizedDescription
+                OktaOidcError.noBearerToken,
+                error as? OktaOidcError
             )
             
             userInfoExpectation.fulfill()

@@ -46,8 +46,9 @@ final class AuthViewController: UIViewController {
         showProgress()
         oktaAppAuth?.authenticate(withSessionToken: token) { authStateManager, error in
             self.hideProgress()
+            
             if let error = error {
-                self.presentError(error)
+                self.showMessage(error)
                 return
             }
             
@@ -56,8 +57,12 @@ final class AuthViewController: UIViewController {
         }
     }
     
-    func presentError(_ error: Error) {
-        self.showMessage("Error: \(error.localizedDescription)")
+    func showMessage(_ error: Error) {
+        if let oidcError = error as? OktaOidcError {
+            messageView.text = oidcError.displayMessage
+        } else {
+            messageView.text = error.localizedDescription
+        }
     }
     
     func showMessage(_ message: String) {

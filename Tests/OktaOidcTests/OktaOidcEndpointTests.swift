@@ -126,18 +126,18 @@ class OktaOidcEndpointTests: XCTestCase {
 
     func testNoEndpointError() {
         XCTAssertEqual(
-            OktaOidcError.noIntrospectionEndpoint.localizedDescription,
-            OktaOidcEndpoint.introspection.noEndpointError.localizedDescription
+            OktaOidcError.noIntrospectionEndpoint,
+            OktaOidcEndpoint.introspection.noEndpointError
         )
         
         XCTAssertEqual(
-            OktaOidcError.noRevocationEndpoint.localizedDescription,
-            OktaOidcEndpoint.revocation.noEndpointError.localizedDescription
+            OktaOidcError.noRevocationEndpoint,
+            OktaOidcEndpoint.revocation.noEndpointError
         )
         
         XCTAssertEqual(
-            OktaOidcError.noUserInfoEndpoint.localizedDescription,
-            OktaOidcEndpoint.userInfo.noEndpointError.localizedDescription
+            OktaOidcError.noUserInfoEndpoint,
+            OktaOidcEndpoint.userInfo.noEndpointError
         )
     }
 

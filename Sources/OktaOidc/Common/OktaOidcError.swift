@@ -12,11 +12,18 @@
 
 import Foundation
 
-public enum OktaOidcError: Error {
-    case APIError(String)
+public enum OktaOidcError: CustomNSError {
+    
+    /// See [RFC6749 Error Response](https://tools.ietf.org/html/rfc6749#section-4.1.2.1).
+    case authorization(error: String, description: String?)
+    
+    case api(message: String, underlyingError: Error?)
+    case unexpectedAuthCodeResponse(statusCode: Int)
     case errorFetchingFreshTokens(String)
-    case JWTDecodeError
     case JWTValidationError(String)
+    case redirectServerError(String)
+    case JWTDecodeError
+    case noLocationHeader
     case missingConfigurationValues
     case noBearerToken
     case noDiscoveryEndpoint
@@ -30,17 +37,53 @@ public enum OktaOidcError: Error {
     case noUserInfoEndpoint
     case parseFailure
     case missingIdToken
-    case unexpectedAuthCodeResponse
     case userCancelledAuthorizationFlow
     case unableToGetAuthCode
-    case redirectServerError(String)
+    
+    public static var errorDomain: String = "\(Self.self)"
+    
+    /// Most of errors returns the general error code.
+    /// Error like `api`, `unexpectedAuthCodeResponse` return specific error code.
+    /// `api` returns the general error code if `underlyingError` is absent. 
+    private static let generalErrorCode = -1012009
+    
+    public var errorCode: Int {
+        switch self {
+        case let .api(_, underlyingError):
+            return (underlyingError as NSError?)?.code ?? Self.generalErrorCode
+            
+        case let .unexpectedAuthCodeResponse(statusCode):
+            return statusCode
+        default:
+            return Self.generalErrorCode
+        }
+    }
+    
+    public var errorUserInfo: [String: Any] {
+        var result: [String: Any] = [:]
+        result[NSLocalizedDescriptionKey] = errorDescription
+        
+        switch self {
+        case let .api(_, underlyingError):
+            result[NSUnderlyingErrorKey] = underlyingError
+            return result
+        default:
+            return result
+        }
+    }
+}
+
+extension OktaOidcError: Equatable {
+    public static func == (lhs: OktaOidcError, rhs: OktaOidcError) -> Bool {
+        lhs as NSError == rhs as NSError
+    }
 }
 
 extension OktaOidcError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .APIError(error: let error):
-            return NSLocalizedString(error, comment: "")
+        case let .api(message, _):
+            return NSLocalizedString(message, comment: "")
         case .errorFetchingFreshTokens(error: let error):
             return NSLocalizedString("Error fetching fresh tokens: \(error)", comment: "")
         case .JWTDecodeError:
@@ -74,14 +117,18 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("Failed to parse and/or convert object.", comment: "")
         case .missingIdToken:
             return NSLocalizedString("ID token needed to fulfill this operation.", comment: "")
-        case .unexpectedAuthCodeResponse:
-            return NSLocalizedString("Unexpected response format while retrieving authorization code.", comment: "")
+        case .unexpectedAuthCodeResponse(let statusCode):
+            return NSLocalizedString("Unexpected response format while retrieving authorization code. Status code: \(statusCode)", comment: "")
         case .userCancelledAuthorizationFlow:
             return NSLocalizedString("User cancelled current session", comment: "")
         case .unableToGetAuthCode:
             return NSLocalizedString("Unable to get authorization code.", comment: "")
         case .redirectServerError(error: let error):
             return NSLocalizedString(error, comment: "")
+        case let .authorization(error, description):
+            return NSLocalizedString("The authorization request failed due to \(error): \(description ?? "")", comment: "")
+        case .noLocationHeader:
+            return NSLocalizedString("Unable to get location header.", comment: "")
         }
     }
 }
