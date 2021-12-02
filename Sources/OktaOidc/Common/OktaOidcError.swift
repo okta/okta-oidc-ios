@@ -45,7 +45,7 @@ public enum OktaOidcError: CustomNSError {
     /// Most of errors returns the general error code.
     /// Error like `api`, `unexpectedAuthCodeResponse` return specific error code.
     /// `api` returns the general error code if `underlyingError` is absent. 
-    private static let generalErrorCode = -1012009
+    static let generalErrorCode = -1012009
     
     public var errorCode: Int {
         switch self {
