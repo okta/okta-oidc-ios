@@ -35,6 +35,7 @@
     return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                          externalUserAgent:externalUserAgent
                                                   delegate:nil
+                                                 validator:nil
                                                   callback:callback];
 }
 

@@ -52,11 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                      presentingViewController:(UIViewController *)presentingViewController
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback;
 
 + (id<OKTExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback API_AVAILABLE(ios(11))
     __deprecated_msg("This method will not work on iOS 13. Use "
         "authStateByPresentingAuthorizationRequest:presentingViewController:callback:");

@@ -32,6 +32,7 @@
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                      presentingViewController:(UIViewController *)presentingViewController
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback {
     OKTExternalUserAgentIOS *externalUserAgent =
         [[OKTExternalUserAgentIOS alloc]
@@ -39,17 +40,20 @@
     return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                          externalUserAgent:externalUserAgent
                                                   delegate:delegate
+                                                 validator: validator
                                                   callback:callback];
 }
 
 + (id<OKTExternalUserAgentSession>)
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback {
   OKTExternalUserAgentIOS *externalUserAgent = [[OKTExternalUserAgentIOS alloc] init];
   return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                        externalUserAgent:externalUserAgent
                                                 delegate:delegate
+                                               validator: validator
                                                 callback:callback];
 }
 

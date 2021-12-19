@@ -131,6 +131,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OKTExternalUserAgent>)externalUserAgent
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OKTExternalUserAgentSession> authFlowSession = [OKTAuthorizationService
@@ -160,7 +161,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                                 tokenResponse:tokenResponse];
                                  }
                                  callback(authState, tokenError);
-                               }];
+                               }
+                                validator:validator];
                              } else {
                                // hybrid flow (code id_token). Two possible cases:
                                // 1. The code is not for this client, ie. will be sent to a
@@ -199,7 +201,11 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 - (instancetype)initWithAuthorizationResponse:(OKTAuthorizationResponse *)authorizationResponse
                                          tokenResponse:(nullable OKTTokenResponse *)tokenResponse {
-    return [self initWithAuthorizationResponse:authorizationResponse tokenResponse:tokenResponse registrationResponse:nil delegate:nil];
+    return [self initWithAuthorizationResponse:authorizationResponse
+                                 tokenResponse:tokenResponse
+                          registrationResponse:nil
+                                      delegate:nil
+                                     validator:nil];
 }
 
 /*! @brief Creates an auth state from an registration response.
@@ -209,17 +215,20 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     return [self initWithAuthorizationResponse:nil
                                  tokenResponse:nil
                           registrationResponse:registrationResponse
-                                      delegate:nil];
+                                      delegate:nil
+                                     validator:nil];
 }
 
 - (instancetype)initWithAuthorizationResponse:
     (nullable OKTAuthorizationResponse *)authorizationResponse
            tokenResponse:(nullable OKTTokenResponse *)tokenResponse
                          registrationResponse:(nullable OKTRegistrationResponse *)registrationResponse
-                                     delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate {
+                                     delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate
+                                    validator:(nullable id<OktaCustomTokenValidator>)validator {
   self = [super init];
   if (self) {
     _delegate = delegate;
+    _validator = validator;
     _pendingActionsSyncObject = [[NSObject alloc] init];
 
     if (registrationResponse) {
@@ -510,7 +519,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     // creates a list of pending actions, starting with this one
     _pendingActions = [NSMutableArray arrayWithObject:pendingAction];
   }
-
+  
   // refresh the tokens
   OKTTokenRequest *tokenRefreshRequest =
       [self tokenRefreshRequestWithAdditionalParameters:additionalParameters];
@@ -546,7 +555,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
         actionToProcess.action(self.accessToken, self.idToken, error);
       });
     }
-  }];
+  }
+   validator:_validator];
 }
 
 #pragma mark -

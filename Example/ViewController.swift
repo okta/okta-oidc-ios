@@ -12,6 +12,8 @@
 
 import OktaOidc
 import UIKit
+// uncomment to test TrueTime using the OktaCustomTokenValidator
+import TrueTime
 
 // swiftlint:disable force_try
 // swiftlint:disable force_cast
@@ -33,6 +35,9 @@ final class ViewController: UIViewController {
         }
     }
     
+    // uncomment to test TrueTime
+    private var trueTimeClient: TrueTime.TrueTimeClient?
+    
     private var isUITest: Bool {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
     }
@@ -52,12 +57,19 @@ final class ViewController: UIViewController {
         
         let configuration = try? OktaOidcConfig.default()
         configuration?.requestCustomizationDelegate = self
+        
+        // uncomment to test TrueTime
+        configuration?.oktaCustomTokenValidator = self
+        trueTimeClient = TrueTimeClient.sharedInstance
+        trueTimeClient?.start()
+        
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
-        
         if let config = oktaAppAuth?.configuration {
             authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
             authStateManager?.requestCustomizationDelegate = self
+            // uncomment to test TrueTime
+            authStateManager?.oktaCustomTokenValidator = self
         }
     }
 
@@ -117,21 +129,43 @@ final class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = authStateManager?.accessToken else { return }
-
-        authStateManager?.introspect(token: accessToken, callback: { payload, error in
-            guard let isValid = payload?["active"] as? Bool else {
-                self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
-                return
+        var accessToken = authStateManager?.accessToken
+        if accessToken == nil {
+            authStateManager?.renew { newAuthStateManager, error in
+                if let error = error {
+                    // Error
+                    print("Error trying to Refresh AccessToken: \(error)")
+                    return
+                }
+                self.authStateManager = newAuthStateManager
+                accessToken = newAuthStateManager?.accessToken
+                
+                self.authStateManager?.introspect(token: accessToken, callback: { payload, error in
+                    guard let isValid = payload?["active"] as? Bool else {
+                        self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
+                        return
+                    }
+                    
+                    self.showMessage("Is the AccessToken valid? - \(isValid)")
+                })
             }
-            
-            self.showMessage("Is the AccessToken valid? - \(isValid)")
-        })
+        } else {
+            authStateManager?.introspect(token: accessToken, callback: { payload, error in
+                guard let isValid = payload?["active"] as? Bool else {
+                    self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
+                    return
+                }
+
+                self.showMessage("Is the AccessToken valid? - \(isValid)")
+            })
+        }
     }
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = authStateManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else {
+            return
+        }
 
         authStateManager?.revoke(accessToken) { _, error in
             if error != nil { self.showMessage("Error: \(error!)") }
@@ -221,6 +255,41 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
         if let response = response {
             print("response: \(response)")
         }
+    }
+}
+
+/*
+ * Simple TrueTime example to validate issueAt and expiry time
+ * https://github.com/instacart/TrueTime.swift#swift
+ * uncomment to test TrueTime
+ */
+extension ViewController: OktaCustomTokenValidator {
+    func isIssue(atValid issuedAt: Date?) -> Bool {
+        if let issueAt = issuedAt {
+            print("TrueTime Token Issued At: \(issueAt)")
+            guard let now = trueTimeClient?.referenceTime?.now() else {
+                print("Failed to retrieve date from TrueTime")
+                return false
+            }
+            
+            if fabs(now.timeIntervalSince(issueAt)) > 600 {
+                return false
+            }
+            return true
+        }
+        return false
+    }
+    
+    func isExpired(_ expiry: Date?) -> Bool {
+        if let expiry = expiry,
+           let now = trueTimeClient?.referenceTime?.now() {
+            print("TrueTime TokenExpiry: \(expiry)")
+            if now < expiry {
+                return false
+            }
+            return true
+        }
+        return true
     }
 }
 

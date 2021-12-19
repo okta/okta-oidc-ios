@@ -20,6 +20,7 @@ class OktaOidcAuthenticateTask: OktaOidcTask {
     
     func authenticateWithSessionToken(sessionToken: String,
                                       delegate: OktaNetworkRequestCustomizationDelegate? = nil,
+                                      validator: OktaCustomTokenValidator? = nil,
                                       callback: @escaping (OKTAuthState?, OktaOidcError?) -> Void) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfig = oidConfig else {
@@ -48,7 +49,7 @@ class OktaOidcAuthenticateTask: OktaOidcTask {
                 additionalParameters: additionalParameters
             )
             
-            OKTAuthState.getState(withAuthRequest: request, delegate: delegate, callback: { authState, error in
+            OKTAuthState.getState(withAuthRequest: request, delegate: delegate, validator: validator, callback: { authState, error in
                 callback(authState, error)
             })
         }

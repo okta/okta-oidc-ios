@@ -17,7 +17,7 @@ import OktaOidc_AppAuth
 // Okta Extension of OIDAuthState
 extension OKTAuthState {
 
-    static func getState(withAuthRequest authRequest: OKTAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback finalize: @escaping (OKTAuthState?, OktaOidcError?) -> Void ) {
+    static func getState(withAuthRequest authRequest: OKTAuthorizationRequest, delegate: OktaNetworkRequestCustomizationDelegate? = nil, validator: OktaCustomTokenValidator? = nil, callback finalize: @escaping (OKTAuthState?, OktaOidcError?) -> Void ) {
         
         // Make authCode request
         OKTAuthorizationService.perform(authRequest: authRequest, delegate: delegate) { authResponse, error in
@@ -39,7 +39,7 @@ extension OKTAuthState {
             }
 
             // Make token request
-            OKTAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, delegate: delegate) { tokenResponse, error in
+            OKTAuthorizationService.perform(tokenRequest, originalAuthorizationResponse: authResponse, delegate: delegate, callback: { tokenResponse, error in
                 guard let tokenResponse = tokenResponse else {
                     finalize(nil, OktaOidcError.api(message: "Authorization Error: \(error?.localizedDescription ?? "No token response.")", underlyingError: error))
                     return
@@ -54,9 +54,10 @@ extension OKTAuthState {
                 let authState = OKTAuthState(authorizationResponse: authResponse,
                                              tokenResponse: tokenResponse,
                                              registrationResponse: nil,
-                                             delegate: delegate)
+                                             delegate: delegate,
+                                             validator: validator)
                 finalize(authState, nil)
-            }
+            }, validator: validator)
         }
     }
 }
