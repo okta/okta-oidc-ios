@@ -39,6 +39,7 @@ public enum OktaOidcError: CustomNSError {
     case missingIdToken
     case userCancelledAuthorizationFlow
     case unableToGetAuthCode
+    case unableToOpenBrowser // macOS specific
     
     public static var errorDomain: String = "\(Self.self)"
     
@@ -129,6 +130,9 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("The authorization request failed due to \(error): \(description ?? "")", comment: "")
         case .noLocationHeader:
             return NSLocalizedString("Unable to get location header.", comment: "")
+        case .unableToOpenBrowser:
+            return NSLocalizedString("Error triggering authorization flow in default system browser. NSWorkspace.openURL returned false.", comment: "")
+
         }
     }
 }

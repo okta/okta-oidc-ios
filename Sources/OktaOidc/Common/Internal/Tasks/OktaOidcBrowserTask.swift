@@ -63,6 +63,11 @@ class OktaOidcBrowserTask: OktaOidcTask {
                     callback(nil, OktaOidcError.userCancelledAuthorizationFlow)
                     return
                 }
+
+                if (error as NSError).code == OKTErrorCode.browserOpenError.rawValue {
+                    callback(nil, OktaOidcError.unableToOpenBrowser)
+                    return
+                }
                 
                 return callback(nil, OktaOidcError.api(message: "Authorization Error: \(error.localizedDescription)", underlyingError: error))
             }
