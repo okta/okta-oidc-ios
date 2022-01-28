@@ -30,7 +30,7 @@
 @protocol OKTExternalUserAgent;
 @protocol OKTExternalUserAgentSession;
 @protocol OktaNetworkRequestCustomizationDelegate;
-@protocol OktaCustomTokenValidator;
+@protocol OKTTokenValidator;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -113,10 +113,10 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
  */
 @property(nonatomic, weak, nullable)id<OktaNetworkRequestCustomizationDelegate> delegate;
 
-/*! @brief The @c OktaCustomTokenValidator validator.
-    @discussion Use a custom validtor to verify issue at / expiry time of tokens.
+/*! @brief The @c OKTTokenValidator validator.
+    @discussion Use a custom validator to verify issuedAt/expired time of tokens.
  */
-@property(nonatomic, weak, nullable)id<OktaCustomTokenValidator> validator;
+@property(nonatomic, strong, nonnull) id<OKTTokenValidator> validator;
 
 /*! @brief The @c OKTAuthStateChangeDelegate delegate.
     @discussion Use the delegate to observe state changes (and update storage) as well as error
@@ -148,7 +148,7 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OKTExternalUserAgent>)externalUserAgent
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
+                                    validator:(id<OKTTokenValidator> _Nonnull)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback;
 
 /*! @internal
@@ -184,7 +184,7 @@ typedef void (^OKTAuthStateAuthorizationCallback)(OKTAuthState *_Nullable authSt
        tokenResponse:(nullable OKTTokenResponse *)tokenResponse
                      registrationResponse:(nullable OKTRegistrationResponse *)registrationResponse
                                  delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate
-                                validator:(nullable id<OktaCustomTokenValidator>)validator
+                                    validator:(nonnull id<OKTTokenValidator>)validator
     NS_DESIGNATED_INITIALIZER;
 
 /*! @brief Updates the authorization state based on a new authorization response.

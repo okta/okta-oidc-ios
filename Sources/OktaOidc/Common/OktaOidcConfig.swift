@@ -31,7 +31,7 @@ public class OktaOidcConfig: NSObject {
      */
     @objc public weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
     
-    @objc public weak var oktaCustomTokenValidator: OktaCustomTokenValidator?
+    @objc public var tokenValidator: OKTTokenValidator = OKTDefaultTokenValidator()
     
     @available(iOS 13.0, *)
     @objc public lazy var noSSO = false

@@ -19,7 +19,6 @@ protocol OktaOidcHttpApiProtocol {
     typealias OktaApiErrorCallback = (OktaOidcError) -> Void
 
     var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate? { get set }
-    var oktaCustomTokenValidator: OktaCustomTokenValidator? { get set }
 
     func post(_ url: URL,
               headers: [String: String]?,

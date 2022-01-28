@@ -37,16 +37,12 @@
 #import "OKTTokenResponse.h"
 #import "OKTURLQueryComponent.h"
 #import "OKTURLSessionProvider.h"
+#import "OKTDefaultTokenValidator.h"
 
 /*! @brief Path appended to an OpenID Connect issuer for discovery
     @see https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig
  */
 static NSString *const kOpenIDConfigurationWellKnownPath = @".well-known/openid-configuration";
-
-/*! @brief Max allowable iat (Issued At) time skew
-    @see https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation
- */
-static int const kOKTAuthorizationSessionIATMaxSkew = 600;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -428,15 +424,15 @@ NS_ASSUME_NONNULL_BEGIN
     [[self class] performTokenRequest:request
         originalAuthorizationResponse:nil
                              delegate:delegate
-                             callback:callback
-                            validator:nil];
+                            validator:[[OKTDefaultTokenValidator alloc] init]
+                             callback:callback];
 }
 
 + (void)performTokenRequest:(OKTTokenRequest *)request
 originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorizationResponse
                    delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-                   callback:(OKTTokenCallback)callback
-                  validator:(id<OktaCustomTokenValidator> _Nullable)validator {
+                  validator:(id<OKTTokenValidator> _Nonnull)validator
+                   callback:(OKTTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
   if ([delegate respondsToSelector:@selector(customizableURLRequest:)]) {
@@ -612,67 +608,32 @@ originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorization
 
       // OpenID Connect Core Section 3.1.3.7. rules #7 & #8
       // Not applicable. See rule #6.
-
-      // OpenID Connect Core Section 3.1.3.7. rule #9
-      // Validates that the current time is before the expiry time.
-      if (validator != nil) {
-          if ([validator isExpired:idToken.expiresAt]) {
-              NSError *invalidIDToken =
-                  [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
-                                   underlyingError:nil
-                                       description:@"ID Token expired"];
-              dispatch_async(dispatch_get_main_queue(), ^{
-                callback(nil, invalidIDToken);
-              });
-              return;
-          }
-      } else {
-          NSTimeInterval expiresAtDifference = [idToken.expiresAt timeIntervalSinceNow];
-          if (expiresAtDifference < 0) {
-            NSError *invalidIDToken =
-                [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
-                                 underlyingError:nil
-                                     description:@"ID Token expired"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-              callback(nil, invalidIDToken);
-            });
-            return;
-          }
-      }
       
-      // OpenID Connect Core Section 3.1.3.7. rule #10
-      // Validates that the issued at time is not more than +/- 10 minutes on the current time.
-      if (validator != nil) {
-          if (![validator isIssueAtValid:idToken.issuedAt]) {
-              NSString *message =
-                  [NSString stringWithFormat:@"Issued at time is more than %d seconds before or after "
-                                              "the current time",
-                                             kOKTAuthorizationSessionIATMaxSkew];
-              NSError *invalidIDToken =
-                [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
-                                 underlyingError:nil
-                                     description:message];
-              dispatch_async(dispatch_get_main_queue(), ^{
-                callback(nil, invalidIDToken);
-              });
-              return;
-          }
-      } else {
-          NSTimeInterval issuedAtDifference = [idToken.issuedAt timeIntervalSinceNow];
-          if (fabs(issuedAtDifference) > kOKTAuthorizationSessionIATMaxSkew) {
-            NSString *message =
-                [NSString stringWithFormat:@"Issued at time is more than %d seconds before or after "
-                                            "the current time",
-                                           kOKTAuthorizationSessionIATMaxSkew];
-            NSError *invalidIDToken =
-              [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
-                               underlyingError:nil
-                                   description:message];
-            dispatch_async(dispatch_get_main_queue(), ^{
+      NSAssert(validator != nil, @"Validator parameter is missed. Default will be used.");
+      id<OKTTokenValidator> tokenValidator = validator ?: [OKTDefaultTokenValidator new];
+
+      if ([tokenValidator isDateExpired:idToken.expiresAt]) {
+        NSError *invalidIDToken =
+        [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
+                         underlyingError:nil
+                             description:@"ID Token expired"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          callback(nil, invalidIDToken);
+        });
+        return;
+      }
+        
+      if (![tokenValidator isIssuedAtDateValid:idToken.issuedAt]) {
+          NSString *message =
+          [NSString stringWithFormat:@"Issued at time is invalid corresponding to the current time"];
+          NSError *invalidIDToken =
+          [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
+                           underlyingError:nil
+                               description:message];
+          dispatch_async(dispatch_get_main_queue(), ^{
               callback(nil, invalidIDToken);
-            });
-            return;
-          }
+          });
+          return;
       }
 
       // Only relevant for the authorization_code response type

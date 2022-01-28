@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "container:okta-oidc.xcodeproj">
-   </FileRef>
-   <FileRef
       location = "group:okta-oidc.xcodeproj">
    </FileRef>
    <FileRef

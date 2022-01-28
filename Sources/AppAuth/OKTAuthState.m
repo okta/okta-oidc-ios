@@ -32,6 +32,7 @@
 #import "OKTTokenRequest.h"
 #import "OKTTokenResponse.h"
 #import "OKTTokenUtilities.h"
+#import "OKTDefaultTokenValidator.h"
 
 /*! @brief Key used to encode the @c refreshToken property for @c NSSecureCoding.
  */
@@ -131,7 +132,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OKTExternalUserAgent>)externalUserAgent
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-                                    validator:(id<OktaCustomTokenValidator> _Nullable)validator
+                                    validator:(id<OKTTokenValidator> _Nonnull)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OKTExternalUserAgentSession> authFlowSession = [OKTAuthorizationService
@@ -152,6 +153,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                [OKTAuthorizationService performTokenRequest:tokenExchangeRequest
                                               originalAuthorizationResponse:authorizationResponse
                                                                    delegate:delegate
+                                                                  validator:validator
                                                                    callback:^(OKTTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
                                  OKTAuthState *authState;
                                  if (tokenResponse) {
@@ -161,8 +163,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                                 tokenResponse:tokenResponse];
                                  }
                                  callback(authState, tokenError);
-                               }
-                                validator:validator];
+                               }];
                              } else {
                                // hybrid flow (code id_token). Two possible cases:
                                // 1. The code is not for this client, ie. will be sent to a
@@ -205,7 +206,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                  tokenResponse:tokenResponse
                           registrationResponse:nil
                                       delegate:nil
-                                     validator:nil];
+                                     validator:[OKTDefaultTokenValidator new]];
 }
 
 /*! @brief Creates an auth state from an registration response.
@@ -216,7 +217,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                  tokenResponse:nil
                           registrationResponse:registrationResponse
                                       delegate:nil
-                                     validator:nil];
+                                     validator:[OKTDefaultTokenValidator new]];
 }
 
 - (instancetype)initWithAuthorizationResponse:
@@ -224,7 +225,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
            tokenResponse:(nullable OKTTokenResponse *)tokenResponse
                          registrationResponse:(nullable OKTRegistrationResponse *)registrationResponse
                                      delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate
-                                    validator:(nullable id<OktaCustomTokenValidator>)validator {
+                                    validator:(nonnull id<OKTTokenValidator>)validator {
   self = [super init];
   if (self) {
     _delegate = delegate;
@@ -526,6 +527,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
   [OKTAuthorizationService performTokenRequest:tokenRefreshRequest
                  originalAuthorizationResponse:_lastAuthorizationResponse
                                       delegate:_delegate
+                                     validator:_validator
                                       callback:^(OKTTokenResponse *_Nullable response,
                                                  NSError *_Nullable error) {
     // update OKTAuthState based on response
@@ -555,8 +557,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
         actionToProcess.action(self.accessToken, self.idToken, error);
       });
     }
-  }
-   validator:_validator];
+  }];
 }
 
 #pragma mark -

@@ -16,7 +16,6 @@ import OktaOidc_AppAuth
 
 class OktaOidcRestApi: OktaOidcHttpApiProtocol {
     weak var requestCustomizationDelegate: OktaNetworkRequestCustomizationDelegate?
-    weak var oktaCustomTokenValidator: OktaCustomTokenValidator?
     
     func fireRequest(_ request: URLRequest,
                      onSuccess: @escaping OktaApiSuccessCallback,

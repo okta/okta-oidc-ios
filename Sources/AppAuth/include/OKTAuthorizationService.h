@@ -20,7 +20,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OktaNetworkRequestCustomizationDelegate.h"
-#import "OktaCustomTokenValidator.h"
+#import "OKTTokenValidator.h"
 
 @class OKTAuthorization;
 @class OKTAuthorizationRequest;
@@ -160,13 +160,14 @@ typedef void (^OKTRegistrationCompletion)(OKTRegistrationResponse *_Nullable reg
     @param request The token request.
     @param authorizationResponse The original authorization response related to this token request.
     @param delegate The network request customization delegate.
+    @param validator Validates token.
     @param callback The method called when the request has completed or failed.
  */
 + (void)performTokenRequest:(OKTTokenRequest *)request
 originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorizationResponse
                    delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
-                   callback:(OKTTokenCallback)callback
-                   validator:(id<OktaCustomTokenValidator> _Nullable)validator;
+                  validator:(id<OKTTokenValidator> _Nonnull)validator
+                   callback:(OKTTokenCallback)callback;
 
 /*! @brief Performs a registration request.
     @param request The registration request.

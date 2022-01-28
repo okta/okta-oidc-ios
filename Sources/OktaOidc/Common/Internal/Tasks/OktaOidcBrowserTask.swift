@@ -21,7 +21,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
     var userAgentSession: OKTExternalUserAgentSession?
     
     func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil,
-                validator: OktaCustomTokenValidator? = nil,
+                validator: OKTTokenValidator,
                 callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfiguration = oidConfig else {

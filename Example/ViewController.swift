@@ -59,7 +59,7 @@ final class ViewController: UIViewController {
         configuration?.requestCustomizationDelegate = self
         
         // uncomment to test TrueTime
-        configuration?.oktaCustomTokenValidator = self
+        configuration?.tokenValidator = self
         trueTimeClient = TrueTimeClient.sharedInstance
         trueTimeClient?.start()
         
@@ -69,7 +69,7 @@ final class ViewController: UIViewController {
             authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
             authStateManager?.requestCustomizationDelegate = self
             // uncomment to test TrueTime
-            authStateManager?.oktaCustomTokenValidator = self
+            authStateManager?.tokenValidator = self
         }
     }
 
@@ -259,37 +259,25 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
 }
 
 /*
- * Simple TrueTime example to validate issueAt and expiry time
+ * Simple TrueTime example to validate issuedAt and expiry time
  * https://github.com/instacart/TrueTime.swift#swift
  * uncomment to test TrueTime
  */
-extension ViewController: OktaCustomTokenValidator {
-    func isIssue(atValid issuedAt: Date?) -> Bool {
-        if let issueAt = issuedAt {
-            print("TrueTime Token Issued At: \(issueAt)")
-            guard let now = trueTimeClient?.referenceTime?.now() else {
-                print("Failed to retrieve date from TrueTime")
-                return false
-            }
-            
-            if fabs(now.timeIntervalSince(issueAt)) > 600 {
-                return false
-            }
-            return true
+extension ViewController: OKTTokenValidator {
+    func isIssued(atDateValid issuedAt: Date?) -> Bool {
+        guard let issuedAt = issuedAt, let now = trueTimeClient?.referenceTime?.now() else {
+            return false
         }
-        return false
+        
+        return fabs(now.timeIntervalSince(issuedAt)) <= 600
     }
     
-    func isExpired(_ expiry: Date?) -> Bool {
-        if let expiry = expiry,
-           let now = trueTimeClient?.referenceTime?.now() {
-            print("TrueTime TokenExpiry: \(expiry)")
-            if now < expiry {
-                return false
-            }
-            return true
+    func isDateExpired(_ expiry: Date?) -> Bool {
+        guard let expiry = expiry, let now = trueTimeClient?.referenceTime?.now() else {
+            return false
         }
-        return true
+
+        return now >= expiry
     }
 }
 

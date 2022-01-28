@@ -38,7 +38,7 @@ public class OktaOidc: NSObject {
         task.authenticateWithSessionToken(
             sessionToken: sessionToken,
             delegate: configuration.requestCustomizationDelegate,
-            validator: configuration.oktaCustomTokenValidator,
+            validator: configuration.tokenValidator,
             callback: { (authState, error) in
                 guard let authState = authState else {
                     callback(nil, error)
@@ -62,7 +62,7 @@ public class OktaOidc: NSObject {
         currentUserSessionTask = task
 
         task.signIn(delegate: configuration.requestCustomizationDelegate,
-                    validator: configuration.oktaCustomTokenValidator) { [weak self] authState, error in
+                    validator: configuration.tokenValidator) { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
             guard let authState = authState else {
                 callback(nil, error)
@@ -73,8 +73,8 @@ public class OktaOidc: NSObject {
             if let delegate = self?.configuration.requestCustomizationDelegate {
                 authStateManager.requestCustomizationDelegate = delegate
             }
-            if let validator = self?.configuration.oktaCustomTokenValidator {
-                authStateManager.oktaCustomTokenValidator = validator
+            if let validator = self?.configuration.tokenValidator {
+                authStateManager.tokenValidator = validator
             }
             callback(authStateManager, nil)
         }

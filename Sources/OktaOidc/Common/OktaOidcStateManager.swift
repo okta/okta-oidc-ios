@@ -33,12 +33,11 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         }
     }
     
-    @objc public weak var oktaCustomTokenValidator: OktaCustomTokenValidator? {
+    @objc public var tokenValidator: OKTTokenValidator {
         get {
-            restAPI.oktaCustomTokenValidator
+            authState.validator
         }
         set {
-            restAPI.oktaCustomTokenValidator = newValue
             authState.validator = newValue
         }
     }
@@ -101,10 +100,9 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
             let tokenObject = OKTIDToken(idTokenString: idToken) else {
                 return OktaOidcError.JWTDecodeError
         }
-        if let expired = oktaCustomTokenValidator?.isExpired(tokenObject.expiresAt) {
-            if expired {
-                return OktaOidcError.JWTValidationError("ID Token expired")
-            }
+        
+        if tokenValidator.isDateExpired(tokenObject.expiresAt) {
+            return OktaOidcError.JWTValidationError("ID Token expired")
         } else if tokenObject.expiresAt.timeIntervalSinceNow < 0 {
             return OktaOidcError.JWTValidationError("ID Token expired")
         }
