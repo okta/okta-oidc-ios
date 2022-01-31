@@ -257,7 +257,7 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
  * uncomment to test TrueTime
  */
 extension ViewController: OKTTokenValidator {
-    func isIssued(atDateValid issuedAt: Date?) -> Bool {
+    func isIssued(atDateValid issuedAt: Date?, token: OKTTokenType) -> Bool {
         guard let issuedAt = issuedAt else {
             return false
         }
@@ -267,7 +267,7 @@ extension ViewController: OKTTokenValidator {
         return fabs(now.timeIntervalSince(issuedAt)) <= 200
     }
     
-    func isDateExpired(_ expiry: Date?) -> Bool {
+    func isDateExpired(_ expiry: Date?, token tokenType: OKTTokenType) -> Bool {
         guard let expiry = expiry else {
             return false
         }

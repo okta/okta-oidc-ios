@@ -47,9 +47,10 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
         guard let tokenResponse = self.authState.lastTokenResponse,
               let token = tokenResponse.accessToken,
               let tokenExp = tokenResponse.accessTokenExpirationDate,
-              tokenExp.timeIntervalSince1970 > Date().timeIntervalSince1970 else {
+              !tokenValidator.isDateExpired(tokenExp, token: .access) else {
             return nil
         }
+        
         return token
     }
 
@@ -101,7 +102,7 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
                 return OktaOidcError.JWTDecodeError
         }
         
-        if tokenValidator.isDateExpired(tokenObject.expiresAt) {
+        if tokenValidator.isDateExpired(tokenObject.expiresAt, token: .id) {
             return OktaOidcError.JWTValidationError("ID Token expired")
         } else if tokenObject.expiresAt.timeIntervalSinceNow < 0 {
             return OktaOidcError.JWTValidationError("ID Token expired")

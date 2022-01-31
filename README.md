@@ -185,6 +185,17 @@ if #available(iOS 13.0, *) {
 ```
 ***Note*** Flag is available on iOS 13 and above versions
 
+
+### Token Time Validation
+
+Custom token time validation is possible by adopting to `OKTTokenValidator` protocol and then setting `tokenValidator` variable: 
+
+```swift
+configuration?.tokenValidator = self
+```
+
+By default `OKTDefaultTokenValidator` object is set. 
+
 ### How to use in Objective-C project
 
 To use this SDK in Objective-C project, you should do the following:

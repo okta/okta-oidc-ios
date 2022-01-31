@@ -13,6 +13,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef NS_ENUM(NSInteger, OKTTokenType) {
+    OKTTokenTypeId,
+    OKTTokenTypeAccess,
+};
+
 /*! @brief Allows to custom logic/time source to verify a tokens issueAt/expiry time.
     @discussion More information could be found here: https://github.com/okta/okta-oidc-ios/blob/master/README.md#TODO.
  */
@@ -22,11 +27,11 @@
     @param issuedAt Tokens issuedAt Date.
     @return bool of result.
 */
-- (BOOL)isIssuedAtDateValid:(nullable NSDate *)issuedAt;
+- (BOOL)isIssuedAtDateValid:(nullable NSDate *)issuedAt token:(OKTTokenType)tokenType;
 
 /*! @brief Check expiry time using custom logic/time source.
     @param expiry Tokens expiry Date.
 */
-- (BOOL)isDateExpired:(nullable NSDate *)expiry;
+- (BOOL)isDateExpired:(nullable NSDate *)expiry token:(OKTTokenType)tokenType;
 
 @end

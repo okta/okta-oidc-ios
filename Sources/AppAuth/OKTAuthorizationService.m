@@ -612,7 +612,7 @@ originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorization
       NSAssert(validator != nil, @"Validator parameter is missed. Default will be used.");
       id<OKTTokenValidator> tokenValidator = validator ?: [OKTDefaultTokenValidator new];
 
-      if ([tokenValidator isDateExpired:idToken.expiresAt]) {
+      if ([tokenValidator isDateExpired:idToken.expiresAt token:OKTTokenTypeId]) {
         NSError *invalidIDToken =
         [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
                          underlyingError:nil
@@ -623,7 +623,7 @@ originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorization
         return;
       }
         
-      if (![tokenValidator isIssuedAtDateValid:idToken.issuedAt]) {
+      if (![tokenValidator isIssuedAtDateValid:idToken.issuedAt token:OKTTokenTypeId]) {
           NSString *message =
           [NSString stringWithFormat:@"Issued at time is invalid corresponding to the current time"];
           NSError *invalidIDToken =

@@ -15,28 +15,41 @@
 
 @implementation OKTDefaultTokenValidatorTests
 
-- (void)testDateExpiredValidation {
+- (void)testDateExpiredValidationIDToken {
     id<OKTTokenValidator> validator = [OKTDefaultTokenValidator new];
     
     // Future
-    XCTAssertFalse([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:100]]);
+    XCTAssertFalse([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:100] token:OKTTokenTypeId]);
     // Past
-    XCTAssertTrue([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:-100]]);
-    // Nil
-    XCTAssertFalse([validator isDateExpired:nil]);
+    XCTAssertTrue([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:-100] token:OKTTokenTypeId]);
+    // nil
+    XCTAssertTrue([validator isDateExpired:nil token:OKTTokenTypeId]);
 }
 
-- (void)testIssuedAtValidation {
+- (void)testIssuedAtValidationIDToken {
     id<OKTTokenValidator> validator = [OKTDefaultTokenValidator new];
     
     // Past
-    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:-100]]);
+    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:-100] token:OKTTokenTypeId]);
     // Now
-    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:0]]);
+    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:0] token:OKTTokenTypeId]);
     // Future
-    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:100]]);
+    XCTAssertTrue([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:100] token:OKTTokenTypeId]);
     // Max time
-    XCTAssertFalse([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:kOKTAuthorizationSessionIATMaxSkew + 1]]);
+    XCTAssertFalse([validator isIssuedAtDateValid:[NSDate dateWithTimeIntervalSinceNow:kOKTAuthorizationSessionIATMaxSkew + 1] token:OKTTokenTypeId]);
+    // nil
+    XCTAssertFalse([validator isIssuedAtDateValid:nil token:OKTTokenTypeId]);
+}
+
+- (void)testDateExpiredValidationAccessToken {
+    id<OKTTokenValidator> validator = [OKTDefaultTokenValidator new];
+    
+    // Future
+    XCTAssertFalse([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:100] token:OKTTokenTypeAccess]);
+    // Past
+    XCTAssertTrue([validator isDateExpired:[NSDate dateWithTimeIntervalSinceNow:-100] token:OKTTokenTypeAccess]);
+    // nil
+    XCTAssertTrue([validator isDateExpired:nil token:OKTTokenTypeAccess]);
 }
 
 @end
