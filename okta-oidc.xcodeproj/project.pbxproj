@@ -39,13 +39,14 @@
 		92AF826326209E1C004D157D /* OktaOidcHttpApiProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */; };
 		92B62A2D25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
 		92B62A2E25C41E59002CE64F /* OKTTokensAuthMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */; };
-		92C1DF5A27A15F1C003773F5 /* OKTDefaultTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF5827A15F1B003773F5 /* OKTDefaultTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92C1DF5B27A15F1C003773F5 /* OKTDefaultTokenValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C1DF5927A15F1B003773F5 /* OKTDefaultTokenValidator.m */; };
 		92C1DF5C27A2FA82003773F5 /* OKTDefaultTokenValidator.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C1DF5927A15F1B003773F5 /* OKTDefaultTokenValidator.m */; };
-		92C1DF5D27A2FA82003773F5 /* OKTDefaultTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF5827A15F1B003773F5 /* OKTDefaultTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92C1DF6027A459BC003773F5 /* OKTDefaultTokenValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C1DF5F27A459BC003773F5 /* OKTDefaultTokenValidatorTests.m */; };
 		92C1DF6127A47347003773F5 /* OKTDefaultTokenValidatorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 92C1DF5F27A459BC003773F5 /* OKTDefaultTokenValidatorTests.m */; };
-		92C1DF6227A47407003773F5 /* OKTTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = E16F73C7276FD39600F45AAC /* OKTTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92C1DF6427A84FDF003773F5 /* OKTDefaultTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF6327A84FDE003773F5 /* OKTDefaultTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92C1DF6527A84FDF003773F5 /* OKTDefaultTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF6327A84FDE003773F5 /* OKTDefaultTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92C1DF6727A84FFF003773F5 /* OKTTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF6627A84FFF003773F5 /* OKTTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		92C1DF6827A84FFF003773F5 /* OKTTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = 92C1DF6627A84FFF003773F5 /* OKTTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		92DB056B2751129E00B3714F /* OktaOidcErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DB05692751125C00B3714F /* OktaOidcErrorTests.swift */; };
 		9601C34C256DD14800C084F5 /* OktaRedirectServerConfigurationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889D2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift */; };
 		9601C34D256DD14800C084F5 /* OktaOidcBrowserTaskMACTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A167889F2433D0DB00D1651D /* OktaOidcBrowserTaskMACTests.swift */; };
@@ -288,7 +289,6 @@
 		DEBFB8E62507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */; };
 		DEBFB8E82507C53600A27026 /* URLSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBFB8E72507C53600A27026 /* URLSessionMock.swift */; };
 		DEE37AD125065C7300318DC3 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E16F73C8276FD39600F45AAC /* OKTTokenValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = E16F73C7276FD39600F45AAC /* OKTTokenValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2E1F3482501868E0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E2F6026625104F3000492BEC /* OktaOIDAuthStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */; };
 		E2FB61302536779800D26EDC /* OKTAuthorizationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -386,10 +386,11 @@
 		922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcHttpApiProtocol.swift; sourceTree = "<group>"; };
 		922628DA261B1F90002F6BC4 /* XCUIElement+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Utils.swift"; sourceTree = "<group>"; };
 		92B62A2C25C41E59002CE64F /* OKTTokensAuthMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OKTTokensAuthMock.swift; sourceTree = "<group>"; };
-		92C1DF5827A15F1B003773F5 /* OKTDefaultTokenValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OKTDefaultTokenValidator.h; sourceTree = "<group>"; };
 		92C1DF5927A15F1B003773F5 /* OKTDefaultTokenValidator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OKTDefaultTokenValidator.m; sourceTree = "<group>"; };
 		92C1DF5E27A459BC003773F5 /* OKTDefaultTokenValidatorTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OKTDefaultTokenValidatorTests.h; sourceTree = "<group>"; };
 		92C1DF5F27A459BC003773F5 /* OKTDefaultTokenValidatorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OKTDefaultTokenValidatorTests.m; sourceTree = "<group>"; };
+		92C1DF6327A84FDE003773F5 /* OKTDefaultTokenValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTDefaultTokenValidator.h; path = include/OKTDefaultTokenValidator.h; sourceTree = "<group>"; };
+		92C1DF6627A84FFF003773F5 /* OKTTokenValidator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTTokenValidator.h; path = include/OKTTokenValidator.h; sourceTree = "<group>"; };
 		92DB05692751125C00B3714F /* OktaOidcErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcErrorTests.swift; sourceTree = "<group>"; };
 		960961F925672EC40077978A /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		9671A102256F153900D0B03F /* OktaOidcBrowserProtocolIOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OktaOidcBrowserProtocolIOS.swift; path = Internal/OktaOidcBrowserProtocolIOS.swift; sourceTree = "<group>"; };
@@ -544,7 +545,6 @@
 		DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceRequestDelegateTests.swift; sourceTree = "<group>"; };
 		DEBFB8E52507C52400A27026 /* OktaNetworkRequestCustomizationDelegateMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaNetworkRequestCustomizationDelegateMock.swift; sourceTree = "<group>"; };
 		DEBFB8E72507C53600A27026 /* URLSessionMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionMock.swift; sourceTree = "<group>"; };
-		E16F73C7276FD39600F45AAC /* OKTTokenValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OKTTokenValidator.h; sourceTree = "<group>"; };
 		E2E1F3472501868D0001DDD5 /* OktaNetworkRequestCustomizationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OktaNetworkRequestCustomizationDelegate.h; path = include/OktaNetworkRequestCustomizationDelegate.h; sourceTree = "<group>"; };
 		E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOIDAuthStateTests.swift; sourceTree = "<group>"; };
 		E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTAuthorizationRequest.h; path = include/OKTAuthorizationRequest.h; sourceTree = "<group>"; };
@@ -888,8 +888,8 @@
 				A17E3846234CFEE700837873 /* OKTURLQueryComponent.m */,
 				A17E384E234CFEE800837873 /* OKTURLSessionProvider.h */,
 				A17E3856234CFEE900837873 /* OKTURLSessionProvider.m */,
-				E16F73C7276FD39600F45AAC /* OKTTokenValidator.h */,
-				92C1DF5827A15F1B003773F5 /* OKTDefaultTokenValidator.h */,
+				92C1DF6627A84FFF003773F5 /* OKTTokenValidator.h */,
+				92C1DF6327A84FDE003773F5 /* OKTDefaultTokenValidator.h */,
 				92C1DF5927A15F1B003773F5 /* OKTDefaultTokenValidator.m */,
 			);
 			name = Core;
@@ -1016,6 +1016,7 @@
 			files = (
 				A17E3887234CFEED00837873 /* OKTAuthorizationResponse.h in Headers */,
 				A17E387A234CFEED00837873 /* AppAuthCore.h in Headers */,
+				92C1DF6427A84FDF003773F5 /* OKTDefaultTokenValidator.h in Headers */,
 				A17E3893234CFEED00837873 /* OKTError.h in Headers */,
 				A17E38A3234CFEED00837873 /* OKTFieldMapping.h in Headers */,
 				A17E3890234CFEED00837873 /* OKTGrantTypes.h in Headers */,
@@ -1025,12 +1026,12 @@
 				A17E38B0234CFEED00837873 /* OKTIDToken.h in Headers */,
 				A17E38BB234CFF1E00837873 /* OKTAuthState+IOS.h in Headers */,
 				A17E38AC234CFEED00837873 /* OKTEndSessionRequest.h in Headers */,
-				92C1DF5A27A15F1C003773F5 /* OKTDefaultTokenValidator.h in Headers */,
 				A17E38AB234CFEED00837873 /* OKTServiceDiscovery.h in Headers */,
 				A17E389C234CFEED00837873 /* OKTURLQueryComponent.h in Headers */,
 				A17E3895234CFEED00837873 /* OKTScopes.h in Headers */,
 				A17E38A1234CFEED00837873 /* OKTClientMetadataParameters.h in Headers */,
 				A17E3891234CFEED00837873 /* OKTTokenUtilities.h in Headers */,
+				92C1DF6727A84FFF003773F5 /* OKTTokenValidator.h in Headers */,
 				A17E388A234CFEED00837873 /* OKTExternalUserAgentSession.h in Headers */,
 				A17E38AF234CFEED00837873 /* OKTTokenResponse.h in Headers */,
 				A17E388B234CFEED00837873 /* OKTExternalUserAgent.h in Headers */,
@@ -1041,7 +1042,6 @@
 				A17E3897234CFEED00837873 /* OKTResponseTypes.h in Headers */,
 				A17E3883234CFEED00837873 /* OKTAuthState.h in Headers */,
 				A17E3894234CFEED00837873 /* OKTErrorUtilities.h in Headers */,
-				E16F73C8276FD39600F45AAC /* OKTTokenValidator.h in Headers */,
 				A17E38AD234CFEED00837873 /* OKTAuthStateChangeDelegate.h in Headers */,
 				A17E3884234CFEED00837873 /* OKTServiceConfiguration.h in Headers */,
 				A17E38BA234CFF1E00837873 /* OKTExternalUserAgentIOS.h in Headers */,
@@ -1064,7 +1064,7 @@
 			files = (
 				A17E397A234D2EC900837873 /* OKTLoopbackHTTPServer.h in Headers */,
 				A17E397B234D2EC900837873 /* OKTAuthorizationService+Mac.h in Headers */,
-				92C1DF5D27A2FA82003773F5 /* OKTDefaultTokenValidator.h in Headers */,
+				92C1DF6527A84FDF003773F5 /* OKTDefaultTokenValidator.h in Headers */,
 				A17E397C234D2ECA00837873 /* OKTAuthState+Mac.h in Headers */,
 				A17E397D234D2ECA00837873 /* OKTExternalUserAgentMac.h in Headers */,
 				A17E397E234D2ECA00837873 /* OKTRedirectHTTPHandler.h in Headers */,
@@ -1079,7 +1079,7 @@
 				A17E395F234D2EAA00837873 /* OKTEndSessionRequest.h in Headers */,
 				A17E3960234D2EAA00837873 /* OKTEndSessionResponse.h in Headers */,
 				A17E3961234D2EAA00837873 /* OKTError.h in Headers */,
-				92C1DF6227A47407003773F5 /* OKTTokenValidator.h in Headers */,
+				92C1DF6827A84FFF003773F5 /* OKTTokenValidator.h in Headers */,
 				A17E3962234D2EAA00837873 /* OKTErrorUtilities.h in Headers */,
 				A17E3963234D2EAA00837873 /* OKTExternalUserAgent.h in Headers */,
 				A17E3964234D2EAA00837873 /* OKTExternalUserAgentRequest.h in Headers */,

@@ -22,6 +22,7 @@
 
 #if TARGET_OS_OSX
 
+#import "OKTDefaultTokenValidator.h"
 #import "OKTAuthState+Mac.h"
 
 #import "OKTExternalUserAgentMac.h"
@@ -35,7 +36,7 @@
     return [self authStateByPresentingAuthorizationRequest:authorizationRequest
                                          externalUserAgent:externalUserAgent
                                                   delegate:nil
-                                                 validator:nil
+                                                 validator:[OKTDefaultTokenValidator new]
                                                   callback:callback];
 }
 
