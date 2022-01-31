@@ -3,11 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		02BEF39800961644D6625169 /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B5B20D8A816C3CD500F31F /* Pods_Example.framework */; };
 		2F32CB51229D3A16003A6768 /* OktaOidcStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB07229D3A16003A6768 /* OktaOidcStateManager.swift */; };
 		2F32CB53229D3A16003A6768 /* OktaOidcUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB09229D3A16003A6768 /* OktaOidcUtils.swift */; };
 		2F32CB54229D3A16003A6768 /* OktaOidcKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F32CB0A229D3A16003A6768 /* OktaOidcKeychain.swift */; };
@@ -383,9 +382,6 @@
 		2F32CC7F229D4FC0003A6768 /* OktaOidcUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OktaOidcUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F32CC8A229D4FCD003A6768 /* OktaScenarios.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OktaScenarios.swift; sourceTree = "<group>"; };
 		2F32CC8B229D4FCD003A6768 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		42B5B20D8A816C3CD500F31F /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5628ECBD5E14791C5AB3E5D0 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		7F59FEF1C975EB399D0D7951 /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9226284226171FD3002F6BC4 /* XCTestCase+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCTestCase+Utils.swift"; sourceTree = "<group>"; };
 		922628782617553E002F6BC4 /* OktaOidcHttpApiProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcHttpApiProtocol.swift; sourceTree = "<group>"; };
 		922628DA261B1F90002F6BC4 /* XCUIElement+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCUIElement+Utils.swift"; sourceTree = "<group>"; };
@@ -543,7 +539,6 @@
 		A17E3A0E2358FA3200837873 /* OKTServiceDiscoveryTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OKTServiceDiscoveryTests.h; sourceTree = "<group>"; };
 		A17E3A0F2358FA3200837873 /* OKTTokenResponseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OKTTokenResponseTests.m; sourceTree = "<group>"; };
 		A17E3A2423592D6000837873 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A287C9203D3A9E51D47F514E /* Pods_okta_oidc.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_okta_oidc.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE10BAB1250A5CAF00655FF8 /* OIDAuthorizationServiceOktaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceOktaTests.swift; sourceTree = "<group>"; };
 		DEBFB8DF250797F600A27026 /* OktaOidcRestApiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOidcRestApiTests.swift; sourceTree = "<group>"; };
 		DEBFB8E22507A7A000A27026 /* OIDAuthorizationServiceRequestDelegateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDAuthorizationServiceRequestDelegateTests.swift; sourceTree = "<group>"; };
@@ -569,7 +564,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F32CCA3229D6801003A6768 /* OktaOidc.framework in Frameworks */,
-				02BEF39800961644D6625169 /* Pods_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -617,8 +611,6 @@
 				2F32CBE5229D4CF8003A6768 /* Tests */,
 				2F32CC89229D4FCD003A6768 /* UITests */,
 				2F32CA1F229D38D4003A6768 /* Products */,
-				2F32CBD2229D42D0003A6768 /* Frameworks */,
-				C74F16CAB954790EAA9B5653 /* Pods */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -680,15 +672,6 @@
 				2F32CBBC229D427A003A6768 /* Info.plist */,
 			);
 			path = Example;
-			sourceTree = "<group>";
-		};
-		2F32CBD2229D42D0003A6768 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				42B5B20D8A816C3CD500F31F /* Pods_Example.framework */,
-				A287C9203D3A9E51D47F514E /* Pods_okta_oidc.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		2F32CBE5229D4CF8003A6768 /* Tests */ = {
@@ -1024,15 +1007,6 @@
 			path = Internal;
 			sourceTree = "<group>";
 		};
-		C74F16CAB954790EAA9B5653 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7F59FEF1C975EB399D0D7951 /* Pods-Example.debug.xcconfig */,
-				5628ECBD5E14791C5AB3E5D0 /* Pods-Example.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -1157,13 +1131,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2F32CBAC229D4231003A6768 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
-				41934E630E8E987EC54BE830 /* [CP] Check Pods Manifest.lock */,
 				2F32CB99229D422F003A6768 /* Sources */,
 				2F32CB9A229D422F003A6768 /* Frameworks */,
 				2F32CB9B229D422F003A6768 /* Resources */,
 				2F32CCA9229D6B5A003A6768 /* Embed Frameworks */,
 				9226287226174662002F6BC4 /* Run script - SwiftLint */,
-				9220ADF2F6FBFAB74E71226A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1358,45 +1330,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		41934E630E8E987EC54BE830 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Example-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9220ADF2F6FBFAB74E71226A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Example/Pods-Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		9226287226174662002F6BC4 /* Run script - SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1892,7 +1825,6 @@
 		};
 		2F32CBAD229D4231003A6768 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F59FEF1C975EB399D0D7951 /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -1912,7 +1844,6 @@
 		};
 		2F32CBAE229D4231003A6768 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5628ECBD5E14791C5AB3E5D0 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

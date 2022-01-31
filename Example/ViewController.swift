@@ -12,8 +12,6 @@
 
 import OktaOidc
 import UIKit
-// uncomment to test TrueTime using the OktaCustomTokenValidator
-import TrueTime
 
 // swiftlint:disable force_try
 // swiftlint:disable force_cast
@@ -34,9 +32,6 @@ final class ViewController: UIViewController {
             authStateManager?.writeToSecureStorage()
         }
     }
-    
-    // uncomment to test TrueTime
-    private var trueTimeClient: TrueTime.TrueTimeClient?
     
     private var isUITest: Bool {
         return ProcessInfo.processInfo.environment["UITEST"] == "1"
@@ -60,8 +55,6 @@ final class ViewController: UIViewController {
         
         // uncomment to test TrueTime
         configuration?.tokenValidator = self
-        trueTimeClient = TrueTimeClient.sharedInstance
-        trueTimeClient?.start()
         
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
@@ -265,17 +258,21 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
  */
 extension ViewController: OKTTokenValidator {
     func isIssued(atDateValid issuedAt: Date?) -> Bool {
-        guard let issuedAt = issuedAt, let now = trueTimeClient?.referenceTime?.now() else {
+        guard let issuedAt = issuedAt else {
             return false
         }
         
-        return fabs(now.timeIntervalSince(issuedAt)) <= 600
+        let now = Date()
+        
+        return fabs(now.timeIntervalSince(issuedAt)) <= 200
     }
     
     func isDateExpired(_ expiry: Date?) -> Bool {
-        guard let expiry = expiry, let now = trueTimeClient?.referenceTime?.now() else {
+        guard let expiry = expiry else {
             return false
         }
+        
+        let now = Date()
 
         return now >= expiry
     }
