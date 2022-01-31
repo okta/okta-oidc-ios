@@ -67,7 +67,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
             redirectURL = self.config.redirectUri
         }
 
-        super.signIn(validator: config.idTokenValidator, callback: callback)
+        super.signIn(validator: config.tokenValidator, callback: callback)
     }
 
     override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {
