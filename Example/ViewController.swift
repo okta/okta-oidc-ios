@@ -53,7 +53,6 @@ final class ViewController: UIViewController {
         let configuration = try? OktaOidcConfig.default()
         configuration?.requestCustomizationDelegate = self
         
-        // uncomment to test TrueTime
         configuration?.tokenValidator = self
         
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
@@ -61,8 +60,6 @@ final class ViewController: UIViewController {
         if let config = oktaAppAuth?.configuration {
             authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
             authStateManager?.requestCustomizationDelegate = self
-            // uncomment to test TrueTime
-            authStateManager?.tokenValidator = self
         }
     }
 
@@ -251,11 +248,6 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
     }
 }
 
-/*
- * Simple TrueTime example to validate issuedAt and expiry time
- * https://github.com/instacart/TrueTime.swift#swift
- * uncomment to test TrueTime
- */
 extension ViewController: OKTTokenValidator {
     func isIssued(atDateValid issuedAt: Date?, token: OKTTokenType) -> Bool {
         guard let issuedAt = issuedAt else {
