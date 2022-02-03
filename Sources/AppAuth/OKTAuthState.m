@@ -32,6 +32,7 @@
 #import "OKTTokenRequest.h"
 #import "OKTTokenResponse.h"
 #import "OKTTokenUtilities.h"
+#import "OKTDefaultTokenValidator.h"
 
 /*! @brief Key used to encode the @c refreshToken property for @c NSSecureCoding.
  */
@@ -131,6 +132,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     authStateByPresentingAuthorizationRequest:(OKTAuthorizationRequest *)authorizationRequest
                             externalUserAgent:(id<OKTExternalUserAgent>)externalUserAgent
                                      delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                                    validator:(id<OKTTokenValidator> _Nonnull)validator
                                      callback:(OKTAuthStateAuthorizationCallback)callback {
   // presents the authorization request
   id<OKTExternalUserAgentSession> authFlowSession = [OKTAuthorizationService
@@ -151,6 +153,7 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                [OKTAuthorizationService performTokenRequest:tokenExchangeRequest
                                               originalAuthorizationResponse:authorizationResponse
                                                                    delegate:delegate
+                                                                  validator:validator
                                                                    callback:^(OKTTokenResponse * _Nullable tokenResponse, NSError * _Nullable tokenError) {
                                  OKTAuthState *authState;
                                  if (tokenResponse) {
@@ -199,7 +202,11 @@ static const NSUInteger kExpiryTimeTolerance = 60;
  */
 - (instancetype)initWithAuthorizationResponse:(OKTAuthorizationResponse *)authorizationResponse
                                          tokenResponse:(nullable OKTTokenResponse *)tokenResponse {
-    return [self initWithAuthorizationResponse:authorizationResponse tokenResponse:tokenResponse registrationResponse:nil delegate:nil];
+    return [self initWithAuthorizationResponse:authorizationResponse
+                                 tokenResponse:tokenResponse
+                          registrationResponse:nil
+                                      delegate:nil
+                                     validator:[OKTDefaultTokenValidator new]];
 }
 
 /*! @brief Creates an auth state from an registration response.
@@ -209,17 +216,20 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     return [self initWithAuthorizationResponse:nil
                                  tokenResponse:nil
                           registrationResponse:registrationResponse
-                                      delegate:nil];
+                                      delegate:nil
+                                     validator:[OKTDefaultTokenValidator new]];
 }
 
 - (instancetype)initWithAuthorizationResponse:
     (nullable OKTAuthorizationResponse *)authorizationResponse
            tokenResponse:(nullable OKTTokenResponse *)tokenResponse
                          registrationResponse:(nullable OKTRegistrationResponse *)registrationResponse
-                                     delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate {
+                                     delegate:(nullable id<OktaNetworkRequestCustomizationDelegate>)delegate
+                                    validator:(nonnull id<OKTTokenValidator>)validator {
   self = [super init];
   if (self) {
     _delegate = delegate;
+    _validator = validator;
     _pendingActionsSyncObject = [[NSObject alloc] init];
 
     if (registrationResponse) {
@@ -510,13 +520,14 @@ static const NSUInteger kExpiryTimeTolerance = 60;
     // creates a list of pending actions, starting with this one
     _pendingActions = [NSMutableArray arrayWithObject:pendingAction];
   }
-
+  
   // refresh the tokens
   OKTTokenRequest *tokenRefreshRequest =
       [self tokenRefreshRequestWithAdditionalParameters:additionalParameters];
   [OKTAuthorizationService performTokenRequest:tokenRefreshRequest
                  originalAuthorizationResponse:_lastAuthorizationResponse
                                       delegate:_delegate
+                                     validator:_validator
                                       callback:^(OKTTokenResponse *_Nullable response,
                                                  NSError *_Nullable error) {
     // update OKTAuthState based on response

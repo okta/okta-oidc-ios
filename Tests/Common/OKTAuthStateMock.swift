@@ -22,6 +22,7 @@ class OKTAuthStateMock: OKTAuthState {
     override class func authState(byPresenting authorizationRequest: OKTAuthorizationRequest,
                                   externalUserAgent: OKTExternalUserAgent,
                                   delegate: OktaNetworkRequestCustomizationDelegate?,
+                                  validator: OKTTokenValidator,
                                   callback: @escaping OKTAuthStateAuthorizationCallback) -> OKTExternalUserAgentSession {
         DispatchQueue.main.async {
             let authState = TestUtils.setupMockAuthState(issuer: TestUtils.mockIssuer, clientId: TestUtils.mockClientId)

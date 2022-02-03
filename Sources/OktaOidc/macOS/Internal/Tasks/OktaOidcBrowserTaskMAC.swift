@@ -53,9 +53,9 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
         didSet {
             self.redirectServer?.redirectHandler.currentAuthorizationFlow = userAgentSession
         }
-    } 
+    }
 
-    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
+    override func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil, validator: OKTTokenValidator, callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         if let redirectServer = self.redirectServer {
             do {
                 redirectURL = try redirectServer.startListener(with: domainName)
@@ -67,7 +67,7 @@ class OktaOidcBrowserTaskMAC: OktaOidcBrowserTask {
             redirectURL = self.config.redirectUri
         }
 
-        super.signIn(callback: callback)
+        super.signIn(validator: config.tokenValidator, callback: callback)
     }
 
     override func signOutWithIdToken(idToken: String, callback: @escaping (Void?, OktaOidcError?) -> Void) {

@@ -21,6 +21,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
     var userAgentSession: OKTExternalUserAgentSession?
     
     func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil,
+                validator: OKTTokenValidator,
                 callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfiguration = oidConfig else {
@@ -46,7 +47,8 @@ class OktaOidcBrowserTask: OktaOidcTask {
 
             let userAgentSession = self.authStateClass().authState(byPresenting: request,
                                                                    externalUserAgent: externalUserAgent,
-                                                                   delegate: delegate) { authorizationResponse, error in
+                                                                   delegate: delegate,
+                                                                   validator: validator) { authorizationResponse, error in
                 defer { self.userAgentSession = nil }
 
                 if let authResponse = authorizationResponse {

@@ -37,16 +37,12 @@
 #import "OKTTokenResponse.h"
 #import "OKTURLQueryComponent.h"
 #import "OKTURLSessionProvider.h"
+#import "OKTDefaultTokenValidator.h"
 
 /*! @brief Path appended to an OpenID Connect issuer for discovery
     @see https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig
  */
 static NSString *const kOpenIDConfigurationWellKnownPath = @".well-known/openid-configuration";
-
-/*! @brief Max allowable iat (Issued At) time skew
-    @see https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation
- */
-static int const kOKTAuthorizationSessionIATMaxSkew = 600;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -425,12 +421,17 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)performTokenRequest:(OKTTokenRequest *)request
                    delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
                    callback:(OKTTokenCallback)callback {
-    [[self class] performTokenRequest:request originalAuthorizationResponse:nil delegate:delegate callback:callback];
+    [[self class] performTokenRequest:request
+        originalAuthorizationResponse:nil
+                             delegate:delegate
+                            validator:[[OKTDefaultTokenValidator alloc] init]
+                             callback:callback];
 }
 
 + (void)performTokenRequest:(OKTTokenRequest *)request
 originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorizationResponse
                    delegate:(id<OktaNetworkRequestCustomizationDelegate> _Nullable)delegate
+                  validator:(id<OKTTokenValidator> _Nonnull)validator
                    callback:(OKTTokenCallback)callback {
 
   NSURLRequest *URLRequest = [request URLRequest];
@@ -607,37 +608,32 @@ originalAuthorizationResponse:(OKTAuthorizationResponse *_Nullable)authorization
 
       // OpenID Connect Core Section 3.1.3.7. rules #7 & #8
       // Not applicable. See rule #6.
+      
+      NSAssert(validator != nil, @"Validator parameter is missed. Default will be used.");
+      id<OKTTokenValidator> tokenValidator = validator ?: [OKTDefaultTokenValidator new];
 
-      // OpenID Connect Core Section 3.1.3.7. rule #9
-      // Validates that the current time is before the expiry time.
-      NSTimeInterval expiresAtDifference = [idToken.expiresAt timeIntervalSinceNow];
-      if (expiresAtDifference < 0) {
+      if ([tokenValidator isDateExpired:idToken.expiresAt token:OKTTokenTypeId]) {
         NSError *invalidIDToken =
-            [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
-                             underlyingError:nil
-                                 description:@"ID Token expired"];
+        [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
+                         underlyingError:nil
+                             description:@"ID Token expired"];
         dispatch_async(dispatch_get_main_queue(), ^{
           callback(nil, invalidIDToken);
         });
         return;
       }
-      
-      // OpenID Connect Core Section 3.1.3.7. rule #10
-      // Validates that the issued at time is not more than +/- 10 minutes on the current time.
-      NSTimeInterval issuedAtDifference = [idToken.issuedAt timeIntervalSinceNow];
-      if (fabs(issuedAtDifference) > kOKTAuthorizationSessionIATMaxSkew) {
-        NSString *message =
-            [NSString stringWithFormat:@"Issued at time is more than %d seconds before or after "
-                                        "the current time",
-                                       kOKTAuthorizationSessionIATMaxSkew];
-        NSError *invalidIDToken =
+        
+      if (![tokenValidator isIssuedAtDateValid:idToken.issuedAt token:OKTTokenTypeId]) {
+          NSString *message =
+          [NSString stringWithFormat:@"Issued at time is invalid corresponding to the current time"];
+          NSError *invalidIDToken =
           [OKTErrorUtilities errorWithCode:OKTErrorCodeIDTokenFailedValidationError
                            underlyingError:nil
                                description:message];
-        dispatch_async(dispatch_get_main_queue(), ^{
-          callback(nil, invalidIDToken);
-        });
-        return;
+          dispatch_async(dispatch_get_main_queue(), ^{
+              callback(nil, invalidIDToken);
+          });
+          return;
       }
 
       // Only relevant for the authorization_code response type

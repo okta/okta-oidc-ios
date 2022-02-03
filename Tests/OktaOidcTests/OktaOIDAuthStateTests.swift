@@ -51,7 +51,7 @@ class OktaOKTAuthStateTests: XCTestCase {
         ]
 
         OKTURLSessionProvider.setSession(networkMock)
-        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock) { (state, _) in
+        OKTAuthState.getState(withAuthRequest: requestMock, delegate: delegateMock, validator: OKTDefaultTokenValidator()) { (state, _) in
             let stateDelegate = state?.delegate
             XCTAssertEqual(stateDelegate as! OktaNetworkRequestCustomizationDelegateMock, delegateMock)
             authStateExpectation.fulfill()

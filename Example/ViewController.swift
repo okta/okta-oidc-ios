@@ -52,9 +52,11 @@ final class ViewController: UIViewController {
         
         let configuration = try? OktaOidcConfig.default()
         configuration?.requestCustomizationDelegate = self
+        
+        configuration?.tokenValidator = self
+        
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
-        
         if let config = oktaAppAuth?.configuration {
             authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
             authStateManager?.requestCustomizationDelegate = self
@@ -117,21 +119,43 @@ final class ViewController: UIViewController {
 
     @IBAction func introspectButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = authStateManager?.accessToken else { return }
-
-        authStateManager?.introspect(token: accessToken, callback: { payload, error in
-            guard let isValid = payload?["active"] as? Bool else {
-                self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
-                return
+        var accessToken = authStateManager?.accessToken
+        if accessToken == nil {
+            authStateManager?.renew { newAuthStateManager, error in
+                if let error = error {
+                    // Error
+                    print("Error trying to Refresh AccessToken: \(error)")
+                    return
+                }
+                self.authStateManager = newAuthStateManager
+                accessToken = newAuthStateManager?.accessToken
+                
+                self.authStateManager?.introspect(token: accessToken, callback: { payload, error in
+                    guard let isValid = payload?["active"] as? Bool else {
+                        self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
+                        return
+                    }
+                    
+                    self.showMessage("Is the AccessToken valid? - \(isValid)")
+                })
             }
-            
-            self.showMessage("Is the AccessToken valid? - \(isValid)")
-        })
+        } else {
+            authStateManager?.introspect(token: accessToken, callback: { payload, error in
+                guard let isValid = payload?["active"] as? Bool else {
+                    self.showMessage("Error: \(error?.localizedDescription ?? "Unknown")")
+                    return
+                }
+
+                self.showMessage("Is the AccessToken valid? - \(isValid)")
+            })
+        }
     }
 
     @IBAction func revokeButton(_ sender: Any) {
         // Get current accessToken
-        guard let accessToken = authStateManager?.accessToken else { return }
+        guard let accessToken = authStateManager?.accessToken else {
+            return
+        }
 
         authStateManager?.revoke(accessToken) { _, error in
             if error != nil { self.showMessage("Error: \(error!)") }
@@ -221,6 +245,28 @@ extension ViewController: OktaNetworkRequestCustomizationDelegate {
         if let response = response {
             print("response: \(response)")
         }
+    }
+}
+
+extension ViewController: OKTTokenValidator {
+    func isIssued(atDateValid issuedAt: Date?, token: OKTTokenType) -> Bool {
+        guard let issuedAt = issuedAt else {
+            return false
+        }
+        
+        let now = Date()
+        
+        return fabs(now.timeIntervalSince(issuedAt)) <= 200
+    }
+    
+    func isDateExpired(_ expiry: Date?, token tokenType: OKTTokenType) -> Bool {
+        guard let expiry = expiry else {
+            return false
+        }
+        
+        let now = Date()
+
+        return now >= expiry
     }
 }
 

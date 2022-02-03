@@ -21,6 +21,7 @@ class OKTAuthStateMACMock: OKTAuthState {
     override class func authState(byPresenting authorizationRequest: OKTAuthorizationRequest,
                                   externalUserAgent: OKTExternalUserAgent,
                                   delegate: OktaNetworkRequestCustomizationDelegate?,
+                                  validator: OKTTokenValidator,
                                   callback: @escaping OKTAuthStateAuthorizationCallback) -> OKTExternalUserAgentSession {
         DispatchQueue.main.async {
             // http://127.0.0.1:60000/ - is intended for cancellation tests
