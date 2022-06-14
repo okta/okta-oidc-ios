@@ -33,8 +33,13 @@ public class OktaOidcConfig: NSObject {
     
     @objc public var tokenValidator: OKTTokenValidator = OKTDefaultTokenValidator()
     
+    private var _noSSO = false
+    
     @available(iOS 13.0, *)
-    @objc public lazy var noSSO = false
+    @objc public var noSSO: Bool {
+        get { _noSSO }
+        set { _noSSO = newValue }
+    }
     
     @objc public let additionalParams: [String: String]?
 
