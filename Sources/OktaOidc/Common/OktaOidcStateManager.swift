@@ -308,3 +308,19 @@ private extension OktaOidcStateManager {
         })
     }
 }
+
+@objc public extension OktaOidcStateManager {
+    @objc class func throwingReadFromSecureStorage(for config: OktaOidcConfig) throws -> OktaOidcStateManager {
+        return try throwingReadFromSecureStorage(forKey: config.clientId)
+    }
+    
+    private class func throwingReadFromSecureStorage(forKey secureStorageKey: String) throws -> OktaOidcStateManager {
+        let encodedAuthState: Data = try OktaOidcKeychain.get(key: secureStorageKey)
+        prepareKeyedArchiver()
+        let anyState = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState)
+        guard let state = anyState as? OktaOidcStateManager else {
+            throw OktaOidcError.errorUnarchivingStateManager(secureStorageKey)
+        }
+        return state
+    }
+}

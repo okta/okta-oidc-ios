@@ -41,6 +41,8 @@ public enum OktaOidcError: CustomNSError {
     case unableToGetAuthCode
     case unableToOpenBrowser // macOS specific
     
+    case errorUnarchivingStateManager(String)
+    
     public static var errorDomain: String = "\(Self.self)"
     
     /// Most of errors returns the general error code.
@@ -132,7 +134,8 @@ extension OktaOidcError: LocalizedError {
             return NSLocalizedString("Unable to get location header.", comment: "")
         case .unableToOpenBrowser:
             return NSLocalizedString("Error triggering authorization flow in default system browser. NSWorkspace.openURL returned false.", comment: "")
-
+        case .errorUnarchivingStateManager(let storageKey):
+            return NSLocalizedString("Unarchived object for storage key \(storageKey) but could not cast to OktaOidcStateManager", comment: "")
         }
     }
 }
