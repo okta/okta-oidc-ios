@@ -1,0 +1,9 @@
+test_suites:
+  - name: sast_scan
+    script_path: /root/okta/okta-oidc-ios/scripts
+    script_name: sast_scan
+    sort_order: '1'
+    timeout: '200'
+    criteria: MERGE
+    queue_name: small
+    trigger: AUTO
