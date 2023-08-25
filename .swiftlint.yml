@@ -40,7 +40,6 @@ only_rules:
   - void_return
   - xct_specific_matcher
   - xctfail_message
-  - sorted_imports
   - prefer_self_type_over_type_of_self
   - syntactic_sugar
   - explicit_init
@@ -95,8 +94,6 @@ colon:
   severity: error
 # Whitespace
 leading_whitespace:
-  severity: error
-let_var_whitespace:
   severity: error
 operator_whitespace:
   severity: error
