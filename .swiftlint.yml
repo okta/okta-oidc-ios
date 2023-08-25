@@ -98,7 +98,7 @@ leading_whitespace:
 operator_whitespace:
   severity: error
 operator_usage_whitespace:
-  severity: error
+  severity: warning
 return_arrow_whitespace:
   severity: error
 # Empty
