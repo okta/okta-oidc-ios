@@ -109,7 +109,7 @@ public class OktaOidcConfig: NSObject {
 
     class URLHandler: URLProtocol {
 
-    private static let requestIdentifier = "com.lyra.dev.lyrawebmobile"
+        private static let requestIdentifier = Bundle.main.bundleIdentifier ?? "unknown bundle identifier"
         
         class RuntimeError: Error {
             init(_ error: String) {
@@ -117,8 +117,7 @@ public class OktaOidcConfig: NSObject {
         }
 
     override class func canInit(with request: URLRequest) -> Bool {
-        NSLog("\(request.url?.scheme ?? " NO SCHEME") LOOK HERE BRYAN")
-        guard request.url?.scheme == "com.lyra.dev.lyrawebmobile" else {
+        guard request.url?.scheme == requestIdentifier && request.url?.scheme != "unknown bundle identifier" else {
         return false
         }
 
