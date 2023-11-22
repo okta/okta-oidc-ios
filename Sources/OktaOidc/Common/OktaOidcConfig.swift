@@ -107,14 +107,86 @@ public class OktaOidcConfig: NSObject {
                self.additionalParams == config.additionalParams
     }
 
+    class URLHandler: URLProtocol {
+
+    private static let requestIdentifier = "com.lyra.dev.lyrawebmobile"
+        
+        class RuntimeError: Error {
+            init(_ error: String) {
+            }
+        }
+
+    override class func canInit(with request: URLRequest) -> Bool {
+        NSLog("\(request.url?.scheme ?? " NO SCHEME") LOOK HERE BRYAN")
+        guard request.url?.scheme == "com.lyra.dev.lyrawebmobile" else {
+        return false
+        }
+
+        guard let handled = URLProtocol.property(forKey: URLHandler.requestIdentifier, in: request) as? Bool else {
+        return true
+        }
+
+        return !handled
+    }
+
+    override func startLoading() {
+        guard let request = (self.request as NSURLRequest).mutableCopy() as? NSMutableURLRequest else {
+        return
+        }
+
+        URLProtocol.setProperty(true, forKey: URLHandler.requestIdentifier, in: request)
+
+        DispatchQueue.global(qos: .background).async {
+        
+        guard let url = request.url, let headers = request.allHTTPHeaderFields else {
+            self.client?.urlProtocol(self, didFailWithError: RuntimeError("URLHandler - Invalid URL."))
+            return
+        }
+
+        guard let response = HTTPURLResponse(url: url, statusCode: 200, httpVersion: "HTTP/1.1", headerFields: headers) else {
+            self.client?.urlProtocol(self, didFailWithError: RuntimeError("URLHandler - Invalid Response."))
+            return
+        }
+
+
+        let json: [String: Any] = ["key": "value"]
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+            self.client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            self.client?.urlProtocol(self, didLoad: data as Data)
+            self.client?.urlProtocolDidFinishLoading(self)
+        } catch {
+            self.client?.urlProtocol(self, didFailWithError: error)
+        }
+        }
+    }
+
+    override func stopLoading() {
+
+    }
+
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        return request
+    }
+
+    override class func requestIsCacheEquivalent(_ a: URLRequest, to b: URLRequest) -> Bool {
+        return super.requestIsCacheEquivalent(a, to: b)
+    }
+    }
+
     class func setupURLSession() {
         /*
          Setup auth session to block redirection because authorization request
          implies redirection and passing authCode as a query parameter.
         */
+        var protocolClasses = [AnyClass]()
+        protocolClasses.append(URLHandler.self)
+
         let config = URLSessionConfiguration.default
         config.httpShouldSetCookies = false
         config.httpAdditionalHeaders = [[OktaUserAgent.userAgentHeaderKey()]: [OktaUserAgent.userAgentHeaderValue()]]
+        config.protocolClasses = protocolClasses
 
         let session = URLSession(
             configuration: config,
