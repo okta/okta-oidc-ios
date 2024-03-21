@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
 Integrate your native app with Okta using the AppAuth library.
                        DESC
-  s.platforms    = { :ios => "11.0", :osx => "10.10"}
+  s.platforms    = { :ios => "11.0", :osx => "10.14"}
   s.homepage         = 'https://github.com/okta/okta-oidc-ios'
   s.license          = { :type => 'APACHE2', :file => 'LICENSE' }
   s.authors          = { "Okta Developers" => "developer@okta.com"}
@@ -15,7 +15,7 @@ Integrate your native app with Okta using the AppAuth library.
   s.subspec 'AppAuth' do |appauth|
      appauth.source_files = 'Sources/AppAuth/**/*.{h,m}'
      appauth.ios.deployment_target = '11.0'
-     appauth.osx.deployment_target = '10.10'
+     appauth.osx.deployment_target = '10.14'
   end
 
   s.subspec 'Okta' do |okta|
@@ -23,7 +23,7 @@ Integrate your native app with Okta using the AppAuth library.
      okta.source_files = 'Sources/OktaOidc/**/*.{h,swift}'
      okta.exclude_files = 'Sources/OktaOidc/Common/Exports.swift'
      okta.ios.deployment_target = '11.0'
-     okta.osx.deployment_target = '10.10'
+     okta.osx.deployment_target = '10.14'
   end
 
   s.xcconfig = { 'USER_HEADER_SEARCH_PATHS' => '${SRCROOT}/Sources/**' }
