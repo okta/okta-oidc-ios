@@ -128,6 +128,30 @@ static NSString *const kHTMLErrorRedirectNotValid =
 }
 
 - (void)HTTPConnection:(HTTPConnection *)conn didReceiveRequest:(HTTPServerRequest *)mess {
+  // Handle private network preflight
+  // https://developer.chrome.com/blog/private-network-access-preflight/
+  CFStringRef method = CFHTTPMessageCopyRequestMethod(mess.request);
+  BOOL isOptionsRequest = CFStringCompare(method, (__bridge CFStringRef)@"OPTIONS", 0) == kCFCompareEqualTo;
+
+  CFStringRef requestPrivateNetwork = isOptionsRequest ? CFHTTPMessageCopyHeaderFieldValue(mess.request, (__bridge CFStringRef)@"Access-Control-Request-Private-Network") : nil;
+  BOOL doesRequestPrivateNetwork = requestPrivateNetwork != nil && CFStringCompare(requestPrivateNetwork, (__bridge CFStringRef)@"true", 0) == kCFCompareEqualTo;
+  if (isOptionsRequest && doesRequestPrivateNetwork) {
+    CFHTTPMessageRef response = CFHTTPMessageCreateResponse(
+                                                            kCFAllocatorDefault,
+                                                            200,
+                                                            NULL,
+                                                            kCFHTTPVersion1_1);
+    CFHTTPMessageSetHeaderFieldValue(response,
+                                     (__bridge CFStringRef)@"Access-Control-Allow-Private-Network",
+                                     (__bridge CFStringRef)@"true");
+    CFHTTPMessageSetHeaderFieldValue(response,
+                                     (__bridge CFStringRef)@"Content-Length",
+                                     (__bridge CFStringRef)@"0");
+    [mess setResponse:response];
+    CFRelease(response);
+      return;
+  }
+
   // Sends URL to AppAuth.
   CFURLRef url = CFHTTPMessageCopyRequestURL(mess.request);
   BOOL handled = [_currentAuthorizationFlow resumeExternalUserAgentFlowWithURL:(__bridge NSURL *)url];
