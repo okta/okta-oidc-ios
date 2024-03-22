@@ -141,6 +141,13 @@ static NSString *const kHTMLErrorRedirectNotValid =
                                                             200,
                                                             NULL,
                                                             kCFHTTPVersion1_1);
+    CFStringRef origin = CFHTTPMessageCopyHeaderFieldValue(mess.request, (__bridge CFStringRef)@"Origin");
+    CFHTTPMessageSetHeaderFieldValue(response,
+                                     (__bridge CFStringRef)@"Access-Control-Allow-Origin",
+                                     origin);
+    CFHTTPMessageSetHeaderFieldValue(response,
+                                     (__bridge CFStringRef)@"Access-Control-Allow-Credentials",
+                                     (__bridge CFStringRef)@"true");
     CFHTTPMessageSetHeaderFieldValue(response,
                                      (__bridge CFStringRef)@"Access-Control-Allow-Private-Network",
                                      (__bridge CFStringRef)@"true");
@@ -149,7 +156,7 @@ static NSString *const kHTMLErrorRedirectNotValid =
                                      (__bridge CFStringRef)@"0");
     [mess setResponse:response];
     CFRelease(response);
-      return;
+    return;
   }
 
   // Sends URL to AppAuth.
