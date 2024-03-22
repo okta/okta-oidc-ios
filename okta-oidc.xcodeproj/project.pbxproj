@@ -1782,7 +1782,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
@@ -1812,7 +1812,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
@@ -1834,7 +1834,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1853,7 +1853,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.okta.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -1960,7 +1960,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
@@ -1987,7 +1987,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.11.3;
+				MARKETING_VERSION = 3.11.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
