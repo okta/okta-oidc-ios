@@ -38,6 +38,9 @@ let package = Package(
         .target(name: "OktaOidc",
                 dependencies: [
                     "OktaOidc_AppAuth"
+                ],
+                resources: [
+                    .process("Resources")
                 ]),
     ] + [
         .target(name: "TestCommon",
