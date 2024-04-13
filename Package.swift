@@ -40,7 +40,7 @@ let package = Package(
                     "OktaOidc_AppAuth"
                 ],
                 resources: [
-                    .process("Resources")
+                    .process("Common/Resources")
                 ]),
     ] + [
         .target(name: "TestCommon",
