@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 /*
@@ -38,6 +38,9 @@ let package = Package(
         .target(name: "OktaOidc",
                 dependencies: [
                     "OktaOidc_AppAuth"
+                ],
+                resources: [
+                    .process("Common/Resources")
                 ]),
     ] + [
         .target(name: "TestCommon",
