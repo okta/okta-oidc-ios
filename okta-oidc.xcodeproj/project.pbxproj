@@ -297,6 +297,7 @@
 		E2FB61312536779800D26EDC /* OKTAuthorizationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FB612E2536779800D26EDC /* OKTAuthorizationRequest.m */; };
 		E2FB61322536779800D26EDC /* OKTAuthorizationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = E2FB612E2536779800D26EDC /* OKTAuthorizationRequest.m */; };
 		E2FB61422536785200D26EDC /* OKTAuthorizationRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F05AE8372C5874850052CB99 /* OKTRedirectHTTPHandlerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F05AE8362C5874850052CB99 /* OKTRedirectHTTPHandlerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -552,6 +553,7 @@
 		E2F6026525104F3000492BEC /* OktaOIDAuthStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OktaOIDAuthStateTests.swift; sourceTree = "<group>"; };
 		E2FB612D2536779800D26EDC /* OKTAuthorizationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OKTAuthorizationRequest.h; path = include/OKTAuthorizationRequest.h; sourceTree = "<group>"; };
 		E2FB612E2536779800D26EDC /* OKTAuthorizationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OKTAuthorizationRequest.m; sourceTree = "<group>"; };
+		F05AE8362C5874850052CB99 /* OKTRedirectHTTPHandlerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OKTRedirectHTTPHandlerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -723,6 +725,7 @@
 				A17E39F62358FA3000837873 /* OKTURLSessionProviderTests.m */,
 				92C1DF5E27A459BC003773F5 /* OKTDefaultTokenValidatorTests.h */,
 				92C1DF5F27A459BC003773F5 /* OKTDefaultTokenValidatorTests.m */,
+				F05AE8362C5874850052CB99 /* OKTRedirectHTTPHandlerTests.m */,
 			);
 			path = AppAuthTests;
 			sourceTree = "<group>";
@@ -1578,6 +1581,7 @@
 				A167889C2432CDD800D1651D /* OKTRedirectHTTPHandlerMock.swift in Sources */,
 				A167889E2433C7B500D1651D /* OktaRedirectServerConfigurationTests.swift in Sources */,
 				92C1DF6127A47347003773F5 /* OKTDefaultTokenValidatorTests.m in Sources */,
+				F05AE8372C5874850052CB99 /* OKTRedirectHTTPHandlerTests.m in Sources */,
 				A16788C22436B1DF00D1651D /* OKTExternalUserAgentSessionMock.swift in Sources */,
 				9601C356256DD14900C084F5 /* OIDExternalUserAgentNoSsoTests.swift in Sources */,
 				A16788AE243567A400D1651D /* OktaOidcBrowserTaskMacMock.swift in Sources */,
@@ -1796,7 +1800,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.5;
+				MARKETING_VERSION = 3.11.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
@@ -1826,7 +1830,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.11.5;
+				MARKETING_VERSION = 3.11.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SKIP_INSTALL = YES;
@@ -1974,7 +1978,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.11.5;
+				MARKETING_VERSION = 3.11.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;
@@ -2001,7 +2005,7 @@
 					"@loader_path/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.14;
-				MARKETING_VERSION = 3.11.5;
+				MARKETING_VERSION = 3.11.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.okta.okta-oidc";
 				PRODUCT_NAME = OktaOidc;
 				SDKROOT = macosx;

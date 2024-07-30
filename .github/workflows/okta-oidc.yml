@@ -8,27 +8,27 @@ on:
 
 jobs:
   UnitTests:
-    runs-on: macos-11
+    runs-on: macos-latest
     env:
-      DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
     steps:
     - uses: actions/checkout@v2
     - name: iOS
-      run: set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+      run: set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-ios" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15" clean test | xcpretty
     - name: macOS
       run: set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc-mac" -destination "platform=macOS" clean test | xcpretty
     - name: Swift
       run: swift test -v
   UITests:
-    runs-on: macos-11
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: iOS
-      run: set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 11" clean test | xcpretty
+      run: set -o pipefail && xcodebuild -project okta-oidc.xcodeproj -scheme "okta-oidc" -destination "platform=iOS Simulator,OS=latest,name=iPhone 15" clean test | xcpretty
   PackageValidation:
-    runs-on: macos-11
+    runs-on: macos-latest
     env:
-      DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_15.4.app/Contents/Developer
     steps:
     - uses: actions/checkout@v2
     - name: Cocoapods
