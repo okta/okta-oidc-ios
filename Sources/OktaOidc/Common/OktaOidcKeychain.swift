@@ -56,9 +56,19 @@ public class OktaOidcKeychain: NSObject {
         SecItemDelete(cfDictionary)
         
         let sanityCheck = SecItemAdd(cfDictionary, nil)
-        if sanityCheck != noErr {
-            throw OktaOidcKeychainError.failed(sanityCheck.description)
-        }        
+        if sanityCheck != errSecSuccess {
+            var message: String = ""
+            if #available(iOSApplicationExtension 11.3, *) {
+                let message = SecCopyErrorMessageString(sanityCheck, nil) as String? ?? "Unknown error"
+            } else {
+                let message = "Keychain error (status: \(sanityCheck))"
+            }
+            let errorDesc = "Keychain set failed (status: \(sanityCheck)) - \(message)"
+            print("❌ [Keychain] \(errorDesc)")
+            throw OktaOidcKeychainError.failed(errorDesc)
+        } else {
+            print("✅ [Keychain] Successfully stored item for key: \(key)")
+        }
     }
     
     /**

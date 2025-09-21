@@ -29,7 +29,11 @@ final class ViewController: UIViewController {
     private var oktaAppAuth: OktaOidc?
     private var authStateManager: OktaOidcStateManager? {
         didSet {
-            authStateManager?.writeToSecureStorage()
+            do {
+                try authStateManager?.writeToSecureStorage()
+            } catch {
+                print("Error writeToSecureStorage")
+            }
         }
     }
     
@@ -58,7 +62,11 @@ final class ViewController: UIViewController {
         oktaAppAuth = try? OktaOidc(configuration: isUITest ? testConfig : configuration)
         AppDelegate.shared.oktaOidc = oktaAppAuth
         if let config = oktaAppAuth?.configuration {
-            authStateManager = OktaOidcStateManager.readFromSecureStorage(for: config)
+            do {
+                authStateManager = try OktaOidcStateManager.readFromSecureStorage(for: config)
+            } catch {
+                print("Error readFromSecureStorage")
+            }
             authStateManager?.requestCustomizationDelegate = self
         }
     }

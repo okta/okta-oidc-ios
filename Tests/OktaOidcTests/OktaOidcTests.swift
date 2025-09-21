@@ -212,8 +212,10 @@ extension OktaOidcTests {
         }
         let viewController = UIViewController(nibName: nil, bundle: nil)
         let options: OktaSignOutOptions = [.revokeAccessToken, .revokeRefreshToken, .removeTokensFromStorage]
-        authStateManager.writeToSecureStorage()
-        guard OktaOidcStateManager.readFromSecureStorage(for: createDummyConfig()!) != nil else {
+        try? authStateManager.writeToSecureStorage()
+        do {
+            try OktaOidcStateManager.readFromSecureStorage(for: createDummyConfig()!)
+        } catch {
             XCTFail("Failed to read from secure storage")
             return
         }
@@ -236,8 +238,12 @@ extension OktaOidcTests {
             XCTAssertEqual(numberOfRevokes, 2)
             XCTAssertTrue(result)
             XCTAssertTrue(failedOptions.isEmpty)
-            if OktaOidcStateManager.readFromSecureStorage(for: self.createDummyConfig()!) != nil {
+            do {
+                try OktaOidcStateManager.readFromSecureStorage(for: self.createDummyConfig()!)
                 XCTFail("Data has not been deleted from the secure storage")
+            } catch {
+                XCTFail("Failed to read from secure storage")
+                return
             }
             expectation.fulfill()
         })

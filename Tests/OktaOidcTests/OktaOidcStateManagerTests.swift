@@ -366,11 +366,11 @@ class OktaOidcStateManagerTests: XCTestCase {
     func runTestReadWriteToSecureStorage(with config: OktaOidcConfig) {
         let manager = TestUtils.setupMockAuthStateManager(issuer: config.issuer, clientId: config.clientId, expiresIn: 5)
         
-        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
+        XCTAssertNil(try? OktaOidcStateManager.readFromSecureStorage(for: config))
         
-        manager.writeToSecureStorage()
+        try? manager.writeToSecureStorage()
         
-        let storedManager = OktaOidcStateManager.readFromSecureStorage(for: config)
+        let storedManager = try? OktaOidcStateManager.readFromSecureStorage(for: config)
         XCTAssertNotNil(storedManager)
         XCTAssertEqual(
             storedManager?.authState.lastAuthorizationResponse.accessToken,
@@ -382,7 +382,7 @@ class OktaOidcStateManagerTests: XCTestCase {
         )
 
         XCTAssertNoThrow(try manager.removeFromSecureStorage())
-        XCTAssertNil(OktaOidcStateManager.readFromSecureStorage(for: config))
+        XCTAssertNil(try? OktaOidcStateManager.readFromSecureStorage(for: config))
     }
     #endif
 }

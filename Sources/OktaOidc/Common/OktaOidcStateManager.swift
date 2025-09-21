@@ -191,50 +191,46 @@ open class OktaOidcStateManager: NSObject, NSSecureCoding {
 @objc public extension OktaOidcStateManager {
 
     @available(*, deprecated, message: "Please use readFromSecureStorage(for config: OktaOidcConfig) function")
-    class func readFromSecureStorage() -> OktaOidcStateManager? {
-        return readFromSecureStorage(forKey: "OktaAuthStateManager")
+    class func readFromSecureStorage() throws -> OktaOidcStateManager {
+        return try readFromSecureStorage(forKey: "OktaAuthStateManager")
     }
 
-    @objc class func readFromSecureStorage(for config: OktaOidcConfig) -> OktaOidcStateManager? {
-        return readFromSecureStorage(forKey: config.clientId)
+    @objc class func readFromSecureStorage(for config: OktaOidcConfig) throws -> OktaOidcStateManager {
+        return try readFromSecureStorage(forKey: config.clientId)
     }
     
-    @objc func writeToSecureStorage() {
+    @objc func writeToSecureStorage() throws {
         let authStateData: Data
-        do {
-            if #available(iOS 11, OSX 10.14, *) {
-                authStateData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
-            } else {
-                authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
-            }
-
-            try OktaOidcKeychain.set(
-                key: self.clientId,
-                data: authStateData,
-                accessibility: self.accessibility
-            )
-        } catch let error {
-            print("Error: \(error)")
+        if #available(iOS 11, OSX 10.14, *) {
+            authStateData = try NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
+        } else {
+            authStateData = NSKeyedArchiver.archivedData(withRootObject: self)
         }
+        
+        try OktaOidcKeychain.set(
+            key: self.clientId,
+            data: authStateData,
+            accessibility: self.accessibility
+        )
     }
     
-    private class func readFromSecureStorage(forKey secureStorageKey: String) -> OktaOidcStateManager? {
-        guard let encodedAuthState: Data = try? OktaOidcKeychain.get(key: secureStorageKey) else {
-            return nil
-        }
-
-        let state: OktaOidcStateManager?
+    private class func readFromSecureStorage(forKey secureStorageKey: String) throws -> OktaOidcStateManager {
+        let encodedAuthState: Data = try OktaOidcKeychain.get(key: secureStorageKey)
         prepareKeyedArchiver()
-      
+        
         if #available(iOS 11, OSX 10.14, *) {
-            state = (try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState)) as? OktaOidcStateManager
+            guard let state = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(encodedAuthState) as? OktaOidcStateManager else {
+                throw OktaOidcKeychainError.failed("Failed to decode OktaOidcStateManager for key: \(secureStorageKey)")
+            }
+            return state
         } else {
-            state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager
+            guard let state = NSKeyedUnarchiver.unarchiveObject(with: encodedAuthState) as? OktaOidcStateManager else {
+                throw OktaOidcKeychainError.failed("Failed to decode (legacy) OktaOidcStateManager for key: \(secureStorageKey)")
+            }
+            return state
         }
-
-        return state
     }
-  
+
     /// This method can be removed in the future with release 4.0.0 or higher.
     /// Resolves OKTA-427089
     private static func prepareKeyedArchiver() {
